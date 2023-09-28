@@ -1,28 +1,26 @@
 {
     "$schema": "http://json.schemastore.org/template",
-    "author": "Me",
-    "classifications": [ "Common", "Console" ],
-    "identity": "ExampleTemplate.AsyncProject",
-    "name": "Example templates: async project",
-    "shortName": "consoleasync",
-    "sourceName":"ExampleTemplate.AsyncProject",
+    "author": "Carsten Riedel",
+    "classifications": [ "Common", "MSBuild" , "Library" ],
+    "identity": "CoreeTemplatesProjectMSBuildLib",
+    "name": "MSBuild Library .NET",
+    "shortName": "msbuildlib",
     "tags": {
       "language": "C#",
       "type": "project"
     },
     
      "symbols": {
-      "TestProject": {
-        "type": "parameter",
-        "dataType": "bool",
-        "defaultValue": "false"
-      },
       "Framework": {
         "type": "parameter",
         "description": "The target framework for the project.",
         "datatype": "choice",
         "enableQuotelessLiterals": true,
         "choices": [
+          {
+            "choice": "net6",
+            "description": "Target net6"
+          },
           {
             "choice": "netcoreapp3.1",
             "description": "Target netcoreapp3.1"
@@ -36,37 +34,8 @@
             "description": "Target netstandard2.0"
           }
         ],
-        "replaces": "$Framework$",
+        "replaces": "netstandard2.0",
         "defaultValue": "netstandard2.0"
-      },
-      "Platform": {
-        "type": "parameter",
-        "description": "The target platform for the project.",
-        "datatype": "choice",
-        "allowMultipleValues": true,
-        "choices": [
-          {
-            "choice": "Windows",
-            "description": "Windows Desktop"
-          },
-          {
-            "choice": "MacOS",
-            "description": "Macintosh computers"
-          },
-          {
-            "choice": "iOS",
-            "description": "iOS mobile"
-          },
-          {
-            "choice": "android",
-            "description": "android mobile"
-          },
-          {
-            "choice": "nix",
-            "description": "Linux distributions"
-          }
-        ],
-        "defaultValue": "MacOS|iOS"
       }
     }
   }

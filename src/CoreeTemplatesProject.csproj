@@ -2,14 +2,51 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>disable</Nullable>
-    
+    <IncludeBuildOutput>False</IncludeBuildOutput>
+    <IncludeSource>False</IncludeSource>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <EnableDefaultItems>False</EnableDefaultItems>
+    <IsPackable>true</IsPackable>
+    <IsShipping>false</IsShipping>
+    <NoWarn>2008;NU5105</NoWarn>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <SuppressDependenciesWhenPacking>True</SuppressDependenciesWhenPacking>
+    <IncludeContentInPack>true</IncludeContentInPack>
+
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+  </PropertyGroup>
+
+  <!-- nuspec properties -->
+  <PropertyGroup>
+    <Authors>Carsten Riedel</Authors>
+    <PackageId>Coree.Template.Project</PackageId>
+    <Version>0.0.4-alpha</Version>
+        <Description>
+      <![CDATA[
+          Project templates for .NET Core
+	    ]]>
+    </Description>
+    <language>en-US</language>
+    <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
+    <PackageTags>Windows Forms WinForms Project Templates .NET Core</PackageTags>
+    <PackageType>Template</PackageType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="content\MSBuild.Task.Library.Simple\*.csproj" />
+    <Content Include="content\MSBuild.Task.Library.Simple\**\*" Exclude="content\MSBuild.Task.Library.Simple\**\bin\**;content\MSBuild.Task.Library.Simple\**\obj\**;;content\MSBuild.Task.Library.Simple\**\.vs\**" PackagePath="content"/>
+    <Compile Remove="**\*" />
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
-	
+
+  <!--
+    
+      dotnet pack 
+      dotnet new uninstall Coree.Template.Project
+      dotnet new install bin\Debug\Coree.Template.Project.0.0.4-alpha.nupkg
+-->
 
 </Project>

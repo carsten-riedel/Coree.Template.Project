@@ -22,7 +22,7 @@
   <PropertyGroup>
     <Authors>Carsten Riedel</Authors>
     <PackageId>Coree.Template.Project</PackageId>
-    <Version>0.0.4-alpha</Version>
+    <Version>0.0.7-alpha</Version>
         <Description>
       <![CDATA[
           Project templates for .NET Core
@@ -37,7 +37,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="content\MSBuild.Task.Library.Simple\**\*" Exclude="content\MSBuild.Task.Library.Simple\**\bin\**;content\MSBuild.Task.Library.Simple\**\obj\**;;content\MSBuild.Task.Library.Simple\**\.vs\**" PackagePath="content"/>
+    <Content Include="content\MSBuildLibrary\**\*" Exclude="content\MSBuildLibrary\**\bin\**;content\MSBuildLibrary\**\obj\**;content\MSBuildLibrary\**\.vs\**" PackagePath="content"/>
     <Compile Remove="**\*" />
     <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
@@ -46,7 +46,7 @@
     
       dotnet pack 
       dotnet new uninstall Coree.Template.Project
-      dotnet new install bin\Debug\Coree.Template.Project.0.0.4-alpha.nupkg
+      dotnet new install bin\Debug\Coree.Template.Project.0.0.5-alpha.nupkg
 -->
 
 </Project>

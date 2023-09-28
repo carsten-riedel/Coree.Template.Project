@@ -1,7 +1,7 @@
 {
     "$schema": "http://json.schemastore.org/template",
     "author": "Carsten Riedel",
-    "classifications": [ "Common", "MSBuild" , "Library" ],
+    "classifications": [ "Common", "MSBuild", "Library", "Coree" ],
     "identity": "CoreeTemplatesProjectMSBuildLib",
     "name": "MSBuild Library .NET",
     "shortName": "msbuildlib",
@@ -9,8 +9,9 @@
       "language": "C#",
       "type": "project"
     },
-    
-     "symbols": {
+    "defaultName": "MSBuildLibrary1",
+    "preferNameDirectory": true,
+    "symbols": {
       "Framework": {
         "type": "parameter",
         "description": "The target framework for the project.",
@@ -18,8 +19,14 @@
         "enableQuotelessLiterals": true,
         "choices": [
           {
+            "choice": "net7",
+            "description": "Target net7",
+            "displayName": ".NET 7"
+          },
+          {
             "choice": "net6",
-            "description": "Target net6"
+            "description": "Target net6",
+            "displayName": ".NET 6"
           },
           {
             "choice": "netcoreapp3.1",
@@ -36,6 +43,13 @@
         ],
         "replaces": "netstandard2.0",
         "defaultValue": "netstandard2.0"
+      },
+      "Nullable": {
+        "type": "parameter",
+        "datatype": "bool",
+        "defaultValue": "true",
+        "description": "Whether to enable nullable reference types for this project.",
+        "displayName": "Enable nullable"
       }
     }
   }

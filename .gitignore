@@ -2,6 +2,6 @@
 src/.vs/**
 src/bin/**
 src/obj/**
-src/content/MSBuild.Task.Library.Simple/.vs/**
-src/content/MSBuild.Task.Library.Simple/bin/**
-src/content/MSBuild.Task.Library.Simple/obj/**
+**/MSBuildLibrary/.vs/**
+**/MSBuildLibrary/bin/**
+**/MSBuildLibrary/obj/**

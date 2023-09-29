@@ -39,7 +39,7 @@
     <language>en-US</language>
     <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
     <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
-    <PackageTags>Windows Forms WinForms Project Templates .NET Core</PackageTags>
+    <PackageTags>Project Templates .NET Core</PackageTags>
     <PackageType>Template</PackageType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>

@@ -6,8 +6,4 @@
     <Nullable Condition="'$(Nullable)' == 'true'">enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.7.2" />
-  </ItemGroup>
-
 </Project>

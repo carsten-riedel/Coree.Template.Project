@@ -5,7 +5,7 @@ using System.IO;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
-namespace MSBuild.Task.Library.Simple
+namespace MSBuildLibrary
 {
 
     //https://github.com/dotnet/samples/blob/main/msbuild/custom-task-code-generation/MSBuildConsoleExample/MSBuildConsoleExample.sln

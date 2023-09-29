@@ -1,16 +1,16 @@
 {
     "$schema": "http://json.schemastore.org/template",
     "author": "Carsten Riedel",
-    "classifications": [ "Common", "MSBuild", "Library", "Coree" ],
-    "identity": "CoreeTemplatesProjectMSBuildLib",
-    "name": "MSBuild Library .NET",
-    "shortName": "msbuildlib",
+    "classifications": [ "Common", "ClassLibrary" ,"Library", "Coree" ],
+    "identity": "CoreeTemplatesProjectClassLibrary",
+    "name": "ClassLibrary Coree",
+    "shortName": "class-library",
     "tags": {
       "language": "C#",
       "type": "project"
     },
-    "defaultName": "MSBuildLibrary1", // Default Solution and Projectname scheme
-    "sourceName": "MSBuildLibrary", // Matching nameingscheme csproj and namespace
+    "defaultName": "ClassLibrary1", // Default Solution and Projectname scheme
+    "sourceName": "ClassLibrary", // Matching nameingscheme csproj and namespace
     "preferNameDirectory": true,
     "symbols": {
       "Framework": {
@@ -47,29 +47,6 @@
         ],
         "replaces": "netstandard2.0",
         "defaultValue": "netstandard2.0"
-      },
-      "Nullable": {
-        "type": "parameter",
-        "datatype": "bool",
-        "defaultValue": "true",
-        "description": "Whether to enable nullable reference types for this project.",
-        "displayName": "Enable nullable"
-      },
-      "PackageVersion": {
-        "type": "parameter",
-        "dataType": "string",
-        "defaultValue": "1.0.0-prerelease",
-        "replaces": "1.0.0-prerelease",
-        "description": "Whether to enable nullable reference types for this project.",
-        "displayName": "Enable nullable"
-      },
-      "PackageAuthor": {
-        "type": "parameter",
-        "dataType": "string",
-        "defaultValue": "MyAuthor",
-        "replaces": "MyAuthor",
-        "description": "Whether to enable nullable reference types for this project.",
-        "displayName": "Package Author"
       }
     }
   }

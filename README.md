@@ -24,7 +24,23 @@ Project Templates for Visual Studio and dotnet cli
 
 # Coree Templates Project
 
-## Install/Uninstall
+## Prerequirements
+
+[Download/Install dotnet SDK](https://dotnet.microsoft.com/en-us/download)
+
+Notes Ubuntu:
+```
+#In the case dotnet sdk does not install.
+sudo apt remove -y --purge --autoremove "dotnet*" "aspnetcore*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+
+#Install the dotnet sdk
+sudo apt-get update && sudo apt-get install -y dotnet-sdk-7.0
+```
+
+
+
+
+## Install/Uninstall the templates
 How to install or uninstall the templates
 ```
 dotnet new install Coree.Template.Project
@@ -41,7 +57,7 @@ dotnet new msbuildlib --PackageAuthor Me
 
 Windows:
 ```
-md "MyMSBuildTask.Name" ; cd "MyMSBuildTask.Name" ; dotnet new msbuildlib --PackageAuthor Me
+mkdir "MyMSBuildTask.Name" ; cd "MyMSBuildTask.Name" ; dotnet new msbuildlib --PackageAuthor Me
 ```
 
 

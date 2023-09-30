@@ -13,9 +13,9 @@ Extended Project Templates
 
 - [MS Learn: Create a template package](https://learn.microsoft.com/en-us/dotnet/core/tutorials/cli-templates-create-template-package?pivots=dotnet-6-0)
 
-- [Templating Wiki](https://github.com/dotnet/templating/wiki)
+- [Github: Templating Wiki](https://github.com/dotnet/templating/wiki)
 
-- [Net template samples](https://github.com/dotnet/templating/tree/main/dotnet-template-samples)
+- [Github: Net template samples](https://github.com/dotnet/templating/tree/main/dotnet-template-samples)
 
 - [Microsoft Project Repository .net winforms templates](https://github.com/dotnet/winforms/tree/main/pkg/Microsoft.Dotnet.WinForms.ProjectTemplates/content/WinFormsApplication-CSharp)
 

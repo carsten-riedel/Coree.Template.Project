@@ -39,7 +39,7 @@
     <language>en-US</language>
     <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
     <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
-    <PackageTags>Project Templates .NET Core</PackageTags>
+    <PackageTags>Project Templates .NET Coree</PackageTags>
     <PackageType>Template</PackageType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
@@ -52,10 +52,9 @@
 
 
   <!--
-    
       dotnet pack 
       dotnet new uninstall Coree.Template.Project
       dotnet new install bin\Debug\Coree.Template.Project.0.0.5-alpha.nupkg
--->
+  -->
 
 </Project>

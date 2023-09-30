@@ -9,9 +9,27 @@
   <!-- nuget Package information-->
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
+    <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
+    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © MyCompany</Copyright>
+    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © MyAuthor</Copyright>
     <PackageId>MSBuildLibrary</PackageId>
     <Version>1.0.0-prerelease</Version>
+     <Description>
+      <![CDATA[
+          PackageDescription
+	    ]]>
+    </Description>
+    <PackageReadmeFile Condition="'$(PackageAddReadMe)' == 'true'">Readme.md</PackageReadmeFile>
+    <PackageLicenseFile Condition="'$(PackageAddMitLicense)' == 'true'">License.txt</PackageLicenseFile>
+    <PackageIcon Condition="'$(PackageAddIconPng)' == 'true'">Icon.png</PackageIcon>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/PackageFiles/ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="PackageFiles/Readme.md" Pack="true" PackagePath="" Condition="'$(PackageAddReadMe)' == 'true'"/>
+    <None Include="PackageFiles/License.txt" Pack="true" PackagePath="" Condition="'$(PackageAddMitLicense)' == 'true'"/>
+    <None Include="PackageFiles/Icon.png" Pack="true" PackagePath="" Condition="'$(PackageAddIconPng)' == 'true'"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.7.2" />

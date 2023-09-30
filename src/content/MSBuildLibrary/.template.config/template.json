@@ -48,28 +48,103 @@
         "replaces": "netstandard2.0",
         "defaultValue": "netstandard2.0"
       },
-      "Nullable": {
+      "PackageAuthor": {
         "type": "parameter",
-        "datatype": "bool",
+        "dataType": "string",
+        "replaces": "MyAuthor",
+        "description": "The nuget package author of your project.",
+        "displayName": "Package author",
+        "isRequired": "true"
+      },
+      "PackageCompany": {
+        "type": "parameter",
+        "dataType": "string",
+        "defaultValue": "",
+        "replaces": "MyCompany",
+        "description": "The nuget company of your project.",
+        "displayName": "Package company"
+      },
+      "PackageCopyright": {
+        "type": "parameter",
+        "dataType": "bool",
         "defaultValue": "true",
-        "description": "Whether to enable nullable reference types for this project.",
-        "displayName": "Enable nullable"
+        "replaces": "MyCopyright",
+        "description": "The nuget copyright of your project.",
+        "displayName": "Package copyright"
+      },
+      "PackageDescription": {
+        "type": "parameter",
+        "dataType": "string",
+        "defaultValue": "Package description",
+        "replaces": "PackageDescription",
+        "description": "The nuget package description of your project.",
+        "displayName": "Package description"
       },
       "PackageVersion": {
         "type": "parameter",
         "dataType": "string",
         "defaultValue": "1.0.0-prerelease",
         "replaces": "1.0.0-prerelease",
-        "description": "Whether to enable nullable reference types for this project.",
-        "displayName": "Enable nullable"
+        "description": "The nuget package semver of your project.",
+        "displayName": "Package Semantic Versioning"
       },
-      "PackageAuthor": {
+      "PackageAddReadMe": {
         "type": "parameter",
-        "dataType": "string",
-        "defaultValue": "MyAuthor",
-        "replaces": "MyAuthor",
-        "description": "Whether to enable nullable reference types for this project.",
-        "displayName": "Package Author"
+        "datatype": "bool",
+        "defaultValue": "true",
+        "description": "Adds a Readme.md for the nuget package of your project.",
+        "displayName": "Add package Readme.md"
+      },
+      "PackageAddReleaseNotes": {
+        "type": "parameter",
+        "datatype": "bool",
+        "defaultValue": "true",
+        "description": "Adds a ReleaseNotes.txt for the nuget package of your project.",
+        "displayName": "Add package ReleaseNotes.txt"
+      },
+      "PackageAddMitLicense": {
+        "type": "parameter",
+        "datatype": "bool",
+        "defaultValue": "true",
+        "description": "Adds a MIT License.txt for the nuget package of your project.",
+        "displayName": "Add package MIT License.txt"
+      },
+      "PackageAddIconPng": {
+        "type": "parameter",
+        "datatype": "bool",
+        "defaultValue": "true",
+        "description": "Adds a Icon.png for the nuget package of your project.",
+        "displayName": "Add package Icon.png"
       }
-    }
+    },
+    "sources": [
+      {
+        "modifiers": [
+          {
+            "condition": "(!PackageAddReadMe)",
+            "exclude": [
+              "PackageFiles/Readme.md"
+            ]
+          },
+          {
+            "condition": "(!PackageAddReleaseNotes)",
+            "exclude": [
+              "PackageFiles/ReleaseNotes.txt"
+            ]
+          },
+          {
+            "condition": "(!PackageAddMitLicense)",
+            "exclude": [
+              "PackageFiles/License.txt"
+            ]
+          },
+          {
+            "condition": "(!PackageAddIconPng)",
+            "exclude": [
+              "PackageFiles/Icon.png"
+            ]
+          }
+        ]
+      }
+    ]
   }

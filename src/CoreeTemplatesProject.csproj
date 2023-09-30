@@ -30,7 +30,7 @@
   <PropertyGroup>
     <Authors>Carsten Riedel</Authors>
     <PackageId>Coree.Template.Project</PackageId>
-    <Version>0.0.8-alpha</Version>
+    <Version>0.0.9-alpha</Version>
         <Description>
       <![CDATA[
           Project templates for .NET Core
@@ -49,12 +49,11 @@
     <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
-
-
   <!--
       dotnet pack 
       dotnet new uninstall Coree.Template.Project
-      dotnet new install bin\Debug\Coree.Template.Project.0.0.5-alpha.nupkg
+      dotnet new install bin\Debug\Coree.Template.Project.0.0.9-alpha.nupkg
+      dotnet nuget push "bin\Debug\Coree.Template.Project.0.0.9-alpha.nupkg" -s https://api.nuget.org/v3/index.json -k key 
   -->
 
 </Project>

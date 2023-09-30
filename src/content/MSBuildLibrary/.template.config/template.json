@@ -64,6 +64,10 @@
         "description": "The nuget company of your project.",
         "displayName": "Package company"
       },
+      "PackageCompanyIsSet": {
+        "type": "computed",
+        "value": "(PackageCompany != \"\")"
+      },
       "PackageCopyright": {
         "type": "parameter",
         "dataType": "bool",
@@ -71,6 +75,22 @@
         "replaces": "MyCopyright",
         "description": "The nuget copyright of your project.",
         "displayName": "Package copyright"
+      },
+      "copyrightYear": {
+        "type": "generated",
+        "generator": "now",
+        "replaces": "1975",
+        "parameters": {
+          "format": "yyyy"
+        }
+      },
+      "datenowsort": {
+        "type": "generated",
+        "generator": "now",
+        "replaces": "1975-01-01",
+        "parameters": {
+          "format": "yyyy-MM-dd"
+        }
       },
       "PackageDescription": {
         "type": "parameter",
@@ -115,6 +135,21 @@
         "defaultValue": "true",
         "description": "Adds a Icon.png for the nuget package of your project.",
         "displayName": "Add package Icon.png"
+      },
+      "nametransform": {
+        "type": "derived",  
+        "valueSource": "name",  
+        "valueTransform": "removenumbersfromend",  
+        "description": "A value derived from the 'name' param, used to rename Application1.cs",
+        "replaces" : "nameRemovedTrailingNumbers"
+      }
+
+    },
+    "forms": {
+      "removenumbersfromend": {
+        "identifier": "replace",
+        "pattern": "\\d+$",        // regex to match everything up to and including the final "."
+        "replacement": ""  // replace it with empty string
       }
     },
     "sources": [

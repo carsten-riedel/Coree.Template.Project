@@ -3,16 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable Condition="'$(Nullable)' == 'true'">enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <!-- nuget Package information-->
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
     <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
-    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © MyCompany</Copyright>
-    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © MyAuthor</Copyright>
-    <PackageId>MSBuildLibrary</PackageId>
+    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © 1975 MyCompany</Copyright>
+    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © 1975 MyAuthor</Copyright>
+    <PackageId>nameRemovedTrailingNumbers</PackageId>
     <Version>1.0.0-prerelease</Version>
      <Description>
       <![CDATA[

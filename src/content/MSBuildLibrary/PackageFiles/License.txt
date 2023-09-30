@@ -1,6 +1,10 @@
 ﻿MIT License
 
-Copyright (c) 2022 <Authors>
+//#if (PackageCompanyIsSet)
+Copyright (c) 1975 MyCompany
+//#else
+Copyright (c) 1975 MyAuthor
+//#endif
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

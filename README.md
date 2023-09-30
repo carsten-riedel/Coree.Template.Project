@@ -28,7 +28,7 @@ Project Templates for Visual Studio and dotnet cli
 
 [Download/Install dotnet SDK](https://dotnet.microsoft.com/en-us/download)
 
-Notes Ubuntu:
+Notes Ubuntu/WSL:
 ```
 #In the case dotnet sdk does not install.
 sudo apt remove -y --purge --autoremove "dotnet*" "aspnetcore*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list
@@ -36,9 +36,6 @@ sudo apt remove -y --purge --autoremove "dotnet*" "aspnetcore*" && sudo rm /etc/
 #Install the dotnet sdk
 sudo apt-get update && sudo apt-get install -y dotnet-sdk-7.0
 ```
-
-
-
 
 ## Install/Uninstall the templates
 How to install or uninstall the templates
@@ -55,9 +52,10 @@ cmd:
 dotnet new msbuildlib --PackageAuthor Me
 ```
 
-Windows:
+Sample unmodified creation of the template nuget:
 ```
-mkdir "MyMSBuildTask.Name" ; cd "MyMSBuildTask.Name" ; dotnet new msbuildlib --PackageAuthor Me
+cd $HOME
+mkdir "MyMSBuildTask.Name" ; cd "MyMSBuildTask.Name" ; dotnet new msbuildlib --PackageAuthor Me ; dotnet pack
 ```
 
 

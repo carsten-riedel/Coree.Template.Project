@@ -30,7 +30,7 @@
   <PropertyGroup>
     <Authors>Carsten Riedel</Authors>
     <PackageId>Coree.Template.Project</PackageId>
-    <Version>0.0.9-alpha</Version>
+    <Version>0.0.14-prerelease</Version>
         <Description>
       <![CDATA[
           Project templates for .NET Core
@@ -42,18 +42,23 @@
     <PackageTags>Project Templates .NET Coree</PackageTags>
     <PackageType>Template</PackageType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageIcon>Icon.png</PackageIcon>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="**\*" />
     <None Include="README.md" Pack="true" PackagePath="" />
+    <None Include="Icon.png" Pack="true" PackagePath="" />
+    <None Include="License.txt" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <!--
       dotnet pack 
       dotnet new uninstall Coree.Template.Project
-      dotnet new install bin\Debug\Coree.Template.Project.0.0.9-alpha.nupkg
-      dotnet nuget push "bin\Debug\Coree.Template.Project.0.0.9-alpha.nupkg" -s https://api.nuget.org/v3/index.json -k key 
+      dotnet new install bin\Debug\Coree.Template.Project.0.0.10-prerelease.nupkg
+      dotnet nuget push "bin\Debug\Coree.Template.Project.0.0.10-prerelease.nupkg" -s https://api.nuget.org/v3/index.json -k key 
   -->
 
 </Project>

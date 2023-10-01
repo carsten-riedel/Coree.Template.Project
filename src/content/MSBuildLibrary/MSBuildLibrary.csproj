@@ -9,11 +9,13 @@
   <!-- nuget Package information-->
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
+    <Owners Condition="'$(PackageCompany)' != ''">MyCompany</Owners>
+    <Owners Condition="'$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">MyAuthor</Owners>
     <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
     <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © 1975 MyCompany</Copyright>
     <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © 1975 MyAuthor</Copyright>
     <PackageId>nameRemovedTrailingNumbers</PackageId>
-    <Version>1.0.0-prerelease</Version>
+    <Version>0.0.1-prerelease</Version>
      <Description>
       <![CDATA[
           PackageDescription

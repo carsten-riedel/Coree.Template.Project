@@ -29,18 +29,21 @@
   <!-- nuspec properties -->
   <PropertyGroup>
     <Authors>Carsten Riedel</Authors>
+    <Owners>Carsten Riedel</Owners>
     <PackageId>Coree.Template.Project</PackageId>
     <Version>0.0.14-prerelease</Version>
         <Description>
-      <![CDATA[
-          Project templates for .NET Core
-	    ]]>
-    </Description>
+          <![CDATA[
+              Project templates for .NET Core
+          ]]>
+        </Description>
     <language>en-US</language>
     <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
     <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
     <PackageTags>Project Templates .NET Coree</PackageTags>
     <PackageType>Template</PackageType>
+        
+    <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <PackageIcon>Icon.png</PackageIcon>
@@ -57,8 +60,8 @@
   <!--
       dotnet pack 
       dotnet new uninstall Coree.Template.Project
-      dotnet new install bin\Debug\Coree.Template.Project.0.0.10-prerelease.nupkg
-      dotnet nuget push "bin\Debug\Coree.Template.Project.0.0.10-prerelease.nupkg" -s https://api.nuget.org/v3/index.json -k key 
+      dotnet new install bin\Debug\Coree.Template.Project.0.0.14-prerelease.nupkg
+      dotnet nuget push "bin\Debug\Coree.Template.Project.0.0.14-prerelease.nupkg" -s https://api.nuget.org/v3/index.json -k key 
   -->
 
 </Project>

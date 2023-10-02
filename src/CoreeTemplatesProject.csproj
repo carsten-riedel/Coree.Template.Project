@@ -58,6 +58,7 @@
   </ItemGroup>
 
   <!--
+      del bin\Debug\Coree.Template.Project.0.0.14-prerelease.nupkg && dotnet new uninstall Coree.Template.Project && dotnet pack && dotnet new install bin\Debug\Coree.Template.Project.0.0.14-prerelease.nupkg
       dotnet pack 
       dotnet new uninstall Coree.Template.Project
       dotnet new install bin\Debug\Coree.Template.Project.0.0.14-prerelease.nupkg

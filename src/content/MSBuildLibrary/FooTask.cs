@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-namespace MSBuildLibrary35
+namespace MSBuildLibrary
 {
 
     /*
@@ -80,6 +80,8 @@ namespace MSBuildLibrary35
         }
     }
 
+/*
+
     public class MyTask : Microsoft.Build.Utilities.Task
     {
         // The filename where the class was generated
@@ -137,7 +139,7 @@ namespace MSBuildLibrary35
         }
     }
 
-    /*
+    
     <!-- 
     <ItemGroup>
         <PackageReference Include="Microsoft.Build" Version="15.9.20" />

@@ -27,10 +27,19 @@
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/PackageFiles/ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
+  <!-- nuget package settings-->
+  <PropertyGroup>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <IsTool>true</IsTool>
+    <NoWarn>NU5102;NU5128</NoWarn>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="PackageFiles/Readme.md" Pack="true" PackagePath="" Condition="'$(PackageAddReadMe)' == 'true'"/>
     <None Include="PackageFiles/License.txt" Pack="true" PackagePath="" Condition="'$(PackageAddMitLicense)' == 'true'"/>
     <None Include="PackageFiles/Icon.png" Pack="true" PackagePath="" Condition="'$(PackageAddIconPng)' == 'true'"/>
+    <None Include="build/*" Pack="true"  PackagePath="build" />
   </ItemGroup>
 
   <ItemGroup>

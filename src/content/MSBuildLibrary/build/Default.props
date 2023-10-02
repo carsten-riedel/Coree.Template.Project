@@ -1,0 +1,5 @@
+<Project>
+
+    <UsingTask TaskName="FooTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MSBuildLibrary.dll"/>
+
+</Project>

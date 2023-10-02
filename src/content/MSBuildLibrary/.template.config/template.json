@@ -20,26 +20,6 @@
         "enableQuotelessLiterals": true,
         "choices": [
           {
-            "choice": "net7.0",
-            "description": "Target net7",
-            "displayName": ".NET 7"
-          },
-          {
-            "choice": "net6.0",
-            "description": "Target net6",
-            "displayName": ".NET 6"
-          },
-          {
-            "choice": "netcoreapp3.1",
-            "description": "Target netcoreapp3.1",
-            "displayName": ".NET Core 3.1"
-          },
-          {
-            "choice": "netstandard2.1",
-            "description": "Target netstandard2.1",
-            "displayName": ".NET Standard 2.1"
-          },
-          {
             "choice": "netstandard2.0",
             "description": "Target netstandard2.0",
             "displayName": ".NET Standard 2.0"
@@ -135,6 +115,13 @@
         "defaultValue": "true",
         "description": "Adds a Icon.png for the nuget package of your project.",
         "displayName": "Add package Icon.png"
+      },
+      "DefaultProps": {
+        "type": "derived",  
+        "valueSource": "name",  
+        "valueTransform": "removenumbersfromend",  
+        "description": "A value derived from the 'name' param, used to rename Application1.cs",
+        "fileRename": "Default"
       },
       "nametransform": {
         "type": "derived",  

@@ -61,3 +61,4 @@ mkdir "MyMSBuildTask.Name" ; cd "MyMSBuildTask.Name" ; dotnet new msbuildlib --P
 
 
 
+

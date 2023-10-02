@@ -116,7 +116,7 @@
         "description": "Adds a Icon.png for the nuget package of your project.",
         "displayName": "Add package Icon.png"
       },
-      "DefaultProps": {
+      "DefaultRename": {
         "type": "derived",  
         "valueSource": "name",  
         "valueTransform": "removenumbersfromend",  

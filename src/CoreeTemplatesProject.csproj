@@ -31,7 +31,7 @@
     <Authors>Carsten Riedel</Authors>
     <Owners>Carsten Riedel</Owners>
     <PackageId>Coree.Template.Project</PackageId>
-    <Version>0.0.14-prerelease</Version>
+    <PackageVersion>0.0.16-prerelease</PackageVersion>
         <Description>
           <![CDATA[
               Project templates for .NET Core

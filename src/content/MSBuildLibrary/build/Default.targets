@@ -1,28 +1,14 @@
 <Project>
 
-	<Target Name = "debugout" AfterTargets="Build">
-		<Message Text = "Hello from CustomAfterBuildTarget" Importance="high" />
-		<Message Text = "MSBuildThisFile:                   $(MSBuildThisFile)" Importance="high" />
-		<Message Text = "MSBuildThisFileDirectory:          $(MSBuildThisFileDirectory)" Importance="high" />
-		<Message Text = "MSBuildThisFileDirectoryNoRoot:    $(MSBuildThisFileDirectoryNoRoot)" Importance="high" />
-		<Message Text = "MSBuildThisFileExtension:          $(MSBuildThisFileExtension)" Importance="high" />
-        <Message Text = "MSBuildThisFileFullPath:           $(MSBuildThisFileFullPath)" Importance="high" />
-		<Message Text = "MSBuildThisFileName:               $(MSBuildThisFileName)" Importance="high" />
+	<Target Name="DemoTarget" AfterTargets="Build">
 
-		<Message Text = "BinFolder:						$(BinFolder)" Importance="high" />
-		<Message Text = "DestinationFolder:				$(DestinationFolder)" Importance="high" />
-		<Message Text = "OutDir:						$(OutDir)" Importance="high" />
-		<Message Text = "OutputPath:					$(OutputPath)" Importance="high" />
-		<Message Text = "BaseOutputPath:				$(BaseOutputPath)" Importance="high" />
-		<Message Text = "PublishDir:					$(PublishDir)" Importance="high" />
+		<ConcatTask Parameter1="Concat" Parameter2="Me">
+            <Output TaskParameter="Result" PropertyName="PropertySet" />
+		</ConcatTask>
 
-	</Target>
+		<Message Text="Result from $(PropertySet)" Importance="high" />
 
-	<Target Name="FooTaskTarget" AfterTargets="Build">
-		<FooTask Parameter1 = "abc">
-            <Output TaskParameter="Result1" PropertyName="SettingClassFileName" />
-		</FooTask>
-		<Message Text = "Hello foo $(SettingClassFileName)" Importance="high" />
+		<DumpEnvironmentVariablesTask></DumpEnvironmentVariablesTask>
 	</Target>
 
 </Project>

@@ -1,5 +1,6 @@
 <Project>
 
-    <UsingTask TaskName="FooTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MSBuildLibrary.dll"/>
+    <UsingTask TaskName="ConcatTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MSBuildLibrary.dll"/>
+    <UsingTask TaskName="DumpEnvironmentVariablesTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MSBuildLibrary.dll"/>
 
 </Project>

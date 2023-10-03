@@ -1,6 +1,30 @@
 <Project>
+    <!-- This is a NuGet props file used to configure MSBuild properties and tasks for projects that include this package. -->
 
-    <UsingTask TaskName="ConcatTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MSBuildLibrary.dll"/>
-    <UsingTask TaskName="DumpEnvironmentVariablesTask" AssemblyFile="$(MSBuildThisFileDirectory)..\tools\MSBuildLibrary.dll"/>
+    <!-- Define default directories and assembly files related to this MSBuild task library. -->
+    <PropertyGroup>
+        <SourceNameRemoveDotsToolsDir>$(MSBuildThisFileDirectory)..\tools\</SourceNameRemoveDotsToolsDir>
+	    <SourceNameRemoveDotsBuildDir>$(MSBuildThisFileDirectory)..\build\</SourceNameRemoveDotsBuildDir>
+	    <SourceNameRemoveDotsAssemblyFile>$(SourceNameRemoveDotsToolsDir)MSBuildLibrary.dll</SourceNameRemoveDotsAssemblyFile>
+	</PropertyGroup>
+
+    <!-- Import tasks from the specified assembly, making them available to the current project. -->
+    <UsingTask TaskName="AddTask" AssemblyFile="$(SourceNameRemoveDotsAssemblyFile)"/>
+    <UsingTask TaskName="DumpEnvVarsTask" AssemblyFile="$(SourceNameRemoveDotsAssemblyFile)"/>
+    <UsingTask TaskName="HomeTask" AssemblyFile="$(SourceNameRemoveDotsAssemblyFile)"/>
+    <UsingTask TaskName="TaskNodeTask" AssemblyFile="$(SourceNameRemoveDotsAssemblyFile)"/>
+
+    <!-- This target uses the HomeTask to fetch and expose the HomeDirectory. 
+         Since we need this information early in the build process, BeforeTargets="CoreCompile" ensures it's executed before the core compile tasks. 
+         Remember that props files get processed before targets. -->
+    <Target Name="SourceNameRemoveDotsPropertyTarget" BeforeTargets="CoreCompile">
+		<HomeTask>
+            <Output TaskParameter="Home" PropertyName="HomeDirectory" />
+		</HomeTask>
+        <TaskNodeTask>
+            <Output TaskParameter="TaskNodeDir" PropertyName="TaskNodeDirectory" />
+            <Output TaskParameter="TaskNodeFile" PropertyName="TaskNodeLocation" />
+		</TaskNodeTask>
+	</Target>
 
 </Project>

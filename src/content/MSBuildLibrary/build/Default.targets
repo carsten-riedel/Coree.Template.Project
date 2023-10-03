@@ -1,14 +1,16 @@
 <Project>
-
-	<Target Name="DemoTarget" AfterTargets="Build">
-
-		<ConcatTask Parameter1="Concat" Parameter2="Me">
-            <Output TaskParameter="Result" PropertyName="PropertySet" />
-		</ConcatTask>
-
-		<Message Text="Result from $(PropertySet)" Importance="high" />
-
-		<DumpEnvironmentVariablesTask></DumpEnvironmentVariablesTask>
+<!-- 
+	<Target Name="DemoTarget" BeforeTargets="CoreCompile">
+		<Message Text="From:       		  $(SourceNameRemoveDotsAssemblyFile)" Importance="high" />
+	    <Message Text="DemoTarget:        CoreCompile" Importance="high" />
+		<Message Text="HomeDirectory:     $(HomeDirectory)" Importance="high" />
+		<Message Text="TaskNodeDirectory: $(TaskNodeDirectory)" Importance="high" />
+		<Message Text="TaskNodeLocation:  $(TaskNodeLocation)" Importance="high" />
+		<DumpEnvVarsTask/>
+		<AddTask Param1="1" Param2="2">
+            <Output TaskParameter="AddResult" PropertyName="Result" />
+		</AddTask>
+		<Message Text="AddTask Result:  $(Result)" Importance="high" />
 	</Target>
-
+-->
 </Project>

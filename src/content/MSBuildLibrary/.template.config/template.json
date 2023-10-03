@@ -119,23 +119,36 @@
       "DefaultRename": {
         "type": "derived",  
         "valueSource": "name",  
-        "valueTransform": "removenumbersfromend",  
+        "valueTransform": "WithoutTrailingNumbers",  
         "description": "A value derived from the 'name' param, used to rename Application1.cs",
         "fileRename": "Default"
       },
-      "nametransform": {
+      "DefaultSourceNameWithoutTrailingNumbers": {
         "type": "derived",  
         "valueSource": "name",  
-        "valueTransform": "removenumbersfromend",  
+        "valueTransform": "WithoutTrailingNumbers",  
         "description": "A value derived from the 'name' param, used to rename Application1.cs",
-        "replaces" : "nameRemovedTrailingNumbers"
+        "replaces" : "SourceNameWithoutTrailingNumbers"
+      },
+      "DefaultSourceNameRemoveDots": {
+        "type": "derived",  
+        "valueSource": "name",  
+        "valueTransform": "RemoveDots",  
+        "description": "A value derived from the 'name' param, used to rename Application1.cs",
+        "replaces" : "SourceNameRemoveDots"
       }
+
 
     },
     "forms": {
-      "removenumbersfromend": {
+      "WithoutTrailingNumbers": {
         "identifier": "replace",
         "pattern": "\\d+$",        // regex to match every number at the end of the string
+        "replacement": ""  // replace it with empty string
+      },
+      "RemoveDots": {
+        "identifier": "replace",
+        "pattern": "\\.",        // regex to match every number at the end of the string
         "replacement": ""  // replace it with empty string
       }
     },

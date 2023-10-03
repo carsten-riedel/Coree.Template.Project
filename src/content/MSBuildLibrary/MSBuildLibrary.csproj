@@ -14,7 +14,7 @@
     <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
     <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © 1975 MyCompany</Copyright>
     <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © 1975 MyAuthor</Copyright>
-    <PackageId>nameRemovedTrailingNumbers</PackageId>
+    <PackageId>SourceNameWithoutTrailingNumbers</PackageId>
     <Version>0.0.1-prerelease</Version>
      <Description>
       <![CDATA[

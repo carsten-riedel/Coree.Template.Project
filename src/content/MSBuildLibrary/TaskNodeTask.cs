@@ -21,8 +21,8 @@ namespace MSBuildLibrary
         {
             try
             {   
-                TaskNodeDir = System.IO.Path.GetDirectoryName(this.BuildEngine.ProjectFileOfTaskNode);
-                TaskNodeFile = this.BuildEngine.ProjectFileOfTaskNode;
+                this.TaskNodeDir = System.IO.Path.GetDirectoryName(this.BuildEngine.ProjectFileOfTaskNode);
+                this.TaskNodeFile = this.BuildEngine.ProjectFileOfTaskNode;
             }
             catch (Exception ex)
             {

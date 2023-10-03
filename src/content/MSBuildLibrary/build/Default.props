@@ -11,6 +11,7 @@
     <!-- Import tasks from the specified assembly, making them available to the current project. -->
     <UsingTask TaskName="AddTask" AssemblyFile="$(SourceNameRemoveDotsAssemblyFile)"/>
     <UsingTask TaskName="DumpEnvVarsTask" AssemblyFile="$(SourceNameRemoveDotsAssemblyFile)"/>
+    <UsingTask TaskName="DumpGlobalPropTask" AssemblyFile="$(SourceNameRemoveDotsAssemblyFile)"/>
     <UsingTask TaskName="HomeTask" AssemblyFile="$(SourceNameRemoveDotsAssemblyFile)"/>
     <UsingTask TaskName="TaskNodeTask" AssemblyFile="$(SourceNameRemoveDotsAssemblyFile)"/>
 

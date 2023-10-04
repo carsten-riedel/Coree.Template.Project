@@ -1,0 +1,222 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "Carsten Riedel",
+    "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "tool", "Coree" ],
+    "identity": "CoreeTemplatesProjectNetTool",
+    "name": ".NET Tool",
+    "shortName": "nettool",
+    "tags": {
+      "language": "C#",
+      "type": "project"
+    },
+    "sourceName": "NetTool", // Matching nameingscheme csproj and namespace
+    "preferNameDirectory": true,
+    "symbols": {
+      "ToolCommandName": {
+        "type": "parameter",
+        "dataType": "string",
+        "replaces": "MyToolCommandName",
+        "description": "The ToolCommandName will serve as both the assembly name and namespace, and it will also be appended to the PackageId",
+        "displayName": "ToolCommandName",
+        "isRequired": "true"
+      },
+      "TargetFramework": {
+        "type": "parameter",
+        "description": "The target frameworks for the project.",
+        "datatype": "choice",
+        "allowMultipleValues": true,
+        "enableQuotelessLiterals": true,
+        "choices": [
+          {
+            "choice": "netcoreapp2.1",
+            "description": "Target netcoreapp2.1",
+            "displayName": ".NET 2.1"
+          },
+          {
+            "choice": "netcoreapp2.2",
+            "description": "Target netcoreapp2.2",
+            "displayName": ".NET Core 2.2"
+          },
+          {
+            "choice": "netcoreapp3.0",
+            "description": "Target netcoreapp3.0",
+            "displayName": ".NET Core 3.0"
+          },
+          {
+            "choice": "netcoreapp3.1",
+            "description": "Target netcoreapp3.1",
+            "displayName": ".NET Core 3.1"
+          },
+          {
+            "choice": "net5.0",
+            "description": "Target net5.0",
+            "displayName": ".NET 5.0"
+          },
+          {
+            "choice": "net6.0",
+            "description": "Target net6.0",
+            "displayName": ".NET 6.0"
+          },
+          {
+            "choice": "net7.0",
+            "description": "Target net7.0",
+            "displayName": ".NET 7.0"
+          }
+        ],
+        "defaultValue": "net6.0|net7.0"
+      },
+      "PackageAuthor": {
+        "type": "parameter",
+        "dataType": "string",
+        "replaces": "MyAuthor",
+        "description": "The nuget package author of your project.",
+        "displayName": "Package author",
+        "isRequired": "true"
+      },
+      "PackageCompany": {
+        "type": "parameter",
+        "dataType": "string",
+        "defaultValue": "",
+        "replaces": "MyCompany",
+        "description": "The nuget company of your project.",
+        "displayName": "Package company"
+      },
+      "PackageCompanyIsSet": {
+        "type": "computed",
+        "value": "(PackageCompany != \"\")"
+      },
+      "PackageCopyright": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "replaces": "MyCopyright",
+        "description": "The nuget copyright of your project.",
+        "displayName": "Package copyright"
+      },
+      "copyrightYear": {
+        "type": "generated",
+        "generator": "now",
+        "replaces": "1975",
+        "parameters": {
+          "format": "yyyy"
+        }
+      },
+      "datenowsort": {
+        "type": "generated",
+        "generator": "now",
+        "replaces": "1975-01-01",
+        "parameters": {
+          "format": "yyyy-MM-dd"
+        }
+      },
+      "PackageDescription": {
+        "type": "parameter",
+        "dataType": "string",
+        "defaultValue": "Package description",
+        "replaces": "PackageDescription",
+        "description": "The nuget package description of your project.",
+        "displayName": "Package description"
+      },
+      "PackageVersion": {
+        "type": "parameter",
+        "dataType": "string",
+        "defaultValue": "0.0.1-prerelease",
+        "replaces": "0.0.1-prerelease",
+        "description": "The nuget package semver of your project.",
+        "displayName": "Package Semantic Versioning"
+      },
+      "PackageAddReadMe": {
+        "type": "parameter",
+        "datatype": "bool",
+        "defaultValue": "true",
+        "description": "Adds a Readme.md for the nuget package of your project.",
+        "displayName": "Add package Readme.md"
+      },
+      "PackageAddReleaseNotes": {
+        "type": "parameter",
+        "datatype": "bool",
+        "defaultValue": "true",
+        "description": "Adds a ReleaseNotes.txt for the nuget package of your project.",
+        "displayName": "Add package ReleaseNotes.txt"
+      },
+      "PackageAddMitLicense": {
+        "type": "parameter",
+        "datatype": "bool",
+        "defaultValue": "true",
+        "description": "Adds a MIT License.txt for the nuget package of your project.",
+        "displayName": "Add package MIT License.txt"
+      },
+      "PackageAddIconPng": {
+        "type": "parameter",
+        "datatype": "bool",
+        "defaultValue": "true",
+        "description": "Adds a Icon.png for the nuget package of your project.",
+        "displayName": "Add package Icon.png"
+      },
+      "DefaultRename": {
+        "type": "derived",  
+        "valueSource": "name",  
+        "valueTransform": "WithoutTrailingNumbers",  
+        "description": "A value derived from the 'name' param, used to rename Application1.cs",
+        "fileRename": "Default"
+      },
+      "DefaultSourceNameWithoutTrailingNumbers": {
+        "type": "derived",  
+        "valueSource": "name",  
+        "valueTransform": "WithoutTrailingNumbers",  
+        "description": "A value derived from the 'name' param, used to rename Application1.cs",
+        "replaces" : "SourceNameWithoutTrailingNumbers"
+      },
+      "DefaultSourceNameRemoveDots": {
+        "type": "derived",  
+        "valueSource": "name",  
+        "valueTransform": "RemoveDots",  
+        "description": "A value derived from the 'name' param, used to rename Application1.cs",
+        "replaces" : "SourceNameRemoveDots"
+      }
+
+
+    },
+    "forms": {
+      "WithoutTrailingNumbers": {
+        "identifier": "replace",
+        "pattern": "\\d+$",        // regex to match every number at the end of the string
+        "replacement": ""  // replace it with empty string
+      },
+      "RemoveDots": {
+        "identifier": "replace",
+        "pattern": "\\.",        // regex to match every number at the end of the string
+        "replacement": ""  // replace it with empty string
+      }
+    },
+    "sources": [
+      {
+        "modifiers": [
+          {
+            "condition": "(!PackageAddReadMe)",
+            "exclude": [
+              "PackageFiles/Readme.md"
+            ]
+          },
+          {
+            "condition": "(!PackageAddReleaseNotes)",
+            "exclude": [
+              "PackageFiles/ReleaseNotes.txt"
+            ]
+          },
+          {
+            "condition": "(!PackageAddMitLicense)",
+            "exclude": [
+              "PackageFiles/License.txt"
+            ]
+          },
+          {
+            "condition": "(!PackageAddIconPng)",
+            "exclude": [
+              "PackageFiles/Icon.png"
+            ]
+          }
+        ]
+      }
+    ]
+  }

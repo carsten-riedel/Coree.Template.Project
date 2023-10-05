@@ -22,9 +22,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="content\ClassLibrary\**\*" Exclude="content\ClassLibrary\**\bin\**;content\ClassLibrary\**\obj\**;content\ClassLibrary\**\.vs\**" />
-    <Content Include="content\MSBuildLibrary\**\*" Exclude="content\MSBuildLibrary\**\bin\**;content\MSBuildLibrary\**\obj\**;content\MSBuildLibrary\**\.vs\**" />
-    <Content Include="content\NetTool\**\*" Exclude="content\NetTool\**\bin\**;content\NetTool\**\obj\**;content\NetTool\**\.vs\**" />
+    <None Include="Package\PackageRoot\**\*" Exclude="Package\PackageRoot\**\**\bin\**;Package\PackageRoot\**\**\obj\**;Package\PackageRoot\**\**\.vs\**" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <!-- nuspec properties -->

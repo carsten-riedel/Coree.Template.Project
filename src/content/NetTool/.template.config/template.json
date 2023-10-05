@@ -9,6 +9,7 @@
       "language": "C#",
       "type": "project"
     },
+    "defaultName": "MyName.NetTool1", // Default Solution and Projectname scheme
     "sourceName": "NetTool", // Matching nameingscheme csproj and namespace
     "preferNameDirectory": true,
     "symbols": {
@@ -195,25 +196,25 @@
           {
             "condition": "(!PackageAddReadMe)",
             "exclude": [
-              "PackageRoot/Readme.md"
+              "Package/PackageRoot/Readme.md"
             ]
           },
           {
             "condition": "(!PackageAddReleaseNotes)",
             "exclude": [
-              "PackageRoot/ReleaseNotes.txt"
+              "Package/ReleaseNotes.txt"
             ]
           },
           {
             "condition": "(!PackageAddMitLicense)",
             "exclude": [
-              "PackageRoot/License.txt"
+              "Package/PackageRoot/License.txt"
             ]
           },
           {
             "condition": "(!PackageAddIconPng)",
             "exclude": [
-              "PackageRoot/Icon.png"
+              "Package/PackageRoot/Icon.png"
             ]
           }
         ]

@@ -78,7 +78,7 @@ copy /y MyMSBuildTask\bin\Debug\MyMSBuildTask.0.0.1-prerelease.nupkg "%userprofi
 cd /D %userprofile% & mkdir "ConsoleApp" & cd "ConsoleApp" & dotnet new console & dotnet add package MyMSBuildTask --prerelease & cd /D %userprofile%
 ```
 
-## <span style="color:red">Inside your ConsoleApp.csproj add a target</span>
+## Inside your ConsoleApp.csproj add a target
 ```
 	<Target Name="DemoTarget" BeforeTargets="CoreCompile">
 		<DumpEnvVarsTask/>

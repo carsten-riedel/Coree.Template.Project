@@ -1,3 +1,15 @@
-﻿0.0.1-prerelease (1975-01-01)
+﻿0.0.25-prerelease (2023-10-05)
+
+ - Restructure of the templates project and templates
+ - Added Nettool template
+ - Changed misc .template.config/template.json
+
+0.0.19-prerelease (2023-10-03)
+
+ - Added sample tasks for msbuildlib.
+ - Added BuildEngineExtension reflection code to access properties and items inside the buildtask.
+ - Changed misc .template.config/template.json
+
+0.0.14-prerelease (2023-10-01)
 
  - Project creation

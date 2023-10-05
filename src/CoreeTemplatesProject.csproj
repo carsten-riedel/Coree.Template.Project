@@ -32,7 +32,7 @@
     <Authors>Carsten Riedel</Authors>
     <Owners>Carsten Riedel</Owners>
     <PackageId>Coree.Template.Project</PackageId>
-    <PackageVersion>0.0.22-prerelease</PackageVersion>
+    <PackageVersion>0.0.23-prerelease</PackageVersion>
         <Description>
           <![CDATA[
               Project templates for .NET Core
@@ -59,7 +59,7 @@
   </ItemGroup>
 
   <!--
-      del bin\Debug\Coree.Template.Project.0.0.20-prerelease.nupkg && dotnet new uninstall Coree.Template.Project && dotnet pack && dotnet new install bin\Debug\Coree.Template.Project.0.0.20-prerelease.nupkg
+      del bin\Debug\Coree.Template.Project.0.0.23-prerelease.nupkg && dotnet new uninstall Coree.Template.Project && dotnet pack && dotnet new install bin\Debug\Coree.Template.Project.0.0.23-prerelease.nupkg
       dotnet pack && dotnet new uninstall Coree.Template.Project
       dotnet new install bin\Debug\Coree.Template.Project.0.0.14-prerelease.nupkg
       dotnet nuget push "bin\Debug\Coree.Template.Project.0.0.14-prerelease.nupkg" -s https://api.nuget.org/v3/index.json -k key 

@@ -2,12 +2,14 @@
 
   <!-- Package specs -->
 
- <PropertyGroup>
-    <PackAsTool>true</PackAsTool>
-    <ToolCommandName>MyToolCommandName</ToolCommandName>
+  <PropertyGroup>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <IsTool>true</IsTool>
+    <NoWarn>NU5102;NU5128</NoWarn>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)/Package/PackageOut</PackageOutputPath>
     <LocalPackagesDir></LocalPackagesDir>
- </PropertyGroup>
+  </PropertyGroup>
   
  <Target Name="CopyToLocalPackages" AfterTargets="Pack" Condition="'$(LocalPackagesDir)'!=''">
 		<Message Text="Copy $(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg to $(LocalPackagesDir)" Importance="high" />

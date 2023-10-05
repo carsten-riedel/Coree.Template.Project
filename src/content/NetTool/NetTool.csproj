@@ -33,7 +33,7 @@
     <AssemblyName>MyToolCommandName</AssemblyName>
   </PropertyGroup>
 
-    <!-- Package configuration-->
-    <Import Project="Package/PackageConfig.props" />
+  <!-- Package configuration-->
+  <Import Project="Package/PackageConfig.props" />
 
 </Project>

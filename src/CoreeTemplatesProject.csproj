@@ -2,65 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <IncludeBuildOutput>False</IncludeBuildOutput>
-    <IncludeSource>False</IncludeSource>
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <EnableDefaultItems>False</EnableDefaultItems>
-    <IsPackable>true</IsPackable>
-    <IsShipping>false</IsShipping>
-    <NoWarn>2008;NU5105</NoWarn>
-    <NoPackageAnalysis>true</NoPackageAnalysis>
-    <SuppressDependenciesWhenPacking>True</SuppressDependenciesWhenPacking>
-    
-    <NoWarn>$(NoWarn);NU5128</NoWarn>
-    <NoDefaultExcludes>true</NoDefaultExcludes>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <!-- Suppress creation of contentFiles directory -->
-    <ContentTargetFolders>.\</ContentTargetFolders>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="Package\PackageRoot\**\*" Exclude="Package\PackageRoot\**\**\bin\**;Package\PackageRoot\**\**\obj\**;Package\PackageRoot\**\**\.vs\**" Pack="true" PackagePath="" />
-  </ItemGroup>
-
-  <!-- nuspec properties -->
-  <PropertyGroup>
-    <Authors>Carsten Riedel</Authors>
-    <Owners>Carsten Riedel</Owners>
-    <PackageId>Coree.Template.Project</PackageId>
-    <PackageVersion>0.0.24-prerelease</PackageVersion>
-        <Description>
-          <![CDATA[
-              Project templates for .NET Core
-          ]]>
-        </Description>
-    <language>en-US</language>
-    <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
-    <PackageTags>Project Templates .NET Coree</PackageTags>
-    <PackageType>Template</PackageType>
-        
-    <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseFile>License.txt</PackageLicenseFile>
-    <PackageIcon>Icon.png</PackageIcon>
-    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/ReleaseNotes.txt"))</PackageReleaseNotes>
-    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)/Package/PackageOut</PackageOutputPath>
-  </PropertyGroup>
-
-  <Target Name="DeletePackage" BeforeTargets="GenerateNuspec" Condition="'$(PackageOutputPath)'!=''">
-      <Message Text="Delete: $(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" Importance="high" />
-      <Delete Files="$(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" />
-  </Target>
-
-  <ItemGroup>
-    <Compile Remove="**\*" />
-    <None Include="README.md" Pack="true" PackagePath="" />
-    <None Include="Icon.png" Pack="true" PackagePath="" />
-    <None Include="License.txt" Pack="true" PackagePath="" />
-  </ItemGroup>
+  <!-- Package configuration-->
+  <Import Project="Package/PackageConfig.props" />
 
   <!--
       del bin\Debug\Coree.Template.Project.0.0.23-prerelease.nupkg && dotnet new uninstall Coree.Template.Project && dotnet pack && dotnet new install bin\Debug\Coree.Template.Project.0.0.23-prerelease.nupkg

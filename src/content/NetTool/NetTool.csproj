@@ -33,37 +33,7 @@
     <AssemblyName>MyToolCommandName</AssemblyName>
   </PropertyGroup>
 
-    <!-- nuget Package information-->
-  <PropertyGroup>
-    <Authors>MyAuthor</Authors>
-    <Owners Condition="'$(PackageCompany)' != ''">MyCompany</Owners>
-    <Owners Condition="'$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">MyAuthor</Owners>
-    <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
-    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © 1975 MyCompany</Copyright>
-    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © 1975 MyAuthor</Copyright>
-    <PackageId>SourceNameWithoutTrailingNumbers.MyToolCommandName</PackageId>
-    <Version>0.0.1-prerelease</Version>
-     <Description>
-      <![CDATA[
-          PackageDescription
-	    ]]>
-    </Description>
-    <PackageReadmeFile Condition="'$(PackageAddReadMe)' == 'true'">Readme.md</PackageReadmeFile>
-    <PackageLicenseFile Condition="'$(PackageAddMitLicense)' == 'true'">License.txt</PackageLicenseFile>
-    <PackageIcon Condition="'$(PackageAddIconPng)' == 'true'">Icon.png</PackageIcon>
-    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/PackageFiles/ReleaseNotes.txt"))</PackageReleaseNotes>
-  </PropertyGroup>
-
-    <!-- nuget package settings-->
-  <PropertyGroup>
-    <PackAsTool>true</PackAsTool>
-    <ToolCommandName>MyToolCommandName</ToolCommandName>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="PackageFiles/Readme.md" Pack="true" PackagePath="" Condition="'$(PackageAddReadMe)' == 'true'"/>
-    <None Include="PackageFiles/License.txt" Pack="true" PackagePath="" Condition="'$(PackageAddMitLicense)' == 'true'"/>
-    <None Include="PackageFiles/Icon.png" Pack="true" PackagePath="" Condition="'$(PackageAddIconPng)' == 'true'"/>
-  </ItemGroup>
+    <!-- Package configuration-->
+    <Import Project="PackageConfig/PackageConfig.props" />
 
 </Project>

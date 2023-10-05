@@ -1,0 +1,34 @@
+<Project>
+
+  <!-- Package metadata-->
+  <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
+
+  <PropertyGroup>
+    <Authors>MyAuthor</Authors>
+    <Owners Condition="'$(PackageCompany)' != ''">MyCompany</Owners>
+    <Owners Condition="'$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">MyAuthor</Owners>
+    <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
+    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © 1975 MyCompany</Copyright>
+    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © 1975 MyAuthor</Copyright>
+    <PackageId>SourceNameWithoutTrailingNumbers.MyToolCommandName</PackageId>
+    <PackageTags>dotnet;tools</PackageTags>
+	  <PackageProjectUrl></PackageProjectUrl>
+	  <RepositoryUrl></RepositoryUrl>
+	  <RepositoryType></RepositoryType>
+    <Version>0.0.1-prerelease</Version>
+     <Description>
+      <![CDATA[
+          PackageDescription
+	    ]]>
+    </Description>
+    <PackageReadmeFile Condition="'$(PackageAddReadMe)' == 'true'">Readme.md</PackageReadmeFile>
+    <PackageLicenseFile Condition="'$(PackageAddMitLicense)' == 'true'">License.txt</PackageLicenseFile>
+    <PackageIcon Condition="'$(PackageAddIconPng)' == 'true'">Icon.png</PackageIcon>
+    <PackageReleaseNotes Condition="'$(PackageAddReleaseNotes)' == 'true'">$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)ReleaseNotes.txt"))</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)PackageRoot/**/*" Pack="true" PackagePath=""/>
+  </ItemGroup>
+
+</Project>

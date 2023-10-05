@@ -195,25 +195,25 @@
           {
             "condition": "(!PackageAddReadMe)",
             "exclude": [
-              "PackageFiles/Readme.md"
+              "PackageRoot/Readme.md"
             ]
           },
           {
             "condition": "(!PackageAddReleaseNotes)",
             "exclude": [
-              "PackageFiles/ReleaseNotes.txt"
+              "PackageRoot/ReleaseNotes.txt"
             ]
           },
           {
             "condition": "(!PackageAddMitLicense)",
             "exclude": [
-              "PackageFiles/License.txt"
+              "PackageRoot/License.txt"
             ]
           },
           {
             "condition": "(!PackageAddIconPng)",
             "exclude": [
-              "PackageFiles/Icon.png"
+              "PackageRoot/Icon.png"
             ]
           }
         ]

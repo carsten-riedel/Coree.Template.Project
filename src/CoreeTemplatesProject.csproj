@@ -32,7 +32,7 @@
     <Authors>Carsten Riedel</Authors>
     <Owners>Carsten Riedel</Owners>
     <PackageId>Coree.Template.Project</PackageId>
-    <PackageVersion>0.0.23-prerelease</PackageVersion>
+    <PackageVersion>0.0.24-prerelease</PackageVersion>
         <Description>
           <![CDATA[
               Project templates for .NET Core
@@ -49,7 +49,13 @@
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/ReleaseNotes.txt"))</PackageReleaseNotes>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)/Package/PackageOut</PackageOutputPath>
   </PropertyGroup>
+
+  <Target Name="DeletePackage" BeforeTargets="GenerateNuspec" Condition="'$(PackageOutputPath)'!=''">
+      <Message Text="Delete: $(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" Importance="high" />
+      <Delete Files="$(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" />
+  </Target>
 
   <ItemGroup>
     <Compile Remove="**\*" />

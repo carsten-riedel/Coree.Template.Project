@@ -1,0 +1,15 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "dotnet pack",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "dotnet pack ; dotnet new uninstall Coree.Template.Project ; dotnet new install bin\\Debug\\Coree.Template.Project.0.0.24-prerelease.nupkg",
+            "cwd": "${workspaceFolder}/src"
+        }
+    ]
+}

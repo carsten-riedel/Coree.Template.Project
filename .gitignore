@@ -2,6 +2,4 @@
 src/.vs/**
 src/bin/**
 src/obj/**
-**/MSBuildLibrary/.vs/**
-**/MSBuildLibrary/bin/**
-**/MSBuildLibrary/obj/**
+src/Package/PackageOut/**

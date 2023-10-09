@@ -1,52 +1,198 @@
 {
-    "$schema": "http://json.schemastore.org/template",
-    "author": "Carsten Riedel",
-    "classifications": [ "Common", "ClassLibrary" ,"Library", "Coree" ],
-    "identity": "CoreeTemplatesProjectClassLibrary",
-    "name": "ClassLibrary Coree",
-    "shortName": "class-library",
-    "tags": {
-      "language": "C#",
-      "type": "project"
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Carsten Riedel",
+  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "ClassLibrary" ,"Library", "Coree" ],
+  "identity": "CoreeTemplatesProjectClassLibrary",
+  "name": "Class Library",
+  "shortName": "class-library",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "defaultName": "Organization.Domain.Functionality", // Default Solution and Projectname scheme
+  "sourceName": "ClassLibrary", // Matching nameingscheme csproj and namespace
+  "preferNameDirectory": true,
+  "symbols": {
+    "TargetFramework": {
+      "type": "parameter",
+      "description": "The target frameworks for the project.",
+      "datatype": "choice",
+      "allowMultipleValues": true,
+      "enableQuotelessLiterals": true,
+      "choices": [
+        {
+          "choice": "netstandard20",
+          "description": "Target .NET Standard 2.0 (.NET Framework 4.6.2 compatible)",
+          "displayName": ".NET Standard 2.0"
+        },
+        {
+          "choice": "net6.0",
+          "description": "Target .NET 6.0",
+          "displayName": ".NET 6.0"
+        }
+      ],
+      "defaultValue": "netstandard20|net6.0"
     },
-    "defaultName": "ClassLibrary1", // Default Solution and Projectname scheme
-    "sourceName": "ClassLibrary", // Matching nameingscheme csproj and namespace
-    "preferNameDirectory": true,
-    "symbols": {
-      "Framework": {
-        "type": "parameter",
-        "description": "The target framework for the project.",
-        "datatype": "choice",
-        "enableQuotelessLiterals": true,
-        "choices": [
-          {
-            "choice": "net7.0",
-            "description": "Target net7",
-            "displayName": ".NET 7"
-          },
-          {
-            "choice": "net6.0",
-            "description": "Target net6",
-            "displayName": ".NET 6"
-          },
-          {
-            "choice": "netcoreapp3.1",
-            "description": "Target netcoreapp3.1",
-            "displayName": ".NET Core 3.1"
-          },
-          {
-            "choice": "netstandard2.1",
-            "description": "Target netstandard2.1",
-            "displayName": ".NET Standard 2.1"
-          },
-          {
-            "choice": "netstandard2.0",
-            "description": "Target netstandard2.0",
-            "displayName": ".NET Standard 2.0"
-          }
-        ],
-        "replaces": "netstandard2.0",
-        "defaultValue": "netstandard2.0"
+    "PackageAuthor": {
+      "type": "parameter",
+      "dataType": "string",
+      "replaces": "MyAuthor",
+      "description": "The nuget package author of your project.",
+      "displayName": "Package author",
+      "isRequired": "true"
+    },
+    "PackageCompany": {
+      "type": "parameter",
+      "dataType": "string",
+      "defaultValue": "",
+      "replaces": "MyCompany",
+      "description": "The nuget company of your project.",
+      "displayName": "Package company"
+    },
+    "PackageCompanyIsSet": {
+      "type": "computed",
+      "value": "(PackageCompany != \"\")"
+    },
+    "PackageCopyright": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "replaces": "MyCopyright",
+      "description": "The nuget copyright of your project.",
+      "displayName": "Package copyright"
+    },
+    "copyrightYear": {
+      "type": "generated",
+      "generator": "now",
+      "replaces": "1975",
+      "parameters": {
+        "format": "yyyy"
       }
+    },
+    "datenowsort": {
+      "type": "generated",
+      "generator": "now",
+      "replaces": "1975-01-01",
+      "parameters": {
+        "format": "yyyy-MM-dd"
+      }
+    },
+    "PackageDescription": {
+      "type": "parameter",
+      "dataType": "string",
+      "defaultValue": "Package description",
+      "replaces": "PackageDescription",
+      "description": "The nuget package description of your project.",
+      "displayName": "Package description"
+    },
+    "PackageVersionPrefix": {
+      "type": "parameter",
+      "dataType": "string",
+      "defaultValue": "0.0.1",
+      "replaces": "0.0.1",
+      "description": "The nuget package semver VersionPrefix of your project.",
+      "displayName": "VersionPrefix"
+    },
+    "PackageVersionSuffix": {
+      "type": "parameter",
+      "dataType": "string",
+      "defaultValue": "prerelease",
+      "replaces": "prerelease",
+      "description": "The nuget package semver VersionSuffix of your project.",
+      "displayName": "VersionSuffix for debug"
+    },
+    "PackageAddReadMe": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "description": "Adds a Readme.md for the nuget package of your project.",
+      "displayName": "Add package Readme.md"
+    },
+    "PackageAddReleaseNotes": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "description": "Adds a ReleaseNotes.txt for the nuget package of your project.",
+      "displayName": "Add package ReleaseNotes.txt"
+    },
+    "PackageAddMitLicense": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "description": "Adds a MIT License.txt for the nuget package of your project.",
+      "displayName": "Add package MIT License.txt"
+    },
+    "PackageAddIconPng": {
+      "type": "parameter",
+      "datatype": "bool",
+      "defaultValue": "true",
+      "description": "Adds a Icon.png for the nuget package of your project.",
+      "displayName": "Add package Icon.png"
+    },
+    "DefaultRename": {
+      "type": "derived",  
+      "valueSource": "name",  
+      "valueTransform": "WithoutTrailingNumbers",  
+      "description": "A value derived from the 'name' param, used to rename Application1.cs",
+      "fileRename": "Default"
+    },
+    "DefaultSourceNameWithoutTrailingNumbers": {
+      "type": "derived",  
+      "valueSource": "name",  
+      "valueTransform": "WithoutTrailingNumbers",  
+      "description": "A value derived from the 'name' param, used to rename Application1.cs",
+      "replaces" : "SourceNameWithoutTrailingNumbers"
+    },
+    "DefaultSourceNameRemoveDots": {
+      "type": "derived",  
+      "valueSource": "name",  
+      "valueTransform": "RemoveDots",  
+      "description": "A value derived from the 'name' param, used to rename Application1.cs",
+      "replaces" : "SourceNameRemoveDots"
     }
-  }
+
+
+  },
+  "forms": {
+    "WithoutTrailingNumbers": {
+      "identifier": "replace",
+      "pattern": "\\d+$",        // regex to match every number at the end of the string
+      "replacement": ""  // replace it with empty string
+    },
+    "RemoveDots": {
+      "identifier": "replace",
+      "pattern": "\\.",        // regex to match every number at the end of the string
+      "replacement": ""  // replace it with empty string
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(!PackageAddReadMe)",
+          "exclude": [
+            "Package/PackageRoot/Readme.md"
+          ]
+        },
+        {
+          "condition": "(!PackageAddReleaseNotes)",
+          "exclude": [
+            "Package/ReleaseNotes.txt"
+          ]
+        },
+        {
+          "condition": "(!PackageAddMitLicense)",
+          "exclude": [
+            "Package/PackageRoot/License.txt"
+          ]
+        },
+        {
+          "condition": "(!PackageAddIconPng)",
+          "exclude": [
+            "Package/PackageRoot/Icon.png"
+          ]
+        }
+      ]
+    }
+  ]
+}

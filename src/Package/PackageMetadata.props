@@ -13,7 +13,8 @@
 	  <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-    <Version>0.0.25-prerelease</Version>
+    <VersionPrefix>0.0.28</VersionPrefix>
+    <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
      <Description>
       <![CDATA[
           Project templates for .NET Core

@@ -8,7 +8,7 @@
             "name": "dotnet pack",
             "type": "PowerShell",
             "request": "launch",
-            "script": "dotnet pack ; dotnet new uninstall Coree.Template.Project ; dotnet new install Package/PackageOut/Coree.Template.Project.0.0.25-prerelease.nupkg",
+            "script": "dotnet pack ; dotnet new uninstall Coree.Template.Project ; dotnet new install Package/PackageOut/Coree.Template.Project.0.0.28-prerelease.nupkg",
             "cwd": "${workspaceFolder}/src"
         }
     ]

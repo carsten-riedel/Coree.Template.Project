@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UseWindowsForms>true</UseWindowsForms>
+    <DebugType>embedded</DebugType>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <!--#if (RuntimeIdentifier == win-x86) -->
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <!--#endif -->
+    <!--#if (RuntimeIdentifier == win-x64) -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <!--#endif -->
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <PublishDir>bin\Publish\$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)</PublishDir>
+    <SelfContained>false</SelfContained>
+	  <PublishSingleFile>true</PublishSingleFile>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>MyAuthor</Authors>
+    <Owners Condition="'$(PackageCompany)' != ''">MyCompany</Owners>
+    <Owners Condition="'$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">MyAuthor</Owners>
+    <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
+    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © MyCompany 1975</Copyright>
+    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © MyAuthor 1975</Copyright>
+    <Version>0.0.1</Version>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+     <Description>
+      <![CDATA[
+          PackageDescription
+	    ]]>
+    </Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ApplicationIcon>Resources\application.ico</ApplicationIcon>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\application.ico" />
+  </ItemGroup>
+ 
+</Project>

@@ -10,6 +10,13 @@
             "request": "launch",
             "script": "dotnet pack ; dotnet new uninstall Coree.Template.Project ; dotnet new install Package/PackageOut/Coree.Template.Project.0.0.28-prerelease.nupkg",
             "cwd": "${workspaceFolder}/src"
+        },
+        {
+            "name": "dotnet pack1",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "dotnet pack --configuration Release ; dotnet new uninstall Coree.Template.Project ; dotnet new install Package/PackageOut/Coree.Template.Project.0.0.28-prerelease.nupkg",
+            "cwd": "${workspaceFolder}/src"
         }
     ]
 }

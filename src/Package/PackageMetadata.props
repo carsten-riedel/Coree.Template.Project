@@ -13,7 +13,7 @@
 	  <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-    <VersionPrefix>0.0.28</VersionPrefix>
+    <VersionPrefix>0.0.29</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
      <Description>
       <![CDATA[

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	
+  <PropertyGroup>
+   <TargetFrameworks>net6;net462;netstandard2.0</TargetFrameworks>
+   <DebugType>embedded</DebugType>
+   <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6'">
+   <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+	
+  <ItemGroup>
+   <PackageReference Include="PowerShellStandard.Library" Version="5.1.1"   />
+  </ItemGroup>
+
+  <!-- Package configuration-->
+  <Import Project="Package/PackageConfig.props" />
+	
+</Project>

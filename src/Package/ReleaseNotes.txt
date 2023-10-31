@@ -1,4 +1,4 @@
-﻿0.1.8705.31732 (2023-10-31)
+﻿0.1.x.x (2023-10-31)
 
  - Update winforms-dotnet-publish
  - Update classlibrary-dotnet-pack

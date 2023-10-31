@@ -7,7 +7,7 @@
   "shortName": "projecttemplate-dotnet-pack",
   "tags": {
     "language": "C#",
-    "type": "project"
+    "type": "solution"
   },
   "defaultName": "Organization.Domain.Functionality", // Default Solution and Projectname scheme
   "sourceName": "ProjectTemplate", // Matching nameingscheme csproj and namespace
@@ -57,15 +57,28 @@
       ],
       "replaces": "net6.0",
       "defaultValue": "net6.0"
+    },
+    "templateDirRename":{
+      "type": "generated",
+      "generator": "constant",
+      "parameters": {
+        "value":".template.config"
+      },
+      "fileRename": "templateDir"
+    },
+    "templateJsonRename":{
+      "type": "generated",
+      "generator": "constant",
+      "parameters": {
+        "value":"template.json"
+      },
+      "fileRename": "templateJson.txt"
     }
-  }
-  ,
-"sources": [
-  {
-  "rename": {
-      "MyTemplate": ".template.config"
-  }
 
+  },
+  "guids": [
+    "3DE8E772-C29F-421A-B9D9-5EAB1033311B",
+    "5D25DDFC-AD5C-4F80-97A2-3E9FCAC9848F"
+  ]
 
-  }]
 }

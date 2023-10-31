@@ -1,4 +1,9 @@
-﻿0.0.25-prerelease (2023-10-05)
+﻿0.1.8705.31732 (2023-10-31)
+
+ - Update winforms-dotnet-publish
+ - Update classlibrary-dotnet-pack
+
+0.0.25-prerelease (2023-10-05)
 
  - Restructure of the templates project and templates
  - Added Nettool template

@@ -37,6 +37,7 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)PackageRoot\**\*" Exclude="$(MSBuildThisFileDirectory)PackageRoot\**\**\bin\**;$(MSBuildThisFileDirectory)PackageRoot\**\**\obj\**;$(MSBuildThisFileDirectory)PackageRoot\**\**\.vs\**" Pack="true" PackagePath="" />
     <None Include="$(MSBuildThisFileDirectory)PackageOut\**\*"  Pack="false" PackagePath="" />
+    <None Include="$(MSBuildThisFileDirectory)*"  Pack="false" PackagePath="" />
   </ItemGroup>
   
 

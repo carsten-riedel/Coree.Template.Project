@@ -1,0 +1,28 @@
+<Project>
+
+  <!-- Package specs -->
+
+  <PropertyGroup>
+    <IncludeBuildOutput>False</IncludeBuildOutput>
+    <IncludeSource>False</IncludeSource>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <EnableDefaultItems>False</EnableDefaultItems>
+    <IsPackable>true</IsPackable>
+    <IsShipping>false</IsShipping>
+    <NoWarn>2008;NU5105</NoWarn>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <SuppressDependenciesWhenPacking>True</SuppressDependenciesWhenPacking>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <PackageType>Template</PackageType>
+    <!-- Suppress creation of contentFiles directory -->
+    <ContentTargetFolders>.\</ContentTargetFolders>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)/bin/NuGetPackage</PackageOutputPath>
+  </PropertyGroup>
+
+  <Target Name="DeletePackage" BeforeTargets="GenerateNuspec" Condition="'$(PackageOutputPath)'!=''">
+      <Message Text="Delete: $(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" Importance="high" />
+      <Delete Files="$(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" />
+  </Target>
+
+</Project>

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- NuGet Package configuration -->
+  <Import Project="NuGetPackage/Config/NuGetPackageMetadata.props" />
+  <Import Project="NuGetPackage/Config/NuGetPackageSpecs.props" />
+
+</Project>

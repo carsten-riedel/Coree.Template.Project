@@ -1,0 +1,35 @@
+<Project>
+
+  <!-- Package metadata-->
+  <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
+
+  <PropertyGroup>
+    <Authors>Carsten Riedel</Authors>
+    <Owners>Carsten Riedel</Owners>
+    <Company></Company>
+    <Copyright>Copyright © Carsten Riedel 2023</Copyright>
+    <PackageId>Coree.Template.Project</PackageId>
+    <PackageTags>Project;Templates;.NET;Coree</PackageTags>
+	  <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
+    <VersionPrefix>0.1.0.0</VersionPrefix>
+    <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
+     <Description>
+      <![CDATA[
+          Project templates for .NET Core
+	    ]]>
+    </Description>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageIcon>Icon.png</PackageIcon>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)ReleaseNotes.txt"))</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)\NuGetPackage\Root\**\*" Exclude="$(MSBuildProjectDirectory)\NuGetPackage\Root\**\**\bin\**;$(MSBuildProjectDirectory)\NuGetPackage\Root\**\**\obj\**;$(MSBuildProjectDirectory)\NuGetPackage\Root\**\**\.vs\**" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\NuGetPackage\Config\**\*"  Pack="false" PackagePath="" />
+  </ItemGroup>
+  
+
+</Project>

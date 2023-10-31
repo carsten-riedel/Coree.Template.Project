@@ -8,21 +8,16 @@
     <AssemblyTitle>ClassLibrary</AssemblyTitle>
     <AssemblyProduct>ClassLibrary</AssemblyProduct>
     <AssemblyConfiguration>$(Configuration)</AssemblyConfiguration>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <!--#if (TargetFramework == netstandard20) -->
-    <TargetFrameworks>$(TargetFrameworks);netstandard20</TargetFrameworks>
-    <!--#endif -->
-    <!--#if (TargetFramework == net6.0) -->
-    <TargetFrameworks>$(TargetFrameworks);net6.0</TargetFrameworks>
-    <!--#endif -->
-    <!--#if (TargetFramework == net7.0) -->
-    <TargetFrameworks>$(TargetFrameworks);net7.0</TargetFrameworks>
-    <!--#endif -->
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <!-- Package configuration-->
   <Import Project="Package/PackageConfig.props" />
+
+  <!-- Exclude .gitignore from solution explorer -->
+  <ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="Package\PackageOut\.gitignore" />
+  </ItemGroup>
 
 </Project>

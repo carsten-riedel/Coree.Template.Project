@@ -4,16 +4,24 @@
   <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
 
   <PropertyGroup>
+    <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), $([System.DateTime]::Parse("2000-01-01T00:00:00Z").Ticks)))</AssemblyVersionBaseTicks>
+    <AssemblyVersionBuild>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerDay)))))</AssemblyVersionBuild>
+    <AssemblyVersionTotalSeconds>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerSecond)))))</AssemblyVersionTotalSeconds>
+    <AssemblyVersionRemainingSeconds>$([System.Convert]::ToInt32($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
+    <AssemblyVersionRevision>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Authors>Carsten Riedel</Authors>
     <Owners>Carsten Riedel</Owners>
     <Company></Company>
-    <Copyright>Copyright © 2023 Carsten Riedel</Copyright>
+    <Copyright>Copyright © Carsten Riedel 2023</Copyright>
     <PackageId>Coree.Template.Project</PackageId>
     <PackageTags>Project;Templates;.NET;Coree</PackageTags>
 	  <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
 	  <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
 	  <RepositoryType>git</RepositoryType>
-    <VersionPrefix>0.0.31</VersionPrefix>
+    <VersionPrefix>0.1.$(AssemblyVersionBuild).$(AssemblyVersionRevision)</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
      <Description>
       <![CDATA[

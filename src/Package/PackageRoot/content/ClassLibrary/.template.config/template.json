@@ -13,25 +13,50 @@
   "sourceName": "ClassLibrary", // Matching nameingscheme csproj and namespace
   "preferNameDirectory": true,
   "symbols": {
-    "TargetFramework": {
+    "Framework": {
       "type": "parameter",
-      "description": "The target frameworks for the project.",
+      "description": "The target framework for the project.",
       "datatype": "choice",
-      "allowMultipleValues": true,
       "enableQuotelessLiterals": true,
       "choices": [
         {
-          "choice": "netstandard20",
-          "description": "Target .NET Standard 2.0 (.NET Framework 4.6.2 compatible)",
-          "displayName": ".NET Standard 2.0"
+          "choice": "netcoreapp2.1",
+          "description": "Target netcoreapp2.1",
+          "displayName": ".NET 2.1"
+        },
+        {
+          "choice": "netcoreapp2.2",
+          "description": "Target netcoreapp2.2",
+          "displayName": ".NET Core 2.2"
+        },
+        {
+          "choice": "netcoreapp3.0",
+          "description": "Target netcoreapp3.0",
+          "displayName": ".NET Core 3.0"
+        },
+        {
+          "choice": "netcoreapp3.1",
+          "description": "Target netcoreapp3.1",
+          "displayName": ".NET Core 3.1"
+        },
+        {
+          "choice": "net5.0",
+          "description": "Target net5.0",
+          "displayName": ".NET 5.0"
         },
         {
           "choice": "net6.0",
-          "description": "Target .NET 6.0",
+          "description": "Target net6.0",
           "displayName": ".NET 6.0"
+        },
+        {
+          "choice": "net7.0",
+          "description": "Target net7.0",
+          "displayName": ".NET 7.0"
         }
       ],
-      "defaultValue": "netstandard20|net6.0"
+      "replaces": "net6.0",
+      "defaultValue": "net6.0"
     },
     "PackageAuthor": {
       "type": "parameter",
@@ -80,18 +105,17 @@
     "PackageDescription": {
       "type": "parameter",
       "dataType": "string",
-      "defaultValue": "Package description",
+      "defaultValue": "PackageDescription",
       "replaces": "PackageDescription",
       "description": "The nuget package description of your project.",
       "displayName": "Package description"
     },
-    "PackageVersionPrefix": {
+    "AssemblyVersioningScheme": {
       "type": "parameter",
-      "dataType": "string",
-      "defaultValue": "0.0.1",
-      "replaces": "0.0.1",
-      "description": "The nuget package semver VersionPrefix of your project.",
-      "displayName": "VersionPrefix"
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Generates nuget and assembly versioning scheme utilizing build and revision date.",
+      "displayName": "Automatic nuget and assembly version."
     },
     "PackageVersionSuffix": {
       "type": "parameter",

@@ -3,6 +3,16 @@
   <!-- Package metadata-->
   <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
 
+  <!--#if (AssemblyVersioningScheme == true) -->
+  <PropertyGroup>
+    <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), $([System.DateTime]::Parse("2000-01-01T00:00:00Z").Ticks)))</AssemblyVersionBaseTicks>
+    <AssemblyVersionBuild>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerDay)))))</AssemblyVersionBuild>
+    <AssemblyVersionTotalSeconds>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerSecond)))))</AssemblyVersionTotalSeconds>
+    <AssemblyVersionRemainingSeconds>$([System.Convert]::ToInt32($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
+    <AssemblyVersionRevision>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
+  </PropertyGroup>
+  <!--#endif -->
+
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
     <Owners Condition="'$(PackageCompany)' != ''">MyCompany</Owners>
@@ -10,14 +20,23 @@
     <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
     <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © MyCompany 1975</Copyright>
     <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © MyAuthor 1975</Copyright>
-    <PackageId>SourceNameWithoutTrailingNumbers</PackageId>
-    <PackageTags>dotnet;classlibrary;class;library</PackageTags>
-	  <PackageProjectUrl></PackageProjectUrl>
-	  <RepositoryUrl></RepositoryUrl>
-	  <RepositoryType></RepositoryType>
+    <PackageId>ClassLibrary</PackageId>
+    <PackageTags>dotnet;class;library</PackageTags>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType></RepositoryType>
+    
+    <!--#if (AssemblyVersioningScheme == true) -->
+    <VersionMajor>0</VersionMajor>
+    <VersionMinor>1</VersionMinor>
+    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(AssemblyVersionBuild).$(AssemblyVersionRevision)</VersionPrefix>
+    <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
+    <AssemblyVersion>$(VersionMajor).$(VersionMinor).$(AssemblyVersionBuild).$(AssemblyVersionRevision)</AssemblyVersion>
+    <!--#endif -->
+    <!--#if (AssemblyVersioningScheme == false) -->
     <VersionPrefix>0.0.1</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
-    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+    <!--#endif -->
     
     <Description>
      <![CDATA[PackageDescription]]>

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
     <UseWindowsForms>true</UseWindowsForms>
     <DebugType>embedded</DebugType>
@@ -17,11 +17,48 @@
   </PropertyGroup>
   
   <PropertyGroup>
-    <PublishDir>bin\Publish\$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)</PublishDir>
-    <SelfContained>false</SelfContained>
-	  <PublishSingleFile>true</PublishSingleFile>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishDir>bin\Publish\$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)</PublishDir>
+    <!--#if (Publish == FrameworkRequired) -->
+    <SelfContained>false</SelfContained>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkRequiredSingle) -->
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkIncluded) -->
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkIncludedSingle) -->
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkIncludedSingleCompressed) -->
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <!--#if (AssemblyVersioningScheme == true) -->
+  <PropertyGroup>
+    <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), $([System.DateTime]::Parse("2000-01-01T00:00:00Z").Ticks)))</AssemblyVersionBaseTicks>
+    <AssemblyVersionBuild>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerDay)))))</AssemblyVersionBuild>
+    <AssemblyVersionTotalSeconds>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerSecond)))))</AssemblyVersionTotalSeconds>
+    <AssemblyVersionRemainingSeconds>$([System.Convert]::ToInt32($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
+    <AssemblyVersionRevision>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
+  </PropertyGroup>
+  <!--#endif -->
 
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
@@ -30,13 +67,23 @@
     <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
     <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © MyCompany 1975</Copyright>
     <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © MyAuthor 1975</Copyright>
-    <Version>0.0.1</Version>
-    <AssemblyVersion>$(Version)</AssemblyVersion>
-     <Description>
-      <![CDATA[
-          PackageDescription
-	    ]]>
-    </Description>
+  </PropertyGroup>
+
+  <!-- Versioning. Note VersionPrefix-VersionSuffix will be used in assembleys product version -->
+  <PropertyGroup>
+      <VersionMajor>0</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <!--#if (AssemblyVersioningScheme == true) -->
+      <VersionBuild>$(AssemblyVersionBuild)</VersionBuild>
+      <VersionRevision>$(AssemblyVersionRevision)</VersionRevision>
+      <!--#endif -->
+      <!--#if (AssemblyVersioningScheme == false) -->
+      <VersionBuild>0</VersionBuild>
+      <VersionRevision>0</VersionRevision>
+      <!--#endif -->
+      <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+      <VersionSuffix>$(Configuration)</VersionSuffix>
+      <AssemblyVersion>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</AssemblyVersion>
   </PropertyGroup>
 
   <PropertyGroup>

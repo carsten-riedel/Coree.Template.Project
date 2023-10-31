@@ -16,11 +16,13 @@ namespace Winforms
         {
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = "Winforms.Resources.application.ico";
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            { 
-#pragma warning disable CA1416 // Validate platform compatibility
-            this.Icon = new Icon(stream);
-#pragma warning restore CA1416 // Validate platform compatibility
+            if (assembly != null)
+            {
+                using Stream? stream = assembly.GetManifestResourceStream(resourceName);
+                if (stream != null)
+                {
+                    this.Icon = new Icon(stream);
+                }
             }
         }
 

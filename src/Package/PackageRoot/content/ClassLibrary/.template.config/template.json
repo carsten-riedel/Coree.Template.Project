@@ -3,8 +3,8 @@
   "author": "Carsten Riedel",
   "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "ClassLibrary" ,"Library", "Coree" ],
   "identity": "CoreeTemplatesProjectClassLibrary",
-  "name": "Class Library",
-  "shortName": "class-library",
+  "name": "Class Library (dotnet pack)",
+  "shortName": "classlibrary-dotnet-pack",
   "tags": {
     "language": "C#",
     "type": "project"

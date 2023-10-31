@@ -17,8 +17,6 @@ namespace Winforms
         [STAThread]
         static void Main()
         {
-            ProfileOptimization.SetProfileRoot(AppContext.BaseDirectory);
-            ProfileOptimization.StartProfile($@"{Assembly.GetExecutingAssembly().GetName().Name}.profile");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());

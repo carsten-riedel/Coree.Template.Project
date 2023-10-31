@@ -3,8 +3,8 @@
   "author": "Carsten Riedel",
   "classifications": [ "Common", "dotnet", "Windows", "Winforms", "Coree" ],
   "identity": "CoreeTemplatesProjectWinforms",
-  "name": "Winforms publish single file",
-  "shortName": "winforms-single",
+  "name": "Winforms (dotnet publish)",
+  "shortName": "winforms-dotnet-publish",
   "tags": {
     "language": "C#",
     "type": "project"
@@ -55,12 +55,47 @@
       ],
       "defaultValue": "win-x64"
     },
+    "Publish": {
+      "type": "parameter",
+      "description": "Choose the publish type. Option 2) or 3) recommended.",
+      "datatype": "choice",
+      "allowMultipleValues": false,
+      "enableQuotelessLiterals": true,
+      "choices": [
+        {
+          "choice": "FrameworkRequired",
+          "description": "",
+          "displayName": "1) Framework-required. (Purpose: Installer)"
+        },
+        {
+          "choice": "FrameworkRequiredSingle",
+          "description": "",
+          "displayName": "2) Framework-required, Single-file. (Purpose: Copy smallest)"
+        },
+        {
+          "choice": "FrameworkIncluded",
+          "description": "",
+          "displayName": "3) Framework-included. (Purpose: Installer)"
+        },
+        {
+          "choice": "FrameworkIncludedSingle",
+          "description": "See Single-file deployment. -> DOTNET_BUNDLE_EXTRACT_BASE_DIR",
+          "displayName": "4) Framework-included, Single-file. (Purpose: Copy large)"
+        },
+        {
+          "choice": "FrameworkIncludedSingleCompressed",
+          "description": "See Single-file deployment. -> DOTNET_BUNDLE_EXTRACT_BASE_DIR",
+          "displayName": "5) Framework-included, Single-file, Compressed. (Purpose: Copy medium)"
+        }
+      ],
+      "defaultValue": "FrameworkRequiredSingle"
+    },
     "PackageAuthor": {
       "type": "parameter",
       "dataType": "string",
       "replaces": "MyAuthor",
-      "description": "The nuget package author of your project.",
-      "displayName": "Package author",
+      "description": "The author of the project.",
+      "displayName": "Author",
       "isRequired": "true"
     },
     "PackageCompany": {
@@ -68,8 +103,8 @@
       "dataType": "string",
       "defaultValue": "",
       "replaces": "MyCompany",
-      "description": "The nuget company of your project.",
-      "displayName": "Package company"
+      "description": "The company of the project.",
+      "displayName": "Company"
     },
     "PackageCompanyIsSet": {
       "type": "computed",
@@ -79,9 +114,8 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "replaces": "MyCopyright",
-      "description": "The nuget copyright of your project.",
-      "displayName": "Package copyright"
+      "description": "Add copyright to assembly.",
+      "displayName": "Add copyright"
     },
     "copyrightYear": {
       "type": "generated",
@@ -99,21 +133,12 @@
         "format": "yyyy-MM-dd"
       }
     },
-    "PackageDescription": {
+    "AssemblyVersioningScheme": {
       "type": "parameter",
-      "dataType": "string",
-      "defaultValue": "Package description",
-      "replaces": "PackageDescription",
-      "description": "The nuget package description of your project.",
-      "displayName": "Package description"
-    },
-    "PackageVersion": {
-      "type": "parameter",
-      "dataType": "string",
-      "defaultValue": "0.0.1",
-      "replaces": "0.0.1",
-      "description": "The assembly version of your project.",
-      "displayName": "Version"
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Generates assembly versioning scheme utilizing build and revision date.",
+      "displayName": "Automatic assembly versioning scheme."
     },
     "DefaultRename": {
       "type": "derived",  

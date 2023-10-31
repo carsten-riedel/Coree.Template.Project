@@ -4,6 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Package\PackageOut\" />
+  </ItemGroup>
+
   <!-- Package configuration-->
   <Import Project="Package/PackageConfig.props" />
 

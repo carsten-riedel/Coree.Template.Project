@@ -27,7 +27,8 @@
 
   <Target Name="BeforeBuildx" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' == 'Release'">
     <Exec Command="git add -A" />
-    <Exec Command="git commit -m &quot;Commit before Release build&quot;" />
+    <!-- <Exec Command="git commit -m &quot;Commit before Release build&quot;" /> -->
+    <Exec Command="git diff-index --quiet HEAD || git commit -m &quot;Commit before Release build&quot;" />
   </Target>
 
 </Project>

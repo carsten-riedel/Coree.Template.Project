@@ -78,6 +78,7 @@
   </Target>
 
   <Target Name="GitPush" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <Exec Command="git push" />
     <Exec Command="git push origin $(VersionPrefix)" />
   </Target>
   

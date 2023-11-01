@@ -37,8 +37,12 @@
       <Output TaskParameter="ConsoleOutput" PropertyName="GitRemoteUrl" />
     </Exec>
     <!-- Output the commit ID -->
+    <PropertyGroup>
+    <ModifiedGitRemoteUrl>$(GitRemoteUrl.Replace('.git', 'abcde'))</ModifiedGitRemoteUrl>
+    </PropertyGroup>
     <Message Text="Latest commit ID: $(GitCommitId)" Importance="high" />
     <Message Text="GitRemoteUrl: $(GitRemoteUrl)" Importance="high" />
+    <Message Text="commiturl: $(ModifiedGitRemoteUrl)" Importance="high" />
   </Target>
 
   <Target Name="x" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">

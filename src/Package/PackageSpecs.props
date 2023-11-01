@@ -43,6 +43,7 @@
 
   <Target Name="x" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
     <Exec Command="git push --tags" />
+    <Exec Command="git push" />
   </Target>
   
 

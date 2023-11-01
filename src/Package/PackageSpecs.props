@@ -33,8 +33,12 @@
     <Exec Command="git rev-parse HEAD" ConsoleToMSBuild="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="GitCommitId" />
     </Exec>
+    <Exec Command="git config --get remote.origin.url" ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitRemoteUrl" />
+    </Exec>
     <!-- Output the commit ID -->
     <Message Text="Latest commit ID: $(GitCommitId)" Importance="high" />
+    <Message Text="GitRemoteUrl: $(GitRemoteUrl)" Importance="high" />
   </Target>
 
   <Target Name="x" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">

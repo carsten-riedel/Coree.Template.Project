@@ -25,6 +25,38 @@
       <Delete Files="$(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" />
   </Target>
 
+   <PropertyGroup>
+    <GitRootPath></GitRootPath>
+  </PropertyGroup>
+
+  <Target Name="GitRootDir" BeforeTargets="BeforeBuild">
+    <!-- Find the Git root directory -->
+    <Exec Command="git rev-parse --show-toplevel 2&gt;nul" IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="GitRootExitCode" />
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitRootPath" />
+    </Exec>
+
+    <!-- Display the path to the Git root directory -->
+    <Message Text="Git root directory path: $(GitRootPath)" Importance="high" />
+
+  </Target>
+  
+  <Target Name="GitAvailable" BeforeTargets="BeforeBuild">
+    <!-- Check if Git is available -->
+    <Exec Command="git --version" IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="GitExitCode" />
+    </Exec>
+
+    <!-- Set GitAvailable based on the exit code -->
+    <PropertyGroup>
+      <GitAvailable>false</GitAvailable>
+      <GitAvailable Condition=" $(GitExitCode) == 0 ">true</GitAvailable>
+    </PropertyGroup>
+
+    <Message Text="Is Git available? $(GitAvailable)" Importance="high" />
+
+  </Target>
+
   <Target Name="BeforeBuildx" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' == 'Release'">
     <Exec Command="git add -A" />
     <!-- <Exec Command="git commit -m &quot;Commit before Release build&quot;" /> -->

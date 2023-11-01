@@ -80,6 +80,7 @@
   <Target Name="GitPush" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
     <Exec Command="git push" />
     <Exec Command="git push origin $(VersionPrefix)" />
+    <!-- git push -d origin 0.1.8706.38986 -->
   </Target>
   
 

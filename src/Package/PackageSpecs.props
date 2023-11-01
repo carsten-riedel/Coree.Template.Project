@@ -82,6 +82,34 @@
     <Exec Command="git push origin $(VersionPrefix)" />
     <!-- git push -d origin 0.1.8706.38986 -->
   </Target>
+
+    <!--
+  <Target Name="GenerateStrings" BeforeTargets="BeforeBuild">
+      <PropertyGroup>
+          <Start></Start>
+          <Start>$(Start)namespace MSBuildVars &#13;&#10;</Start>
+          <Start>$(Start){&#13;&#10;</Start>
+          <Start>$(Start)&#9;public class MyStrings &#13;&#10;</Start>
+          <Start>$(Start)&#9;{&#13;&#10;</Start>
+          
+          <Content></Content>
+          <Content>$(Content)&#9;&#9;public const string Copyright = &quot;$(Copyright)&quot;;&#13;&#10;</Content>
+          <Content>$(Content)&#9;&#9;public const string AssemblyVersion = &quot;$(AssemblyVersion)&quot;;&#13;&#10;</Content>
+          <Content>$(Content)&#9;&#9;public const string TargetFramework = &quot;$(TargetFramework)&quot;;&#13;&#10;</Content>
+          
+          <End></End>
+          <End>$(End)&#9;}&#13;&#10;</End>
+          <End>$(End)}&#13;&#10;</End>
+          
+          <FinalContent>$([System.String]::Concat($(Start), $(Content), $(End)))</FinalContent>
+      </PropertyGroup>
+      <WriteLinesToFile
+          File="Properties\GeneratedStrings.cs"
+          Lines="$(FinalContent)"
+          Overwrite="true"
+          Encoding="Unicode"/>
+  </Target>
+  -->
   
 
 </Project>

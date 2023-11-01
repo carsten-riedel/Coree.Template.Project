@@ -37,4 +37,9 @@
     <Message Text="Latest commit ID: $(GitCommitId)" Importance="high" />
   </Target>
 
+  <Target Name="x" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <Exec Command="git push --follow-tags" />
+  </Target>
+  
+
 </Project>

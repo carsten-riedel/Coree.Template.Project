@@ -1,4 +1,8 @@
-﻿0.1.x.x (2023-10-31)
+﻿0.1.x.x (2023-11-01)
+
+ - Update projecttemplate-dotnet-pack
+ 
+0.1.x.x (2023-10-31)
 
  - Update winforms-dotnet-publish
  - Update classlibrary-dotnet-pack

@@ -4,20 +4,30 @@
   <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
 
   <PropertyGroup>
-    <Authors>Carsten Riedel</Authors>
-    <Owners>Carsten Riedel</Owners>
-    <Company></Company>
-    <Copyright>Copyright © Carsten Riedel 2023</Copyright>
-    <PackageId>Coree.Template.Project</PackageId>
-    <PackageTags>Project;Templates;.NET;Coree</PackageTags>
-	  <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
-	  <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
-	  <RepositoryType>git</RepositoryType>
+    <Authors>MyAuthor</Authors>
+    <!--#if (PackageCompany == '') -->
+    <Owners>MyAuthor</Owners>
+    <!--#endif -->
+    <!--#if (PackageCompany != '') -->
+    <Owners>MyCompany</Owners>
+    <!--#endif -->
+    <Company>MyCompany</Company>
+    <!--#if (PackageCompany == '') -->
+    <Copyright>Copyright © MyAuthor 2023</Copyright>
+    <!--#endif -->
+    <!--#if (PackageCompany != '') -->
+    <Copyright>Copyright © MyCompany 2023</Copyright>
+    <!--#endif -->
+    <PackageId>ProjectTemplate</PackageId>
+    <PackageTags>Project;Templates;.NET</PackageTags>
+	  <PackageProjectUrl></PackageProjectUrl>
+	  <RepositoryUrl></RepositoryUrl>
+	  <RepositoryType></RepositoryType>
     <VersionPrefix>0.1.0.0</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
      <Description>
       <![CDATA[
-          Project templates for .NET Core
+          Project templates
 	    ]]>
     </Description>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>

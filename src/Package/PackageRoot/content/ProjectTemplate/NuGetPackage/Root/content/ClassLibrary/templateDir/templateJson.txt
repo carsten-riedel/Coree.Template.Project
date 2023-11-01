@@ -1,10 +1,14 @@
 {
   "$schema": "http://json.schemastore.org/template",
-  "author": "TBD",
+  //#if (PackageCompany == '')
+  "author": "MyAuthor",
+  //#else
+  "author": "MyCompany",
+  //#endif
   "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "Project", "Template" ],
-  "identity": "TBDProjectTemplate",
-  "name": "TBD Name",
-  "shortName": "TBDSHORTNAME",
+  "identity": "DefaultSourceNameClean",
+  "name": "SampleTemplateName",
+  "shortName": "SampleTemplateShortName",
   "tags": {
     "language": "C#",
     "type": "project"

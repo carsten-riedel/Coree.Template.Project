@@ -13,6 +13,58 @@
   "sourceName": "ProjectTemplate", // Matching nameingscheme csproj and namespace
   "preferNameDirectory": true,
   "symbols": {
+    "PackageAuthor": {
+      "type": "parameter",
+      "dataType": "string",
+      "replaces": "MyAuthor",
+      "description": "The author of the project.",
+      "displayName": "Package author",
+      "isRequired": "true"
+    },
+    "PackageCompany": {
+      "type": "parameter",
+      "dataType": "string",
+      "defaultValue": "",
+      "replaces": "MyCompany",
+      "description": "The company of the project.",
+      "displayName": "Package company"
+    },
+    "PackageCompanyIsSet": {
+      "type": "computed",
+      "value": "(PackageCompany != \"\")"
+    },
+    "SampleTemplateName": {
+      "type": "parameter",
+      "dataType": "string",
+      "defaultValue": "Default class library",
+      "replaces": "SampleTemplateName",
+      "description": "The company of the project.",
+      "displayName": "Sample Template Name",
+      "isRequired": "true"
+    },
+    "SampleTemplateShortName": {
+      "type": "parameter",
+      "dataType": "string",
+      "defaultValue": "default-class-library",
+      "replaces": "SampleTemplateShortName",
+      "description": "The company of the project.",
+      "displayName": "Sample Short Template Name",
+      "isRequired": "true"
+    },
+    "DefaultSourceNameRemoveDots": {
+      "type": "derived",  
+      "valueSource": "name",  
+      "valueTransform": "RemoveDots",  
+      "description": "A value derived from the 'name' param, used to rename Application1.cs"
+    },
+    "DefaultSourceNameClean": {
+      "type": "derived",  
+      "valueSource": "DefaultSourceNameRemoveDots",  
+      "valueTransform": "WithoutTrailingNumbers",  
+      "description": "A value derived from the 'name' param, used to rename Application1.cs",
+      "replaces" : "DefaultSourceNameClean"
+    },
+
     "templateDirRename":{
       "type": "generated",
       "generator": "constant",
@@ -34,6 +86,17 @@
   "guids": [
     "3DE8E772-C29F-421A-B9D9-5EAB1033311B",
     "5D25DDFC-AD5C-4F80-97A2-3E9FCAC9848F"
-  ]
-
+  ],
+  "forms": {
+    "WithoutTrailingNumbers": {
+      "identifier": "replace",
+      "pattern": "\\d+$",        // regex to match every number at the end of the string
+      "replacement": ""  // replace it with empty string
+    },
+    "RemoveDots": {
+      "identifier": "replace",
+      "pattern": "\\.",        // regex to match every number at the end of the string
+      "replacement": ""  // replace it with empty string
+    }
+  }
 }

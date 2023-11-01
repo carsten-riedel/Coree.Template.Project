@@ -29,6 +29,11 @@
     <Exec Command="git add -A" />
     <!-- <Exec Command="git commit -m &quot;Commit before Release build&quot;" /> -->
     <Exec Command="git diff-index --quiet HEAD || git commit -m &quot;Commit before Release build&quot;" />
+    <Exec Command="git rev-parse HEAD" ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitCommitId" />
+    </Exec>
+    <!-- Output the commit ID -->
+    <Message Text="Latest commit ID: $(GitCommitId)" Importance="high" />
   </Target>
 
 </Project>

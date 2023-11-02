@@ -5,10 +5,10 @@
 
   <PropertyGroup>
     <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
-    <AssemblyVersionBuild>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerDay)))))</AssemblyVersionBuild>
-    <AssemblyVersionTotalSeconds>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerSecond)))))</AssemblyVersionTotalSeconds>
-    <AssemblyVersionRemainingSeconds>$([System.Convert]::ToInt32($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
-    <AssemblyVersionRevision>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
+    <AssemblyVersionBuild>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerDay)))))</AssemblyVersionBuild>
+    <AssemblyVersionTotalSeconds>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerSecond)))))</AssemblyVersionTotalSeconds>
+    <AssemblyVersionRemainingSeconds>$([System.Math]::Truncate($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
+    <AssemblyVersionRevision>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -40,5 +40,14 @@
     <None Include="$(MSBuildThisFileDirectory)*"  Pack="false" PackagePath="" />
   </ItemGroup>
   
+    <Target Name="GitRootDirr" BeforeTargets="BeforeBuild">
+
+    <!-- Display the path to the Git root directory -->
+    
+    <Message Text="-- Ticks:  $(Ticks)" Importance="high" />
+    <Message Text="-- TicksPerDay: $(TicksPerDay)" Importance="high" />
+    <Message Text="-- TicksDiv: $(TicksDiv)" Importance="high" />
+
+  </Target>
 
 </Project>

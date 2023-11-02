@@ -52,11 +52,11 @@
 
   <!--#if (AssemblyVersioningScheme == true) -->
   <PropertyGroup>
-    <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), $([System.DateTime]::Parse("2000-01-01T00:00:00Z").Ticks)))</AssemblyVersionBaseTicks>
-    <AssemblyVersionBuild>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerDay)))))</AssemblyVersionBuild>
-    <AssemblyVersionTotalSeconds>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerSecond)))))</AssemblyVersionTotalSeconds>
-    <AssemblyVersionRemainingSeconds>$([System.Convert]::ToInt32($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
-    <AssemblyVersionRevision>$([System.Convert]::ToInt32($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
+    <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
+    <AssemblyVersionBuild>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerDay)))))</AssemblyVersionBuild>
+    <AssemblyVersionTotalSeconds>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerSecond)))))</AssemblyVersionTotalSeconds>
+    <AssemblyVersionRemainingSeconds>$([System.Math]::Truncate($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
+    <AssemblyVersionRevision>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
   </PropertyGroup>
   <!--#endif -->
 

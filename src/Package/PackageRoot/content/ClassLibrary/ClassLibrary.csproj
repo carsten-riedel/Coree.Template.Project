@@ -4,20 +4,20 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
-    <LangVersion>latest</LangVersion>
-    <AssemblyTitle>ClassLibrary</AssemblyTitle>
-    <AssemblyProduct>ClassLibrary</AssemblyProduct>
-    <AssemblyConfiguration>$(Configuration)</AssemblyConfiguration>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net6.0</TargetFrameworks> <!-- using TargetFramework will produce NU5128 and won't generate dependency in .nuspec -->
   </PropertyGroup>
 
-  <!-- Package configuration-->
-  <Import Project="Package/PackageConfig.props" />
+  <!-- 
+    Since during pack all ProjectReference will be transformed to Package dependencies. And version number is cascading into all package.
+  -->
+
+  <!-- NuGet Package configuration -->
+  <Import Project="Package/Config/PackageMetadata.props" />
+  <Import Project="Package/Config/PackageSpecs.props" />
 
   <!-- Exclude .gitignore from solution explorer -->
   <ItemGroup>
     <None Remove=".gitignore" />
-    <None Remove="Package\PackageOut\.gitignore" />
   </ItemGroup>
 
 </Project>

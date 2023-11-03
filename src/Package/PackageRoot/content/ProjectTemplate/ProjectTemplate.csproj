@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <!-- NuGet Package configuration -->
-  <Import Project="NuGetPackage/Config/NuGetPackageMetadata.props" />
-  <Import Project="NuGetPackage/Config/NuGetPackageSpecs.props" />
+  <Import Project="Package/Config/PackageMetadata.props" />
+  <Import Project="Package/Config/PackageSpecs.props" />
 
 </Project>

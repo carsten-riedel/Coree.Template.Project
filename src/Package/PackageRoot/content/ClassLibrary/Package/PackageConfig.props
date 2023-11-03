@@ -1,6 +1,0 @@
-<Project>
-
-  <Import Project="$(MSBuildThisFileDirectory)PackageMetadata.props" />
-  <Import Project="$(MSBuildThisFileDirectory)PackageSpecs.props" />
-
-</Project>

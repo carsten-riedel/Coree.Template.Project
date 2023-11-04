@@ -5,9 +5,12 @@ using System.IO;
 
 namespace ClassLibrary
 {
-    public class Class1
+    public static class Class1
     {
-
+        public static string Foo()
+        {
+            return "123";
+        }
     }
 }
 

@@ -5,24 +5,16 @@
 
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
-    <!--#if (PackageCompany == '') -->
-    <Owners>MyAuthor</Owners>
-    <!--#endif -->
-    <!--#if (PackageCompany != '') -->
-    <Owners>MyCompany</Owners>
-    <!--#endif -->
-    <Company>MyCompany</Company>
-    <!--#if (PackageCompany == '') -->
-    <Copyright>Copyright © MyAuthor 2023</Copyright>
-    <!--#endif -->
-    <!--#if (PackageCompany != '') -->
-    <Copyright>Copyright © MyCompany 2023</Copyright>
-    <!--#endif -->
-    <PackageId>ProjectTemplate</PackageId>
-    <PackageTags>Project;Templates;.NET</PackageTags>
-	  <PackageProjectUrl></PackageProjectUrl>
-	  <RepositoryUrl></RepositoryUrl>
-	  <RepositoryType></RepositoryType>
+    <Owners Condition="'$(PackageCompany)' != ''">MyCompany</Owners>
+    <Owners Condition="'$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">MyAuthor</Owners>
+    <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
+    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © MyCompany 1975</Copyright>
+    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © MyAuthor 1975</Copyright>
+    <PackageId>ClassLibrary</PackageId>
+    <PackageTags>dotnet;class;library</PackageTags>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType></RepositoryType>
 
     <VersionMajor>0</VersionMajor>
     <VersionMinor>1</VersionMinor>
@@ -35,10 +27,8 @@
     <InformationalVersion>$(PackageVersion)</InformationalVersion>
     <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
 
-     <Description>
-      <![CDATA[
-          Project templates
-	    ]]>
+    <Description>
+     <![CDATA[PackageDescription]]>
     </Description>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
@@ -46,7 +36,7 @@
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
-    <!--#if (AssemblyVersioningScheme == true) -->
+  <!--#if (AssemblyVersioningScheme == true) -->
   <Target Name="OverrideBuildRevision" BeforeTargets="GenerateNuspec" AfterTargets="BeforeBuild" >
     <PropertyGroup>
       <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
@@ -67,6 +57,5 @@
     </PropertyGroup>
   </Target>
   <!--#endif -->
-
 
 </Project>

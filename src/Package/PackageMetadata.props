@@ -5,7 +5,8 @@
 
   <PropertyGroup>
     <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
-    <AssemblyVersionBuild>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerDay)))))</AssemblyVersionBuild>
+    <TicksPerDay>$([System.TimeSpan]::TicksPerDay)</TicksPerDay>
+    <AssemblyVersionBuild>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerDay)))))</AssemblyVersionBuild>
     <AssemblyVersionTotalSeconds>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerSecond)))))</AssemblyVersionTotalSeconds>
     <AssemblyVersionRemainingSeconds>$([System.Math]::Truncate($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
     <AssemblyVersionRevision>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>

@@ -33,6 +33,13 @@
       "type": "computed",
       "value": "(PackageCompany != \"\")"
     },
+    "AssemblyVersioningScheme": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Generates nuget versioning scheme utilizing build and revision date.",
+      "displayName": "Automatic nuget version."
+    },
     "SampleTemplateName": {
       "type": "parameter",
       "dataType": "string",

@@ -1,0 +1,38 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28701.123
+MinimumVisualStudioVersion = 10.0.40219.1
+
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuildLibrary.MSTest", "MSBuildLibrary.MSTest\MSBuildLibrary.MSTest.csproj", "{35BBE988-7105-4CF2-BF49-11DBD588309E}"
+EndProject
+
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuildLibrary", "MSBuildLibrary\MSBuildLibrary.csproj", "{8CDD8387-B905-44A8-B5D5-07BB50E05BEA}"
+EndProject
+
+Global
+  GlobalSection(SolutionNotes) = postSolution
+  EndGlobalSection
+  GlobalSection(SolutionConfiguration) = preSolution
+       ConfigName.0 = Debug
+       ConfigName.1 = Release
+  EndGlobalSection
+  GlobalSection(ProjectDependencies) = postSolution
+  EndGlobalSection
+  GlobalSection(ProjectConfiguration) = postSolution
+   {8CDD8387-B905-44A8-B5D5-07BB50E05BEA}.Debug.ActiveCfg = Debug|x86
+   {8CDD8387-B905-44A8-B5D5-07BB50E05BEA}.Debug.Build.0 = Debug|x86
+   {8CDD8387-B905-44A8-B5D5-07BB50E05BEA}.Release.ActiveCfg = Release|x86
+   {8CDD8387-B905-44A8-B5D5-07BB50E05BEA}.Release.Build.0 = Release|x86
+   {35BBE988-7105-4CF2-BF49-11DBD588309E}.Debug.ActiveCfg = Debug|x86
+   {35BBE988-7105-4CF2-BF49-11DBD588309E}.Debug.Build.0 = Debug|x86
+   {35BBE988-7105-4CF2-BF49-11DBD588309E}.Release.ActiveCfg = Release|x86
+   {35BBE988-7105-4CF2-BF49-11DBD588309E}.Release.Build.0 = Release|x86
+  EndGlobalSection
+  GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {43DA960A-5EB3-4648-9643-7F837744A68C}
+	EndGlobalSection
+  GlobalSection(ExtensibilityAddIns) = postSolution
+  EndGlobalSection
+EndGlobal
+
+# Comment

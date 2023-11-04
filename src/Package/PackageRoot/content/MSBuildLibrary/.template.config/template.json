@@ -9,7 +9,7 @@
       "language": "C#",
       "type": "project"
     },
-    "defaultName": "MSBuildLibrary1", // Default Solution and Projectname scheme
+    "defaultName": "Organization.Domain.Functionality", // Default Solution and Projectname scheme
     "sourceName": "MSBuildLibrary", // Matching nameingscheme csproj and namespace
     "preferNameDirectory": true,
     "symbols": {
@@ -137,8 +137,6 @@
         "description": "A value derived from the 'name' param, used to rename Application1.cs",
         "replaces" : "SourceNameRemoveDots"
       }
-
-
     },
     "forms": {
       "WithoutTrailingNumbers": {
@@ -152,6 +150,11 @@
         "replacement": ""  // replace it with empty string
       }
     },
+    "guids": [
+      "8CDD8387-B905-44A8-B5D5-07BB50E05BEA",
+      "35BBE988-7105-4CF2-BF49-11DBD588309E",
+      "43DA960A-5EB3-4648-9643-7F837744A68C"
+    ],
     "sources": [
       {
         "modifiers": [

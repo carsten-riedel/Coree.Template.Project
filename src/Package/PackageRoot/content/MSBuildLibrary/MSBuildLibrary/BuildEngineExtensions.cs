@@ -1,13 +1,12 @@
-using Microsoft.Build.Execution;
-using Microsoft.Build.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Build.Execution;
+using Microsoft.Build.Framework;
 
 namespace MSBuildLibrary
 {
-
     public static class BuildEngineExtensions
     {
         const BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.Public;
@@ -21,7 +20,6 @@ namespace MSBuildLibrary
             {
                 return items.Select(x => x.EvaluatedInclude);
             }
-
 
             List<ProjectPropertyInstance> properties = projectInstance.Properties.Where(x => string.Equals(x.Name, key, StringComparison.InvariantCultureIgnoreCase)).ToList();
             if (properties.Count > 0)
@@ -71,7 +69,7 @@ namespace MSBuildLibrary
             var targetBuilderCallbackField = buildEngineType.GetField("_targetBuilderCallback", bindingFlags) ?? throw new Exception("Could not extract _targetBuilderCallback from " + buildEngineType.FullName);
             var targetBuilderCallback = targetBuilderCallbackField.GetValue(buildEngine);
             var targetCallbackType = targetBuilderCallback.GetType();
-            var projectInstanceField = targetCallbackType.GetField("_projectInstance", bindingFlags) ??     throw new Exception("Could not extract projectInstance from " + targetCallbackType.FullName);
+            var projectInstanceField = targetCallbackType.GetField("_projectInstance", bindingFlags) ?? throw new Exception("Could not extract projectInstance from " + targetCallbackType.FullName);
             return (ProjectInstance)projectInstanceField.GetValue(targetBuilderCallback);
         }
     }

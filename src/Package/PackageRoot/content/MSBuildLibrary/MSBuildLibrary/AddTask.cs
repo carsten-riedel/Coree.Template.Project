@@ -1,10 +1,5 @@
-using Microsoft.Build.Evaluation;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-
+using Microsoft.Build.Framework;
 
 namespace MSBuildLibrary
 {
@@ -22,7 +17,7 @@ namespace MSBuildLibrary
         public override bool Execute()
         {
             try
-            {            
+            {
                 AddResult = Param1 + Param2;
             }
             catch (Exception ex)
@@ -32,5 +27,4 @@ namespace MSBuildLibrary
             return !Log.HasLoggedErrors;
         }
     }
-
 }

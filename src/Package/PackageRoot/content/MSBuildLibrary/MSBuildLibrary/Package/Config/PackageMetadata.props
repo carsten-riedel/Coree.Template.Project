@@ -10,16 +10,16 @@
     <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
     <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © 1975 MyCompany</Copyright>
     <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © 1975 MyAuthor</Copyright>
-    <PackageId>SourceNameWithoutTrailingNumbers</PackageId>
+    <PackageId>MSBuildLibrary</PackageId>
     <PackageTags>dotnet;msbuild;task;</PackageTags>
-	  <PackageProjectUrl></PackageProjectUrl>
-	  <RepositoryUrl></RepositoryUrl>
-	  <RepositoryType></RepositoryType>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType></RepositoryType>
     <Version>0.0.1-prerelease</Version>
-     <Description>
+      <Description>
       <![CDATA[
           PackageDescription
-	    ]]>
+      ]]>
     </Description>
     <PackageReadmeFile Condition="'$(PackageAddReadMe)' == 'true'">Readme.md</PackageReadmeFile>
     <PackageLicenseFile Condition="'$(PackageAddMitLicense)' == 'true'">License.txt</PackageLicenseFile>
@@ -27,8 +27,4 @@
     <PackageReleaseNotes Condition="'$(PackageAddReleaseNotes)' == 'true'">$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)PackageRoot/**/*" Pack="true" PackagePath=""/>
-  </ItemGroup>
-
-</Project>
+  </Project>

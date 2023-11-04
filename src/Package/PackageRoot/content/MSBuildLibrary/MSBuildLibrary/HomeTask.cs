@@ -1,14 +1,9 @@
-using Microsoft.Build.Evaluation;
 using Microsoft.Build.Framework;
-using Microsoft.Build.Utilities;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace MSBuildLibrary
 {
-
     public class HomeTask : Microsoft.Build.Utilities.Task
     {
         [Output]
@@ -17,7 +12,7 @@ namespace MSBuildLibrary
         public override bool Execute()
         {
             try
-            {   
+            {
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     Home = Environment.GetEnvironmentVariable("USERPROFILE");
@@ -47,5 +42,4 @@ namespace MSBuildLibrary
             return !Log.HasLoggedErrors;
         }
     }
-
 }

@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 
 namespace MSBuildLibrary
 {
-
     public class TaskNodeTask : Microsoft.Build.Utilities.Task
     {
         [Output]
@@ -20,7 +19,7 @@ namespace MSBuildLibrary
         public override bool Execute()
         {
             try
-            {   
+            {
                 this.TaskNodeDir = System.IO.Path.GetDirectoryName(this.BuildEngine.ProjectFileOfTaskNode);
                 this.TaskNodeFile = this.BuildEngine.ProjectFileOfTaskNode;
             }

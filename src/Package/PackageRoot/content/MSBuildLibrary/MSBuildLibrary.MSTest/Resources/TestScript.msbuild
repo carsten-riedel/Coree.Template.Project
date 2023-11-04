@@ -1,0 +1,16 @@
+<Project>
+
+  <UsingTask TaskName="AddTask" AssemblyFile="..\MSBuildLibrary.dll" />
+
+  <Target Name="RunAddTask">
+    <!-- Create an instance of your task and execute it -->
+    <AddTask Param1="5" Param2="3">
+      <Output TaskParameter="AddResult" PropertyName="Sum" />
+    </AddTask>
+
+    <!-- Use the result for something -->
+    <Message Text="The sum is: $(Sum)" Importance="high" />
+  </Target>
+
+
+</Project>

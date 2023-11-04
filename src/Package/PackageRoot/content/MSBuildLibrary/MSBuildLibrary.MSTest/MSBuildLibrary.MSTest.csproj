@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.9.20" />
     <PackageReference Include="Microsoft.Build" Version="15.9.20" />
+    <PackageReference Include="Moq" Version="4.20.69" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
@@ -19,6 +20,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MSBuildLibrary\MSBuildLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\TestScript.msbuild">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -7,9 +7,9 @@
     "shortName": "msbuildlib",
     "tags": {
       "language": "C#",
-      "type": "project"
+      "type": "solution"
     },
-    "defaultName": "Organization.Domain.Functionality", // Default Solution and Projectname scheme
+    "defaultName": "Organization.MSBuild.Tasks", // Default Solution and Projectname scheme "Organization.Domain.Functionality"
     "sourceName": "MSBuildLibrary", // Matching nameingscheme csproj and namespace
     "preferNameDirectory": true,
     "symbols": {
@@ -123,6 +123,13 @@
         "description": "A value derived from the 'name' param, used to rename Application1.cs",
         "fileRename": "Default"
       },
+      "DefaultRemoveDots": {
+        "type": "derived",  
+        "valueSource": "name",  
+        "valueTransform": "RemoveDots",  
+        "description": "A value derived from the 'name' param, used to rename Application1.cs",
+        "fileRename": "NoDotsFileName"
+      },
       "DefaultSourceNameWithoutTrailingNumbers": {
         "type": "derived",  
         "valueSource": "name",  
@@ -135,7 +142,7 @@
         "valueSource": "name",  
         "valueTransform": "RemoveDots",  
         "description": "A value derived from the 'name' param, used to rename Application1.cs",
-        "replaces" : "SourceNameRemoveDots"
+        "replaces" : "NoDotsReplace"
       }
     },
     "forms": {

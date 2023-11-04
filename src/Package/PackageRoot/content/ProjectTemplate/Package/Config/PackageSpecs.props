@@ -22,7 +22,7 @@
     <PackageType>Template</PackageType>
     <!-- Suppress creation of contentFiles directory -->
     <ContentTargetFolders>.\</ContentTargetFolders>
-    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)/bin/Package</PackageOutputPath>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Package</PackageOutputPath>
   </PropertyGroup>
 
   <Target Name="DeletePackage" BeforeTargets="GenerateNuspec" Condition="'$(PackageOutputPath)'!=''">

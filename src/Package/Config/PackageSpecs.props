@@ -2,6 +2,11 @@
 
   <!-- Package specs -->
 
+  <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)\Package\Root\**\*" Exclude="$(MSBuildProjectDirectory)\Package\Root\**\**\bin\**;$(MSBuildProjectDirectory)\Package\Root\**\**\obj\**;$(MSBuildProjectDirectory)\Package\Root\**\**\.vs\**" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\Package\Config\**\*"  Pack="false" PackagePath="" />
+  </ItemGroup>
+
   <PropertyGroup>
     <IncludeBuildOutput>False</IncludeBuildOutput>
     <IncludeSource>False</IncludeSource>
@@ -17,10 +22,15 @@
     <PackageType>Template</PackageType>
     <!-- Suppress creation of contentFiles directory -->
     <ContentTargetFolders>.\</ContentTargetFolders>
-    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)/Package/PackageOut</PackageOutputPath>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)/bin/Package</PackageOutputPath>
   </PropertyGroup>
 
   <Target Name="DeletePackage" BeforeTargets="GenerateNuspec" Condition="'$(PackageOutputPath)'!=''">
+      <Message Text="Delete: $(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" Importance="high" />
+      <Delete Files="$(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" />
+  </Target>
+
+    <Target Name="DeletePackage" BeforeTargets="GenerateNuspec" Condition="'$(PackageOutputPath)'!=''">
       <Message Text="Delete: $(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" Importance="high" />
       <Delete Files="$(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" />
   </Target>
@@ -31,15 +41,20 @@
 
   <Target Name="GitRootDir" BeforeTargets="BeforeBuild">
     <!-- Find the Git root directory -->
-    <Exec Command="git rev-parse --show-toplevel 2&gt;nul" IgnoreExitCode="true">
+    <Exec Command="git rev-parse --show-toplevel 2&gt;&amp;1" IgnoreExitCode="true" ConsoleToMSBuild="true">
       <Output TaskParameter="ExitCode" PropertyName="GitRootExitCode" />
       <Output TaskParameter="ConsoleOutput" PropertyName="GitRootPath" />
     </Exec>
 
-    <!-- Display the path to the Git root directory -->
-    <Message Text="Git root directory path: $(GitRootPath)" Importance="high" />
+    <!-- Check if the command was successful -->
+    <PropertyGroup Condition=" '$(GitRootExitCode)' == '0' ">
+      <GitRootPath Condition=" '$(GitRootPath)' != '' ">$(GitRootPath.Trim())</GitRootPath>
+    </PropertyGroup>
 
+    <!-- Display the path to the Git root directory -->
+    <Message Text="Git root directory path: $(GitRootPath)" Importance="high" Condition=" '$(GitRootExitCode)' == '0' "/>
   </Target>
+
   
   <Target Name="GitAvailable" BeforeTargets="BeforeBuild">
     <!-- Check if Git is available -->
@@ -57,7 +72,7 @@
 
   </Target>
 
-  <Target Name="BeforeBuildx" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="BeforeBuildx" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' == 'Release' And '$(GitAvailable)' == 'true' And '$(GitRootPath)' != ''">
     <Exec Command="git add -A" />
     <!-- <Exec Command="git commit -m &quot;Commit before Release build&quot;" /> -->
     <Exec Command="git diff-index --quiet HEAD || git commit -m &quot;Commit before Release build&quot;" />
@@ -77,7 +92,7 @@
     <Message Text="----------: $(ModifiedGitRemoteUrl)" Importance="high" />
   </Target>
 
-  <Target Name="GitPush" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+  <Target Name="GitPush" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' And '$(GitAvailable)' == 'true' And '$(GitRootPath)' != ''">
     <Exec Command="git push" />
     <Exec Command="git push origin $(VersionPrefix)" />
     <!-- git push -d origin 0.1.8706.38986 -->

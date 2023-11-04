@@ -17,7 +17,7 @@ Project Templates for Visual Studio and dotnet cli
 
 - [Github: Net template samples](https://github.com/dotnet/templating/tree/main/dotnet-template-samples)
 
-- [Microsoft Project Repository .net winforms templates](https://github.com/dotnet/winforms/tree/main/pkg/Microsoft.Dotnet.WinForms.ProjectTemplates/content/WinFormsApplication-CSharp)
+- [Microsoft Project Repository .net winforms templates](https://github.com/dotnet/winforms/tree/main/pkg/Microsoft.Dotnet.WinForms.Coree.Template.Projects/content/WinFormsApplication-CSharp)
 
 ## About MSBuild Tasks creation
 - [MSbuild Custom Task](https://github.com/dotnet/samples/tree/main/msbuild/custom-task-code-generation)

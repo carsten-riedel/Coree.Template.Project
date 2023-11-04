@@ -36,7 +36,7 @@
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
-  <Target Name="OverrideBuildRevision" BeforeTargets="GenerateNuspec" AfterTargets="BeforeBuild" >
+  <Target Name="OverrideBuildRevision" BeforeTargets="GenerateNuspec;BeforeBuild" AfterTargets="BeforeBuild" >
     <PropertyGroup>
       <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
       <TicksPerDay>$([System.TimeSpan]::TicksPerDay)</TicksPerDay>

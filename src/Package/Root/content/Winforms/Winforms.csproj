@@ -50,15 +50,18 @@
     <!--#endif -->
   </PropertyGroup>
 
-  <!--#if (AssemblyVersioningScheme == true) -->
   <PropertyGroup>
-    <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
-    <AssemblyVersionBuild>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerDay)))))</AssemblyVersionBuild>
-    <AssemblyVersionTotalSeconds>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $([System.TimeSpan]::TicksPerSecond)))))</AssemblyVersionTotalSeconds>
-    <AssemblyVersionRemainingSeconds>$([System.Math]::Truncate($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
-    <AssemblyVersionRevision>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
+    <VersionMajor>0</VersionMajor>
+    <VersionMinor>1</VersionMinor>
+    <VersionBuild>0</VersionBuild>
+    <VersionRevision>0</VersionRevision>
+    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+    <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
+    <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+    <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
   </PropertyGroup>
-  <!--#endif -->
 
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
@@ -69,22 +72,27 @@
     <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © MyAuthor 1975</Copyright>
   </PropertyGroup>
 
-  <!-- Versioning. Note VersionPrefix-VersionSuffix will be used in assembleys product version -->
-  <PropertyGroup>
-      <VersionMajor>0</VersionMajor>
-      <VersionMinor>1</VersionMinor>
-      <!--#if (AssemblyVersioningScheme == true) -->
+  <!--#if (AssemblyVersioningScheme == true) -->
+  <Target Name="OverrideBuildRevision" BeforeTargets="GenerateNuspec" AfterTargets="BeforeBuild" >
+    <PropertyGroup>
+      <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
+      <TicksPerDay>$([System.TimeSpan]::TicksPerDay)</TicksPerDay>
+      <TicksPerSecond>$([System.TimeSpan]::TicksPerSecond)</TicksPerSecond>
+      <AssemblyVersionBuild>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerDay)))))</AssemblyVersionBuild>
+      <AssemblyVersionTotalSeconds>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerSecond)))))</AssemblyVersionTotalSeconds>
+      <AssemblyVersionRemainingSeconds>$([System.Math]::Truncate($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
+      <AssemblyVersionRevision>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
       <VersionBuild>$(AssemblyVersionBuild)</VersionBuild>
       <VersionRevision>$(AssemblyVersionRevision)</VersionRevision>
-      <!--#endif -->
-      <!--#if (AssemblyVersioningScheme == false) -->
-      <VersionBuild>0</VersionBuild>
-      <VersionRevision>0</VersionRevision>
-      <!--#endif -->
       <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
-      <VersionSuffix>$(Configuration)</VersionSuffix>
-      <AssemblyVersion>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</AssemblyVersion>
-  </PropertyGroup>
+      <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
+      <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+      <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+      <InformationalVersion>$(PackageVersion)</InformationalVersion>
+      <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+    </PropertyGroup>
+  </Target>
+  <!--#endif -->
 
   <PropertyGroup>
     <ApplicationIcon>Resources\application.ico</ApplicationIcon>

@@ -7,7 +7,7 @@
     <IsTool>true</IsTool>
     <NoWarn>NU5102;NU5128</NoWarn>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)/bin/Pack</PackageOutputPath>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Pack</PackageOutputPath>
     <LocalPackagesDir></LocalPackagesDir>
   </PropertyGroup>
   

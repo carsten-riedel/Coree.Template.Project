@@ -34,7 +34,7 @@ Notes Ubuntu/WSL:
 sudo apt remove -y --purge --autoremove "dotnet*" "aspnetcore*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list
 
 #Install the dotnet sdk
-sudo apt-get update && sudo apt-get install -y dotnet-sdk-7.0
+sudo apt-get update && sudo apt-get install -y dotnet-sdk-6.0 dotnet-sdk-7.0
 ```
 
 ## Install/Uninstall the templates

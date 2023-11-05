@@ -25,5 +25,10 @@ namespace WpfApp
         {
             InitializeComponent();
         }
+
+        private void GoToSource(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://github.com/carsten-riedel/Coree.Template.Project") { UseShellExecute = true });
+        }
     }
 }

@@ -17,7 +17,6 @@
         Title="MainWindow" Height="450" Width="800">
     
     <mah:MetroWindow.WindowTitleBrush>
-        <!-- <ImageBrush ImageSource="/Assets/Title/bar.png" Stretch="Fill" /> -->
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
             <GradientStop Color="SkyBlue" Offset="0" />
             <GradientStop Color="SteelBlue" Offset="1" />
@@ -28,25 +27,19 @@
         <DataTemplate>
             <Image Width="20" Height="20" Stretch="Uniform">
                 <Image.Source>
-                    <BitmapImage UriSource="pack://application:,,,/Assets/Png/heart.png" />
+                    <BitmapImage UriSource="pack://application:,,,/Assets/Png/Application.png" />
                 </Image.Source>
             </Image>
         </DataTemplate>
     </mah:MetroWindow.IconTemplate>
 
-    <mah:MetroWindow.LeftWindowCommands>
-        <mah:WindowCommands>
-                <Image Source="/Assets/Glyph/check.png" Margin="4" />
-        </mah:WindowCommands>
-    </mah:MetroWindow.LeftWindowCommands>
-
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
-            <Button Content="GoToSource">
+            <Button Content="Source" Click="GoToSource" Foreground="White">
                 <Button.ContentTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/Glyph/check.png" Margin="4" />
+                            <Image Source="/Assets/Png/github.png" Margin="4" />
                             <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="{Binding}" />
                         </StackPanel>
                     </DataTemplate>

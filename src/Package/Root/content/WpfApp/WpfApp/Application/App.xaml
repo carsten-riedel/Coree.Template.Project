@@ -27,14 +27,64 @@
                 
             </ResourceDictionary.MergedDictionaries>
 
-            <Style TargetType="Button" BasedOn="{StaticResource   MaterialDesignRaisedButton}">
-                <Setter Property="FontSize" Value="30"/>
+            <!-- Material Design Colors https://colordesigner.io/gradient-generator -->
+            <Color x:Key="Primary50">#87ceeb</Color>
+            <Color x:Key="Primary50Foreground">#DD000000</Color>
+            <Color x:Key="Primary100">#7ec5e5</Color>
+            <Color x:Key="Primary100Foreground">#DD000000</Color>
+            <Color x:Key="Primary200">#76bddf</Color>
+            <Color x:Key="Primary200Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary300">#6eb4d9</Color>
+            <Color x:Key="Primary300Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary400">#67acd3</Color>
+            <Color x:Key="Primary400Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary500">#5fa4cd</Color>
+            <Color x:Key="Primary500Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary600">#589bc7</Color>
+            <Color x:Key="Primary600Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary700">#5293c1</Color>
+            <Color x:Key="Primary700Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary800">#4c8aba</Color>
+            <Color x:Key="Primary800Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary900">#4682b4</Color>
+            <Color x:Key="Primary900Foreground">#DDFFFFFF</Color>
+
+            <!-- Material Design Used in ctrls-->
+            <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary200}" />
+            <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary200Foreground}"  />
+            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary700}" />
+            <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary700Foreground}"  />
+            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary900}" />
+            <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary900Foreground}"  />
+            
+            <!-- MahApps Brushes -->
+            <SolidColorBrush x:Key="MahApps.Color.Highlight" Color="{DynamicResource Primary900}"/>
+            <SolidColorBrush x:Key="MahApps.Color.AccentBase" Color="{DynamicResource Primary800}" />
+            <SolidColorBrush x:Key="MahApps.Color.Accent" Color="{DynamicResource Primary700}"/>
+            <SolidColorBrush x:Key="MahApps.Color.Accent2" Color="{DynamicResource Primary600}"/>
+            <SolidColorBrush x:Key="MahApps.Color.Accent3" Color="{DynamicResource Primary500}"/>
+            <SolidColorBrush x:Key="MahApps.Color.Accent4" Color="{DynamicResource Primary400}"/>
+            
+            
+            <SolidColorBrush x:Key="MahApps.Brushes.WindowTitle" Color="{DynamicResource Primary700}"/>
+            <SolidColorBrush x:Key="MahApps.Brushes.Selected.Foreground" Color="{DynamicResource Primary500Foreground}"/>
+            <LinearGradientBrush x:Key="MahApps.Brushes.Progress" EndPoint="0.001,0.5" StartPoint="1.002,0.5">
+                <GradientStop Color="{DynamicResource Primary700}" Offset="0"/>
+                <GradientStop Color="{DynamicResource Primary300}" Offset="1"/>
+            </LinearGradientBrush>
+            <SolidColorBrush x:Key="MahApps.Brushes.CheckmarkFill" Color="{DynamicResource Primary500}"/>
+            <SolidColorBrush x:Key="MahApps.Brushes.RightArrowFill" Color="{DynamicResource Primary500}"/>
+            <SolidColorBrush x:Key="MahApps.Brushes.IdealForeground" Color="{DynamicResource Primary500Foreground}"/>
+            <SolidColorBrush x:Key="MahApps.Brushes.IdealForegroundDisabled" Color="{DynamicResource Primary500}" Opacity="0.4"/>
+
+            <Style TargetType="Button" BasedOn="{StaticResource   MaterialDesignRaisedLightButton}">
+                <Setter Property="FontSize" Value="14"/>
                 <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="0" />
                 <Setter Property="materialDesign:ShadowAssist.ShadowEdges" Value="None" />
                 <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0" />
             </Style>
             <Style TargetType="TextBox" BasedOn="{StaticResource  MaterialDesignTextBox}">
-                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="FontSize" Value="14"/>
             </Style>
 
         </ResourceDictionary>

@@ -7,11 +7,54 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!--#if (RuntimeIdentifier == win-x86) -->
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <!--#endif -->
+    <!--#if (RuntimeIdentifier == win-x64) -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <!--#endif -->
+    <PublishDir>bin\Publish\$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)</PublishDir>
+    <!--#if (Publish == FrameworkRequired) -->
+    <SelfContained>false</SelfContained>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkRequiredSingle) -->
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkIncluded) -->
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkIncludedSingle) -->
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkIncludedSingleCompressed) -->
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <!--#endif -->
+  </PropertyGroup>
+
   <ItemGroup>
     <ApplicationDefinition Include="Application\App.xaml" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <ApplicationIcon>Assets\Ico\Application.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <!-- https://simpleicons.org/ -->
   <ItemGroup>
+    <Resource Include="Assets\Png\Application.png" />
+    <Resource Include="Assets\Png\github.png" />
     <Resource Include="Assets\Png\check.png" />
     <Resource Include="Assets\Png\heart.png" />
     <Resource Include="Assets\Png\settings.png" />

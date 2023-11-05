@@ -1,0 +1,61 @@
+﻿<mah:MetroWindow  x:Class="WpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:local="clr-namespace:WpfApp"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        TitleCharacterCasing="Normal"
+        ResizeMode="CanResizeWithGrip"
+        FontFamily="{materialDesign:MaterialDesignFont}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Title="MainWindow" Height="450" Width="800">
+    
+    <mah:MetroWindow.WindowTitleBrush>
+        <!-- <ImageBrush ImageSource="/Assets/Title/bar.png" Stretch="Fill" /> -->
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="SkyBlue" Offset="0" />
+            <GradientStop Color="SteelBlue" Offset="1" />
+        </LinearGradientBrush>
+    </mah:MetroWindow.WindowTitleBrush>
+
+    <mah:MetroWindow.IconTemplate>
+        <DataTemplate>
+            <Image Width="20" Height="20" Stretch="Uniform">
+                <Image.Source>
+                    <BitmapImage UriSource="pack://application:,,,/Assets/Png/heart.png" />
+                </Image.Source>
+            </Image>
+        </DataTemplate>
+    </mah:MetroWindow.IconTemplate>
+
+    <mah:MetroWindow.LeftWindowCommands>
+        <mah:WindowCommands>
+                <Image Source="/Assets/Glyph/check.png" Margin="4" />
+        </mah:WindowCommands>
+    </mah:MetroWindow.LeftWindowCommands>
+
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands>
+            <Button Content="GoToSource">
+                <Button.ContentTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Assets/Glyph/check.png" Margin="4" />
+                            <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </Button.ContentTemplate>
+            </Button>
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
+
+    <Grid>
+
+    </Grid>
+</mah:MetroWindow>

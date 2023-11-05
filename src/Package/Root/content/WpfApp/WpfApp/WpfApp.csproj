@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="Application\App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Png\check.png" />
+    <Resource Include="Assets\Png\heart.png" />
+    <Resource Include="Assets\Png\settings.png" />
+    <Resource Include="Assets\Png\user.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.3.0" />
+  </ItemGroup>
+
+</Project>

@@ -60,6 +60,7 @@
         "description": "Choose the publish type. Option 2) or 3) recommended.",
         "datatype": "choice",
         "allowMultipleValues": false,
+        "displayName": "Dotnet publish configuration.",
         "enableQuotelessLiterals": true,
         "choices": [
           {
@@ -110,13 +111,6 @@
         "type": "computed",
         "value": "(PackageCompany != \"\")"
       },
-      "PackageCopyright": {
-        "type": "parameter",
-        "dataType": "bool",
-        "defaultValue": "true",
-        "description": "Add copyright to assembly.",
-        "displayName": "Add copyright"
-      },
       "copyrightYear": {
         "type": "generated",
         "generator": "now",
@@ -132,6 +126,13 @@
         "parameters": {
           "format": "yyyy-MM-dd"
         }
+      },
+      "ProfileOptimizationStartup": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "description": "ProfileOptimization in startup.",
+        "displayName": "ProfileOptimization in startup."
       },
       "VersioningScheme": {
         "type": "parameter",

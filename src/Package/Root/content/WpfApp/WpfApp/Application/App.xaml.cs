@@ -15,6 +15,10 @@ namespace WpfApp
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            #if( ProfileOptimizationStartup )
+            System.Runtime.ProfileOptimization.SetProfileRoot(AppDomain.CurrentDomain.BaseDirectory);
+            System.Runtime.ProfileOptimization.StartProfile($@"{System.Reflection.Assembly.GetAssembly(this.GetType())!.GetName().Name}.profile");
+            #endif
             base.OnStartup(e);
         }
 

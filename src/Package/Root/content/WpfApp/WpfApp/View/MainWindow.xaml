@@ -6,6 +6,10 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:local="clr-namespace:WpfApp"
+        <!--#if (ViewModel) -->
+        xmlns:viewmodel="clr-namespace:WpfApp.ViewModel"
+        d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
+        <!--#endif -->
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         TitleCharacterCasing="Normal"
@@ -14,7 +18,12 @@
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Title="MainWindow" Height="450" Width="800">
+        <!--#if (ViewModel) -->
+        Title="{Binding Path=Title}"
+        <!--#else -->
+        Title="MainWindow"
+        <!--#endif -->
+        Height="450" Width="800">
     
     <mah:MetroWindow.WindowTitleBrush>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">

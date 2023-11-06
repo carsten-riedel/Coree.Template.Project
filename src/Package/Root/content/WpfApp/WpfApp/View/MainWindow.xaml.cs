@@ -13,6 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+#if( ViewModel )
+using Microsoft.Extensions.DependencyInjection;
+using WpfApp.ViewModel;
+#endif
 
 namespace WpfApp
 {
@@ -23,6 +27,9 @@ namespace WpfApp
     {
         public MainWindow()
         {
+            #if( ViewModel )
+            this.DataContext = App.Services!.GetRequiredService<MainWindowViewModel>();
+            #endif
             InitializeComponent();
         }
 

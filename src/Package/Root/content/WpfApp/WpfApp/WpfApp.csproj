@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <DebugType>embedded</DebugType>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -97,7 +97,7 @@
     <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
   </PropertyGroup>
 
-    <!--#if (VersioningScheme == true) -->
+  <!--#if (VersioningScheme == true) -->
   <Target Name="OverrideBuildRevision" BeforeTargets="GenerateNuspec" AfterTargets="BeforeBuild" >
     <PropertyGroup>
       <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
@@ -121,6 +121,14 @@
 
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="0.3.0" />
+    <!--#if (DependencyInjection == true) -->
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+    <!--#endif -->
+    <!--#if (ViewModel == true) -->
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <!--#endif -->
+
+    
   </ItemGroup>
 
 </Project>

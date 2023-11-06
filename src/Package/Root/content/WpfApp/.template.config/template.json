@@ -141,6 +141,21 @@
         "description": "Generates versioning scheme utilizing build and revision date.",
         "displayName": "Automatic versioning scheme."
       },
+      "DependencyInjection": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "description": "Add a generic host to startup.",
+        "displayName": "Add a generic host to startup."
+      },
+      "ViewModel": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "isEnabled": "DependencyInjection == true",
+        "description": "Add a ViewModel stub.",
+        "displayName": "Add a ViewModel stub."
+      },
       "DefaultRename": {
         "type": "derived",  
         "valueSource": "name",  
@@ -178,6 +193,18 @@
         "pattern": "\\.",        // regex to match every number at the end of the string
         "replacement": ""  // replace it with empty string
       }
-    }
+    },
+    "sources": [
+      {
+        "modifiers": [
+          {
+            "condition": "(!ViewModel)",
+            "exclude": [
+              "WpfApp/ViewModel/MainWindowViewModel.cs"
+            ]
+          }
+        ]
+      }
+    ]
   }
   

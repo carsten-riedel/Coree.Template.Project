@@ -53,6 +53,28 @@
     <ApplicationIcon>Assets\Ico\Application.ico</ApplicationIcon>
   </PropertyGroup>
 
+<!--#if (SourceCodeProFonts == true) -->
+  <!-- https://fonts.google.com/  https://stackoverflow.com/questions/6453640/how-to-include-external-font-in-wpf-application-without-installing-it -->
+  <ItemGroup>
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-Black.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-BlackItalic.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-Bold.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-BoldItalic.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-ExtraBold.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-ExtraBoldItalic.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-ExtraLight.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-ExtraLightItalic.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-Italic.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-Light.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-LightItalic.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-Medium.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-MediumItalic.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-Regular.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-SemiBold.ttf" />
+    <Resource Include="Assets\Fonts\SourceCodePro\SourceCodePro-SemiBoldItalic.ttf" />
+  </ItemGroup>
+<!--#endif -->
+
   <!-- https://simpleicons.org/ -->
   <ItemGroup>
     <Resource Include="Assets\Png\Application.png" />

@@ -156,6 +156,13 @@
         "description": "Add a ViewModel stub.",
         "displayName": "Add a ViewModel stub."
       },
+      "SourceCodeProFonts": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "description": "Add source code pro fonts.",
+        "displayName": "Add source code pro fonts."
+      },
       "DefaultRename": {
         "type": "derived",  
         "valueSource": "name",  
@@ -201,6 +208,28 @@
             "condition": "(!ViewModel)",
             "exclude": [
               "WpfApp/ViewModel/MainWindowViewModel.cs"
+            ]
+          },
+          {
+            "condition": "(!SourceCodeProFonts)",
+            "exclude": [
+              "WpfApp/Assets/Fonts/SourceCodePro/OFL.txt",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-Black.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-BlackItalic.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-Bold.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-BoldItalic.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-ExtraBold.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-ExtraBoldItalic.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-ExtraLight.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-ExtraLightItalic.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-Italic.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-Light.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-LightItalic.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-Medium.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-MediumItalic.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-Regular.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-SemiBold.ttf",
+              "WpfApp/Assets/Fonts/SourceCodePro/SourceCodePro-SemiBoldItalic.ttf",
             ]
           }
         ]

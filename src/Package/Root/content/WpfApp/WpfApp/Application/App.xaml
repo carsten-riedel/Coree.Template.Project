@@ -26,6 +26,25 @@
                 
             </ResourceDictionary.MergedDictionaries>
 
+            <!--#if (SourceCodeProFonts == true) -->
+            <FontFamily x:Key="SourceCodePro-Black">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro Black</FontFamily>
+            <FontFamily x:Key="SourceCodePro-BlackItalic">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro Black Italic</FontFamily>
+            <FontFamily x:Key="SourceCodePro-Bold">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro Bold</FontFamily>
+            <FontFamily x:Key="SourceCodePro-BoldItalic">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro Bold Italic</FontFamily>
+            <FontFamily x:Key="SourceCodePro-ExtraBold">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro ExtraBold</FontFamily>
+            <FontFamily x:Key="SourceCodePro-ExtraBoldItalic">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro ExtraBold Italic</FontFamily>
+            <FontFamily x:Key="SourceCodePro-ExtraLight">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro ExtraLight</FontFamily>
+            <FontFamily x:Key="SourceCodePro-ExtraLightItalic">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro ExtraLight Italic</FontFamily>
+            <FontFamily x:Key="SourceCodePro-Italic">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro Italic</FontFamily>
+            <FontFamily x:Key="SourceCodePro-Light">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro Light</FontFamily>
+            <FontFamily x:Key="SourceCodePro-LightItalic">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro Light Italic</FontFamily>
+            <FontFamily x:Key="SourceCodePro-Medium">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro Medium</FontFamily>
+            <FontFamily x:Key="SourceCodePro-MediumItalic">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro Medium Italic</FontFamily>
+            <FontFamily x:Key="SourceCodePro-Regular">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro Regular</FontFamily>
+            <FontFamily x:Key="SourceCodePro-SemiBold">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro SemiBold</FontFamily>
+            <FontFamily x:Key="SourceCodePro-SemiBoldItalic">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro SemiBold Italic</FontFamily>
+            <!--#endif -->
+
             <!-- Material Design Colors https://colordesigner.io/gradient-generator -->
             <Color x:Key="Primary50">#87ceeb</Color>
             <Color x:Key="Primary50Foreground">#DD000000</Color>
@@ -76,14 +95,37 @@
             <SolidColorBrush x:Key="MahApps.Brushes.IdealForeground" Color="{DynamicResource Primary500Foreground}"/>
             <SolidColorBrush x:Key="MahApps.Brushes.IdealForegroundDisabled" Color="{DynamicResource Primary500}" Opacity="0.4"/>
 
-            <Style TargetType="Button" BasedOn="{StaticResource   MaterialDesignRaisedLightButton}">
+            <Style TargetType="Button" BasedOn="{StaticResource    MaterialDesignOutlinedLightButton}">
                 <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Medium"/>
                 <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="0" />
                 <Setter Property="materialDesign:ShadowAssist.ShadowEdges" Value="None" />
                 <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0" />
             </Style>
-            <Style TargetType="TextBox" BasedOn="{StaticResource  MaterialDesignTextBox}">
+            <Style TargetType="TextBox" BasedOn="{StaticResource  MaterialDesignFloatingHintTextBox}">
                 <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+                <Setter Property="materialDesign:HintAssist.FloatingOffset" Value="0, -17"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="MinHeight" Value="38"/>
+                <Setter Property="MinWidth" Value="180"/>
+                <Setter Property="materialDesign:HintAssist.Hint" Value="Override"/>
+                <Setter Property="materialDesign:HintAssist.HelperText" Value="Override App.xaml property on control"/>
+            </Style>
+            <Style TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignCheckBox}">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+            </Style>
+            <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignRadioButton}">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+            </Style>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignTextBlock}">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontWeight" Value="Medium"/>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
             </Style>
 
         </ResourceDictionary>

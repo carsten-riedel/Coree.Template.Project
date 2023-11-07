@@ -15,16 +15,24 @@
         TitleCharacterCasing="Normal"
         ResizeMode="CanResizeWithGrip"
         FontFamily="{materialDesign:MaterialDesignFont}"
-        TextElement.FontWeight="Medium"
-        TextElement.FontSize="14"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         <!--#if (ViewModel) -->
         Title="{Binding Path=Title}"
         <!--#else -->
         Title="MainWindow"
         <!--#endif -->
+        TitleBarHeight="30"
         Height="450" Width="800">
     
+    <mah:MetroWindow.TitleTemplate>
+        <DataTemplate>
+            <!--#if (SourceCodeProFonts) -->
+            <TextBlock Text="{TemplateBinding Content}" Foreground="White" FontFamily="/Assets/Fonts/SourceCodePro/#Source Code Pro Regular" FontSize="16" Margin="6 0 0 0" VerticalAlignment="Center"/>
+            <!--#else -->
+            <TextBlock Text="{TemplateBinding Content}" Foreground="White" FontSize="16" FontWeight="Light" Margin="6 0 0 0" VerticalAlignment="Center"/>
+            <!--#endif -->
+        </DataTemplate>
+    </mah:MetroWindow.TitleTemplate>
+
     <mah:MetroWindow.WindowTitleBrush>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
             <GradientStop Color="SkyBlue" Offset="0" />
@@ -44,12 +52,16 @@
 
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
-            <Button Content="Source" Click="GoToSource" Foreground="White">
+            <!--#if (ViewModel) -->
+            <Button Content="{Binding Path=TitleSource}" Click="GoToSource" >
+            <!--#else -->
+            <Button Content="Source" Click="GoToSource" >
+            <!--#endif -->
                 <Button.ContentTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Assets/Png/github.png" Margin="4" />
-                            <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="{Binding}" />
+                            <Image Source="/Assets/Png/github.png" Width="20" Height="20" Stretch="Uniform" />
+                            <TextBlock Margin="6 0 0 0" VerticalAlignment="Center" Text="{Binding}" Foreground="White" FontSize="16" FontWeight="Light" />
                         </StackPanel>
                     </DataTemplate>
                 </Button.ContentTemplate>

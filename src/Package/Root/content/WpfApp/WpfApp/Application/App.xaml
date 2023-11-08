@@ -95,35 +95,37 @@
             <SolidColorBrush x:Key="MahApps.Brushes.IdealForeground" Color="{DynamicResource Primary500Foreground}"/>
             <SolidColorBrush x:Key="MahApps.Brushes.IdealForegroundDisabled" Color="{DynamicResource Primary500}" Opacity="0.4"/>
 
-            <Style TargetType="Button" BasedOn="{StaticResource    MaterialDesignOutlinedLightButton}">
+            <Style x:Key="CustomButtonStyle" TargetType="Button" BasedOn="{StaticResource    MaterialDesignOutlinedLightButton}">
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="FontWeight" Value="Medium"/>
                 <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="0" />
                 <Setter Property="materialDesign:ShadowAssist.ShadowEdges" Value="None" />
                 <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0" />
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
             </Style>
-            <Style TargetType="TextBox" BasedOn="{StaticResource  MaterialDesignFloatingHintTextBox}">
+            <Style x:Key="CustomTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
-                <Setter Property="materialDesign:HintAssist.FloatingOffset" Value="0, -17"/>
                 <Setter Property="FontWeight" Value="Medium"/>
-                <Setter Property="MinHeight" Value="38"/>
+                <Setter Property="MinHeight" Value="40"/>
                 <Setter Property="MinWidth" Value="180"/>
                 <Setter Property="materialDesign:HintAssist.Hint" Value="Override"/>
                 <Setter Property="materialDesign:HintAssist.HelperText" Value="Override App.xaml property on control"/>
+                <Setter Property="TextWrapping" Value="NoWrap"/>
+                <!-- Add other setters as required -->
             </Style>
-            <Style TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignCheckBox}">
+            <Style x:Key="CustomCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignCheckBox}">
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="FontWeight" Value="Medium"/>
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
             </Style>
-            <Style TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignRadioButton}">
+            <Style x:Key="CustomRadioButtonStyle" TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignRadioButton}">
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="FontWeight" Value="Medium"/>
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
             </Style>
-            <Style TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignTextBlock}">
-                <Setter Property="FontSize" Value="14"/>
+            <Style x:Key="CustomTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignTextBlock}">
+                <Setter Property="FontSize" Value="30"/>
                 <Setter Property="FontWeight" Value="Medium"/>
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
             </Style>

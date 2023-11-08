@@ -12,6 +12,9 @@
         <!--#endif -->
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        GlowBrush="{DynamicResource PrimaryHueDarkBrush}"
+        BorderThickness="1"
+        BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
         TitleCharacterCasing="Normal"
         ResizeMode="CanResizeWithGrip"
         FontFamily="{materialDesign:MaterialDesignFont}"
@@ -20,7 +23,8 @@
         <!--#else -->
         Title="MainWindow"
         <!--#endif -->
-        TitleBarHeight="30"
+        TitleBarHeight="28"
+        WindowState="Normal"
         Height="450" Width="800">
     
     <mah:MetroWindow.TitleTemplate>
@@ -35,10 +39,25 @@
 
     <mah:MetroWindow.WindowTitleBrush>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-            <GradientStop Color="SkyBlue" Offset="0" />
-            <GradientStop Color="SteelBlue" Offset="1" />
+            <GradientStop Color="{StaticResource Primary900}" Offset="0" />
+            <GradientStop Color="{StaticResource Primary200}" Offset="1" />
         </LinearGradientBrush>
     </mah:MetroWindow.WindowTitleBrush>
+
+    <mah:MetroWindow.NonActiveWindowTitleBrush>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="{StaticResource Primary900}" Offset="0" />
+            <GradientStop Color="{StaticResource Primary200}" Offset="1" />
+        </LinearGradientBrush>
+    </mah:MetroWindow.NonActiveWindowTitleBrush>
+
+    <mah:MetroWindow.NonActiveGlowBrush>
+        <SolidColorBrush Color="{StaticResource Primary900}"  />
+    </mah:MetroWindow.NonActiveGlowBrush>
+
+    <mah:MetroWindow.NonActiveBorderBrush>
+        <SolidColorBrush Color="{StaticResource Primary900}"  />
+    </mah:MetroWindow.NonActiveBorderBrush>
 
     <mah:MetroWindow.IconTemplate>
         <DataTemplate>
@@ -61,7 +80,11 @@
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <Image Source="/Assets/Png/github.png" Width="20" Height="20" Stretch="Uniform" />
+                            <!--#if (SourceCodeProFonts) -->
+                            <TextBlock Margin="6 0 0 0" VerticalAlignment="Center" Text="{Binding}" Foreground="White" FontFamily="/Assets/Fonts/SourceCodePro/#Source Code Pro Regular" FontSize="16" FontWeight="Light" />
+                            <!--#else -->
                             <TextBlock Margin="6 0 0 0" VerticalAlignment="Center" Text="{Binding}" Foreground="White" FontSize="16" FontWeight="Light" />
+                            <!--#endif -->
                         </StackPanel>
                     </DataTemplate>
                 </Button.ContentTemplate>
@@ -69,7 +92,27 @@
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
 
-    <Grid>
+    <DockPanel LastChildFill="False">
 
-    </Grid>
+       <Canvas DockPanel.Dock="Top">
+            <!--#if (ViewModel) -->
+            <Button x:Name="button" Style="{StaticResource CustomButtonStyle}"  Content="Button" Command="{Binding  SetTitleSourceStringCommand}" HorizontalAlignment="Left" Height="40" Margin="10,10,0,0" VerticalAlignment="Top" Width="180"/>
+            <TextBox x:Name="textBox" Style="{StaticResource CustomTextBoxStyle}"  HorizontalAlignment="Left" Height="40" Margin="10,51,0,0"  Text="{Binding Path=TitleSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="180"/>
+            <!--#else -->
+            <Button x:Name="button" Style="{StaticResource CustomButtonStyle}"  Content="Button" HorizontalAlignment="Left" Height="40" Margin="10,10,0,0" VerticalAlignment="Top" Width="180"/>
+            <TextBox x:Name="textBox" Style="{StaticResource CustomTextBoxStyle}"  HorizontalAlignment="Left" Height="40" Margin="10,51,0,0"  Text="Sampletext" VerticalAlignment="Top" Width="180"/>
+            <!--#endif -->
+       </Canvas>
+
+       <DockPanel  DockPanel.Dock="Bottom" Height="5" >
+           <DockPanel.Background>
+               <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                   <GradientStop Color="{StaticResource Primary900}" Offset="0" />
+                   <GradientStop Color="{StaticResource Primary200}" Offset="1" />
+               </LinearGradientBrush>
+           </DockPanel.Background>
+       </DockPanel>
+       
+   </DockPanel>
+
 </mah:MetroWindow>

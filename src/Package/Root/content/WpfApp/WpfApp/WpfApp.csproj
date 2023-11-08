@@ -23,6 +23,7 @@
     <!--#if (Publish == FrameworkRequiredSingle) -->
     <SelfContained>false</SelfContained>
     <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <!--#endif -->
     <!--#if (Publish == FrameworkIncluded) -->
     <SelfContained>true</SelfContained>
@@ -149,8 +150,10 @@
     <!--#if (ViewModel == true) -->
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <!--#endif -->
+    <!--#if (Sqlitedb == true) -->
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.13" />
+    <!--#endif -->
 
-    
   </ItemGroup>
 
 </Project>

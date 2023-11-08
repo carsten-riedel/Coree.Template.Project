@@ -156,6 +156,13 @@
         "description": "Add a ViewModel stub.",
         "displayName": "Add a ViewModel stub."
       },
+      "Sqlitedb": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "description": "Add a sqlite db.",
+        "displayName": "Add a sqlite db."
+      },
       "SourceCodeProFonts": {
         "type": "parameter",
         "dataType": "bool",

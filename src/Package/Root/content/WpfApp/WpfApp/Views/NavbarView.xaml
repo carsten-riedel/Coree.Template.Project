@@ -1,0 +1,97 @@
+<UserControl x:Class="WpfApp.Views.NavbarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:views="clr-namespace:WpfApp.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d"
+             <!--#if (ViewModel) -->
+             xmlns:viewmodel="clr-namespace:WpfApp.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodel:NavbarViewModel}"
+             <!--#endif -->
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid>
+            <mah:HamburgerMenu x:Name="HamburgerMenuControl"
+                                IsPaneOpen="False"
+                                ItemTemplate="{StaticResource HamburgerMenuItemTemplate}"
+                                OptionsItemTemplate="{StaticResource HamburgerMenuOptionsItemTemplate}"
+                                
+                                ItemClick="HamburgerMenuControl_OnItemClick"
+                                OptionsItemClick="HamburgerMenuControl_OnItemClick"
+                                SelectedIndex="0"
+                                DisplayMode="CompactInline"
+                                
+                                HamburgerButtonStyle="{StaticResource CustomHamburgerButtonStyle}"
+
+                                PaneForeground="{DynamicResource PrimaryHueDarkBrush}"
+                                PaneBackground="{DynamicResource PrimaryHueLightForegroundBrush}"
+                           >
+
+            <!--  Items  -->
+            <!-- https://learn.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font -->
+            <mah:HamburgerMenu.ItemsSource>
+                <mah:HamburgerMenuItemCollection>
+                    <mah:HamburgerMenuGlyphItem Glyph="&#xE80F;" Label="HomeView">
+                        <mah:HamburgerMenuGlyphItem.Tag>
+                            <views:HomeView />
+                        </mah:HamburgerMenuGlyphItem.Tag>
+                    </mah:HamburgerMenuGlyphItem>
+                </mah:HamburgerMenuItemCollection>
+            </mah:HamburgerMenu.ItemsSource>
+
+            <!--  Options  -->
+            <!-- https://learn.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font -->
+            <mah:HamburgerMenu.OptionsItemsSource>
+                <mah:HamburgerMenuItemCollection>
+                    <mah:HamburgerMenuGlyphItem Glyph="&#xE713;" Label="AboutView">
+                        <mah:HamburgerMenuGlyphItem.Tag>
+                            <views:AboutView />
+                        </mah:HamburgerMenuGlyphItem.Tag>
+                    </mah:HamburgerMenuGlyphItem>
+                </mah:HamburgerMenuItemCollection>
+            </mah:HamburgerMenu.OptionsItemsSource>
+
+            <!--  Options with icon template 
+            <mah:HamburgerMenu.OptionsItemsSource>
+                <mah:HamburgerMenuItemCollection >
+                    <mah:HamburgerMenuIconItem  Label="AboutView">
+                        <mah:HamburgerMenuIconItem.Icon>
+                            <Image Source="/Assets/Png/settings.png" Margin="10" />
+                        </mah:HamburgerMenuIconItem.Icon>
+                        <mah:HamburgerMenuIconItem.Tag>
+                            <views:AboutView />
+                        </mah:HamburgerMenuIconItem.Tag>
+                    </mah:HamburgerMenuIconItem>
+                </mah:HamburgerMenuItemCollection>
+            </mah:HamburgerMenu.OptionsItemsSource>
+            -->
+
+                <!--  Content  -->
+                <mah:HamburgerMenu.ContentTemplate>
+                    <DataTemplate DataType="{x:Type mah:HamburgerMenuItem}">
+                        <Grid x:Name="TheContentGrid">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="48" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Background="{DynamicResource PrimaryHueLightForegroundBrush}">
+                                <TextBlock x:Name="Header"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontSize="24"
+                                       Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                       Text="{Binding Label}" />
+                            </Border>
+                            <ContentControl x:Name="TheContent" Grid.Row="1" Focusable="False" Content="{Binding Tag}" />
+                        </Grid>
+                    </DataTemplate>
+                </mah:HamburgerMenu.ContentTemplate>
+
+            </mah:HamburgerMenu>
+
+    </Grid>  
+
+</UserControl>

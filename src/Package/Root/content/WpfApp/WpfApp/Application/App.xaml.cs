@@ -4,8 +4,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 #endif
 #if( ViewModel )
-using WpfApp.ViewModel;
+using WpfApp.ViewModels;
 #endif
+using WpfApp.Views;
 using System;
 using System.Windows;
 
@@ -31,9 +32,11 @@ namespace WpfApp
 
         private void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
-            services.AddSingleton<MainWindow>();
             #if( ViewModel )
-            services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<WindowViewModel>();
+            services.AddSingleton<HomeViewModel>();
+            services.AddSingleton<AboutViewModel>();
+            services.AddSingleton<NavbarViewModel>();
             #endif
         }
 
@@ -50,7 +53,7 @@ namespace WpfApp
             System.Runtime.ProfileOptimization.StartProfile($@"{System.Reflection.Assembly.GetAssembly(this.GetType())!.GetName().Name}.profile");
             #endif
             await host.StartAsync();
-            MainWindow? mainWindow = host.Services.GetService<MainWindow>();
+            WindowView mainWindow = new();
             if (mainWindow != null)
             {
                 mainWindow.Show();

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:WpfApp"
              xmlns:materialDesign="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              >
 
     <Application.Resources>
@@ -43,6 +44,10 @@
             <FontFamily x:Key="SourceCodePro-Regular">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro Regular</FontFamily>
             <FontFamily x:Key="SourceCodePro-SemiBold">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro SemiBold</FontFamily>
             <FontFamily x:Key="SourceCodePro-SemiBoldItalic">pack://application:,,,/Assets/Fonts/SourceCodePro/#Source Code Pro SemiBold Italic</FontFamily>
+            
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="FontFamily" Value="{StaticResource SourceCodePro-Regular}" />
+            </Style>
             <!--#endif -->
 
             <!-- Material Design Colors https://colordesigner.io/gradient-generator -->
@@ -67,6 +72,32 @@
             <Color x:Key="Primary900">#4682b4</Color>
             <Color x:Key="Primary900Foreground">#DDFFFFFF</Color>
 
+            <!-- 
+            <Color x:Key="Primary50">#fafa6e</Color>
+            <Color x:Key="Primary50Foreground">#DD000000</Color>
+            <Color x:Key="Primary100">#c4ec74</Color>
+            <Color x:Key="Primary100Foreground">#DD000000</Color>
+            <Color x:Key="Primary200">#92dc7e</Color>
+            <Color x:Key="Primary200Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary300">#64c987</Color>
+            <Color x:Key="Primary300Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary400">#39b48e</Color>
+            <Color x:Key="Primary400Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary500">#089f8f</Color>
+            <Color x:Key="Primary500Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary600">#00898a</Color>
+            <Color x:Key="Primary600Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary700">#08737f</Color>
+            <Color x:Key="Primary700Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary800">#215d6e</Color>
+            <Color x:Key="Primary800Foreground">#DDFFFFFF</Color>
+            <Color x:Key="Primary900">#2a4858</Color>
+            <Color x:Key="Primary900Foreground">#DDFFFFFF</Color>
+            -->
+
+            <!-- Extra brush for burger menu -->
+            <SolidColorBrush x:Key="PrimaryHueExtraLightBrush" Color="{StaticResource Primary100}" />
+
             <!-- Material Design Used in ctrls-->
             <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{StaticResource Primary200}" />
             <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{StaticResource Primary200Foreground}"  />
@@ -83,6 +114,11 @@
             <SolidColorBrush x:Key="MahApps.Color.Accent3" Color="{DynamicResource Primary500}"/>
             <SolidColorBrush x:Key="MahApps.Color.Accent4" Color="{DynamicResource Primary400}"/>
             
+            <SolidColorBrush x:Key="MahApps.Brushes.AccentBase" Color="{DynamicResource Primary800}" />
+            <SolidColorBrush x:Key="MahApps.Brushes.Accent" Color="{DynamicResource Primary700}" />
+            <SolidColorBrush x:Key="MahApps.Brushes.Accent2" Color="{DynamicResource Primary600}" />
+            <SolidColorBrush x:Key="MahApps.Brushes.Accent3" Color="{DynamicResource Primary500}" />
+            <SolidColorBrush x:Key="MahApps.Brushes.Accent4" Color="{DynamicResource Primary400}" />
             
             <SolidColorBrush x:Key="MahApps.Brushes.WindowTitle" Color="{DynamicResource Primary700}"/>
             <SolidColorBrush x:Key="MahApps.Brushes.Selected.Foreground" Color="{DynamicResource Primary500Foreground}"/>
@@ -129,6 +165,233 @@
                 <Setter Property="FontWeight" Value="Medium"/>
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
             </Style>
+
+            <!-- Windows minimize maximize and close button styles -->
+            <Style x:Key="CustomLightMetroWindowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Styles.Button.MetroWindow.Close.Light.Win10}">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="#00000000" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="Background" Value="Red" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="CustomDarkMetroWindowButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MahApps.Styles.Button.MetroWindow.Close.Dark.Win10}">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="#00000000" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="Background" Value="Red" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="CustomWindowButtonCommandsStyleLocatedtInAppXaml" TargetType="{x:Type mah:WindowButtonCommands}" BasedOn="{StaticResource {x:Type mah:WindowButtonCommands}}">
+                <Setter Property="LightMinButtonStyle" Value="{StaticResource CustomLightMetroWindowButtonStyle}" />
+                <Setter Property="LightMaxButtonStyle" Value="{StaticResource CustomLightMetroWindowButtonStyle}" />
+                <Setter Property="LightCloseButtonStyle" Value="{StaticResource CustomLightMetroWindowButtonStyle}" />
+                <Setter Property="DarkMinButtonStyle" Value="{StaticResource CustomDarkMetroWindowButtonStyle}" />
+                <Setter Property="DarkMaxButtonStyle" Value="{StaticResource CustomDarkMetroWindowButtonStyle}" />
+                <Setter Property="DarkCloseButtonStyle" Value="{StaticResource CustomDarkMetroWindowButtonStyle}" />
+            </Style>
+
+            <!-- Hamburger menu definitions -->
+            <DataTemplate x:Key="HamburgerMenuItemTemplate" DataType="{x:Type mah:HamburgerMenuGlyphItem}">
+                <Grid Height="48">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="48" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="{Binding Glyph}" />
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="16" Text="{Binding Label}" />
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource PrimaryHueExtraLightBrush}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="HamburgerMenuOptionsItemTemplate" DataType="{x:Type mah:HamburgerMenuGlyphItem}">
+                <Grid Height="48">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="48" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="{Binding Glyph}" />
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="16" Text="{Binding Label}" />
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource PrimaryHueExtraLightBrush}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                </Grid>
+            </DataTemplate>
+
+            <!--  Options with icon template 
+            <DataTemplate x:Key="HamburgerMenuOptionsItemTemplate" DataType="{x:Type mah:HamburgerMenuIconItem}">
+              <Grid x:Name="RootGrid" Height="48">
+                  <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="48"/>
+                      <ColumnDefinition/>
+                  </Grid.ColumnDefinitions>
+                  <ContentControl Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Icon}" Focusable="False"/>
+                  <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="16" Text="{Binding Label}"/>
+                  <Grid.Style>
+                      <Style TargetType="Grid">
+                          <Setter Property="Background" Value="Transparent"/>
+                          <Style.Triggers>
+                              <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource PrimaryHueExtraLightBrush}"/>
+                                </Trigger>
+                          </Style.Triggers>
+                      </Style>
+                  </Grid.Style>
+              </Grid>
+          </DataTemplate>
+          -->
+
+        <Style x:Key="CustomHamburgerButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+
+        <!-- Menu -->
+        <Style TargetType="{x:Type Menu}">
+            <!--#if (SourceCodeProFonts == true) -->
+            <Setter Property="FontFamily" Value="{StaticResource SourceCodePro-Regular}" />
+            <!--#endif -->
+            <Setter Property="FontSize" Value="14" />
+            
+            <Setter Property="Margin" Value="0,4,0,4" />
+            <Setter Property="Background" Value= "{StaticResource PrimaryHueDarkForegroundBrush}"/>
+        </Style>
+
+        <!-- Menu Separator -->
+        <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="Separator">
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Separator}">
+                        <Border  Height="1" Margin="4" Background="{StaticResource  PrimaryHueDarkBrush}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Outer menu items -->
+        <Style TargetType="{x:Type MenuItem}">
+            <Setter Property="Background" Value= "{StaticResource PrimaryHueDarkForegroundBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkBrush}" />
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="LightGray"/>
+                </Trigger>
+                 <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property = "Background" Value="{StaticResource PrimaryHueMidBrush}"/>
+                    <Setter Property = "Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- SubmenuItem -->
+        <ControlTemplate x:Key="{x:Static MenuItem.SubmenuItemTemplateKey}" TargetType="{x:Type MenuItem}">
+            <Border Name="Border">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="Icon" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="Shortcut" />
+                        <ColumnDefinition Width="13" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Name="Icon" Margin="6,0,6,0" VerticalAlignment="Center" ContentSource="Icon" />
+                    <Border Name="Check" Width="13" Height="13" Visibility="Collapsed" Margin="6,0,6,0" Background="{StaticResource PrimaryHueDarkForegroundBrush}" BorderThickness="1" BorderBrush="{StaticResource  PrimaryHueDarkBrush}">
+                        <Path Name="CheckMark" Width="7" Height="7" Visibility="Hidden" SnapsToDevicePixels="False" Stroke="{StaticResource  PrimaryHueDarkBrush}" StrokeThickness="2" Data="M 0 0 L 7 7 M 0 7 L 7 0" />
+                    </Border>
+                    <ContentPresenter Name="HeaderHost" Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" />
+                    <TextBlock x:Name="InputGestureText" Grid.Column="2" Text="{TemplateBinding InputGestureText}" Margin="5,2,0,2" DockPanel.Dock="Right" />
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Icon" Value="{x:Null}">
+                    <Setter TargetName="Icon" Property="Visibility" Value="Hidden" />
+                </Trigger>
+                <Trigger Property="IsChecked" Value="true">
+                    <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="IsCheckable" Value="true">
+                    <Setter TargetName="Check" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="Icon" Property="Visibility" Value="Hidden" />
+                </Trigger>
+                <Trigger Property="IsHighlighted" Value="false">
+                    <Setter TargetName="Border" Property="Background" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
+                </Trigger>
+                <Trigger Property="IsHighlighted" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="{StaticResource PrimaryHueMidBrush}" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="#0f3c5a" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- SubmenuHeader -->
+        <ControlTemplate x:Key="{x:Static MenuItem.SubmenuHeaderTemplateKey}" TargetType="{x:Type MenuItem}">
+            <Border Name="Border">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="Icon" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="Shortcut" />
+                        <ColumnDefinition Width="13" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Name="Icon" Margin="6,0,6,0" VerticalAlignment="Center" ContentSource="Icon" />
+                    <ContentPresenter Name="HeaderHost" Grid.Column="1" ContentSource="Header" RecognizesAccessKey="True" />
+                    <TextBlock x:Name="InputGestureText" Grid.Column="2" Text="{TemplateBinding InputGestureText}" Margin="5,2,2,2" DockPanel.Dock="Right" />
+                    <Path Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Data="M 0 0 L 0 7 L 4 3.5 Z" Fill="{StaticResource PrimaryHueDarkBrush}" />
+                    <Popup Name="Popup" Placement="Right" HorizontalOffset="-0" IsOpen="{TemplateBinding IsSubmenuOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Fade">
+                        <Border Name="SubmenuBorder" SnapsToDevicePixels="True" Background="#ffffff" BorderBrush="{StaticResource PrimaryHueDarkBrush}" BorderThickness="1">
+                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </Border>
+                    </Popup>
+                </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Icon" Value="{x:Null}">
+                    <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
+                </Trigger>
+                <Trigger Property="IsHighlighted" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="{StaticResource PrimaryHueMidBrush}" />
+                </Trigger>
+                <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="True">
+                    <Setter TargetName="SubmenuBorder" Property="CornerRadius" Value="0" />
+                    <Setter TargetName="SubmenuBorder" Property="Padding" Value="0,3,0,3" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="#0f3c5a" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!-- StatusBarItem -->
+        <Style TargetType="{x:Type StatusBarItem}">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
+        </Style>
 
         </ResourceDictionary>
 

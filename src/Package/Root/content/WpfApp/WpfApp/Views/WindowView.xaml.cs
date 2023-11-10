@@ -13,24 +13,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 #if( ViewModel )
+using System.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
-using WpfApp.ViewModel;
+using WpfApp.ViewModels;
 #endif
 
-namespace WpfApp
+namespace WpfApp.Views
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : MetroWindow
+
+    public partial class WindowView : MetroWindow
     {
-        public MainWindow()
+        public WindowView()
         {
-            #if( ViewModel )
-            this.DataContext = App.Services!.GetRequiredService<MainWindowViewModel>();
-            #endif
             InitializeComponent();
+            #if( ViewModel )
+            if (DesignerProperties.GetIsInDesignMode(this))
+                return;
+            this.DataContext = App.Services!.GetRequiredService<WindowViewModel>();
+            #endif
         }
 
         private void GoToSource(object sender, RoutedEventArgs e)

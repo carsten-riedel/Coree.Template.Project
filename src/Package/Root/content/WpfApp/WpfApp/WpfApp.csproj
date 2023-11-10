@@ -80,9 +80,7 @@
   <ItemGroup>
     <Resource Include="Assets\Png\Application.png" />
     <Resource Include="Assets\Png\github.png" />
-    <Resource Include="Assets\Png\heart.png" />
     <Resource Include="Assets\Png\settings.png" />
-    <Resource Include="Assets\Png\user.png" />
   </ItemGroup>
 
   <PropertyGroup>

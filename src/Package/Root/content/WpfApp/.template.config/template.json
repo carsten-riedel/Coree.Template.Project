@@ -166,7 +166,7 @@
       "SourceCodeProFonts": {
         "type": "parameter",
         "dataType": "bool",
-        "defaultValue": "true",
+        "defaultValue": "false",
         "description": "Add source code pro fonts.",
         "displayName": "Add source code pro fonts."
       },
@@ -214,7 +214,10 @@
           {
             "condition": "(!ViewModel)",
             "exclude": [
-              "WpfApp/ViewModel/MainWindowViewModel.cs"
+              "WpfApp/ViewModels/WindowViewModel.cs",
+              "WpfApp/ViewModels/HomeViewModel.cs",
+              "WpfApp/ViewModels/AboutViewModel.cs",
+              "WpfApp/ViewModels/NavbarViewModel.cs"
             ]
           },
           {

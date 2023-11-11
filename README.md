@@ -152,5 +152,5 @@ The Single-file selection will have the following settings.
 <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 ```
 
-#Sample default screenshot
+### Sample default screenshot
 

@@ -27,8 +27,7 @@
     <!--#endif -->
     <!--#if (Publish == FrameworkIncluded) -->
     <SelfContained>true</SelfContained>
-    <PublishSingleFile>true</PublishSingleFile>
-    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishSingleFile>false</PublishSingleFile>
     <IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract>
     <!--#endif -->
     <!--#if (Publish == FrameworkIncludedSingle) -->

@@ -45,8 +45,11 @@ dotnet new uninstall Coree.Template.Project
 ```
 The package contains the following templates:<br><br>
 [.Net MSBuild Task library](#msbuild)<br><br>
-[.Net Class library](#classlib)
-[.Net Tool](#nettool)
+[.Net Class library](#classlib)<br><br>
+[.Net Tool](#nettool)<br><br>
+[.Net Powershell cmdlet](#powershell)<br><br>
+[.Net Winforms](#winforms)<br><br>
+[.Net Wpf](#wpf)<br><br>
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -69,7 +72,7 @@ This template provides a foundation for building a .NET Standard compatible MSBu
 ```
 dotnet new msbuildlib --PackageAuthor Me
 ```
-**Easily edit your NuGet package metadata inside the Package directory.**
+**Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory**
 <br><br>
 
 Linux/WSL (Sample useage):
@@ -91,7 +94,7 @@ This template provides a foundation for building a .NET compatible library. It i
 dotnet new classlibrary-dotnet-pack --PackageAuthor Me
 ```
 
-**Easily edit your NuGet package metadata inside the Package directory.**
+**Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory**
 
 Linux/WSL (Sample useage):
 ```
@@ -104,12 +107,14 @@ cd /D %userprofile% & mkdir "MyClassLib" & cd "MyClassLib" & dotnet new classlib
 ```
 
 ## <a name="nettool"> .Net Tool
+This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.
+The final command will be the ToolCommandName. The Packagename is the Project and ToolCommandName
 
 ```
 dotnet new nettool --PackageAuthor Me --ToolCommandName helloworld
 ```
 
-**Easily edit your NuGet package metadata inside the Package directory.**
+**Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory**
 
 Linux/WSL (Sample useage):
 ```
@@ -125,3 +130,27 @@ Assuming you've already copied your package to a NuGet source, whether it's loca
 ```
 dotnet tool install -g MyNetTool.helloworld --prerelease
 ```
+
+## <a name="powershell"> .Net Powershell cmdlet
+
+## <a name="winforms"> .Net Winforms
+
+## <a name="wpf"> .Net Wpf
+This template serves as a base for developing WPF applications, optimized primarily for .NET publishing as an executable. It includes five distinct configurations tailored for the dotnet publish process. Enhanced with basic visual improvements, the template utilizes the MaterialDesignThemes.MahApps package. You can tailor the App.xaml to your requirements, particularly by altering color keys like `<Color x:Key="Primary200">#76bddf</Color>`, to suit your design preferences.
+
+Publish settings.
+1) Framework-required. (Purpose: Installer)
+2) Framework-required, Single-file. (Purpose: Copy smallest)
+3) Framework-included. (Purpose: Installer)
+4) Framework-included, Single-file. (Purpose: Copy large)
+5) Framework-included, Single-file, Compressed. (Purpose: Copy medium)
+
+The Single-file selection will have the following settings.
+```
+<PublishSingleFile>true</PublishSingleFile>
+<PublishReadyToRun>true</PublishReadyToRun>
+<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+```
+
+#Sample default screenshot
+

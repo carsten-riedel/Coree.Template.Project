@@ -38,50 +38,64 @@ sudo apt-get update && sudo apt-get install -y dotnet-sdk-6.0 dotnet-sdk-7.0
 ```
 
 ## Install/Uninstall the templates
-How to install or uninstall the templates
+The commands below demonstrate how to install or uninstall the templates, primarily designed for .NET with Visual Studio 2022 compatibility in mind. Remember, template definitions might include specific limitations like conditional settings (true/false).
 ```
 dotnet new install Coree.Template.Project
 dotnet new uninstall Coree.Template.Project
 ```
+[link](#head1234)
 
-## .Net MSBuild Task library
-A project template to create a msbuild .netstandard compatible msbuild task library. Author is required for nuget pack/publish reasons.
+#### Hint:
+For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
+In the packages dir `PackageSpecs.props` you can add `<LocalPackagesDir>$(userprofile)\nupkg</LocalPackagesDir>`<br>
+Then add a local package source.
 
-cmdline:
+Linux/WSL (Sample useage):
+```
+dotnet nuget add source "$HOME\localpackage" --name "localpackage"
+```
+
+Windows cmd (Sample useage):
+```
+dotnet nuget add source "%userprofile%\localpackage" --name "localpackage"
+```
+
+## <a name="head1234"> .Net MSBuild Task library
+This template provides a foundation for building a .NET Standard compatible MSBuild task library, essential for tasks like build automation. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
+
 ```
 dotnet new msbuildlib --PackageAuthor Me
 ```
+**Easily edit your NuGet package metadata inside the Package directory.**
+<br><br>
 
-Linux/WSL:
+Linux/WSL (Sample useage):
 ```
-#create directory, create the project, create a nugetpackage
-cd $HOME ;mkdir "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildlib --PackageAuthor Me ; dotnet pack ; cd $HOME
-# Create a local nuget source directory
-mkdir $HOME/nugetlocal & dotnet nuget add source "$HOME/nugetlocal" --name "UserNugetLocal"
-# Copy nuget to local source
-cp MyMSBuildTask/bin/Debug/MyMSBuildTask.0.0.1-prerelease.nupkg "$HOME/nugetlocal"
-
-
-cd $HOME ;mkdir "ConsoleApp" ; cd "ConsoleApp" ; dotnet new console ; dotnet add package MyMSBuildTask --prerelease ; cd $HOME
+cd $HOME ;mkdir "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildlib --PackageAuthor Me --force ; dotnet test ; dotnet pack ; cd $HOME
 ```
 
-Windows cmd:
+Windows cmd (Sample useage):
 ```
-REM create directory, create the project, create a nugetpackage
-cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new msbuildlib --PackageAuthor Me & dotnet pack & cd /D %userprofile%
-REM Create a local nuget source directory
-mkdir %userprofile%\nugetlocal & dotnet nuget add source "%userprofile%\nugetlocal" --name "UserNugetLocal"
-REM Copy nuget to local source
-copy /y MyMSBuildTask\bin\Debug\MyMSBuildTask.0.0.1-prerelease.nupkg "%userprofile%\nugetlocal"
-
-
-cd /D %userprofile% & mkdir "ConsoleApp" & cd "ConsoleApp" & dotnet new console & dotnet add package MyMSBuildTask --prerelease & cd /D %userprofile%
+cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new msbuildlib --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
 ```
 
-## <span style="color:red">Inside your ConsoleApp.csproj add a target</span>
+**Enhance the TestScript.msbuild in the MSTest project to test your integration.**
+
+## .Net class library
+This template provides a foundation for building a .NET compatible library. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
+
 ```
-	<Target Name="DemoTarget" BeforeTargets="CoreCompile">
-		<DumpEnvVarsTask/>
-		<DumpGlobalPropTask/>
-	</Target>
+dotnet new classlibrary-dotnet-pack --PackageAuthor Me
+```
+
+**Easily edit your NuGet package metadata inside the Package directory.**
+
+Linux/WSL (Sample useage):
+```
+cd $HOME ;mkdir "MyClassLib" ; cd "MyClassLib" ; dotnet new classlibrary-dotnet-pack --PackageAuthor Me --force ; dotnet test ; dotnet pack ; cd $HOME
+```
+
+Windows cmd (Sample useage):
+```
+cd /D %userprofile% & mkdir "MyClassLib" & cd "MyClassLib" & dotnet new classlibrary-dotnet-pack --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
 ```

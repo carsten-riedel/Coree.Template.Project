@@ -133,8 +133,10 @@ dotnet tool install -g MyNetTool.helloworld --prerelease
 ```
 
 ## <a name="powershell"> .Net Powershell cmdlet
+### Description TBD
 
 ## <a name="winforms"> .Net Winforms (Windows only)
+### Description TBD
 
 ## <a name="wpf"> .Net Wpf (Windows only)
 This template serves as a base for developing WPF applications, optimized primarily for .NET publishing as an executable. It includes five distinct configurations tailored for the dotnet publish process. Enhanced with basic visual improvements, the template utilizes the MaterialDesignThemes.MahApps package. You can tailor the App.xaml to your requirements, particularly by altering color keys like `<Color x:Key="Primary200">#76bddf</Color>`, to suit your design preferences.

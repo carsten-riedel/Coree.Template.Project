@@ -15,7 +15,7 @@
 	  <RepositoryType></RepositoryType>
 
     <VersionMajor>0</VersionMajor>
-    <VersionMinor>1</VersionMinor>
+    <VersionMinor>2</VersionMinor>
     <VersionBuild>0</VersionBuild>
     <VersionRevision>0</VersionRevision>
     <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>

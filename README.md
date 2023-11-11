@@ -50,6 +50,7 @@ The package contains the following templates:<br><br>
 [.Net Powershell cmdlet](#powershell)<br><br>
 [.Net Winforms](#winforms)<br><br>
 [.Net Wpf](#wpf)<br><br>
+[.Net Project Template](#template)<br><br>
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -133,17 +134,22 @@ dotnet tool install -g MyNetTool.helloworld --prerelease
 
 ## <a name="powershell"> .Net Powershell cmdlet
 
-## <a name="winforms"> .Net Winforms
+## <a name="winforms"> .Net Winforms (Windows only)
 
-## <a name="wpf"> .Net Wpf
+## <a name="wpf"> .Net Wpf (Windows only)
 This template serves as a base for developing WPF applications, optimized primarily for .NET publishing as an executable. It includes five distinct configurations tailored for the dotnet publish process. Enhanced with basic visual improvements, the template utilizes the MaterialDesignThemes.MahApps package. You can tailor the App.xaml to your requirements, particularly by altering color keys like `<Color x:Key="Primary200">#76bddf</Color>`, to suit your design preferences.
 
 Publish settings.
 1) Framework-required. (Purpose: Installer)
-2) Framework-required, Single-file. (Purpose: Copy smallest)
+2) Framework-required, Single-file. (Purpose: Copy smallest) <- DEFAULT
 3) Framework-included. (Purpose: Installer)
 4) Framework-included, Single-file. (Purpose: Copy large)
 5) Framework-included, Single-file, Compressed. (Purpose: Copy medium)
+
+Windows cmd (Sample useage):
+```
+cd /D %userprofile% & mkdir "MyWpfApp" & cd "MyWpfApp" & dotnet new wpfapp-dotnet-publish --Author Me --force & dotnet publish & cd /D %userprofile%
+```
 
 The Single-file selection will have the following settings.
 ```
@@ -156,4 +162,7 @@ The Single-file selection will have the following settings.
 ![image](https://github.com/carsten-riedel/Coree.Template.Project/assets/97656046/7540e391-0554-4f44-bf5b-eb5d6d0ea984)
 
 ![image](https://github.com/carsten-riedel/Coree.Template.Project/assets/97656046/18061fa0-4b72-49f3-baa6-8e49648a7991)
+
+## <a name="template"> .Net Project Template
+
 

@@ -152,5 +152,8 @@ The Single-file selection will have the following settings.
 <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 ```
 
-### Sample default screenshot
+### Screenshots
+![image](https://github.com/carsten-riedel/Coree.Template.Project/assets/97656046/7540e391-0554-4f44-bf5b-eb5d6d0ea984)
+
+![image](https://github.com/carsten-riedel/Coree.Template.Project/assets/97656046/18061fa0-4b72-49f3-baa6-8e49648a7991)
 

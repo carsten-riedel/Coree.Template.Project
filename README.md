@@ -43,11 +43,14 @@ The commands below demonstrate how to install or uninstall the templates, primar
 dotnet new install Coree.Template.Project
 dotnet new uninstall Coree.Template.Project
 ```
-[link](#head1234)
+The package contains the following templates:<br><br>
+[.Net MSBuild Task library](#msbuild)<br><br>
+[.Net Class library](#classlib)
+[.Net Tool](#nettool)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
-In the packages dir `PackageSpecs.props` you can add `<LocalPackagesDir>$(userprofile)\nupkg</LocalPackagesDir>`<br>
+In the packages dir `PackageSpecs.props` you can add `<LocalPackagesDir>$(userprofile)\localpackage</LocalPackagesDir>`<br>
 Then add a local package source.
 
 Linux/WSL (Sample useage):
@@ -60,7 +63,7 @@ Windows cmd (Sample useage):
 dotnet nuget add source "%userprofile%\localpackage" --name "localpackage"
 ```
 
-## <a name="head1234"> .Net MSBuild Task library
+## <a name="msbuild"> .Net MSBuild Task library
 This template provides a foundation for building a .NET Standard compatible MSBuild task library, essential for tasks like build automation. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
 
 ```
@@ -81,7 +84,7 @@ cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new ms
 
 **Enhance the TestScript.msbuild in the MSTest project to test your integration.**
 
-## .Net class library
+## <a name="classlib"> .Net class library
 This template provides a foundation for building a .NET compatible library. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
 
 ```
@@ -98,4 +101,27 @@ cd $HOME ;mkdir "MyClassLib" ; cd "MyClassLib" ; dotnet new classlibrary-dotnet-
 Windows cmd (Sample useage):
 ```
 cd /D %userprofile% & mkdir "MyClassLib" & cd "MyClassLib" & dotnet new classlibrary-dotnet-pack --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
+```
+
+## <a name="nettool"> .Net Tool
+
+```
+dotnet new nettool --PackageAuthor Me --ToolCommandName helloworld
+```
+
+**Easily edit your NuGet package metadata inside the Package directory.**
+
+Linux/WSL (Sample useage):
+```
+cd $HOME ;mkdir "MyNetTool" ; cd "MyNetTool" ; dotnet new nettool --PackageAuthor Me --ToolCommandName helloworld --force ; dotnet pack ; cd $HOME
+```
+
+Windows cmd (Sample useage):
+```
+cd /D %userprofile% & mkdir "MyNetTool" & cd "MyNetTool" & dotnet new nettool --PackageAuthor Me --ToolCommandName helloworld --force & dotnet pack & cd /D %userprofile%
+```
+
+Assuming you've already copied your package to a NuGet source, whether it's local or remote, you can easily install it using the .NET Core CLI. Specifically, if you're created a prerelease version of a tool called MyNetTool.helloworld, you can install it globally on your machine with the following command
+```
+dotnet tool install -g MyNetTool.helloworld --prerelease
 ```

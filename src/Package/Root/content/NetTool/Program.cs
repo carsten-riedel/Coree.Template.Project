@@ -1,6 +1,6 @@
 using System;
 
-namespace MyToolCommandName
+namespace NetTool
 {
     internal class Program
     {

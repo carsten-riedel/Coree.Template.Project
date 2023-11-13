@@ -30,7 +30,6 @@
     <!--#endif -->
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <AssemblyName>MyToolCommandName</AssemblyName>
   </PropertyGroup>
 
   <!-- Package configuration-->

@@ -23,8 +23,9 @@
     <!--#if (PackageCompany == '') -->
     <Copyright>Copyright © MyAuthor 1975</Copyright>
     <!--#endif -->
-    <PackageId>ClassLibrary</PackageId>
-    <PackageTags>dotnet;class;library</PackageTags>
+    
+    <PackageId>SourceGeneratorCoree</PackageId>
+    <PackageTags>dotnet;class;source;generator</PackageTags>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
     <RepositoryType></RepositoryType>

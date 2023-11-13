@@ -1,0 +1,7 @@
+.vs/**/*
+SourceGeneratorCoree/.vs/**/*
+SourceGeneratorCoree/bin/**/*
+SourceGeneratorCoree/obj/**/*
+SourceGeneratorCoree.MSTest/.vs/**/*
+SourceGeneratorCoree.MSTest/bin/**/*
+SourceGeneratorCoree.MSTest/obj/**/*

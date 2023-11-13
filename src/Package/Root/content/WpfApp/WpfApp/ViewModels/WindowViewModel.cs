@@ -18,6 +18,9 @@ namespace WpfApp.ViewModels
         [ObservableProperty]
         private string titleSource = "Source";
 
+        [ObservableProperty]
+        private string statusBar = "Statusbar";
+
         public WindowViewModel()
         {
 

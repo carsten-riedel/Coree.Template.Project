@@ -13,6 +13,7 @@
         <!--#endif -->
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        SaveWindowPosition="True"
         GlowBrush="{DynamicResource PrimaryHueDarkBrush}"
         BorderThickness="1"
         BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
@@ -124,7 +125,7 @@
                 </LinearGradientBrush>
             </StatusBar.Background>
 
-            <StatusBarItem Content="Statusbar"/>
+            <StatusBarItem Content="{Binding Path=StatusBar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
        </StatusBar>
 
        <views:NavbarView  />

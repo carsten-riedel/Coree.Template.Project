@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <DebugType>embedded</DebugType>
+    <TargetFrameworks>net6.0</TargetFrameworks> <!-- using TargetFramework will produce NU5128 and won't generate dependency in .nuspec -->
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <!-- 
+    Since during pack all ProjectReference will be transformed to Package dependencies. And version number is cascading into all package.
+  -->
+
+  <!-- Exclude .gitignore from solution explorer -->
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+</Project>

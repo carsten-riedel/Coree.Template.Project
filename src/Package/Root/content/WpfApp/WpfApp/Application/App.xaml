@@ -206,7 +206,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="{Binding Glyph}" />
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="16" Text="{Binding Label}" />
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="18" Text="{Binding Label}" Margin="0,2,0,0" />
                     <Grid.Style>
                         <Style TargetType="Grid">
                             <Setter Property="Background" Value="Transparent"/>
@@ -227,7 +227,7 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe MDL2 Assets" Text="{Binding Glyph}" />
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="16" Text="{Binding Label}" />
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="18" Text="{Binding Label}" Margin="0,2,0,0" />
                     <Grid.Style>
                         <Style TargetType="Grid">
                             <Setter Property="Background" Value="Transparent"/>
@@ -335,6 +335,9 @@
                 <Trigger Property="IsCheckable" Value="true">
                     <Setter TargetName="Check" Property="Visibility" Value="Visible" />
                     <Setter TargetName="Icon" Property="Visibility" Value="Hidden" />
+                </Trigger>
+                <Trigger Property="IsCheckable" Value="false">
+                    <Setter TargetName="Check" Property="Visibility" Value="Hidden" />
                 </Trigger>
                 <Trigger Property="IsHighlighted" Value="false">
                     <Setter TargetName="Border" Property="Background" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />

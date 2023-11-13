@@ -37,6 +37,7 @@ namespace WpfApp
             services.AddSingleton<HomeViewModel>();
             services.AddSingleton<AboutViewModel>();
             services.AddSingleton<NavbarViewModel>();
+            services.AddSingleton<SettingsViewModel>();
             #endif
         }
 

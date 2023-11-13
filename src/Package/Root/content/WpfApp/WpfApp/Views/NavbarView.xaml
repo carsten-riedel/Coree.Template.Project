@@ -15,10 +15,14 @@
 
     <Grid>
             <mah:HamburgerMenu x:Name="HamburgerMenuControl"
+                                <!--#if (ViewModel) -->
+                                IsPaneOpen="{Binding Path=IsOpen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                <!--#else -->
                                 IsPaneOpen="False"
+                                <!--#endif -->
                                 ItemTemplate="{StaticResource HamburgerMenuItemTemplate}"
                                 OptionsItemTemplate="{StaticResource HamburgerMenuOptionsItemTemplate}"
-                                
+                                PaneMargin="0,0,0,2"
                                 ItemClick="HamburgerMenuControl_OnItemClick"
                                 OptionsItemClick="HamburgerMenuControl_OnItemClick"
                                 SelectedIndex="0"
@@ -34,7 +38,7 @@
             <!-- https://learn.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font -->
             <mah:HamburgerMenu.ItemsSource>
                 <mah:HamburgerMenuItemCollection>
-                    <mah:HamburgerMenuGlyphItem Glyph="&#xE80F;" Label="HomeView">
+                    <mah:HamburgerMenuGlyphItem Glyph="&#xE80F;" Label="Home">
                         <mah:HamburgerMenuGlyphItem.Tag>
                             <views:HomeView />
                         </mah:HamburgerMenuGlyphItem.Tag>
@@ -46,7 +50,12 @@
             <!-- https://learn.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font -->
             <mah:HamburgerMenu.OptionsItemsSource>
                 <mah:HamburgerMenuItemCollection>
-                    <mah:HamburgerMenuGlyphItem Glyph="&#xE713;" Label="AboutView">
+                    <mah:HamburgerMenuGlyphItem Glyph="&#xE713;" Label="Settings">
+                        <mah:HamburgerMenuGlyphItem.Tag>
+                            <views:SettingsView />
+                        </mah:HamburgerMenuGlyphItem.Tag>
+                    </mah:HamburgerMenuGlyphItem>
+                    <mah:HamburgerMenuGlyphItem Glyph="&#xF142;" Label="About">
                         <mah:HamburgerMenuGlyphItem.Tag>
                             <views:AboutView />
                         </mah:HamburgerMenuGlyphItem.Tag>
@@ -74,14 +83,14 @@
                     <DataTemplate DataType="{x:Type mah:HamburgerMenuItem}">
                         <Grid x:Name="TheContentGrid">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="48" />
+                                <RowDefinition Height="34" />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <Border Grid.Row="0" Background="{DynamicResource PrimaryHueLightForegroundBrush}">
                                 <TextBlock x:Name="Header"
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
-                                       FontSize="24"
+                                       FontSize="30"
                                        Foreground="{DynamicResource PrimaryHueDarkBrush}"
                                        Text="{Binding Label}" />
                             </Border>

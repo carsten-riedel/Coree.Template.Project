@@ -10,17 +10,15 @@ using System.Threading.Tasks;
 
 namespace WpfApp.ViewModels
 {
-    public partial class NavbarViewModel : ObservableObject
+    public partial class SettingsViewModel : ObservableObject
     {
         public readonly WindowViewModel WindowViewModel;
+        public readonly NavbarViewModel NavbarViewModel;
 
-        [ObservableProperty]
-        private bool isOpen = false;
-
-        public NavbarViewModel()
+        public SettingsViewModel()
         {
             WindowViewModel = App.Services!.GetRequiredService<WindowViewModel>();
-            this.PropertyChanged += (s, e) => { if (e.PropertyName == nameof(IsOpen)){ WindowViewModel.StatusBar = @$"Pane is {IsOpen}"; }  };
+            NavbarViewModel = App.Services!.GetRequiredService<NavbarViewModel>();
         }
     }
 }

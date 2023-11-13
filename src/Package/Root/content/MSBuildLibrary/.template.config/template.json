@@ -3,8 +3,8 @@
     "author": "Carsten Riedel",
     "classifications": [ "Common", "MSBuild", "Windows", "Linux", "macOS", "Library", "Coree" ],
     "identity": "CoreeTemplatesProjectMSBuildLib",
-    "name": "MSBuild Library .NET",
-    "shortName": "msbuildlib",
+    "name": ".NET MSBuild Task library.",
+    "shortName": "msbuildtasklib-coree",
     "tags": {
       "language": "C#",
       "type": "solution"

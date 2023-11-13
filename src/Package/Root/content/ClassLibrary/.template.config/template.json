@@ -3,8 +3,8 @@
   "author": "Carsten Riedel",
   "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "ClassLibrary" ,"Library", "Coree" ],
   "identity": "CoreeTemplatesProjectClassLibrary",
-  "name": "Class Library (dotnet pack)",
-  "shortName": "classlibrary-dotnet-pack",
+  "name": ".NET Class library",
+  "shortName": "classlibrary-coree",
   "tags": {
     "language": "C#",
     "type": "solution"
@@ -77,14 +77,6 @@
     "PackageCompanyIsSet": {
       "type": "computed",
       "value": "(PackageCompany != \"\")"
-    },
-    "PackageCopyright": {
-      "type": "parameter",
-      "dataType": "bool",
-      "defaultValue": "true",
-      "replaces": "MyCopyright",
-      "description": "The nuget copyright of your project.",
-      "displayName": "Package copyright"
     },
     "copyrightYear": {
       "type": "generated",

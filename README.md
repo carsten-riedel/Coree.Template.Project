@@ -71,19 +71,19 @@ dotnet nuget add source "%userprofile%\localpackage" --name "localpackage"
 This template provides a foundation for building a .NET Standard compatible MSBuild task library, essential for tasks like build automation. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
 
 ```
-dotnet new msbuildlib --PackageAuthor Me
+dotnet new msbuildtasklib-coree --PackageAuthor Me
 ```
 **Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory**
 <br><br>
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildlib --PackageAuthor Me --force ; dotnet test ; dotnet pack ; cd $HOME
+cd $HOME ;mkdir "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildtasklib-coree --PackageAuthor Me --force ; dotnet test ; dotnet pack ; cd $HOME
 ```
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new msbuildlib --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
+cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new msbuildtasklib-coree --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
 ```
 
 **Enhance the TestScript.msbuild in the MSTest project to test your integration.**
@@ -92,19 +92,19 @@ cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new ms
 This template provides a foundation for building a .NET compatible library. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
 
 ```
-dotnet new classlibrary-dotnet-pack --PackageAuthor Me
+dotnet new classlibrary-coree --PackageAuthor Me
 ```
 
 **Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory**
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyClassLib" ; cd "MyClassLib" ; dotnet new classlibrary-dotnet-pack --PackageAuthor Me --force ; dotnet test ; dotnet pack ; cd $HOME
+cd $HOME ;mkdir "MyClassLib" ; cd "MyClassLib" ; dotnet new classlibrary-coree --PackageAuthor Me --force ; dotnet test ; dotnet pack ; cd $HOME
 ```
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyClassLib" & cd "MyClassLib" & dotnet new classlibrary-dotnet-pack --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
+cd /D %userprofile% & mkdir "MyClassLib" & cd "MyClassLib" & dotnet new classlibrary-coree --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
 ```
 
 ## <a name="nettool"> .Net Tool

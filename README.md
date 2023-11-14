@@ -179,9 +179,9 @@ The Single-file selection will have the following settings.
 ```
 
 ### Screenshots
-[comment]: ![image](https://github.com/carsten-riedel/Coree.Template.Project/assets/97656046/7540e391-0554-4f44-bf5b-eb5d6d0ea984)
+![image](https://github.com/carsten-riedel/Coree.Template.Project/assets/97656046/7540e391-0554-4f44-bf5b-eb5d6d0ea984)
 
-[comment]: ![image](https://github.com/carsten-riedel/Coree.Template.Project/assets/97656046/18061fa0-4b72-49f3-baa6-8e49648a7991)
+![image](https://github.com/carsten-riedel/Coree.Template.Project/assets/97656046/18061fa0-4b72-49f3-baa6-8e49648a7991)
 
 ## <a name="template"> .Net Project Template
 Indeed, it may sound a bit perplexing at first – a project template for creating project templates. However, it's quite straightforward. For a project to generate templates, these must be situated within the packages/root/content folder. Additionally, a default class library is incorporated, complete with the provided names, to kickstart your project template creation. For more detailed guidance, refer to the educational section at the beginning of this readme.

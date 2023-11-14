@@ -1,3 +1,5 @@
+![alt text](https://github.com/carsten-riedel/Coree.Template.Project/blob/main/image.jpg?raw=true)
+
 # Coree.Template.Project
 Project Templates for Visual Studio and dotnet cli
 

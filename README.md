@@ -67,6 +67,11 @@ Windows cmd (Sample useage):
 dotnet nuget add source "%userprofile%\localpackage" --name "localpackage"
 ```
 
+To remove the local source
+```
+dotnet nuget remove source "localpackage"
+```
+
 ## <a name="msbuild"> .Net MSBuild Task library
 This template provides a foundation for building a .NET Standard compatible MSBuild task library, essential for tasks like build automation. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
 

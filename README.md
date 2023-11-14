@@ -1,7 +1,8 @@
 
 
 # Coree.Template.Project
-![image](https://github.com/carsten-riedel/Coree.Template.Project/blob/main/images/logo800x200.png?raw=true)
+
+![image](https://github.com/carsten-riedel/Coree.Template.Project/assets/97656046/1d691cb1-b24b-4827-be11-c96cd83d5a12)
 
 Project Templates for Visual Studio and dotnet cli
 

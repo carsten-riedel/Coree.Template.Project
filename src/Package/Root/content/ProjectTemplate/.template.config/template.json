@@ -3,8 +3,8 @@
   "author": "Carsten Riedel",
   "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "Project", "Template", "Coree" ],
   "identity": "CoreeTemplatesProjectTemplate",
-  "name": "Project template (dotnet pack)",
-  "shortName": "projecttemplate-dotnet-pack",
+  "name": ".NET Project template",
+  "shortName": "projecttemplate-coree",
   "tags": {
     "language": "C#",
     "type": "solution"

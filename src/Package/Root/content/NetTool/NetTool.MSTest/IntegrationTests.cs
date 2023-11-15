@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace NetTool.MSTest
 {
     [TestClass]
-    public class FunctionalTests
+    public class IntegrationTests
     {
 
         [TestInitialize()]
@@ -13,8 +13,14 @@ namespace NetTool.MSTest
 
         }
 
+        [TestCleanup()]
+        public void Cleanup()
+        {
+            
+        }
+
         [TestMethod]
-        public void TestTheMethod()
+        public void TestTheIntegration()
         {
 
         }

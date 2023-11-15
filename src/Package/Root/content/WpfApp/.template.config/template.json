@@ -3,8 +3,8 @@
     "author": "Carsten Riedel",
     "classifications": [ "Common", "dotnet", "Windows", "WPF", "Coree" ],
     "identity": "CoreeTemplatesProjectWpfApp",
-    "name": "WpfApp (dotnet publish)",
-    "shortName": "wpfapp-dotnet-publish",
+    "name": ".NET WpfApp",
+    "shortName": "wpfapp-coree",
     "tags": {
       "language": "C#",
       "type": "project"

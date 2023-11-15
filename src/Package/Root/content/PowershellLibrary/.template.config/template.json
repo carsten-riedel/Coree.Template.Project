@@ -3,8 +3,8 @@
   "author": "Carsten Riedel",
   "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "Powershell", "ClassLibrary" ,"Library", "Coree" ],
   "identity": "CoreeTemplatesProjectPowershellClassLibrary",
-  "name": "Powershell Library",
-  "shortName": "Powershell-library",
+  "name": ".NET Powershell Library",
+  "shortName": "powershelllib-coree",
   "tags": {
     "language": "C#",
     "type": "project"

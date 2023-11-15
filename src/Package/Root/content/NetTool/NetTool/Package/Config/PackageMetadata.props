@@ -5,26 +5,71 @@
 
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
-    <Owners Condition="'$(PackageCompany)' != ''">MyCompany</Owners>
-    <Owners Condition="'$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">MyAuthor</Owners>
-    <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
-    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © 1975 MyCompany</Copyright>
-    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © 1975 MyAuthor</Copyright>
-    <PackageId>SourceNameWithoutTrailingNumbers.MyToolCommandName</PackageId>
-    <PackageTags>dotnet;tools</PackageTags>
-	  <PackageProjectUrl></PackageProjectUrl>
-	  <RepositoryUrl></RepositoryUrl>
-	  <RepositoryType></RepositoryType>
-    <Version>0.0.1-prerelease</Version>
-     <Description>
-      <![CDATA[
-          PackageDescription
-	    ]]>
+    <!--#if (PackageCompany != '') -->
+    <Owners>MyCompany</Owners>
+    <!--#endif -->
+    <!--#if (PackageCompany == '') -->
+    <Owners>MyAuthor</Owners>
+    <!--#endif -->
+    <!--#if (PackageCompany != '') -->
+    <Company>MyCompany</Company>
+    <!--#endif -->
+    <!--#if (PackageCompany == '') -->
+    <Company></Company>
+    <!--#endif -->
+    <!--#if (PackageCompany != '') -->
+    <Copyright>Copyright © MyCompany 1975</Copyright>
+    <!--#endif -->
+    <!--#if (PackageCompany == '') -->
+    <Copyright>Copyright © MyAuthor 1975</Copyright>
+    <!--#endif -->
+    
+    <PackageId>NetTool</PackageId>
+    <PackageTags>dotnet;tool</PackageTags>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType></RepositoryType>
+
+    <VersionMajor>0</VersionMajor>
+    <VersionMinor>1</VersionMinor>
+    <VersionBuild>0</VersionBuild>
+    <VersionRevision>0</VersionRevision>
+    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+    <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
+    <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+    <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+
+    <Description>
+     <![CDATA[PackageDescription]]>
     </Description>
-    <PackageReadmeFile Condition="'$(PackageAddReadMe)' == 'true'">Readme.md</PackageReadmeFile>
-    <PackageLicenseFile Condition="'$(PackageAddMitLicense)' == 'true'">License.txt</PackageLicenseFile>
-    <PackageIcon Condition="'$(PackageAddIconPng)' == 'true'">Icon.png</PackageIcon>
-    <PackageReleaseNotes Condition="'$(PackageAddReleaseNotes)' == 'true'">$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)ReleaseNotes.txt"))</PackageReleaseNotes>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageIcon>Icon.png</PackageIcon>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
+
+  <!--#if (AssemblyVersioningScheme == true) -->
+  <Target Name="OverrideBuildRevision" BeforeTargets="GenerateNuspec" AfterTargets="BeforeBuild" >
+    <PropertyGroup>
+      <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
+      <TicksPerDay>$([System.TimeSpan]::TicksPerDay)</TicksPerDay>
+      <TicksPerSecond>$([System.TimeSpan]::TicksPerSecond)</TicksPerSecond>
+      <AssemblyVersionBuild>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerDay)))))</AssemblyVersionBuild>
+      <AssemblyVersionTotalSeconds>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerSecond)))))</AssemblyVersionTotalSeconds>
+      <AssemblyVersionRemainingSeconds>$([System.Math]::Truncate($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
+      <AssemblyVersionRevision>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
+      <VersionBuild>$(AssemblyVersionBuild)</VersionBuild>
+      <VersionRevision>$(AssemblyVersionRevision)</VersionRevision>
+      <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+      <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
+      <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+      <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+      <InformationalVersion>$(PackageVersion)</InformationalVersion>
+      <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+    </PropertyGroup>
+  </Target>
+  <!--#endif -->
 
 </Project>

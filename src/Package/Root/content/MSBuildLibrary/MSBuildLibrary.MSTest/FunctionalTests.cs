@@ -1,4 +1,4 @@
-using Moq;
+using NSubstitute;
 using Microsoft.Build.Framework;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
@@ -9,16 +9,16 @@ namespace MSBuildLibrary.MSTest
     public class FunctionalTests
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        private Mock<IBuildEngine> buildEngine;
+        private IBuildEngine buildEngine;
         private List<BuildErrorEventArgs> errors;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         [TestInitialize()]
         public void Startup()
         {
-            buildEngine = new Mock<IBuildEngine>();
+            buildEngine = Substitute.For<IBuildEngine>();
             errors = new List<BuildErrorEventArgs>();
-            buildEngine.Setup(x => x.LogErrorEvent(It.IsAny<BuildErrorEventArgs>())).Callback<BuildErrorEventArgs>(e => errors.Add(e));
+            buildEngine.When(x => x.LogErrorEvent(Arg.Any<BuildErrorEventArgs>())).Do(x => errors.Add(x.Arg<BuildErrorEventArgs>()));
         }
 
         [TestMethod]
@@ -26,7 +26,7 @@ namespace MSBuildLibrary.MSTest
         {
             //Arrange
             var addTask = new AddTask { Param1 = 1, Param2 = 2 };
-            addTask.BuildEngine = buildEngine.Object;
+            addTask.BuildEngine = buildEngine;
 
             //Act
             var success = addTask.Execute();

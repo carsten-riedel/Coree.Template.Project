@@ -1,15 +1,15 @@
 {
     "$schema": "http://json.schemastore.org/template",
     "author": "Carsten Riedel",
-    "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "tool", "Coree" ],
+    "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "Tool", "Coree" ],
     "identity": "CoreeTemplatesProjectNetTool",
     "name": ".NET Tool",
-    "shortName": "nettool",
+    "shortName": "nettool-coree",
     "tags": {
       "language": "C#",
-      "type": "project"
+      "type": "solution"
     },
-    "defaultName": "MyName.NetTool1", // Default Solution and Projectname scheme
+    "defaultName": "Organization.Domain.CommandName", // Default Solution and Projectname scheme
     "sourceName": "NetTool", // Matching nameingscheme csproj and namespace
     "preferNameDirectory": true,
     "symbols": {
@@ -69,7 +69,7 @@
             "displayName": ".NET 8.0"
           }
         ],
-        "defaultValue": "net6.0|net7.0"
+        "defaultValue": "net6.0|net7.0|net8.0"
       },
       "PackageAuthor": {
         "type": "parameter",
@@ -91,14 +91,6 @@
         "type": "computed",
         "value": "(PackageCompany != \"\")"
       },
-      "PackageCopyright": {
-        "type": "parameter",
-        "dataType": "bool",
-        "defaultValue": "true",
-        "replaces": "MyCopyright",
-        "description": "The nuget copyright of your project.",
-        "displayName": "Package copyright"
-      },
       "copyrightYear": {
         "type": "generated",
         "generator": "now",
@@ -118,46 +110,25 @@
       "PackageDescription": {
         "type": "parameter",
         "dataType": "string",
-        "defaultValue": "Package description",
+        "defaultValue": "PackageDescription",
         "replaces": "PackageDescription",
         "description": "The nuget package description of your project.",
         "displayName": "Package description"
       },
-      "PackageVersion": {
+      "AssemblyVersioningScheme": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "description": "Generates nuget and assembly versioning scheme utilizing build and revision date.",
+        "displayName": "Automatic nuget and assembly version."
+      },
+      "PackageVersionSuffix": {
         "type": "parameter",
         "dataType": "string",
-        "defaultValue": "0.0.1-prerelease",
-        "replaces": "0.0.1-prerelease",
-        "description": "The nuget package semver of your project.",
-        "displayName": "Package Semantic Versioning"
-      },
-      "PackageAddReadMe": {
-        "type": "parameter",
-        "datatype": "bool",
-        "defaultValue": "true",
-        "description": "Adds a Readme.md for the nuget package of your project.",
-        "displayName": "Add package Readme.md"
-      },
-      "PackageAddReleaseNotes": {
-        "type": "parameter",
-        "datatype": "bool",
-        "defaultValue": "true",
-        "description": "Adds a ReleaseNotes.txt for the nuget package of your project.",
-        "displayName": "Add package ReleaseNotes.txt"
-      },
-      "PackageAddMitLicense": {
-        "type": "parameter",
-        "datatype": "bool",
-        "defaultValue": "true",
-        "description": "Adds a MIT License.txt for the nuget package of your project.",
-        "displayName": "Add package MIT License.txt"
-      },
-      "PackageAddIconPng": {
-        "type": "parameter",
-        "datatype": "bool",
-        "defaultValue": "true",
-        "description": "Adds a Icon.png for the nuget package of your project.",
-        "displayName": "Add package Icon.png"
+        "defaultValue": "prerelease",
+        "replaces": "prerelease",
+        "description": "The nuget package semver VersionSuffix of your project.",
+        "displayName": "VersionSuffix for debug"
       },
       "DefaultRename": {
         "type": "derived",  
@@ -183,6 +154,11 @@
 
 
     },
+    "guids": [
+      "8CDD8387-B905-44A8-B5D5-07BB50E05BEA",
+      "35BBE988-7105-4CF2-BF49-11DBD588309E",
+      "43DA960A-5EB3-4648-9643-7F837744A68C"
+    ],
     "forms": {
       "WithoutTrailingNumbers": {
         "identifier": "replace",
@@ -194,35 +170,5 @@
         "pattern": "\\.",        // regex to match every number at the end of the string
         "replacement": ""  // replace it with empty string
       }
-    },
-    "sources": [
-      {
-        "modifiers": [
-          {
-            "condition": "(!PackageAddReadMe)",
-            "exclude": [
-              "Package/PackageRoot/Readme.md"
-            ]
-          },
-          {
-            "condition": "(!PackageAddReleaseNotes)",
-            "exclude": [
-              "Package/ReleaseNotes.txt"
-            ]
-          },
-          {
-            "condition": "(!PackageAddMitLicense)",
-            "exclude": [
-              "Package/PackageRoot/License.txt"
-            ]
-          },
-          {
-            "condition": "(!PackageAddIconPng)",
-            "exclude": [
-              "Package/PackageRoot/Icon.png"
-            ]
-          }
-        ]
-      }
-    ]
-  }
+    }
+}

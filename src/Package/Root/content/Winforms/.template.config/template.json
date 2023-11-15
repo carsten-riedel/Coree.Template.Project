@@ -3,8 +3,8 @@
   "author": "Carsten Riedel",
   "classifications": [ "Common", "dotnet", "Windows", "Winforms", "Coree" ],
   "identity": "CoreeTemplatesProjectWinforms",
-  "name": "Winforms (dotnet publish)",
-  "shortName": "winforms-dotnet-publish",
+  "name": ".NET Winforms",
+  "shortName": "winforms-coree",
   "tags": {
     "language": "C#",
     "type": "project"

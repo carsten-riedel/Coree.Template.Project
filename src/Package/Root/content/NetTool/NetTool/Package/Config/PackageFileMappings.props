@@ -1,0 +1,10 @@
+<Project>
+
+  <!-- Package file mappings -->
+  
+  <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)\Package\Root\**\*" Exclude="$(MSBuildProjectDirectory)\Package\Root\**\**\bin\**;$(MSBuildProjectDirectory)\Package\Root\**\**\obj\**;$(MSBuildProjectDirectory)\Package\Root\**\**\.vs\**" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\Package\Config\**\*"  Pack="false" PackagePath="" />
+  </ItemGroup>
+
+</Project>

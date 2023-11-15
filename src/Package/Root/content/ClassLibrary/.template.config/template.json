@@ -4,7 +4,7 @@
   "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "ClassLibrary" ,"Library", "Coree" ],
   "identity": "CoreeTemplatesProjectClassLibrary",
   "name": ".NET Class library",
-  "shortName": "classlibrary-coree",
+  "shortName": "classlib-coree",
   "tags": {
     "language": "C#",
     "type": "solution"

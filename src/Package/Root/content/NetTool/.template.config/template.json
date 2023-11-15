@@ -62,6 +62,11 @@
             "choice": "net7.0",
             "description": "Target net7.0",
             "displayName": ".NET 7.0"
+          },
+          {
+            "choice": "net8.0",
+            "description": "Target net8.0",
+            "displayName": ".NET 8.0"
           }
         ],
         "defaultValue": "net6.0|net7.0"

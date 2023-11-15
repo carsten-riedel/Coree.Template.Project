@@ -10,9 +10,9 @@
     <Copyright>Copyright © Carsten Riedel 2023</Copyright>
     <PackageId>Coree.Template.Project</PackageId>
     <PackageTags>Project;Templates;.NET</PackageTags>
-	  <PackageProjectUrl></PackageProjectUrl>
-	  <RepositoryUrl></RepositoryUrl>
-	  <RepositoryType></RepositoryType>
+	  <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
+	  <RepositoryType>git</RepositoryType>
 
     <VersionMajor>0</VersionMajor>
     <VersionMinor>2</VersionMinor>

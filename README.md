@@ -122,19 +122,19 @@ This template provides a foundation for building a .NET commandline tool. The te
 The final command will be the ToolCommandName. The Packagename is the Project and ToolCommandName
 
 ```
-dotnet new nettool --PackageAuthor Me --ToolCommandName helloworld
+dotnet new nettool-coree --PackageAuthor Me --ToolCommandName helloworld
 ```
 
 **Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory**
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyNetTool" ; cd "MyNetTool" ; dotnet new nettool --PackageAuthor Me --ToolCommandName helloworld --force ; dotnet pack ; cd $HOME
+cd $HOME ;mkdir "MyNetTool" ; cd "MyNetTool" ; dotnet new nettool-coree --PackageAuthor Me --ToolCommandName helloworld --force ; dotnet pack ; cd $HOME
 ```
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyNetTool" & cd "MyNetTool" & dotnet new nettool --PackageAuthor Me --ToolCommandName helloworld --force & dotnet pack & cd /D %userprofile%
+cd /D %userprofile% & mkdir "MyNetTool" & cd "MyNetTool" & dotnet new nettool-coree --PackageAuthor Me --ToolCommandName helloworld --force & dotnet pack & cd /D %userprofile%
 ```
 
 Assuming you've already copied your package to a NuGet source, whether it's local or remote, you can easily install it using the .NET Core CLI. Specifically, if you're created a prerelease version of a tool called MyNetTool.helloworld, you can install it globally on your machine with the following command
@@ -168,7 +168,7 @@ Publish settings.
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyWpfApp" & cd "MyWpfApp" & dotnet new wpfapp-dotnet-publish --Author Me --force & dotnet publish & cd /D %userprofile%
+cd /D %userprofile% & mkdir "MyWpfApp" & cd "MyWpfApp" & dotnet new wpfapp-coree --Author Me --force & dotnet publish & cd /D %userprofile%
 ```
 
 The Single-file selection will have the following settings.
@@ -188,10 +188,10 @@ Indeed, it may sound a bit perplexing at first – a project template for creati
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyProjTemplate" ; cd "MyProjTemplate" ; dotnet new projecttemplate-dotnet-pack --PackageAuthor Me --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --force ; dotnet pack ; cd $HOME
+cd $HOME ;mkdir "MyProjTemplate" ; cd "MyProjTemplate" ; dotnet new projecttemplate-coree --PackageAuthor Me --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --force ; dotnet pack ; cd $HOME
 ```
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyProjTemplate" & cd "MyProjTemplate" & dotnet new projecttemplate-dotnet-pack --PackageAuthor Me --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --force & dotnet pack & cd /D %userprofile%
+cd /D %userprofile% & mkdir "MyProjTemplate" & cd "MyProjTemplate" & dotnet new projecttemplate-coree --PackageAuthor Me --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --force & dotnet pack & cd /D %userprofile%
 ```

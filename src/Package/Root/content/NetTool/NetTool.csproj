@@ -32,7 +32,18 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
-  <!-- Package configuration-->
-  <Import Project="Package/PackageConfig.props" />
+  <!-- 
+    Since during pack all ProjectReference will be transformed to Package dependencies. And version number is cascading into all package.
+  -->
+
+  <!-- Package configuration -->
+  <Import Project="Package/Config/PackageMetadata.props" />
+  <Import Project="Package/Config/PackageFileMappings.props" />
+  <Import Project="Package/Config/PackageSpecs.props" />
+
+  <!-- Exclude .gitignore from solution explorer -->
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
 
 </Project>

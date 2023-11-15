@@ -9,7 +9,7 @@
       "language": "C#",
       "type": "project"
     },
-    "defaultName": "MyName.NetTool1", // Default Solution and Projectname scheme
+    "defaultName": "Organization.Domain.MyToolCommandName", // Default Solution and Projectname scheme
     "sourceName": "NetTool", // Matching nameingscheme csproj and namespace
     "preferNameDirectory": true,
     "symbols": {

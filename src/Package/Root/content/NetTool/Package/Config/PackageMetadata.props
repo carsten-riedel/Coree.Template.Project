@@ -27,8 +27,4 @@
     <PackageReleaseNotes Condition="'$(PackageAddReleaseNotes)' == 'true'">$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)PackageRoot/**/*" Pack="true" PackagePath=""/>
-  </ItemGroup>
-
 </Project>

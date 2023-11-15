@@ -10,6 +10,12 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
 
+  <!-- Specific package specs -->
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <PublishRelease>false</PublishRelease>
+  </PropertyGroup>
+
   <PropertyGroup>
     <!--#if (RuntimeIdentifier == win-x86) -->
     <RuntimeIdentifier>win-x86</RuntimeIdentifier>

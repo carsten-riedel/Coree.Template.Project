@@ -1,11 +1,14 @@
 <Project>
 
-  <!-- Package specs -->
-
- <PropertyGroup>
-    <PackAsTool>true</PackAsTool>
+  <!-- Streamlining package specs -->
+  <PropertyGroup>
     <PackRelease>false</PackRelease>
     <PublishRelease>false</PublishRelease>
+  </PropertyGroup>
+
+ <!-- Specific package specs -->
+ <PropertyGroup>
+    <PackAsTool>true</PackAsTool>
     <ToolCommandName>MyToolCommandName</ToolCommandName>
     <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Pack</PackageOutputPath>
     <LocalPackagesDir></LocalPackagesDir>

@@ -1,6 +1,12 @@
 <Project>
 
-  <!-- Package specs -->
+  <!-- Streamlining package specs -->
+  <PropertyGroup>
+    <PackRelease>false</PackRelease>
+    <PublishRelease>false</PublishRelease>
+  </PropertyGroup>
+
+  <!-- Specific package specs -->
   <PropertyGroup>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
   </PropertyGroup>

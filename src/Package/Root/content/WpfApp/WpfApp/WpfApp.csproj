@@ -161,7 +161,7 @@
 
   <ItemGroup>
     <None Update="Properties\appsettings.json">
-      <Link>appsettings.json</Link>
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

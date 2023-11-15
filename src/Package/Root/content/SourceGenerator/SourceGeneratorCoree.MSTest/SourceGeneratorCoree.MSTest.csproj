@@ -6,6 +6,10 @@
     <DebugType>embedded</DebugType>
     <TargetFrameworks>net6.0</TargetFrameworks> <!-- using TargetFramework will produce NU5128 and won't generate dependency in .nuspec -->
     <LangVersion>latest</LangVersion>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <PackRelease>false</PackRelease>
+    <PublishRelease>false</PublishRelease>
   </PropertyGroup>
 
   <!-- 

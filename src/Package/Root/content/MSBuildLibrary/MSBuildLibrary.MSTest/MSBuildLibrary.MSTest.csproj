@@ -6,6 +6,9 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <PackRelease>false</PackRelease>
+    <PublishRelease>false</PublishRelease>
   </PropertyGroup>
 
   <ItemGroup>

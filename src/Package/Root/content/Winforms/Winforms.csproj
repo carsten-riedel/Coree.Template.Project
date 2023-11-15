@@ -16,8 +16,10 @@
     <!--#endif -->
   </PropertyGroup>
   
+  <!-- Specific package specs -->
   <PropertyGroup>
     <IsPackable>false</IsPackable>
+    <PublishRelease>false</PublishRelease>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -98,7 +98,7 @@
     <!-- git push -d origin 0.1.8706.38986 -->
   </Target>
 
-    <!--
+  <!--
   <Target Name="GenerateStrings" BeforeTargets="BeforeBuild">
       <PropertyGroup>
           <Start></Start>

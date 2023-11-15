@@ -91,22 +91,22 @@
 
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
-    <!--#if (PackageCompany != '') -->
+    <!--#if (Company != '') -->
     <Owners>MyCompany</Owners>
     <!--#endif -->
-    <!--#if (PackageCompany == '') -->
+    <!--#if (Company == '') -->
     <Owners>MyAuthor</Owners>
     <!--#endif -->
-    <!--#if (PackageCompany != '') -->
+    <!--#if (Company != '') -->
     <Company>MyCompany</Company>
     <!--#endif -->
-    <!--#if (PackageCompany == '') -->
+    <!--#if (Company == '') -->
     <Company></Company>
     <!--#endif -->
-    <!--#if (PackageCompany != '') -->
+    <!--#if (Company != '') -->
     <Copyright>Copyright © MyCompany 1975</Copyright>
     <!--#endif -->
-    <!--#if (PackageCompany == '') -->
+    <!--#if (Company == '') -->
     <Copyright>Copyright © MyAuthor 1975</Copyright>
     <!--#endif -->
   </PropertyGroup>
@@ -157,7 +157,12 @@
     <!--#if (Sqlitedb == true) -->
     <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.13" />
     <!--#endif -->
+  </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Properties\appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

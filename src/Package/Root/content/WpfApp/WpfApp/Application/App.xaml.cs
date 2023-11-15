@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 #endif
 #if( ViewModel )
 using WpfApp.ViewModels;
@@ -26,8 +27,14 @@ namespace WpfApp
 
         public App()
         {
-            host = new HostBuilder().ConfigureServices(ConfigureServices).ConfigureLogging(ConfigureLogging).Build();
+            host = new HostBuilder().ConfigureServices(ConfigureServices).ConfigureAppConfiguration(ConfigureAppConfiguration).ConfigureLogging(ConfigureLogging).Build();
             Services = host.Services;
+        }
+
+        private void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder)
+        {
+            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
+            builder.AddConfiguration(config);
         }
 
         private void ConfigureServices(HostBuilderContext context, IServiceCollection services)

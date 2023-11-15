@@ -109,12 +109,12 @@ dotnet new classlibrary-coree --PackageAuthor Me
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyClassLib" ; cd "MyClassLib" ; dotnet new classlibrary-coree --PackageAuthor Me --force ; dotnet test ; dotnet pack ; cd $HOME
+cd $HOME ;mkdir "MyClassLib" ; cd "MyClassLib" ; dotnet new classlib-coree --PackageAuthor Me --force ; dotnet test ; dotnet pack ; cd $HOME
 ```
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyClassLib" & cd "MyClassLib" & dotnet new classlibrary-coree --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
+cd /D %userprofile% & mkdir "MyClassLib" & cd "MyClassLib" & dotnet new classlib-coree --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
 ```
 
 ## <a name="nettool"> .Net Tool

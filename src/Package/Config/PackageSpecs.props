@@ -8,6 +8,7 @@
   </ItemGroup>
 
   <PropertyGroup>
+    <PublishRelease>false</PublishRelease>
     <IncludeBuildOutput>False</IncludeBuildOutput>
     <IncludeSource>False</IncludeSource>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>

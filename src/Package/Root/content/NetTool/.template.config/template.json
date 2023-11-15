@@ -7,9 +7,9 @@
     "shortName": "nettool",
     "tags": {
       "language": "C#",
-      "type": "project"
+      "type": "solution"
     },
-    "defaultName": "Organization.Domain.MyToolCommandName", // Default Solution and Projectname scheme
+    "defaultName": "Organization.Domain.CommandName", // Default Solution and Projectname scheme
     "sourceName": "NetTool", // Matching nameingscheme csproj and namespace
     "preferNameDirectory": true,
     "symbols": {
@@ -183,6 +183,11 @@
 
 
     },
+    "guids": [
+      "8CDD8387-B905-44A8-B5D5-07BB50E05BEA",
+      "35BBE988-7105-4CF2-BF49-11DBD588309E",
+      "43DA960A-5EB3-4648-9643-7F837744A68C"
+    ],
     "forms": {
       "WithoutTrailingNumbers": {
         "identifier": "replace",

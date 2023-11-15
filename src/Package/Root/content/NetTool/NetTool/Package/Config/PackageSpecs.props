@@ -4,6 +4,7 @@
 
  <PropertyGroup>
     <PackAsTool>true</PackAsTool>
+    <PublishRelease>false</PublishRelease>
     <ToolCommandName>MyToolCommandName</ToolCommandName>
     <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Pack</PackageOutputPath>
     <LocalPackagesDir></LocalPackagesDir>

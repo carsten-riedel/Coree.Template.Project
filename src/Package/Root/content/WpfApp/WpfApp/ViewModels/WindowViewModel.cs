@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
+using WpfApp.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,12 +29,13 @@ namespace WpfApp.ViewModels
         public WindowViewModel()
         {
             Configuration = App.Services!.GetRequiredService<IConfiguration>();
-            ChangeToken.OnChange(() => Configuration.GetReloadToken(), onChange);
+            ChangeToken.OnChange(() => Configuration.GetReloadToken(), OnChange);
+            OnChange();
         }
 
-        private void onChange()
+        private void OnChange()
         {
-            Title = Configuration.GetRequiredSection("Settings:KeyOne").Value;
+            StatusBar = Configuration.GetSection("Settings:KeyiThree:Message").Get<string>().EmptyIfNull();
         }
     }
 }

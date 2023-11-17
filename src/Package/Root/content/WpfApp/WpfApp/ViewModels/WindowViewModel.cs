@@ -35,7 +35,7 @@ namespace WpfApp.ViewModels
 
         private void OnChange()
         {
-            StatusBar = Configuration.GetSection("Settings:KeyThree:Message").Get<string>().EmptyIfNull();
+            StatusBar = Configuration.GetSection("Settings:Subkey1:Value1").Get<string>().EmptyIfNull();
         }
     }
 }

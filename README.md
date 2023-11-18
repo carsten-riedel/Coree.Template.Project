@@ -6,7 +6,9 @@
 
 Welcome to the Coree.Template.Project repository! This project offers a comprehensive suite of templates for Visual Studio and dotnet CLI, designed to streamline the creation of various .NET projects. From MSBuild tasks to class libraries and WPF applications, this repository serves as a one-stop resource for developers looking to enhance their .NET development workflow.
 
-## WSL Setup
+## Preperation (Prerequirments)
+
+### WSL Setup
 
 To set up WSL on Windows:
   1. Open the Command Prompt or PowerShell as an administrator.
@@ -28,7 +30,7 @@ To uninstall a wsl image e.g Ubuntu on Windows:
   2. Execute: `wsl --list` to see a list of your local installed wsl images.
   3. Execute: `wsl --unregister Ubuntu-22.04` to remove a installed wsl image.
 
-## Get ready for dotnet powershell and vscode on ubuntu
+### Get ready for dotnet powershell and vscode on ubuntu
 
 To install dotnet powershell and vscode:
   1. Open the wsl app in windows or type `wsl` inside a command prompt.
@@ -44,7 +46,7 @@ To uninstall dotnet powershell and vscode:
   3. Execute: `dotnet tool uninstall --global PowerShell` to uninstall Powershell.
   4. Execute: `sudo apt remove -y --purge --autoremove "dotnet*" "aspnet*" "netstandard*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list` to uninstall all .NET 8.0 packages.
   
-## Windows Setup
+### Windows Setup
 
 Normal install and download procedure.
   1. [Download/Install dotnet SDK](https://dotnet.microsoft.com/en-us/download)
@@ -53,7 +55,7 @@ Normal install and download procedure.
 
 
 
-# Install/Uninstall the templates
+## Install/Uninstall the templates
 The commands below demonstrate how to install or uninstall the templates, primarily designed for .NET with Visual Studio 2022 compatibility in mind. Remember, template definitions might include specific limitations like conditional settings (true/false).
 ```
 dotnet new install Coree.Template.Project
@@ -88,7 +90,7 @@ To remove the local source
 dotnet nuget remove source "localpackage"
 ```
 
-## <a name="msbuild"> .Net MSBuild Task library
+### <a name="msbuild"> .Net MSBuild Task library
 This template provides a foundation for building a .NET Standard compatible MSBuild task library, essential for tasks like build automation. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
 
 ```
@@ -109,7 +111,7 @@ cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new ms
 
 **Enhance the TestScript.msbuild in the MSTest project to test your integration.**
 
-## <a name="classlib"> .Net class library
+### <a name="classlib"> .Net class library
 This template provides a foundation for building a .NET compatible library. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
 
 ```
@@ -128,7 +130,7 @@ Windows cmd (Sample useage):
 cd /D %userprofile% & mkdir "MyClassLib" & cd "MyClassLib" & dotnet new classlib-coree --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
 ```
 
-## <a name="nettool"> .Net Tool
+### <a name="nettool"> .Net Tool
 This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.
 The final command will be the ToolCommandName. The Packagename is the Project and ToolCommandName
 
@@ -161,13 +163,13 @@ C:\Users\MainUser>helloworld
 Hello, World!
 ```
 
-## <a name="powershell"> .Net Powershell cmdlet
+### <a name="powershell"> .Net Powershell cmdlet
 ### Description TBD
 
-## <a name="winforms"> .Net Winforms (Windows only)
+### <a name="winforms"> .Net Winforms (Windows only)
 ### Description TBD
 
-## <a name="wpf"> .Net Wpf (Windows only)
+### <a name="wpf"> .Net Wpf (Windows only)
 This template serves as a base for developing WPF applications, optimized primarily for .NET publishing as an executable. It includes five distinct configurations tailored for the dotnet publish process. Enhanced with basic visual improvements, the template utilizes the MaterialDesignThemes.MahApps package. You can tailor the App.xaml to your requirements, particularly by altering color keys like `<Color x:Key="Primary200">#76bddf</Color>`, to suit your design preferences.
 
 Publish settings.
@@ -194,7 +196,7 @@ The Single-file selection will have the following settings.
 
 ![image](https://github.com/carsten-riedel/Coree.Template.Project/assets/97656046/18061fa0-4b72-49f3-baa6-8e49648a7991)
 
-## <a name="template"> .Net Project Template
+### <a name="template"> .Net Project Template
 Indeed, it may sound a bit perplexing at first – a project template for creating project templates. However, it's quite straightforward. For a project to generate templates, these must be situated within the packages/root/content folder. Additionally, a default class library is incorporated, complete with the provided names, to kickstart your project template creation. For more detailed guidance, refer to the educational section at the beginning of this readme.
 
 Linux/WSL (Sample useage):
@@ -206,7 +208,7 @@ Windows cmd (Sample useage):
 cd /D %userprofile% & mkdir "MyProjTemplate" & cd "MyProjTemplate" & dotnet new projecttemplate-coree --PackageAuthor Me --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --force & dotnet pack & cd /D %userprofile%
 ```
 
-# Educational
+## Educational
 
 For more information and resources for templating:
   - [MS Learn: Custom templates for dotnet new](https://learn.microsoft.com/en-us/dotnet/core/tools/custom-templates)

@@ -35,6 +35,14 @@ Project Templates for Visual Studio and dotnet cli
 
 Notes Ubuntu/WSL:
 ```
+#WSL commands Windows
+wsl --list
+wsl --unregister Ubuntu-22.04
+wsl --list --online
+wsl --install Ubuntu-22.04
+#user -> lowercase
+#password
+
 #In the case dotnet sdk does not install.
 sudo apt remove -y --purge --autoremove "dotnet*" "aspnet*" "netstandard*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list
 
@@ -48,8 +56,8 @@ sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0
 #dotnet tool install --global PowerShell
 
 #Download and install VSCode
-#wget --content-disposition -S https://go.microsoft.com/fwlink/?LinkID=760868
-#sudo apt install ./<file>.deb
+#wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868
+#sudo apt install ./code.deb
 ```
 
 ## Install/Uninstall the templates

@@ -56,7 +56,7 @@ sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0
 #dotnet tool install --global PowerShell
 
 #Download and install VSCode
-#wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1"
+#sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1"
 ```
 
 ## Install/Uninstall the templates

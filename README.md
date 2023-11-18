@@ -11,7 +11,7 @@ Welcome to the Coree.Template.Project repository! This project offers a comprehe
 ### WSL Setup
 
 To set up WSL on Windows:
-  1. Open the Command Prompt or PowerShell as an administrator.
+  1. Open the Command Prompt or PowerShell as an **administrator**.
   2. Execute: `wsl --install --no-distribution`.
   3. Restart your computer when prompted.
 

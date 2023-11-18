@@ -36,7 +36,13 @@ Project Templates for Visual Studio and dotnet cli
 Notes Ubuntu/WSL:
 ```
 #WSL commands Windows
+
+Invoke-WebRequest -Uri https://aka.ms/wslubuntu2204 -OutFile Ubuntu2204.appx -UseBasicParsing
+Add-AppxPackage .\Ubuntu2204.appx
+
+wsl --install --no-distribution  & REM Adminrights needed enable windows features (reboot)
 wsl --update & REM Updates to the latest wsl version
+wsl --set-default-version 2  & REM Sets WSL to the latest WSL2 version.
 wsl --list & REM Lists your local install wsl versions.
 wsl --unregister Ubuntu-22.04 & REM Deletes/Removes your local wsl version.
 wsl --list --online & REM Lists all online availible versions.

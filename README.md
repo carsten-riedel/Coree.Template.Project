@@ -7,6 +7,13 @@
 Welcome to the Coree.Template.Project repository! This project offers a comprehensive suite of templates for Visual Studio and dotnet CLI, designed to streamline the creation of various .NET projects. From MSBuild tasks to class libraries and WPF applications, this repository serves as a one-stop resource for developers looking to enhance their .NET development workflow.
 
 ## Preperation (Prerequirments)
+  
+### Windows Setup
+
+Normal install and download procedure.
+  1. [Download/Install dotnet SDK](https://dotnet.microsoft.com/en-us/download)
+  2. [Download/Install Visual Studio Code](https://code.visualstudio.com/)
+  3. [Download/Install Powershell](https://learn.microsoft.com/en-US/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.3)
 
 ### WSL Setup
 
@@ -38,22 +45,13 @@ To install dotnet powershell and vscode:
   3. Execute: `sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0` to install the .NET 8.0 SDK.
   4. Execute: `dotnet tool install --global PowerShell` if you want to use Powershell Core.
   5. Execute: `sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb` to install Visual Studio code.
-  6. Execute: `echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1" && mkdir -p "$HOME/source/repos" && mkdir -p "$HOME/localpackage"` to get rid of the Visual Studio code promt, and to create some default directories.
+  6. Execute: `echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1" && mkdir -p "$HOME/source/repos" && mkdir -p "$HOME/localpackage"` to get rid of the Visual Studio code prompt, and to create some default directories.
 
 To uninstall dotnet powershell and vscode:
   1. Open the wsl app in windows or type `wsl` inside a command prompt.
   2. Execute: `sudo apt-get remove -y code` to uninstall Visual Studio Code.
   3. Execute: `dotnet tool uninstall --global PowerShell` to uninstall Powershell.
   4. Execute: `sudo apt remove -y --purge --autoremove "dotnet*" "aspnet*" "netstandard*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list` to uninstall all .NET 8.0 packages.
-  
-### Windows Setup
-
-Normal install and download procedure.
-  1. [Download/Install dotnet SDK](https://dotnet.microsoft.com/en-us/download)
-  2. [Download/Install Visual Studio Code](https://code.visualstudio.com/)
-  3. [Download/Install Powershell](https://learn.microsoft.com/en-US/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.3)
-
-
 
 # Install/Uninstall the templates
 The commands below demonstrate how to install or uninstall the templates, primarily designed for .NET with Visual Studio 2022 compatibility in mind. Remember, template definitions might include specific limitations like conditional settings (true/false).

@@ -36,10 +36,11 @@ Project Templates for Visual Studio and dotnet cli
 Notes Ubuntu/WSL:
 ```
 #WSL commands Windows
-wsl --list
-wsl --unregister Ubuntu-22.04
-wsl --list --online
-wsl --install Ubuntu-22.04
+wsl --update & REM Updates to the latest wsl version
+wsl --list & REM Lists your local install wsl versions.
+wsl --unregister Ubuntu-22.04 & REM Deletes/Removes your local wsl version.
+wsl --list --online & REM Lists all online availible versions.
+wsl --install Ubuntu-22.04 & REM Installs a online version.
 #user -> lowercase
 #password
 
@@ -56,7 +57,7 @@ sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0
 #dotnet tool install --global PowerShell
 
 #Download and install VSCode
-#sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1"
+#sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1" && mkdir -p "$HOME/source/repos" && mkdir -p "$HOME/localpackage"
 ```
 
 ## Install/Uninstall the templates
@@ -81,7 +82,7 @@ Then add a local package source.
 
 Linux/WSL (Sample useage):
 ```
-dotnet nuget add source "$HOME\localpackage" --name "localpackage"
+dotnet nuget add source "$HOME/localpackage" --name "localpackage"
 ```
 
 Windows cmd (Sample useage):

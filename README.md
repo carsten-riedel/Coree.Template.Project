@@ -36,7 +36,6 @@ Project Templates for Visual Studio and dotnet cli
 #### Get ready for WSL
 WSL enable:
 ```
-#WSL enableing on Windows
 wsl --install --no-distribution  & REM Adminrights required enable windows features (reboot)
 ```
 WSL install:
@@ -62,7 +61,7 @@ sudo wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-
 #Install the dotnet sdk
 sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0
 
-#Optional Install PowershellCore 
+#Optional: Install PowerShell Core 
 dotnet tool install --global PowerShell
 
 #Download and install VSCode, make default dirs
@@ -70,9 +69,11 @@ sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?Lin
 ```
 Ubuntu uninstall
 ```
-#Remove all dotnet installs, if needed
+#Remove VSCode
 sudo apt-get remove -y code
+#Remove PowerShell Core 
 dotnet tool uninstall --global PowerShell
+#Remove all .NET installations if necessary
 sudo apt remove -y --purge --autoremove "dotnet*" "aspnet*" "netstandard*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list
 ```
 
@@ -117,7 +118,7 @@ This template provides a foundation for building a .NET Standard compatible MSBu
 ```
 dotnet new msbuildtasklib-coree --PackageAuthor Me
 ```
-**Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory**
+**Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory.**
 <br><br>
 
 Linux/WSL (Sample useage):
@@ -139,7 +140,7 @@ This template provides a foundation for building a .NET compatible library. It i
 dotnet new classlibrary-coree --PackageAuthor Me
 ```
 
-**Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory**
+**Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory.**
 
 Linux/WSL (Sample useage):
 ```
@@ -159,7 +160,7 @@ The final command will be the ToolCommandName. The Packagename is the Project an
 dotnet new nettool-coree --PackageAuthor Me --ToolCommandName helloworld
 ```
 
-**Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory**
+**Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory.**
 
 Linux/WSL (Sample useage):
 ```
@@ -171,7 +172,7 @@ Windows cmd (Sample useage):
 cd /D %userprofile% & mkdir "MyNetTool" & cd "MyNetTool" & dotnet new nettool-coree --PackageAuthor Me --ToolCommandName helloworld --force & dotnet pack & cd /D %userprofile%
 ```
 
-Assuming you've already copied your package to a NuGet source, whether it's local or remote, you can easily install it using the .NET Core CLI. Specifically, if you're created a prerelease version of a tool called MyNetTool.helloworld, you can install it globally on your machine with the following command
+Assuming you've already copied your package to a NuGet source, whether it's local or remote, you can easily install it using the .NET Core CLI. Specifically, if you're created a prerelease version of a tool called MyNetTool.helloworld, you can install it globally on your machine with the following command.
 ```
 dotnet tool install -g MyNetTool.helloworld --prerelease
 #REM OR use a temporary package location

@@ -59,12 +59,12 @@ The commands below demonstrate how to install or uninstall the templates, primar
 dotnet new install Coree.Template.Project
 dotnet new uninstall Coree.Template.Project
 ```
-The package contains the following templates:<br><br>
-[.Net MSBuild Task library](#Net-MSBuild-Task-library)<br><br>
-[.Net Class library](#Net-class-library)<br><br>
-[.Net Tool](#Net-Tool)<br><br>
-[.Net Wpf](#Net-Wpf-Windows-only)<br><br>
-[.Net Project Template](#Net-Project-Template)<br><br>
+The package contains the following templates:
+  1. [.Net MSBuild Task library](#Net-MSBuild-Task-library)
+  2. [.Net Class library](#Net-class-library)
+  3. [.Net Tool](#Net-Tool)
+  4. [.Net Wpf](#Net-Wpf-Windows-only)
+  5. [.Net Project Template](#Net-Project-Template)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.

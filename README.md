@@ -33,37 +33,47 @@ Project Templates for Visual Studio and dotnet cli
 
 [Download/Install dotnet SDK](https://dotnet.microsoft.com/en-us/download)
 
-Notes Ubuntu/WSL:
+#### Get ready for WSL
+WSL enable:
 ```
-#WSL commands Windows
-
-Invoke-WebRequest -Uri https://aka.ms/wslubuntu2204 -OutFile Ubuntu2204.appx -UseBasicParsing
-Add-AppxPackage .\Ubuntu2204.appx
-
-wsl --install --no-distribution  & REM Adminrights needed enable windows features (reboot)
+#WSL enableing on Windows
+wsl --install --no-distribution  & REM Adminrights required enable windows features (reboot)
+```
+WSL install:
+```
 wsl --update & REM Updates to the latest wsl version
-wsl --set-default-version 2  & REM Sets WSL to the latest WSL2 version.
-wsl --list & REM Lists your local install wsl versions.
-wsl --unregister Ubuntu-22.04 & REM Deletes/Removes your local wsl version.
+wsl --set-default-version 2 & REM Sets WSL to the latest WSL2 version.
 wsl --list --online & REM Lists all online availible versions.
-wsl --install Ubuntu-22.04 & REM Installs a online version.
+wsl --install Ubuntu-22.04 --web-download & REM Installs a online version as webdownload in the case the store is blocked.
 #user -> lowercase
 #password
-
-#In the case dotnet sdk does not install.
-sudo apt remove -y --purge --autoremove "dotnet*" "aspnet*" "netstandard*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list
-
-#Add Microsoft sources
+```
+WSL uninstall:
+```
+wsl --list & REM Lists your local install wsl versions.
+wsl --unregister Ubuntu-22.04 & REM Deletes/Removes your local wsl version.
+```
+#### Get ready for dotnet powershell and vscode
+Ubuntu install
+```
+#Add the microsoft sources for apt
 sudo wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && sudo dpkg -i packages-microsoft-prod.deb && sudo rm packages-microsoft-prod.deb
 
 #Install the dotnet sdk
 sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0
 
 #Optional Install PowershellCore 
-#dotnet tool install --global PowerShell
+dotnet tool install --global PowerShell
 
-#Download and install VSCode
-#sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1" && mkdir -p "$HOME/source/repos" && mkdir -p "$HOME/localpackage"
+#Download and install VSCode, make default dirs
+sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb && echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1" && mkdir -p "$HOME/source/repos" && mkdir -p "$HOME/localpackage"
+```
+Ubuntu uninstall
+```
+#Remove all dotnet installs, if needed
+sudo apt-get remove -y code
+dotnet tool uninstall --global PowerShell
+sudo apt remove -y --purge --autoremove "dotnet*" "aspnet*" "netstandard*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list
 ```
 
 ## Install/Uninstall the templates

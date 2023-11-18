@@ -30,7 +30,7 @@
           Templates for Visual Studio and dotnet CLI that allows you to create various types of .NET projects . MSBuild tasks, class libraries, .NET tools, PowerShell cmdlets, WinForms applications, WPF applications, and a Project Template.
 	    ]]>
     </Description>
-    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)ReleaseNotes.txt"))</PackageReleaseNotes>

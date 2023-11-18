@@ -70,7 +70,8 @@ The package contains the following templates:
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
-In the packages dir `PackageSpecs.props` you can add `<LocalPackagesDir>$(userprofile)\localpackage</LocalPackagesDir>`<br>
+In the packages dir `PackageSpecs.props` you can add `<LocalPackagesDir>$(userprofile)\localpackage</LocalPackagesDir>`
+
 Then add a local package source.
 
 Linux/WSL (Sample useage):
@@ -95,7 +96,7 @@ This template provides a foundation for building a .NET Standard compatible MSBu
 dotnet new msbuildtasklib-coree --PackageAuthor Me
 ```
 **Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory.**
-<br><br>
+
 
 Linux/WSL (Sample useage):
 ```

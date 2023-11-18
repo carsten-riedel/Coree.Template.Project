@@ -148,9 +148,9 @@ cd /D %userprofile% & mkdir "MyNetTool" & cd "MyNetTool" & dotnet new nettool-co
 
 Assuming you've already copied your package to a NuGet source, whether it's local or remote, you can easily install it using the .NET Core CLI. Specifically, if you're created a prerelease version of a tool called MyNetTool.helloworld, you can install it globally on your machine with the following command.
 ```
-dotnet tool install -g MyNetTool.helloworld --prerelease
+dotnet tool install -g MyNetTool --prerelease
 #REM OR use a temporary package location
-dotnet tool install -g MyNetTool.helloworld --prerelease --add-source "%userprofile%\MyNetTool\Package\PackageOut"
+dotnet tool install -g MyNetTool --prerelease --add-source "%userprofile%\MyNetTool\MyNetTool\bin\Pack"
 ```
 
 Use:

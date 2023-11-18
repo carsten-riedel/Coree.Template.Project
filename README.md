@@ -17,6 +17,8 @@ Normal install and download procedure.
 
 ### WSL Setup
 
+WSL (Windows Subsystem for Linux) enables running Linux environments on Windows. This section covers its setup, essential for cross-platform development.
+
 To set up WSL on Windows:
   1. Open the Command Prompt or PowerShell as an **administrator**.
   2. Execute: `wsl --install --no-distribution`.
@@ -37,7 +39,7 @@ To uninstall a wsl image e.g Ubuntu on Windows:
   2. Execute: `wsl --list` to see a list of your local installed wsl images.
   3. Execute: `wsl --unregister Ubuntu-22.04` to remove a installed wsl image.
 
-### Get ready for dotnet powershell and vscode on ubuntu
+### Setting up .NET, PowerShell, and Visual Studio Code on Ubuntu
 
 To install dotnet powershell and vscode:
   1. Open the wsl app in windows or type `wsl` inside a command prompt.
@@ -60,11 +62,11 @@ dotnet new install Coree.Template.Project
 dotnet new uninstall Coree.Template.Project
 ```
 The package contains the following templates:
-  1. [.Net MSBuild Task library](#Net-MSBuild-Task-library)
-  2. [.Net Class library](#Net-class-library)
-  3. [.Net Tool](#Net-Tool)
-  4. [.Net Wpf](#Net-Wpf-Windows-only)
-  5. [.Net Project Template](#Net-Project-Template)
+  1. [.NET MSBuild Task library](#Net-MSBuild-Task-library)
+  2. [.NET Class library](#Net-class-library)
+  3. [.NET Tool](#Net-Tool)
+  4. [.NET Wpf](#Net-Wpf-Windows-only)
+  5. [.NET Project Template](#Net-Project-Template)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -86,7 +88,7 @@ To remove the local source
 dotnet nuget remove source "localpackage"
 ```
 
-## .Net MSBuild Task library
+## .NET MSBuild Task library
 This template provides a foundation for building a .NET Standard compatible MSBuild task library, essential for tasks like build automation. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
 
 ```
@@ -107,7 +109,7 @@ cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new ms
 
 **Enhance the TestScript.msbuild in the MSTest project to test your integration.**
 
-## .Net class library
+## .NET Class library
 This template provides a foundation for building a .NET compatible library. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
 
 ```
@@ -126,7 +128,7 @@ Windows cmd (Sample useage):
 cd /D %userprofile% & mkdir "MyClassLib" & cd "MyClassLib" & dotnet new classlib-coree --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
 ```
 
-## .Net Tool
+## .NET Tool
 This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.
 The final command will be the ToolCommandName. The Packagename is the Project and ToolCommandName
 
@@ -159,7 +161,7 @@ C:\Users\MainUser>helloworld
 Hello, World!
 ```
 
-## .Net Wpf (Windows only)
+## .NET Wpf (Windows only)
 This template serves as a base for developing WPF applications, optimized primarily for .NET publishing as an executable. It includes five distinct configurations tailored for the dotnet publish process. Enhanced with basic visual improvements, the template utilizes the MaterialDesignThemes.MahApps package. You can tailor the App.xaml to your requirements, particularly by altering color keys like `<Color x:Key="Primary200">#76bddf</Color>`, to suit your design preferences.
 
 Publish settings.
@@ -186,7 +188,7 @@ The Single-file selection will have the following settings.
 
 ![image](https://github.com/carsten-riedel/Coree.Template.Project/assets/97656046/18061fa0-4b72-49f3-baa6-8e49648a7991)
 
-## .Net Project Template
+## .NET Project Template
 Indeed, it may sound a bit perplexing at first – a project template for creating project templates. However, it's quite straightforward. For a project to generate templates, these must be situated within the packages/root/content folder. Additionally, a default class library is incorporated, complete with the provided names, to kickstart your project template creation. For more detailed guidance, refer to the educational section at the beginning of this readme.
 
 Linux/WSL (Sample useage):

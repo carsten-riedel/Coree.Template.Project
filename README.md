@@ -45,7 +45,11 @@ sudo wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-
 sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0
 
 #Optional Install PowershellCore 
-#dotnet tool install --global PowerShell 
+#dotnet tool install --global PowerShell
+
+#Download and install VSCode
+#wget --content-disposition -S https://go.microsoft.com/fwlink/?LinkID=760868
+#sudo apt install ./<file>.deb
 ```
 
 ## Install/Uninstall the templates

@@ -4,80 +4,56 @@
 
 ![image](https://github.com/carsten-riedel/Coree.Template.Project/assets/97656046/1d691cb1-b24b-4827-be11-c96cd83d5a12)
 
-Project Templates for Visual Studio and dotnet cli
+Welcome to the Coree.Template.Project repository! This project offers a comprehensive suite of templates for Visual Studio and dotnet CLI, designed to streamline the creation of various .NET projects. From MSBuild tasks to class libraries and WPF applications, this repository serves as a one-stop resource for developers looking to enhance their .NET development workflow.
 
-# Educational
+## WSL Setup
 
-## About Templates creation (Visual Studio; Visual Studio Code; dotnet cli)
+To set up WSL on Windows:
+  1. Open the Command Prompt or PowerShell as an administrator.
+  2. Execute: `wsl --install --no-distribution`.
+  3. Restart your computer when prompted.
 
-- [MS Learn: Custom templates for dotnet new](https://learn.microsoft.com/en-us/dotnet/core/tools/custom-templates)
+To install a wsl image e.g Ubuntu on Windows:
+  1. Open the Command Prompt or PowerShell.
+  2. Execute: `wsl --update` to update your wsl to the latest version.
+  3. Execute: `wsl --set-default-version 2` to set the WSL version to WSL2.
+  4. Execute: `wsl --list --online` to list all online availible wsl image versions.
+  5. Execute: `wsl --install Ubuntu-22.04 --web-download` to install a online version as webdownload in the case the store is blocked.
+  6. Enter your username. If you get an error use lowercase and numbers only.
+  7. Enter your password.
+  8. Confirm your password.
 
-- [MS Learn: Create an item template](https://learn.microsoft.com/en-us/dotnet/core/tutorials/cli-templates-create-item-template)
+To uninstall a wsl image e.g Ubuntu on Windows:
+  1. Open the Command Prompt or PowerShell.
+  2. Execute: `wsl --list` to see a list of your local installed wsl images.
+  3. Execute: `wsl --unregister Ubuntu-22.04` to remove a installed wsl image.
 
-- [MS Learn: Create a project template](https://learn.microsoft.com/en-us/dotnet/core/tutorials/cli-templates-create-project-template)
+## Get ready for dotnet powershell and vscode on ubuntu
 
-- [MS Learn: Create a template package](https://learn.microsoft.com/en-us/dotnet/core/tutorials/cli-templates-create-template-package?pivots=dotnet-6-0)
+To install dotnet powershell and vscode:
+  1. Open the wsl app in windows or type `wsl` inside a command prompt.
+  2. Execute: `sudo wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && sudo dpkg -i packages-microsoft-prod.deb && sudo rm packages-microsoft-prod.deb` to install the microsoft apt package sources.
+  3. Execute: `sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0` to install the .NET 8.0 SDK.
+  4. Execute: `dotnet tool install --global PowerShell` if you want to use Powershell Core.
+  5. Execute: `sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb` to install Visual Studio code.
+  6. Execute: `echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1" && mkdir -p "$HOME/source/repos" && mkdir -p "$HOME/localpackage"` to get rid of the Visual Studio code promt, and to create some default directories.
 
-- [Github: Templating Wiki](https://github.com/dotnet/templating/wiki)
+To uninstall dotnet powershell and vscode:
+  1. Open the wsl app in windows or type `wsl` inside a command prompt.
+  2. Execute: `sudo apt-get remove -y code` to uninstall Visual Studio Code.
+  3. Execute: `dotnet tool uninstall --global PowerShell` to uninstall Powershell.
+  4. Execute: `sudo apt remove -y --purge --autoremove "dotnet*" "aspnet*" "netstandard*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list` to uninstall all .NET 8.0 packages.
+  
+## Windows Setup
 
-- [Github: Net template samples](https://github.com/dotnet/templating/tree/main/dotnet-template-samples)
+Normal install and download procedure.
+  1. [Download/Install dotnet SDK](https://dotnet.microsoft.com/en-us/download)
+  2. [Download/Install Visual Studio Code](https://code.visualstudio.com/)
+  3. [Download/Install Powershell](https://learn.microsoft.com/en-US/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.3)
 
-- [Microsoft Project Repository .net winforms templates](https://github.com/dotnet/winforms/tree/main/pkg/Microsoft.Dotnet.WinForms.ProjectTemplates/content/WinFormsApplication-CSharp)
 
-## About MSBuild Tasks creation
-- [MSbuild Custom Task](https://github.com/dotnet/samples/tree/main/msbuild/custom-task-code-generation)
 
-# Coree Templates Project
-
-## Prerequirements
-
-[Download/Install dotnet SDK](https://dotnet.microsoft.com/en-us/download)
-
-#### Get ready for WSL
-WSL enable:
-```
-wsl --install --no-distribution  & REM Adminrights required enable windows features (reboot)
-```
-WSL install:
-```
-wsl --update & REM Updates to the latest wsl version
-wsl --set-default-version 2 & REM Sets WSL to the latest WSL2 version.
-wsl --list --online & REM Lists all online availible versions.
-wsl --install Ubuntu-22.04 --web-download & REM Installs a online version as webdownload in the case the store is blocked.
-#user -> lowercase
-#password
-```
-WSL uninstall:
-```
-wsl --list & REM Lists your local install wsl versions.
-wsl --unregister Ubuntu-22.04 & REM Deletes/Removes your local wsl version.
-```
-#### Get ready for dotnet powershell and vscode
-Ubuntu install
-```
-#Add the microsoft sources for apt
-sudo wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && sudo dpkg -i packages-microsoft-prod.deb && sudo rm packages-microsoft-prod.deb
-
-#Install the dotnet sdk
-sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0
-
-#Optional: Install PowerShell Core 
-dotnet tool install --global PowerShell
-
-#Download and install VSCode, make default dirs
-sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb && echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1" && mkdir -p "$HOME/source/repos" && mkdir -p "$HOME/localpackage"
-```
-Ubuntu uninstall
-```
-#Remove VSCode
-sudo apt-get remove -y code
-#Remove PowerShell Core 
-dotnet tool uninstall --global PowerShell
-#Remove all .NET installations if necessary
-sudo apt remove -y --purge --autoremove "dotnet*" "aspnet*" "netstandard*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list
-```
-
-## Install/Uninstall the templates
+# Install/Uninstall the templates
 The commands below demonstrate how to install or uninstall the templates, primarily designed for .NET with Visual Studio 2022 compatibility in mind. Remember, template definitions might include specific limitations like conditional settings (true/false).
 ```
 dotnet new install Coree.Template.Project
@@ -225,8 +201,22 @@ Linux/WSL (Sample useage):
 ```
 cd $HOME ;mkdir "MyProjTemplate" ; cd "MyProjTemplate" ; dotnet new projecttemplate-coree --PackageAuthor Me --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --force ; dotnet pack ; cd $HOME
 ```
-
 Windows cmd (Sample useage):
 ```
 cd /D %userprofile% & mkdir "MyProjTemplate" & cd "MyProjTemplate" & dotnet new projecttemplate-coree --PackageAuthor Me --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --force & dotnet pack & cd /D %userprofile%
 ```
+
+# Educational
+
+For more information and resources for templating:
+  - [MS Learn: Custom templates for dotnet new](https://learn.microsoft.com/en-us/dotnet/core/tools/custom-templates)
+  - [MS Learn: Create an item template](https://learn.microsoft.com/en-us/dotnet/core/tutorials/cli-templates-create-item-template)
+  - [MS Learn: Create a project template](https://learn.microsoft.com/en-us/dotnet/core/tutorials/cli-templates-create-project-template)
+  - [MS Learn: Create a template package](https://learn.microsoft.com/en-us/dotnet/core/tutorials/cli-templates-create-template-package?pivots=dotnet-6-0)
+  - [Github: Templating Wiki](https://github.com/dotnet/templating/wiki)
+  - [Github: Net template samples](https://github.com/dotnet/templating/tree/main/dotnet-template-samples)
+  - [Microsoft Project Repository .net winforms templates](https://github.com/dotnet/winforms/tree/main/pkg/Microsoft.Dotnet.WinForms.ProjectTemplates/content/WinFormsApplication-CSharp)
+
+For more information and resources for msbuild tasks:
+  - [MSbuild Custom Task](https://github.com/dotnet/samples/tree/main/msbuild/custom-task-code-generation)
+

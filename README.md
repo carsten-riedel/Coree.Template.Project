@@ -36,10 +36,13 @@ Project Templates for Visual Studio and dotnet cli
 Notes Ubuntu/WSL:
 ```
 #In the case dotnet sdk does not install.
-sudo apt remove -y --purge --autoremove "dotnet*" "aspnetcore*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+sudo apt remove -y --purge --autoremove "dotnet*" "aspnet*" "netstandard*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list
+
+#Add Microsoft sources
+sudo wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && sudo dpkg -i packages-microsoft-prod.deb && sudo rm packages-microsoft-prod.deb
 
 #Install the dotnet sdk
-sudo apt-get update && sudo apt-get install -y dotnet-sdk-6.0 dotnet-sdk-7.0
+sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0
 ```
 
 ## Install/Uninstall the templates

@@ -11,10 +11,10 @@ namespace MSBuildLibrary
     public class TaskNodeTask : Microsoft.Build.Utilities.Task
     {
         [Output]
-        public string TaskNodeDir { get; set; }
+        public string? TaskNodeDir { get; set; }
 
         [Output]
-        public string TaskNodeFile { get; set; }
+        public string? TaskNodeFile { get; set; }
 
         public override bool Execute()
         {

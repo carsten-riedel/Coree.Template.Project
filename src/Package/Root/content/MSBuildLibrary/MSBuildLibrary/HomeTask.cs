@@ -7,7 +7,7 @@ namespace MSBuildLibrary
     public class HomeTask : Microsoft.Build.Utilities.Task
     {
         [Output]
-        public string Home { get; set; }
+        public string? Home { get; set; }
 
         public override bool Execute()
         {

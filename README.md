@@ -43,6 +43,9 @@ sudo wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-
 
 #Install the dotnet sdk
 sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0
+
+#Optional Install PowershellCore 
+#dotnet tool install --global PowerShell 
 ```
 
 ## Install/Uninstall the templates

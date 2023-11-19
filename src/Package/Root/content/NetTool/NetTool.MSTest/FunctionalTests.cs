@@ -25,7 +25,7 @@ namespace NetTool.MSTest
             };  
             Console.SetIn(new StringReader(String.Join(Environment.NewLine, inputs)));
 
-            Program.Main(new string[] { });
+            Program.Main(Array.Empty<string>());
 
             string? output = @out.ToString();
 

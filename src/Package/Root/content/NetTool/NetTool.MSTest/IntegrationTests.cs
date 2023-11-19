@@ -1,5 +1,8 @@
+using Microsoft.VisualStudio.TestPlatform.CoreUtilities.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
+using System.Reflection;
+using System.Text;
 
 namespace NetTool.MSTest
 {
@@ -51,7 +54,7 @@ namespace NetTool.MSTest
             process.StandardInput.WriteLine("Somebody");
             process.StandardInput.WriteLine("99");
             process.WaitForExit();
-            var output = sb.ToString();
+            var output = sb!.ToString();
 
             string expectedOutput = String.Join(Environment.NewLine, new string[] {
                 "What's your name?",

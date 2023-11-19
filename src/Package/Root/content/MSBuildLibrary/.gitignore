@@ -1,0 +1,7 @@
+.vs/**/*
+MSBuildLibrary/.vs/**/*
+MSBuildLibrary/bin/**/*
+MSBuildLibrary/obj/**/*
+MSBuildLibrary.MSTest/.vs/**/*
+MSBuildLibrary.MSTest/bin/**/*
+MSBuildLibrary.MSTest/obj/**/*

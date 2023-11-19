@@ -103,7 +103,7 @@ cd $HOME ;mkdir "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildtasklib
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd..
+cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd..
 ```
 
 **Enhance the TestScript.msbuild in the MSTest project to test your integration.**

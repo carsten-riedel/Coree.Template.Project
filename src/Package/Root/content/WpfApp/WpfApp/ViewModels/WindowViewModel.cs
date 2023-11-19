@@ -28,6 +28,9 @@ namespace WpfApp.ViewModels
 
         public WindowViewModel()
         {
+            //System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("de-DE");
+            //System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("de-DE");
+            TitleSource = ResourceDesigner.Resource.CurrentUICultureSpecificString;
             Configuration = App.Services!.GetRequiredService<IConfiguration>();
             ChangeToken.OnChange(() => Configuration.GetReloadToken(), OnChange);
             OnChange();

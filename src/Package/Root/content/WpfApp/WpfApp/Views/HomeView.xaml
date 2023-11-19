@@ -16,13 +16,13 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
     <Grid>
         <!--#if (ViewModel) -->
-        <Button x:Name="button" Style="{StaticResource CustomButtonStyle}"  Content="Button" Command="{Binding  SetTitleSourceStringCommand}" HorizontalAlignment="Left" Height="40" Margin="10,0,0,0" VerticalAlignment="Top" Width="180"/>
+        <Button x:Name="button" Style="{StaticResource CustomButtonStyle}"  Content="{Binding Path=ButtonText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding  SetTitleSourceStringCommand}" HorizontalAlignment="Left" Height="40" Margin="10,0,0,0" VerticalAlignment="Top" Width="180"/>
         <TextBox x:Name="textBox" Style="{StaticResource CustomTextBoxStyle}"  HorizontalAlignment="Left" Height="40" Margin="10,45,0,0"  Text="{Binding Path=TitleSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="180"
                      materialDesign:HintAssist.Hint="{Binding Path=Hint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.HelperText="{Binding Path=Helper, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
          >
             <TextBox.InputBindings>
-                <KeyBinding Command="{Binding Path=EnterKeyDownCommand}" Key="Enter" Modifiers="Shift" />
+                <KeyBinding Command="{Binding Path=EnterKeyDownCommand}" Key="Enter" Modifiers="" />
             </TextBox.InputBindings>
         </TextBox>
         <!--#else -->

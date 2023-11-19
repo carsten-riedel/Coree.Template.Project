@@ -10,6 +10,7 @@ using WpfApp.ViewModels;
 using WpfApp.Views;
 using System;
 using System.Windows;
+using System.Threading;
 
 namespace WpfApp
 {
@@ -23,13 +24,7 @@ namespace WpfApp
 
         public static IServiceProvider? Services { get => services; set => services = value; }
         
-        public readonly IHost host;
-
-        public App()
-        {
-            host = new HostBuilder().ConfigureServices(ConfigureServices).ConfigureAppConfiguration(ConfigureAppConfiguration).ConfigureLogging(ConfigureLogging).Build();
-            Services = host.Services;
-        }
+        public IHost? host;
 
         private void ConfigureAppConfiguration(HostBuilderContext context, IConfigurationBuilder builder)
         {
@@ -56,10 +51,22 @@ namespace WpfApp
 
         protected override async void OnStartup(StartupEventArgs e)
         {
+            bool createdNew;
+            var appName = System.Reflection.Assembly.GetEntryAssembly()!.GetName().Name;
+            Mutex m = new Mutex(true, appName, out createdNew);
+            if (!createdNew)
+            {
+                MessageBox.Show($"{appName} is already running!", "Multiple Instances not supported.",MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.Application.Current.Shutdown();
+                return;
+            }
+
             #if( ProfileOptimizationStartup )
             System.Runtime.ProfileOptimization.SetProfileRoot(AppDomain.CurrentDomain.BaseDirectory);
             System.Runtime.ProfileOptimization.StartProfile($@"{System.Reflection.Assembly.GetAssembly(this.GetType())!.GetName().Name}.profile");
             #endif
+            host = new HostBuilder().ConfigureServices(ConfigureServices).ConfigureAppConfiguration(ConfigureAppConfiguration).ConfigureLogging(ConfigureLogging).Build();
+            Services = host.Services;
             await host.StartAsync();
             WindowView mainWindow = new();
             if (mainWindow != null)
@@ -74,17 +81,36 @@ namespace WpfApp
         
         protected override async void OnExit(ExitEventArgs e)
         {
-            await host.StopAsync(TimeSpan.FromSeconds(3));
+            if (host != null)
+            {
+                await host.StopAsync(TimeSpan.FromSeconds(3));
+            }
         }
+
         #else
+
         protected override void OnStartup(StartupEventArgs e)
         {
-            this.StartupUri = new Uri(@"..\View\MainWindow.xaml", UriKind.Relative);
+            bool createdNew;
+            var appName = System.Reflection.Assembly.GetEntryAssembly()!.GetName().Name;
+            Mutex m = new Mutex(true, appName, out createdNew);
+            if (!createdNew)
+            {
+                MessageBox.Show($"{appName} is already running!", "Multiple Instances not supported.",MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.Application.Current.Shutdown();
+                return;
+            }
             #if( ProfileOptimizationStartup )
             System.Runtime.ProfileOptimization.SetProfileRoot(AppDomain.CurrentDomain.BaseDirectory);
             System.Runtime.ProfileOptimization.StartProfile($@"{System.Reflection.Assembly.GetAssembly(this.GetType())!.GetName().Name}.profile");
             #endif
+            this.StartupUri = new Uri(@"..\View\MainWindow.xaml", UriKind.Relative);
             base.OnStartup(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            
         }
         #endif
 

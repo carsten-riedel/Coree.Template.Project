@@ -164,6 +164,27 @@
       <TargetPath>%(Filename)%(Extension)</TargetPath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <!--#if (Sqlitedb == true) -->
+    <None Update="Properties\demo.db">
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <!--#endif -->
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ResourceDesigner\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="ResourceDesigner\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

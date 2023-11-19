@@ -226,6 +226,12 @@
             ]
           },
           {
+            "condition": "(!Sqlitedb)",
+            "exclude": [
+              "WpfApp/Properties/demo.db"
+            ]
+          },
+          {
             "condition": "(!SourceCodeProFonts)",
             "exclude": [
               "WpfApp/Assets/Fonts/SourceCodePro/OFL.txt",

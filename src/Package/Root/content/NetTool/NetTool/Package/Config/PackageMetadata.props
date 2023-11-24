@@ -63,7 +63,6 @@
       <VersionBuild>$(AssemblyVersionBuild)</VersionBuild>
       <VersionRevision>$(AssemblyVersionRevision)</VersionRevision>
       <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
-      <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
       <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
       <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
       <InformationalVersion>$(PackageVersion)</InformationalVersion>

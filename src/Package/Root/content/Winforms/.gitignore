@@ -1,0 +1,7 @@
+.vs/**/*
+Winforms/.vs/**/*
+Winforms/bin/**/*
+Winforms/obj/**/*
+Winforms.Library/.vs/**/*
+Winforms.Library/bin/**/*
+Winforms.Library/obj/**/*

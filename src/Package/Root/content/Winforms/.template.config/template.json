@@ -115,13 +115,6 @@
       "type": "computed",
       "value": "(PackageCompany != \"\")"
     },
-    "PackageCopyright": {
-      "type": "parameter",
-      "dataType": "bool",
-      "defaultValue": "true",
-      "description": "Add copyright to assembly.",
-      "displayName": "Add copyright"
-    },
     "copyrightYear": {
       "type": "generated",
       "generator": "now",
@@ -165,13 +158,33 @@
       "valueTransform": "RemoveDots",  
       "description": "A value derived from the 'name' param, used to rename Application1.cs",
       "replaces" : "SourceNameRemoveDots"
+    },
+    "DependencyInjection": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "description": "Add a generic host to startup.",
+        "displayName": "Add a generic host to startup."
+    },
+    "ProfileOptimizationStartup": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "description": "ProfileOptimization in startup.",
+        "displayName": "ProfileOptimization in startup."
+    },
+    "StartupMutex": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "description": "Startup mutex.",
+        "displayName": "Startup mutex."
     }
-
-
   },
   "guids": [
-    "8CDD8387-B905-44A8-B5D5-07BB50E05BEA", /* project */
-    "43DA960A-5EB3-4648-9643-7F837744A68C" /* solution */
+    "8CDD8387-B905-44A8-B5D5-07BB50E05BEA",
+    "35BBE988-7105-4CF2-BF49-11DBD588309E",
+    "43DA960A-5EB3-4648-9643-7F837744A68C"
   ],
   "forms": {
     "WithoutTrailingNumbers": {
@@ -184,5 +197,17 @@
       "pattern": "\\.",        // regex to match every number at the end of the string
       "replacement": ""  // replace it with empty string
     }
-  }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(!DependencyInjection)",
+          "exclude": [
+            "Winforms/Properties/appsettings.json"
+          ]
+        }
+      ]
+    }
+  ]
 }

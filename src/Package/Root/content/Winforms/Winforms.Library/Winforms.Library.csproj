@@ -1,13 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>disable</ImplicitUsings>
+    <ImplicitUsings>enable</ImplicitUsings>
     <UseWindowsForms>true</UseWindowsForms>
     <DebugType>embedded</DebugType>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <!--#if (RuntimeIdentifier == win-x86) -->
     <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     <!--#endif -->
@@ -20,36 +18,6 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <PublishRelease>false</PublishRelease>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <PublishDir>bin\Publish\$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)</PublishDir>
-    <!--#if (Publish == FrameworkRequired) -->
-    <SelfContained>false</SelfContained>
-    <!--#endif -->
-    <!--#if (Publish == FrameworkRequiredSingle) -->
-    <SelfContained>false</SelfContained>
-    <PublishSingleFile>true</PublishSingleFile>
-    <!--#endif -->
-    <!--#if (Publish == FrameworkIncluded) -->
-    <SelfContained>true</SelfContained>
-    <PublishSingleFile>true</PublishSingleFile>
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract>
-    <!--#endif -->
-    <!--#if (Publish == FrameworkIncludedSingle) -->
-    <SelfContained>true</SelfContained>
-    <PublishSingleFile>true</PublishSingleFile>
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-    <!--#endif -->
-    <!--#if (Publish == FrameworkIncludedSingleCompressed) -->
-    <SelfContained>true</SelfContained>
-    <PublishSingleFile>true</PublishSingleFile>
-    <PublishReadyToRun>true</PublishReadyToRun>
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
-    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-    <!--#endif -->
   </PropertyGroup>
 
   <PropertyGroup>
@@ -67,11 +35,24 @@
 
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
-    <Owners Condition="'$(PackageCompany)' != ''">MyCompany</Owners>
-    <Owners Condition="'$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">MyAuthor</Owners>
-    <Company Condition="'$(PackageCompany)' != ''">MyCompany</Company>
-    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' != ''">Copyright © MyCompany 1975</Copyright>
-    <Copyright Condition="'$(PackageCopyright)' == 'true' AND '$(PackageCompany)' == '' AND '$(PackageAuthor)' != ''">Copyright © MyAuthor 1975</Copyright>
+    <!--#if (PackageCompany != '') -->
+    <Owners>MyCompany</Owners>
+    <!--#endif -->
+    <!--#if (PackageCompany == '') -->
+    <Owners>MyAuthor</Owners>
+    <!--#endif -->
+    <!--#if (PackageCompany != '') -->
+    <Company>MyCompany</Company>
+    <!--#endif -->
+    <!--#if (PackageCompany == '') -->
+    <Company></Company>
+    <!--#endif -->
+    <!--#if (PackageCompany != '') -->
+    <Copyright>Copyright © MyCompany 1975</Copyright>
+    <!--#endif -->
+    <!--#if (PackageCompany == '') -->
+    <Copyright>Copyright © MyAuthor 1975</Copyright>
+    <!--#endif -->
   </PropertyGroup>
 
   <!--#if (AssemblyVersioningScheme == true) -->
@@ -87,7 +68,6 @@
       <VersionBuild>$(AssemblyVersionBuild)</VersionBuild>
       <VersionRevision>$(AssemblyVersionRevision)</VersionRevision>
       <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
-      <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
       <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
       <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
       <InformationalVersion>$(PackageVersion)</InformationalVersion>
@@ -96,12 +76,4 @@
   </Target>
   <!--#endif -->
 
-  <PropertyGroup>
-    <ApplicationIcon>Resources\application.ico</ApplicationIcon>
-  </PropertyGroup>
-    
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\application.ico" />
-  </ItemGroup>
- 
 </Project>

@@ -1,0 +1,4 @@
+.vs/**/*
+WpfApp/.vs/**/*
+WpfApp/bin/**/*
+WpfApp/obj/**/*

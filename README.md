@@ -14,6 +14,15 @@ Normal install and download procedure.
   3. [Download/Install Powershell](https://learn.microsoft.com/en-US/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.3)
   4. [Download/Install git](https://git-scm.com/download/win)
 
+#### User-Space Installation of .NET and PowerShell Core on Windows.
+```
+powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 6.0" & cd %localappdata%\Microsoft\dotnet & dotnet new globaljson --sdk-version 6.0.0 --roll-forward latestFeature --force & dotnet tool install --global Powershell --version 7.2.9 --no-cache & set PATH=%PATH%;%localappdata%\Microsoft\dotnet
+```
+#### Before you run commands
+Tools: `SET "DOTNET_ROOT=%localappdata%\Microsoft\dotnet"`
+
+Dotnet `SET "PATH=%PATH%;%localappdata%\Microsoft\dotnet"`
+
 ### WSL Setup
 
 WSL (Windows Subsystem for Linux) enables running Linux environments on Windows. This section covers its setup, essential for cross-platform development.

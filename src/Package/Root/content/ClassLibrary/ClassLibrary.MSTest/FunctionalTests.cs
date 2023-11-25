@@ -1,4 +1,3 @@
-using Moq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 

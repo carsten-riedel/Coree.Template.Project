@@ -142,6 +142,20 @@
       "valueTransform": "RemoveDots",  
       "description": "A value derived from the 'name' param, used to rename Application1.cs",
       "replaces" : "SourceNameRemoveDots"
+    },
+    "CoverletMSBuild": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Add a coverlet code coverage to the test project.",
+      "displayName": "Add a coverlet code coverage to the test project."
+    },
+    "BenchmarkDotNet": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Add a BenchmarkDotNet test to the test project.",
+      "displayName": "Add a BenchmarkDotNet test to the test project."
     }
 
 
@@ -162,6 +176,18 @@
       "pattern": "\\.",        // regex to match every number at the end of the string
       "replacement": ""  // replace it with empty string
     }
-  }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(!BenchmarkDotNet)",
+          "exclude": [
+            "ClassLibrary.MSTest/BenchmarksTests.cs"
+          ]
+        }
+      ]
+    }
+  ]
 
 }

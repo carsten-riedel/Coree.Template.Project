@@ -101,7 +101,7 @@ dotnet new msbuildtasklib-coree --PackageAuthor Me
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildtasklib-coree --PackageAuthor Me --force ; dotnet test ; dotnet pack ; cd $HOME
+cd $HOME ; mkdir -p "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd ..
 ```
 
 Windows cmd (Sample useage):

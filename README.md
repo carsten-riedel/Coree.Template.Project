@@ -16,7 +16,7 @@ Normal install and download procedure.
 
 #### User-Space Installation of .NET and PowerShell Core on Windows.
 ```
-powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 6.0" & cd %localappdata%\Microsoft\dotnet & dotnet new globaljson --sdk-version 6.0.0 --roll-forward latestFeature --force & dotnet tool install --global Powershell --version 7.2.9 --no-cache & set PATH=%PATH%;%localappdata%\Microsoft\dotnet
+powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 6.0" & cd %localappdata%\Microsoft\dotnet & dotnet new globaljson --sdk-version 6.0.0 --roll-forward latestFeature --force & dotnet tool install --global Powershell --version 7.2.9 --no-cache
 ```
 #### Before you run commands
 Tools: `SET "DOTNET_ROOT=%localappdata%\Microsoft\dotnet"`

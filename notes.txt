@@ -343,3 +343,29 @@ namespace MSBuildLibrary
 		<Message Text = "PublishDir:					$(PublishDir)" Importance="high" />
 
 	</Target>
+    Benchmark.NET
+Terminal.GUI
+WPFUI
+LINQKit
+MediatR
+Polly
+NodaTime
+HangFire
+Serilog
+NLOG
+Refit
+Apizr
+FluentValidation
+log4net
+FluentAssertions
+NSubstitute
+Dapper
+Flurl
+ManyConsole
+Humanizer.Core
+AutoMapper
+Quartz.NET
+NAudio
+CsvHelper
+Spectre.Console
+coverlet.collector 

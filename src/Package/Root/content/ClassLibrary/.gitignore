@@ -1,0 +1,7 @@
+.vs/**/*
+ClassLibrary/.vs/**/*
+ClassLibrary/bin/**/*
+ClassLibrary/obj/**/*
+ClassLibrary.MSTest/.vs/**/*
+ClassLibrary.MSTest/bin/**/*
+ClassLibrary.MSTest/obj/**/*

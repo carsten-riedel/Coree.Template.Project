@@ -1,0 +1,7 @@
+.vs/**/*
+NetTool/.vs/**/*
+NetTool/bin/**/*
+NetTool/obj/**/*
+NetTool.MSTest/.vs/**/*
+NetTool.MSTest/bin/**/*
+NetTool.MSTest/obj/**/*

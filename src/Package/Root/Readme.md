@@ -12,6 +12,16 @@ Normal install and download procedure.
   1. [Download/Install dotnet SDK](https://dotnet.microsoft.com/en-us/download)
   2. [Download/Install Visual Studio Code](https://code.visualstudio.com/)
   3. [Download/Install Powershell](https://learn.microsoft.com/en-US/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.3)
+  4. [Download/Install git](https://git-scm.com/download/win)
+
+#### User-Space Installation of .NET and PowerShell Core on Windows.
+```
+powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 6.0" & cd %localappdata%\Microsoft\dotnet & dotnet new globaljson --sdk-version 6.0.0 --roll-forward latestFeature --force & dotnet tool install --global Powershell --version 7.2.9 --no-cache
+```
+#### Before you run commands
+Tools: `SET "DOTNET_ROOT=%localappdata%\Microsoft\dotnet"`
+
+Dotnet `SET "PATH=%PATH%;%localappdata%\Microsoft\dotnet"`
 
 ### WSL Setup
 
@@ -42,10 +52,12 @@ To uninstall a wsl image e.g Ubuntu on Windows:
 To install dotnet powershell and vscode:
   1. Open the wsl app in windows or type `wsl` inside a command prompt.
   2. Execute: `sudo wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && sudo dpkg -i packages-microsoft-prod.deb && sudo rm packages-microsoft-prod.deb` to install the microsoft apt package sources.
-  3. Execute: `sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0` to install the .NET 8.0 SDK.
+  3. Execute: `sudo apt-get update && sudo apt-get -y upgrade && sudo apt-get install -y dotnet-sdk-6.0 && sudo apt-get install -y dotnet-sdk-7.0` to install the .NET 6.0 SDK and .NET 7.0 SDK.
   4. Execute: `dotnet tool install --global PowerShell` if you want to use Powershell Core.
   5. Execute: `sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb` to install Visual Studio code.
   6. Execute: `echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1" && mkdir -p "$HOME/source/repos" && mkdir -p "$HOME/localpackage"` to get rid of the Visual Studio code prompt, and to create some default directories.
+  7. Optional: Start visual studio code, Execute: `code`
+  8. Optional: In the case visual studio code flickers shutdown wsl inside windows command prompt and start wsl again. Execute: `wsl --shutdown & wsl`
 
 To uninstall dotnet powershell and vscode:
   1. Open the wsl app in windows or type `wsl` inside a command prompt.
@@ -98,12 +110,12 @@ dotnet new msbuildtasklib-coree --PackageAuthor Me
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildtasklib-coree --PackageAuthor Me --force ; dotnet test ; dotnet pack ; cd $HOME
+cd $HOME ; mkdir -p "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd ..
 ```
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new msbuildtasklib-coree --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
+cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd..
 ```
 
 **Enhance the TestScript.msbuild in the MSTest project to test your integration.**

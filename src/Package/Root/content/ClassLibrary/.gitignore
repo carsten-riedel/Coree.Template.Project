@@ -5,3 +5,5 @@ ClassLibrary/obj/**/*
 ClassLibrary.MSTest/.vs/**/*
 ClassLibrary.MSTest/bin/**/*
 ClassLibrary.MSTest/obj/**/*
+ClassLibrary.MSTest/CoverletOutput/**/*
+ClassLibrary.MSTest/ReportGeneratorOutput/**/*

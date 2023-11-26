@@ -156,6 +156,13 @@
       "defaultValue": "true",
       "description": "Add a BenchmarkDotNet test to the test project.",
       "displayName": "Add a BenchmarkDotNet test to the test project."
+    },
+    "ReportGenerator": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Add ReportGenerator for the coverlet output.",
+      "displayName": "Add ReportGenerator for the coverlet output."
     }
 
 

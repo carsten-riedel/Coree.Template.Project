@@ -11,7 +11,7 @@
     <!--#if (CoverletMSBuild == true) -->
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutputFormat>opencover,cobertura,json</CoverletOutputFormat>
-    <CoverletOutput>./results/</CoverletOutput>
+    <CoverletOutput>./CoverletOutput/</CoverletOutput>
     <!--#endif -->
   </PropertyGroup>
 
@@ -29,7 +29,16 @@
     <!--#if (BenchmarkDotNet == true) -->
     <PackageReference Include="BenchmarkDotNet" Version="0.13.10" />
     <!--#endif -->
+    <!--#if (ReportGenerator == true) -->
+    <PackageReference Include="ReportGenerator" Version="5.2.0" />
+    <!--#endif -->
   </ItemGroup>
+
+  <!--#if (ReportGenerator == true) -->
+  <Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
+    <ReportGenerator ReportFiles="@(CoverletReport)" TargetDirectory="ReportGeneratorOutput" ReportTypes="Html;MarkdownSummaryGithub;MarkdownSummary;CsvSummary;Clover;SvgChart;Badges" />
+  </Target>
+  <!--#endif -->
 
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />

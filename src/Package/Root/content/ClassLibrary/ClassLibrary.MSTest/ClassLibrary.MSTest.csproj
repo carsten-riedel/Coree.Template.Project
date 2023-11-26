@@ -10,7 +10,7 @@
     <PublishRelease>false</PublishRelease>
     <!--#if (CoverletMSBuild == true) -->
     <CollectCoverage>true</CollectCoverage>
-    <CoverletOutputFormat>opencover,cobertura,json</CoverletOutputFormat>
+    <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
     <CoverletOutput>./CoverletOutput/</CoverletOutput>
     <!--#endif -->
   </PropertyGroup>
@@ -36,7 +36,7 @@
 
   <!--#if (ReportGenerator == true) -->
   <Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
-    <ReportGenerator ReportFiles="@(CoverletReport)" TargetDirectory="ReportGeneratorOutput" ReportTypes="Html;MarkdownSummaryGithub;MarkdownSummary;CsvSummary;Clover;SvgChart;Badges" />
+    <ReportGenerator ReportFiles="@(CoverletReport)" TargetDirectory="ReportGeneratorOutput" ReportTypes="Html;MarkdownSummaryGithub;MarkdownSummary;CsvSummary;Clover;Badges" />
   </Target>
   <!--#endif -->
 

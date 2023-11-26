@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BenchmarkDotNet.Exporters.Json;
+using BenchmarkDotNet.Exporters;
 
 namespace ClassLibrary.MSTest
 {
@@ -17,11 +19,12 @@ namespace ClassLibrary.MSTest
     [DryJob] // [DryJob], [ShortRunJob], [MediumRunJob], [LongRunJob], [VeryLongRunJob]
     [Config(typeof(Config))]
     [JsonExporter("-custom", indentJson: true)]
+    
     public class Benchmarks
     {
-        public static ImmutableArray<BenchmarkReport> RunBenchmarkReport()
+        public static Summary RunBenchmark()
         {
-            return BenchmarkRunner.Run<Benchmarks>().Reports;
+            return BenchmarkRunner.Run<Benchmarks>();
         }
 
         private class Config : ManualConfig
@@ -53,19 +56,19 @@ namespace ClassLibrary.MSTest
     public class BenchmarksTests
     {
 
-        static ImmutableArray<BenchmarkReport> reports;
+        static Summary? summary;
 
         // This method will run once before any tests are executed in this class
         [ClassInitialize]
         public static void Initialize(TestContext context)
         {
-            reports = Benchmarks.RunBenchmarkReport();
+            summary = Benchmarks.RunBenchmark();
         }
 
         [TestMethod]
         public void Benchmark1()
         {
-            var item = reports.First(e => e.BenchmarkCase.Descriptor.WorkloadMethodDisplayInfo == nameof(Benchmarks.Benchmark1));
+            var item = summary!.Reports.First(e => e.BenchmarkCase.Descriptor.WorkloadMethodDisplayInfo == nameof(Benchmarks.Benchmark1));
 
             double? MedianMs = item.ResultStatistics?.Median / 1000000.0;
             double? MeanMs = item.ResultStatistics?.Mean / 1000000.0;
@@ -82,7 +85,7 @@ namespace ClassLibrary.MSTest
         [TestMethod]
         public void Benchmark2()
         {
-            var item = reports.First(e => e.BenchmarkCase.Descriptor.WorkloadMethodDisplayInfo == nameof(Benchmarks.Benchmark2));
+            var item = summary!.Reports.First(e => e.BenchmarkCase.Descriptor.WorkloadMethodDisplayInfo == nameof(Benchmarks.Benchmark2));
 
             double? MedianMs = item.ResultStatistics?.Median / 1000000.0;
             double? MeanMs = item.ResultStatistics?.Mean / 1000000.0;

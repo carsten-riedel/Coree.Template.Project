@@ -29,7 +29,7 @@ namespace ClassLibrary.MSTest
             public Config()
             {
                 this.WithOptions(ConfigOptions.JoinSummary | ConfigOptions.DisableLogFile | ConfigOptions.DisableOptimizationsValidator);
-                
+                this.WithArtifactsPath("./../../../BenchmarkDotNetReport");
             }
         }
 

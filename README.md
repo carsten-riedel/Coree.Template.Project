@@ -35,7 +35,7 @@ To set up WSL on Windows:
 To install a wsl image e.g Ubuntu on Windows:
   1. Open the Command Prompt or PowerShell.
   2. Execute: `wsl --update` to update your wsl to the latest version.
-  3. Execute: `wsl --set-default-version 2` to set the WSL version to WSL2.
+  3. Execute: `wsl --set-default-version 1` to set the WSL version to WSL1. (This is the still the best option in coperate enviroment with proxies and vpn)
   4. Execute: `wsl --list --online` to list all online availible wsl image versions.
   5. Execute: `wsl --install Ubuntu-22.04 --web-download` to install a online version as webdownload in the case the store is blocked.
   6. Enter your username. If you get an error use lowercase and numbers only.

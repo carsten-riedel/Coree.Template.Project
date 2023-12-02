@@ -55,7 +55,7 @@ To install dotnet powershell and vscode:
   3. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 6.0` to install the .NET 6.0 SDK.
   4. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 7.0` to install the .NET 7.0 SDK.
   5. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 8.0` to install the .NET 8.0 SDK.
-  6. Execute:  `export DOTNET_ROOT=$HOME/.dotnet ; export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools ; echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc && echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc` to add the dotnet root and path to the enviroment and shell startup.
+  6. Execute:  `export DOTNET_ROOT=$HOME/.dotnet ; export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools ; echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $HOME/.bashrc && echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $HOME/.bashrc` to add the dotnet root and path to the enviroment and shell startup.
   7. Execute:  `dotnet tool install --global PowerShell` if you want to use Powershell Core.
   8. Execute:  `sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb` to install Visual Studio code.
   9. Execute:  `export DONT_PROMPT_WSL_INSTALL=1 ; echo 'export DONT_PROMPT_WSL_INSTALL=1' >> $HOME/.bashrc ; mkdir -p "$HOME/source/repos" ; mkdir -p "$HOME/source/packages"` to get rid of the Visual Studio code prompt, and to create some default directories.

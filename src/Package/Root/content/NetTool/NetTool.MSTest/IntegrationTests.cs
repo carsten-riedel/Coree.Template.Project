@@ -35,7 +35,16 @@ namespace NetTool.MSTest
             // Get the assembly name
             string assemblyName = referencedAssembly.GetName().Name!;
 
-            var startInfo = new ProcessStartInfo($"{assemblyName}.exe");
+            ProcessStartInfo startInfo;
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                startInfo = new ProcessStartInfo($"{assemblyName}.exe");
+            }
+            else
+            {
+                startInfo = new ProcessStartInfo($"{assemblyName}");
+            }
+
             startInfo.RedirectStandardInput = true;
             startInfo.RedirectStandardOutput = true;
             startInfo.RedirectStandardError = true;

@@ -1,0 +1,256 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Carsten Riedel",
+  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "Console" ,"Library", "Coree" ],
+  "identity": "CoreeTemplatesProjectConsole",
+  "name": ".NET Console",
+  "shortName": "console-coree",
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "defaultName": "Organization.Domain.Console", // Default Solution and Projectname scheme "Organization.Domain.Functionality"
+  "sourceName": "ConsoleApp", // Matching nameingscheme csproj and namespace
+  "preferNameDirectory": true,
+  "symbols": {
+    "TargetFramework": {
+      "type": "parameter",
+      "description": "The target frameworks for the project.",
+      "datatype": "choice",
+      "allowMultipleValues": false,
+      "enableQuotelessLiterals": true,
+      "choices": [
+        {
+          "choice": "net6.0",
+          "description": "Target .NET 6.0",
+          "displayName": ".NET 6.0 Windows"
+        },
+        {
+          "choice": "net7.0",
+          "description": "Target .NET 7.0",
+          "displayName": ".NET 7.0 Windows"
+        },
+        {
+          "choice": "net8.0",
+          "description": "Target .NET 8.0",
+          "displayName": ".NET 8.0 Windows"
+        }
+      ],
+      "defaultValue": "net6.0",
+      "replaces": "net6.0"
+      
+    },
+    "RuntimeIdentifier": {
+      "type": "parameter",
+      "description": "The target RuntimeIdentifier for the project.",
+      "datatype": "choice",
+      "allowMultipleValues": false,
+      "enableQuotelessLiterals": true,
+      "choices": [
+        {
+          "choice": "win-x86",
+          "description": "Target x86",
+          "displayName": "Windows x86"
+        },
+        {
+          "choice": "win-x64",
+          "description": "Target x64",
+          "displayName": "Windows x64"
+        }
+      ],
+      "defaultValue": "win-x64"
+    },
+    "Publish": {
+      "type": "parameter",
+      "description": "Choose the publish type. Option 2) or 3) recommended.",
+      "datatype": "choice",
+      "allowMultipleValues": false,
+      "enableQuotelessLiterals": true,
+      "choices": [
+        {
+          "choice": "FrameworkRequired",
+          "description": "",
+          "displayName": "1) Framework-required. (Purpose: Installer)"
+        },
+        {
+          "choice": "FrameworkRequiredSingle",
+          "description": "",
+          "displayName": "2) Framework-required, Single-file. (Purpose: Copy smallest)"
+        },
+        {
+          "choice": "FrameworkIncluded",
+          "description": "",
+          "displayName": "3) Framework-included. (Purpose: Installer)"
+        },
+        {
+          "choice": "FrameworkIncludedSingle",
+          "description": "See Single-file deployment. -> DOTNET_BUNDLE_EXTRACT_BASE_DIR",
+          "displayName": "4) Framework-included, Single-file. (Purpose: Copy large)"
+        },
+        {
+          "choice": "FrameworkIncludedSingleCompressed",
+          "description": "See Single-file deployment. -> DOTNET_BUNDLE_EXTRACT_BASE_DIR",
+          "displayName": "5) Framework-included, Single-file, Compressed. (Purpose: Copy medium)"
+        }
+      ],
+      "defaultValue": "FrameworkRequiredSingle"
+    },
+    "PackageAuthor": {
+      "type": "parameter",
+      "dataType": "string",
+      "replaces": "MyAuthor",
+      "description": "The author of the project.",
+      "displayName": "Author",
+      "isRequired": "true"
+    },
+    "PackageCompany": {
+      "type": "parameter",
+      "dataType": "string",
+      "defaultValue": "",
+      "replaces": "MyCompany",
+      "description": "The company of the project.",
+      "displayName": "Company"
+    },
+    "PackageCompanyIsSet": {
+      "type": "computed",
+      "value": "(PackageCompany != \"\")"
+    },
+    "copyrightYear": {
+      "type": "generated",
+      "generator": "now",
+      "replaces": "1975",
+      "parameters": {
+        "format": "yyyy"
+      }
+    },
+    "datenowsort": {
+      "type": "generated",
+      "generator": "now",
+      "replaces": "1975-01-01",
+      "parameters": {
+        "format": "yyyy-MM-dd"
+      }
+    },
+    "AssemblyVersioningScheme": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Generates assembly versioning scheme utilizing build and revision date.",
+      "displayName": "Automatic assembly versioning scheme."
+    },
+    "DefaultRename": {
+      "type": "derived",  
+      "valueSource": "name",  
+      "valueTransform": "WithoutTrailingNumbers",  
+      "description": "A value derived from the 'name' param, used to rename Application1.cs",
+      "fileRename": "Default"
+    },
+    "DefaultSourceNameWithoutTrailingNumbers": {
+      "type": "derived",  
+      "valueSource": "name",  
+      "valueTransform": "WithoutTrailingNumbers",  
+      "description": "A value derived from the 'name' param, used to rename Application1.cs",
+      "replaces" : "SourceNameWithoutTrailingNumbers"
+    },
+    "DefaultSourceNameRemoveDots": {
+      "type": "derived",  
+      "valueSource": "name",  
+      "valueTransform": "RemoveDots",  
+      "description": "A value derived from the 'name' param, used to rename Application1.cs",
+      "replaces" : "SourceNameRemoveDots"
+    },
+    "DependencyInjection": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "description": "Add a generic host to startup.",
+        "displayName": "Add a generic host to startup."
+    },
+    "ProfileOptimizationStartup": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "description": "ProfileOptimization in startup.",
+        "displayName": "ProfileOptimization in startup."
+    },
+    "StartupMutex": {
+        "type": "parameter",
+        "dataType": "bool",
+        "defaultValue": "true",
+        "description": "Startup mutex.",
+        "displayName": "Startup mutex."
+    },
+    "AddGlobalsJson": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Add globals.json sdk at solution",
+      "displayName": "Add globals.json sdk at solution"
+    },
+    "IsNet6": {
+      "type": "computed",
+      "value": "(TargetFramework == \"net6.0\")"
+    },
+    "IsNet7": {
+      "type": "computed",
+      "value": "(TargetFramework == \"net7.0\")"
+    },
+    "IsNet8": {
+      "type": "computed",
+      "value": "(TargetFramework == \"net8.0\")"
+    },
+    "IsDotNet": {
+      "type": "computed",
+      "value": "(IsNet6 || IsNet7 || IsNet8)"
+    }
+  },
+  "guids": [
+    "8CDD8387-B905-44A8-B5D5-07BB50E05BEA",
+    "35BBE988-7105-4CF2-BF49-11DBD588309E",
+    "43DA960A-5EB3-4648-9643-7F837744A68C",
+    "9CDD8387-B905-44A8-B5D5-07BB50E05BAA",
+    "F05BD403-D4EE-4D45-811E-0F84D6236589"
+  ],
+  "forms": {
+    "WithoutTrailingNumbers": {
+      "identifier": "replace",
+      "pattern": "\\d+$",        // regex to match every number at the end of the string
+      "replacement": ""  // replace it with empty string
+    },
+    "RemoveDots": {
+      "identifier": "replace",
+      "pattern": "\\.",        // regex to match every number at the end of the string
+      "replacement": ""  // replace it with empty string
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(!DependencyInjection)",
+          "exclude": [
+            "Winforms/Properties/appsettings.json"
+          ]
+        }
+      ]
+    }
+  ],
+  "primaryOutputs": [
+    {
+      "path": "Readme.md"        
+    }
+  ]
+,
+"postActions": [
+    {
+      "condition": "(HostIdentifier != \"dotnetcli\")",
+      "description": "Opens Readme.md in the editor",
+      "manualInstructions": [ ],
+      "actionId": "84C0DA21-51C8-4541-9940-6CA19AF04EE6",
+      "args": {
+        "files": "0"
+      },
+      "continueOnError": true
+    }
+]
+}

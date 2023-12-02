@@ -1,0 +1,10 @@
+.vs/**/*
+ConsoleApp/.vs/**/*
+ConsoleApp/bin/**/*
+ConsoleApp/obj/**/*
+ConsoleApp.Library/.vs/**/*
+ConsoleApp.Library/bin/**/*
+ConsoleApp.Library/obj/**/*
+ConsoleApp.MSTest/.vs/**/*
+ConsoleApp.MSTest/bin/**/*
+ConsoleApp.MSTest/obj/**/*

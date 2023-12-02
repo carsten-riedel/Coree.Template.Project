@@ -1,0 +1,14 @@
+{
+  "sdk": {
+    "rollForward": "latestFeature",
+    //#if (IsNet6)
+    "version": "6.0.0"
+    //#endif
+    //#if (IsNet7)
+    "version": "7.0.0"
+    //#endif
+    //#if (IsNet8)
+    "version": "8.0.0"
+    //#endif
+  }
+}

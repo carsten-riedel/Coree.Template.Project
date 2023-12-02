@@ -8,6 +8,10 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <Target Name="CustomBeforeBuild" BeforeTargets="BeforeBuild">
+    <Exec Command="dotnet tool restore" />
+  </Target>
+  
   <!-- 
     Since during pack all ProjectReference will be transformed to Package dependencies. And version number is cascading into all package.
   -->

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "dotnet-trace": {
+      "version": "8.0.452401",
+      "commands": [
+        "dotnet-trace"
+      ]
+    }
+  }
+}

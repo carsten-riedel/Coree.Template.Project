@@ -86,17 +86,17 @@ Then add a local package source.
 
 Linux/WSL (Sample useage):
 ```
-dotnet nuget add source "$HOME/localpackage" --name "localpackage"
+mkdir -p "$HOME/source/packages" ; dotnet nuget add source "$HOME/source/packages" --name "SourcePackages"
 ```
 
 Windows cmd (Sample useage):
 ```
-dotnet nuget add source "%userprofile%\localpackage" --name "localpackage"
+mkdir "%userprofile%\source\packages" & dotnet nuget add source "%userprofile%\source\packages" --name "SourcePackages"
 ```
 
 To remove the local source
 ```
-dotnet nuget remove source "localpackage"
+dotnet nuget remove source "SourcePackages"
 ```
 
 ## .NET MSBuild Task library

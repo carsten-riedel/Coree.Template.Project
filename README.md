@@ -60,7 +60,7 @@ To install dotnet powershell and vscode:
   8. Execute:  `sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb` to install Visual Studio code.
   9. Execute:  `export DONT_PROMPT_WSL_INSTALL=1 ; echo 'export DONT_PROMPT_WSL_INSTALL=1' >> $HOME/.bashrc ; mkdir -p "$HOME/source/repos" ; mkdir -p "$HOME/source/packages"` to get rid of the Visual Studio code prompt, and to create some default directories.
  10. Optional:  Start visual studio code, Execute: `code`
- 11. Optional:  In the case visual studio code flickers shutdown wsl inside windows command prompt and start wsl again. Execute: `wsl --shutdown & wsl code`
+ 11. Optional:  In the case visual studio code flickers shutdown wsl inside windows command prompt and start wsl again. Execute: `wsl --shutdown & wsl export DONT_PROMPT_WSL_INSTALL=1 ; code`
 
 To uninstall dotnet powershell and vscode:
   1. Open the wsl app in windows or type `wsl` inside a command prompt.

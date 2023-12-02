@@ -210,11 +210,11 @@ Indeed, it may sound a bit perplexing at first – a project template for creati
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyProjTemplate" ; cd "MyProjTemplate" ; dotnet new projecttemplate-coree --PackageAuthor Me --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --force ; dotnet pack ; cd $HOME
+dotnet new install Coree.Template.Project ; cd $HOME ; mkdir -p "source/repos/MyProjTemplate" ; cd "source/repos/MyProjTemplate" ; dotnet new projecttemplate-coree --PackageAuthor Me --name "MyProjTemplate" --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --output "src" --force ; git init ; cd "src" ; dotnet pack ; cd .. ; code -n . ; cd $HOME
 ```
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyProjTemplate" & cd "MyProjTemplate" & dotnet new projecttemplate-coree --PackageAuthor Me --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --force & dotnet pack & cd /D %userprofile%
+dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\repos\MyProjTemplate" & cd "source\repos\MyProjTemplate" & dotnet new projecttemplate-coree --PackageAuthor Me --name "MyProjTemplate" --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --output "src" --force  & git init & cd "src" & dotnet pack & cd.. & code -n . & cd /D %userprofile%
 ```
 
 ## Educational

@@ -15,13 +15,16 @@ Normal install and download procedure.
   4. [Download/Install git](https://git-scm.com/download/win)
 
 #### User-Space Installation of .NET and PowerShell Core on Windows.
-```
-powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 6.0" & cd %localappdata%\Microsoft\dotnet & dotnet new globaljson --sdk-version 6.0.0 --roll-forward latestFeature --force & dotnet tool install --global Powershell --version 7.2.9 --no-cache
-```
-#### Before you run commands
-Tools: `SET "DOTNET_ROOT=%localappdata%\Microsoft\dotnet"`
 
-Dotnet `SET "PATH=%PATH%;%localappdata%\Microsoft\dotnet"`
+To install dotnet and powershell core from cmd in Windows:
+  1. Open the Command Prompt or PowerShell.
+  2. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 6.0"` to install the .NET 6.0 SDK.
+  3. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 7.0"` to install the .NET 7.0 SDK.
+  4. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 8.0"` to install the .NET 8.0 SDK.
+  5. Execute: `powershell -NoProfile -ExecutionPolicy Unrestricted -Command "& {[Environment]::SetEnvironmentVariable('DOTNET_ROOT', \"$env:localappdata\Microsoft\dotnet\", 'User')}"` to set the enviroment variables.
+  6. Execute: `powershell -NoProfile -ExecutionPolicy Unrestricted -Command "& {[Environment]::SetEnvironmentVariable('PATH', \"$($env:path);$env:localappdata\Microsoft\dotnet\", 'User')}"`  to set the enviroment variables.
+  7. Execute: `SET "DOTNET_ROOT=%localappdata%\Microsoft\dotnet" & SET "PATH=%PATH%;%localappdata%\Microsoft\dotnet"`  to set the current session enviroment variables.
+  8. Execute: `dotnet tool install --global Powershell --no-cache` 
 
 ### WSL Setup
 

@@ -17,7 +17,7 @@ Normal install and download procedure.
 #### User-Space Installation of .NET and PowerShell Core on Windows.
 
 To install dotnet and powershell core from cmd in Windows:
-  1. Open the Command Prompt or PowerShell.
+  1. Open the Command Prompt.
   2. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 6.0"` to install the .NET 6.0 SDK.
   3. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 7.0"` to install the .NET 7.0 SDK.
   4. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 8.0"` to install the .NET 8.0 SDK.
@@ -116,12 +116,12 @@ dotnet new msbuildtasklib-coree --PackageAuthor Me
 
 Linux/WSL (Sample useage):
 ```
-dotnet new install Coree.Template.Project ; cd $HOME ; mkdir -p "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd ..
+dotnet new install Coree.Template.Project ; cd $HOME ; mkdir -p "source/repos/MyMSBuildTask" ; cd "source/repos/MyMSBuildTask" ; dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd $HOME
 ```
 
 Windows cmd (Sample useage):
 ```
-dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd..
+dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\repos\MyMSBuildTask" & cd "source\repos\MyMSBuildTask" & dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd /D %userprofile%
 ```
 
 **Enhance the TestScript.msbuild in the MSTest project to test your integration.**
@@ -137,12 +137,12 @@ dotnet new classlibrary-coree --PackageAuthor Me
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyClassLib" ; cd "MyClassLib" ; dotnet new classlib-coree --PackageAuthor Me --force ; dotnet test ; dotnet pack ; cd $HOME
+dotnet new install Coree.Template.Project ; cd $HOME ; mkdir -p "source/repos/MyClassLib" ; cd "source/repos/MyClassLib" ; dotnet new classlib-coree --PackageAuthor Me --name "MyClassLib" --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd $HOME
 ```
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyClassLib" & cd "MyClassLib" & dotnet new classlib-coree --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
+dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\repos\MyClassLib" & cd "source\repos\MyClassLib" & dotnet new classlib-coree --PackageAuthor Me --name "MyClassLib" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd /D %userprofile%
 ```
 
 ## .NET Tool
@@ -157,15 +157,15 @@ dotnet new nettool-coree --PackageAuthor Me --ToolCommandName helloworld
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyNetTool" ; cd "MyNetTool" ; dotnet new nettool-coree --PackageAuthor Me --ToolCommandName helloworld --force ; dotnet pack ; cd $HOME
+dotnet new install Coree.Template.Project ; cd $HOME ; mkdir -p "source/repos/MyNetTool" ; cd "source/repos/MyNetTool" ; dotnet new nettool-coree --PackageAuthor Me --name "MyNetTool" --ToolCommandName helloworld --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd $HOME
 ```
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyNetTool" & cd "MyNetTool" & dotnet new nettool-coree --PackageAuthor Me --ToolCommandName helloworld --force & dotnet pack & cd /D %userprofile%
+dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\repos\MyNetTool" & cd "source\repos\MyNetTool" & dotnet new nettool-coree --PackageAuthor Me --name "MyNetTool"  --ToolCommandName helloworld --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd /D %userprofile%
 ```
-
 Assuming you've already copied your package to a NuGet source, whether it's local or remote, you can easily install it using the .NET Core CLI. Specifically, if you're created a prerelease version of a tool called MyNetTool.helloworld, you can install it globally on your machine with the following command.
+
 ```
 dotnet tool install -g MyNetTool --prerelease
 #REM OR use a temporary package location

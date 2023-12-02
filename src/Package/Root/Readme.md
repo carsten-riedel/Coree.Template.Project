@@ -15,13 +15,16 @@ Normal install and download procedure.
   4. [Download/Install git](https://git-scm.com/download/win)
 
 #### User-Space Installation of .NET and PowerShell Core on Windows.
-```
-powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 6.0" & cd %localappdata%\Microsoft\dotnet & dotnet new globaljson --sdk-version 6.0.0 --roll-forward latestFeature --force & dotnet tool install --global Powershell --version 7.2.9 --no-cache
-```
-#### Before you run commands
-Tools: `SET "DOTNET_ROOT=%localappdata%\Microsoft\dotnet"`
 
-Dotnet `SET "PATH=%PATH%;%localappdata%\Microsoft\dotnet"`
+To install dotnet and powershell core from cmd in Windows:
+  1. Open the Command Prompt.
+  2. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 6.0"` to install the .NET 6.0 SDK.
+  3. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 7.0"` to install the .NET 7.0 SDK.
+  4. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 8.0"` to install the .NET 8.0 SDK.
+  5. Execute: `powershell -NoProfile -ExecutionPolicy Unrestricted -Command "& {[Environment]::SetEnvironmentVariable('DOTNET_ROOT', \"$env:localappdata\Microsoft\dotnet\", 'User')}"` to set the enviroment variables.
+  6. Execute: `powershell -NoProfile -ExecutionPolicy Unrestricted -Command "& {[Environment]::SetEnvironmentVariable('PATH', \"$($env:path);$env:localappdata\Microsoft\dotnet\", 'User')}"`  to set the enviroment variables.
+  7. Execute: `SET "DOTNET_ROOT=%localappdata%\Microsoft\dotnet" & SET "PATH=%PATH%;%localappdata%\Microsoft\dotnet"`  to set the current session enviroment variables.
+  8. Execute: `dotnet tool install --global Powershell --no-cache` 
 
 ### WSL Setup
 
@@ -51,19 +54,22 @@ To uninstall a wsl image e.g Ubuntu on Windows:
 
 To install dotnet powershell and vscode:
   1. Open the wsl app in windows or type `wsl` inside a command prompt.
-  2. Execute: `sudo wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && sudo dpkg -i packages-microsoft-prod.deb && sudo rm packages-microsoft-prod.deb` to install the microsoft apt package sources.
-  3. Execute: `sudo apt-get update && sudo apt-get -y upgrade && sudo apt-get install -y dotnet-sdk-6.0 && sudo apt-get install -y dotnet-sdk-7.0` to install the .NET 6.0 SDK and .NET 7.0 SDK.
-  4. Execute: `dotnet tool install --global PowerShell` if you want to use Powershell Core.
-  5. Execute: `sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb` to install Visual Studio code.
-  6. Execute: `echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1" && mkdir -p "$HOME/source/repos" && mkdir -p "$HOME/localpackage"` to get rid of the Visual Studio code prompt, and to create some default directories.
-  7. Optional: Start visual studio code, Execute: `code`
-  8. Optional: In the case visual studio code flickers shutdown wsl inside windows command prompt and start wsl again. Execute: `wsl --shutdown & wsl`
+  2. Execute:  `sudo apt-get update && sudo apt-get -y upgrade ` to upgrade the linux distrobution to the latest state.
+  3. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 6.0` to install the .NET 6.0 SDK.
+  4. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 7.0` to install the .NET 7.0 SDK.
+  5. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 8.0` to install the .NET 8.0 SDK.
+  6. Execute:  `export DOTNET_ROOT=$HOME/.dotnet ; export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools ; echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $HOME/.bashrc && echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $HOME/.bashrc` to add the dotnet root and path to the enviroment and shell startup.
+  7. Execute:  `dotnet tool install --global PowerShell` if you want to use Powershell Core.
+  8. Execute:  `sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb` to install Visual Studio code.
+  9. Execute:  `export DONT_PROMPT_WSL_INSTALL=1 ; echo 'export DONT_PROMPT_WSL_INSTALL=1' >> $HOME/.bashrc ; mkdir -p "$HOME/source/repos" ; mkdir -p "$HOME/source/packages"` to get rid of the Visual Studio code prompt, and to create some default directories.
+ 10. Optional:  Start visual studio code, Execute: `code`
+ 11. Optional:  In the case visual studio code flickers shutdown wsl inside windows command prompt and start wsl again. Execute: `wsl --shutdown & wsl export DONT_PROMPT_WSL_INSTALL=1 ; code`
 
 To uninstall dotnet powershell and vscode:
   1. Open the wsl app in windows or type `wsl` inside a command prompt.
   2. Execute: `sudo apt-get remove -y code` to uninstall Visual Studio Code.
   3. Execute: `dotnet tool uninstall --global PowerShell` to uninstall Powershell.
-  4. Execute: `sudo apt remove -y --purge --autoremove "dotnet*" "aspnet*" "netstandard*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list` to uninstall all .NET 8.0 packages.
+  4. Manual:  Remove entries $HOME/.bashrc and delete the .dotnet folder.
 
 # Install/Uninstall the templates
 The commands below demonstrate how to install or uninstall the templates, primarily designed for .NET with Visual Studio 2022 compatibility in mind. Remember, template definitions might include specific limitations like conditional settings (true/false).
@@ -86,17 +92,17 @@ Then add a local package source.
 
 Linux/WSL (Sample useage):
 ```
-dotnet nuget add source "$HOME/localpackage" --name "localpackage"
+mkdir -p "$HOME/source/packages" ; dotnet nuget add source "$HOME/source/packages" --name "SourcePackages"
 ```
 
 Windows cmd (Sample useage):
 ```
-dotnet nuget add source "%userprofile%\localpackage" --name "localpackage"
+mkdir "%userprofile%\source\packages" & dotnet nuget add source "%userprofile%\source\packages" --name "SourcePackages"
 ```
 
 To remove the local source
 ```
-dotnet nuget remove source "localpackage"
+dotnet nuget remove source "SourcePackages"
 ```
 
 ## .NET MSBuild Task library
@@ -110,12 +116,12 @@ dotnet new msbuildtasklib-coree --PackageAuthor Me
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ; mkdir -p "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd ..
+dotnet new install Coree.Template.Project ; cd $HOME ; mkdir -p "source/repos/MyMSBuildTask" ; cd "source/repos/MyMSBuildTask" ; dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd $HOME
 ```
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd..
+dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\repos\MyMSBuildTask" & cd "source\repos\MyMSBuildTask" & dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd /D %userprofile%
 ```
 
 **Enhance the TestScript.msbuild in the MSTest project to test your integration.**
@@ -131,12 +137,12 @@ dotnet new classlibrary-coree --PackageAuthor Me
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyClassLib" ; cd "MyClassLib" ; dotnet new classlib-coree --PackageAuthor Me --force ; dotnet test ; dotnet pack ; cd $HOME
+dotnet new install Coree.Template.Project ; cd $HOME ; mkdir -p "source/repos/MyClassLib" ; cd "source/repos/MyClassLib" ; dotnet new classlib-coree --PackageAuthor Me --name "MyClassLib" --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd $HOME
 ```
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyClassLib" & cd "MyClassLib" & dotnet new classlib-coree --PackageAuthor Me --force & dotnet test & dotnet pack & cd /D %userprofile%
+dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\repos\MyClassLib" & cd "source\repos\MyClassLib" & dotnet new classlib-coree --PackageAuthor Me --name "MyClassLib" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd /D %userprofile%
 ```
 
 ## .NET Tool
@@ -151,15 +157,15 @@ dotnet new nettool-coree --PackageAuthor Me --ToolCommandName helloworld
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyNetTool" ; cd "MyNetTool" ; dotnet new nettool-coree --PackageAuthor Me --ToolCommandName helloworld --force ; dotnet pack ; cd $HOME
+dotnet new install Coree.Template.Project ; cd $HOME ; mkdir -p "source/repos/MyNetTool" ; cd "source/repos/MyNetTool" ; dotnet new nettool-coree --PackageAuthor Me --name "MyNetTool" --ToolCommandName helloworld --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd $HOME
 ```
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyNetTool" & cd "MyNetTool" & dotnet new nettool-coree --PackageAuthor Me --ToolCommandName helloworld --force & dotnet pack & cd /D %userprofile%
+dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\repos\MyNetTool" & cd "source\repos\MyNetTool" & dotnet new nettool-coree --PackageAuthor Me --name "MyNetTool"  --ToolCommandName helloworld --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd /D %userprofile%
 ```
-
 Assuming you've already copied your package to a NuGet source, whether it's local or remote, you can easily install it using the .NET Core CLI. Specifically, if you're created a prerelease version of a tool called MyNetTool.helloworld, you can install it globally on your machine with the following command.
+
 ```
 dotnet tool install -g MyNetTool --prerelease
 #REM OR use a temporary package location
@@ -204,11 +210,11 @@ Indeed, it may sound a bit perplexing at first – a project template for creati
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ;mkdir "MyProjTemplate" ; cd "MyProjTemplate" ; dotnet new projecttemplate-coree --PackageAuthor Me --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --force ; dotnet pack ; cd $HOME
+dotnet new install Coree.Template.Project ; cd $HOME ; mkdir -p "source/repos/MyProjTemplate" ; cd "source/repos/MyProjTemplate" ; dotnet new projecttemplate-coree --PackageAuthor Me --name "MyProjTemplate" --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --output "src" --force ; git init ; cd "src" ; dotnet pack ; cd .. ; code -n . ; cd $HOME
 ```
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyProjTemplate" & cd "MyProjTemplate" & dotnet new projecttemplate-coree --PackageAuthor Me --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --force & dotnet pack & cd /D %userprofile%
+dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\repos\MyProjTemplate" & cd "source\repos\MyProjTemplate" & dotnet new projecttemplate-coree --PackageAuthor Me --name "MyProjTemplate" --SampleTemplateName "My Class library template" --SampleTemplateShortName "my template" --output "src" --force  & git init & cd "src" & dotnet pack & cd.. & code -n . & cd /D %userprofile%
 ```
 
 ## Educational

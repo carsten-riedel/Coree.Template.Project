@@ -113,12 +113,12 @@ dotnet new msbuildtasklib-coree --PackageAuthor Me
 
 Linux/WSL (Sample useage):
 ```
-cd $HOME ; mkdir -p "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd ..
+dotnet new install Coree.Template.Project ; cd $HOME ; mkdir -p "MyMSBuildTask" ; cd "MyMSBuildTask" ; dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd ..
 ```
 
 Windows cmd (Sample useage):
 ```
-cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd..
+dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "MyMSBuildTask" & cd "MyMSBuildTask" & dotnet new msbuildtasklib-coree --PackageAuthor Me --name "MyMSBuildTask" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd..
 ```
 
 **Enhance the TestScript.msbuild in the MSTest project to test your integration.**

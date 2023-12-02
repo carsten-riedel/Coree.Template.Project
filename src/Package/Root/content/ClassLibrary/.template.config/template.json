@@ -139,6 +139,13 @@
       "description": "Add ReportGenerator for the coverlet output.",
       "displayName": "Add ReportGenerator for the coverlet output."
     },
+    "AddGlobalsJson": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Add globals.json sdk at solution",
+      "displayName": "Add globals.json sdk at solution"
+    },
     "IsNet6": {
       "type": "computed",
       "value": "(Framework == \"net6.0\")"
@@ -159,7 +166,8 @@
   "guids": [
     "8CDD8387-B905-44A8-B5D5-07BB50E05BEA",
     "35BBE988-7105-4CF2-BF49-11DBD588309E",
-    "43DA960A-5EB3-4648-9643-7F837744A68C"
+    "43DA960A-5EB3-4648-9643-7F837744A68C",
+    "F05BD403-D4EE-4D45-811E-0F84D6236589"
   ],
   "forms": {
     "WithoutTrailingNumbers": {
@@ -180,6 +188,12 @@
           "condition": "(!BenchmarkDotNet)",
           "exclude": [
             "ClassLibrary.MSTest/BenchmarksTests.cs"
+          ]
+        },
+        {
+          "condition": "(!AddGlobalsJson)",
+          "exclude": [
+            "global.json"
           ]
         }
       ]

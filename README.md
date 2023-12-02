@@ -51,19 +51,22 @@ To uninstall a wsl image e.g Ubuntu on Windows:
 
 To install dotnet powershell and vscode:
   1. Open the wsl app in windows or type `wsl` inside a command prompt.
-  2. Execute: `sudo wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && sudo dpkg -i packages-microsoft-prod.deb && sudo rm packages-microsoft-prod.deb` to install the microsoft apt package sources.
-  3. Execute: `sudo apt-get update && sudo apt-get -y upgrade && sudo apt-get install -y dotnet-sdk-6.0 && sudo apt-get install -y dotnet-sdk-7.0` to install the .NET 6.0 SDK and .NET 7.0 SDK.
-  4. Execute: `dotnet tool install --global PowerShell` if you want to use Powershell Core.
-  5. Execute: `sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb` to install Visual Studio code.
-  6. Execute: `echo >>"$HOME/.bashrc" "export DONT_PROMPT_WSL_INSTALL=1" && mkdir -p "$HOME/source/repos" && mkdir -p "$HOME/localpackage"` to get rid of the Visual Studio code prompt, and to create some default directories.
-  7. Optional: Start visual studio code, Execute: `code`
-  8. Optional: In the case visual studio code flickers shutdown wsl inside windows command prompt and start wsl again. Execute: `wsl --shutdown & wsl`
+  2. Execute:  `sudo apt-get update && sudo apt-get -y upgrade ` to upgrade the linux distrobution to the latest state.
+  3. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 6.0` to install the .NET 6.0 SDK.
+  4. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 7.0` to install the .NET 7.0 SDK.
+  5. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 8.0` to install the .NET 8.0 SDK.
+  6. Execute:  `export DOTNET_ROOT=$HOME/.dotnet ; export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools ; echo 'export DOTNET_ROOT=$HOME/.dotnet' >> ~/.bashrc && echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> ~/.bashrc` to add the dotnet root and path to the enviroment and shell startup.
+  7. Execute:  `dotnet tool install --global PowerShell` if you want to use Powershell Core.
+  8. Execute:  `sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb` to install Visual Studio code.
+  9. Execute:  `export DONT_PROMPT_WSL_INSTALL=1 ; echo 'export DONT_PROMPT_WSL_INSTALL=1' >> $HOME/.bashrc ; mkdir -p "$HOME/source/repos" ; mkdir -p "$HOME/source/packages"` to get rid of the Visual Studio code prompt, and to create some default directories.
+ 10. Optional:  Start visual studio code, Execute: `code`
+ 11. Optional:  In the case visual studio code flickers shutdown wsl inside windows command prompt and start wsl again. Execute: `wsl --shutdown & wsl code`
 
 To uninstall dotnet powershell and vscode:
   1. Open the wsl app in windows or type `wsl` inside a command prompt.
   2. Execute: `sudo apt-get remove -y code` to uninstall Visual Studio Code.
   3. Execute: `dotnet tool uninstall --global PowerShell` to uninstall Powershell.
-  4. Execute: `sudo apt remove -y --purge --autoremove "dotnet*" "aspnet*" "netstandard*" && sudo rm /etc/apt/sources.list.d/microsoft-prod.list` to uninstall all .NET 8.0 packages.
+  4. Manual:  Remove entries $HOME/.bashrc and delete the .dotnet folder.
 
 # Install/Uninstall the templates
 The commands below demonstrate how to install or uninstall the templates, primarily designed for .NET with Visual Studio 2022 compatibility in mind. Remember, template definitions might include specific limitations like conditional settings (true/false).

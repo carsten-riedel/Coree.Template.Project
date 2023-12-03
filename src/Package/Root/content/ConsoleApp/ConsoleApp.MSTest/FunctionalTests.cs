@@ -35,7 +35,7 @@ namespace ConsoleApp.MSTest
             string? output = @out.ToString();
 
             string expectedOutput = String.Join(Environment.NewLine, new string[] {
-                $@"Hello, World! {param[0]} {inputs[0]}",
+                $@"Hello, World! {param[0]} {inputs[0]} {ConsoleApp.Library.Class1.Foo()}",
             }) + Environment.NewLine;
 
             Assert.AreEqual(output, expectedOutput); 

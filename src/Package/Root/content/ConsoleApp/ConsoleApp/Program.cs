@@ -15,7 +15,7 @@ namespace ConsoleApp
             {
                 arg = args[0];
             }
-            Console.WriteLine($@"Hello, World! {arg} {name}");
+            Console.WriteLine($@"Hello, World! {arg} {name} {ConsoleApp.Library.Class1.Foo()}");
         }
     }
 }

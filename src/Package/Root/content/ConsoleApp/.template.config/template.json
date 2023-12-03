@@ -47,6 +47,26 @@
       "allowMultipleValues": false,
       "enableQuotelessLiterals": true,
       "choices": [
+        { 
+          "choice": "linux-musl-arm64",
+          "description": "Linux arm64 (musl, e.g. Docker-Images)",
+          "displayName": "Linux arm64 (musl, e.g. Docker-Images)"
+        },
+        {
+          "choice": "linux-musl-x64",
+          "description": "Linux x64 (musl, e.g. Alpine Linux)",
+          "displayName": "Linux x64 (musl, e.g. Alpine Linux)"
+        },
+        {
+          "choice": "linux-x64",
+          "description": "Linux x64 (Debian, Ubuntu, CentOS, Fedora)",
+          "displayName": "Linux x64 (Debian, Ubuntu, CentOS, Fedora)"
+        },
+        {
+          "choice": "osx-x64",
+          "description": "Mac OS X x64",
+          "displayName": "Mac OS X x64"
+        },
         {
           "choice": "win-x86",
           "description": "Target x86",

@@ -8,10 +8,69 @@
     <TargetFramework>net6.0</TargetFramework> <!-- using TargetFramework will produce NU5128 and won't generate dependency in .nuspec -->
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
- 
-  <!-- 
-    Since during pack all ProjectReference will be transformed to Package dependencies. And version number is cascading into all package.
-  -->
+  
+  <PropertyGroup>
+    <IsPublishable>true</IsPublishable>
+    <IsPackable>false</IsPackable>
+    <PublishRelease>false</PublishRelease>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--#if (RuntimeIdentifier == linux-musl-arm64) -->
+    <RuntimeIdentifier>linux-musl-arm64</RuntimeIdentifier>
+    <!--#endif -->
+    <!--#if (RuntimeIdentifier == linux-musl-x64) -->
+    <RuntimeIdentifier>linux-musl-x64</RuntimeIdentifier>
+    <!--#endif -->
+    <!--#if (RuntimeIdentifier == linux-x64) -->
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <!--#endif -->
+    <!--#if (RuntimeIdentifier == osx-x64) -->
+    <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+    <!--#endif -->
+    <!--#if (RuntimeIdentifier == win-x86) -->
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <!--#endif -->
+    <!--#if (RuntimeIdentifier == win-x64) -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishDir>bin\Publish\$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)</PublishDir>
+    <!--#if (Publish == FrameworkRequired) -->
+    <SelfContained>false</SelfContained>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkRequiredSingle) -->
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkIncluded) -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishAot>true</PublishAot>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkIncludedSingle) -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishAot>true</PublishAot>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkIncludedSingleCompressed) -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishAot>true</PublishAot>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <!--#endif -->
+  </PropertyGroup>
 
   <!-- Exclude .gitignore from solution explorer -->
   <ItemGroup>

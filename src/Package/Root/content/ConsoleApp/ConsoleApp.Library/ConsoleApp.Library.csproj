@@ -8,9 +8,12 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
-  <!-- 
-    Since during pack all ProjectReference will be transformed to Package dependencies. And version number is cascading into all package.
-  -->
+  <!-- Specific package specs -->
+  <PropertyGroup>
+    <IsPublishable>false</IsPublishable>
+    <IsPackable>true</IsPackable>
+    <PublishRelease>false</PublishRelease>
+  </PropertyGroup>
 
   <!-- Exclude .gitignore from solution explorer -->
   <ItemGroup>

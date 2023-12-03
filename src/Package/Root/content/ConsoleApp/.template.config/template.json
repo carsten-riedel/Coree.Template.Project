@@ -23,17 +23,17 @@
         {
           "choice": "net6.0",
           "description": "Target .NET 6.0",
-          "displayName": ".NET 6.0 Windows"
+          "displayName": ".NET 6.0"
         },
         {
           "choice": "net7.0",
           "description": "Target .NET 7.0",
-          "displayName": ".NET 7.0 Windows"
+          "displayName": ".NET 7.0"
         },
         {
           "choice": "net8.0",
           "description": "Target .NET 8.0",
-          "displayName": ".NET 8.0 Windows"
+          "displayName": ".NET 8.0"
         }
       ],
       "defaultValue": "net6.0",
@@ -254,3 +254,6 @@
     }
 ]
 }
+
+
+//cd /D %userprofile% & mkdir "source\repos\ConsoleAppX" & cd "source\repos\ConsoleAppX" & dotnet new console-coree --PackageAuthor Me --name "ConsoleAppX" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd /D %userprofile%

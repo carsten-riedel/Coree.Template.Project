@@ -8,13 +8,30 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
-  <!-- 
-    Since during pack all ProjectReference will be transformed to Package dependencies. And version number is cascading into all package.
-  -->
+  <PropertyGroup>
+    <IsPublishable>false</IsPublishable>
+    <IsPackable>false</IsPackable>
+    <PublishRelease>false</PublishRelease>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageReference Include="coverlet.collector" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
   <!-- Exclude .gitignore from solution explorer -->
   <ItemGroup>
     <None Remove=".gitignore" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConsoleApp\ConsoleApp.csproj" />
+    <ProjectReference Include="..\ConsoleApp.Library\ConsoleApp.Library.csproj" />
   </ItemGroup>
 
 </Project>

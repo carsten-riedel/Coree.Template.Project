@@ -146,6 +146,13 @@
       "description": "Add globals.json sdk at solution",
       "displayName": "Add globals.json sdk at solution"
     },
+    "AddDocfx": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Add preconfigured docfx to the MSTest",
+      "displayName": "Add preconfigured docfx to the MSTest"
+    },
     "IsNet6": {
       "type": "computed",
       "value": "(Framework == \"net6.0\")"
@@ -195,7 +202,20 @@
           "exclude": [
             "global.json"
           ]
+        },
+        {
+          "condition": "(!AddDocfx)",
+          "exclude": [
+            "ClassLibrary.MSTest/docfx/docfx.json",
+            "ClassLibrary.MSTest/docfx/index.md",
+            "ClassLibrary.MSTest/docfx/toc.yml",
+            "ClassLibrary.MSTest/docfx/docs/toc.yml",
+            "ClassLibrary.MSTest/docfx/docs/introduction.md",
+            "ClassLibrary.MSTest/docfx/docs/getting-started.md",
+            "ClassLibrary.MSTest/.config/dotnet-tools.json"
+          ]
         }
+
       ]
     }
   ]

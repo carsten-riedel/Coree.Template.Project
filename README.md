@@ -86,7 +86,7 @@ The package contains the following templates:
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
-In the packages dir `PackageSpecs.props` you can add `<LocalPackagesDir>$(userprofile)\localpackage</LocalPackagesDir>`
+In the packages dir `PackageSpecs.props` you can add `<LocalPackagesDir>$(userprofile)\source\packages</LocalPackagesDir>`
 
 Then add a local package source.
 

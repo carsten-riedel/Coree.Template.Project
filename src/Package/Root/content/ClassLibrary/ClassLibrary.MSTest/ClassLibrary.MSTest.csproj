@@ -14,7 +14,7 @@
     <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
     <CoverletOutput>./CoverletOutput/</CoverletOutput>
     <!--#endif -->
-    <VSTestLogger>trx%3bLogFileName=$(MSBuildProjectName).trx</VSTestLogger>
+    <VSTestLogger>trx%3bLogFileName=$(MSBuildThisFileDirectory)\MSTestResults\$(MSBuildProjectName).trx;html%3bLogFileName=$(MSBuildThisFileDirectory)\MSTestResults\result.html</VSTestLogger>
   </PropertyGroup>
 
   <ItemGroup>

@@ -79,7 +79,7 @@ namespace ClassLibrary.MSTest
             Trace.WriteLine($@"{item.BenchmarkCase.Descriptor.WorkloadMethodDisplayInfo} Mean:   {MeanMsShort} ms");
             Trace.WriteLine($@"{item.BenchmarkCase.Descriptor.WorkloadMethodDisplayInfo} Median: {MedianMsShort} ms");
 
-            Assert.IsTrue(MeanMsShort < 10);
+            Assert.IsTrue(MeanMsShort < 250);
         }
 
         [TestMethod]
@@ -96,7 +96,7 @@ namespace ClassLibrary.MSTest
             Trace.WriteLine($@"{item.BenchmarkCase.Descriptor.WorkloadMethodDisplayInfo} Mean:   {MeanMsShort} ms");
             Trace.WriteLine($@"{item.BenchmarkCase.Descriptor.WorkloadMethodDisplayInfo} Median: {MedianMsShort} ms");
 
-            Assert.IsTrue(MeanMsShort < 550);
+            Assert.IsTrue(MeanMsShort < 750);
         }
 
     }

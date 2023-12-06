@@ -8,5 +8,5 @@ ClassLibrary.MSTest/obj/**/*
 ClassLibrary.MSTest/CoverletOutput/**/*
 ClassLibrary.MSTest/BenchmarkDotNetReport/**/*
 ClassLibrary.MSTest/ReportGeneratorOutput/**/*
-ClassLibrary.MSTest/docfx/**/*
+ClassLibrary.MSTest/Docfx/result/**/*
 ClassLibrary.MSTest/MSTestResults/**/*

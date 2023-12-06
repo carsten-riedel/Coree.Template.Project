@@ -4,7 +4,7 @@
       "noRestore": true,
       "src": [
         {
-          "src": "../../ClassLibrary",
+          "src": "../../../ClassLibrary",
           "files": [
             "**/*.csproj"
           ]
@@ -18,9 +18,6 @@
       {
         "files": [
           "**/*.{md,yml}"
-        ],
-        "exclude": [
-          "_site/**"
         ]
       }
     ],
@@ -31,7 +28,7 @@
         ]
       }
     ],
-    "output": "_site",
+    "output": "../result/web",
     "template": [
       "default",
       "modern"
@@ -39,6 +36,7 @@
     "globalMetadata": {
       "_appName": "ClassLibrary",
       "_appTitle": "ClassLibrary",
+      "_appFooter": "<pre></pre>",
       "_enableSearch": true,
       "pdf": true
     }

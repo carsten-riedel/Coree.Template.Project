@@ -125,19 +125,19 @@
       "description": "Add a coverlet code coverage to the test project.",
       "displayName": "Add a coverlet code coverage to the test project."
     },
-    "BenchmarkDotNet": {
-      "type": "parameter",
-      "dataType": "bool",
-      "defaultValue": "true",
-      "description": "Add a BenchmarkDotNet test to the test project.",
-      "displayName": "Add a BenchmarkDotNet test to the test project."
-    },
     "ReportGenerator": {
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
       "description": "Add ReportGenerator for the coverlet output.",
       "displayName": "Add ReportGenerator for the coverlet output."
+    },
+    "BenchmarkDotNet": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Add a BenchmarkDotNet test to the test project.",
+      "displayName": "Add a BenchmarkDotNet test to the test project."
     },
     "AddGlobalsJson": {
       "type": "parameter",
@@ -152,6 +152,13 @@
       "defaultValue": "true",
       "description": "Add preconfigured docfx to the MSTest",
       "displayName": "Add preconfigured docfx to the MSTest"
+    },
+    "AddNlog": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Add preconfigured NLOG to the ClassLibrary",
+      "displayName": "Add preconfigured NLOG to the ClassLibrary"
     },
     "IsNet6": {
       "type": "computed",
@@ -206,18 +213,38 @@
         {
           "condition": "(!AddDocfx)",
           "exclude": [
-            "ClassLibrary.MSTest/docfx/docfx.json",
-            "ClassLibrary.MSTest/docfx/index.md",
-            "ClassLibrary.MSTest/docfx/toc.yml",
-            "ClassLibrary.MSTest/docfx/docs/toc.yml",
-            "ClassLibrary.MSTest/docfx/docs/introduction.md",
-            "ClassLibrary.MSTest/docfx/docs/getting-started.md",
+            "ClassLibrary.MSTest/Docfx/build/docfx_web.json",
+            "ClassLibrary.MSTest/Docfx/build/docfx_local.json",
+            "ClassLibrary.MSTest/Docfx/build/index.md",
+            "ClassLibrary.MSTest/Docfx/build/toc.yml",
+            "ClassLibrary.MSTest/Docfx/build/docs/toc.yml",
+            "ClassLibrary.MSTest/Docfx/build/docs/introduction.md",
+            "ClassLibrary.MSTest/Docfx/build/docs/getting-started.md",
             "ClassLibrary.MSTest/.config/dotnet-tools.json"
           ]
         }
 
       ]
     }
+  ]
+  ,
+  "primaryOutputs": [
+    {
+      "path": "Readme.md"        
+    }
+  ]
+  ,
+  "postActions": [
+      {
+        "condition": "(HostIdentifier != \"dotnetcli\")",
+        "description": "Opens Readme.md in the editor",
+        "manualInstructions": [ ],
+        "actionId": "84C0DA21-51C8-4541-9940-6CA19AF04EE6",
+        "args": {
+          "files": "0"
+        },
+        "continueOnError": true
+      }
   ]
 
 }

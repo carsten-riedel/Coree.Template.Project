@@ -25,4 +25,11 @@
     <None Remove=".gitignore" />
   </ItemGroup>
 
+  <!--#if (AddNlog == true) -->
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="5.2.7" />
+  </ItemGroup>
+  <!--#endif -->
+
+
 </Project>

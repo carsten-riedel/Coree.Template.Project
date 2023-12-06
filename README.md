@@ -152,12 +152,12 @@ dotnet new classlibrary-coree --PackageAuthor Me
 
 Linux/WSL (Sample useage):
 ```
-dotnet new install Coree.Template.Project ; cd $HOME ; mkdir -p "source/repos/MyClassLib" ; cd "source/repos/MyClassLib" ; dotnet new classlib-coree --PackageAuthor Me --name "MyClassLib" --output "src" --force ; git init ; cd "src" ; dotnet pack ; cd .. ; code -n . ; cd $HOME
+dotnet new install Coree.Template.Project ; cd $HOME ; mkdir -p "source/repos/MyClassLib" ; cd "source/repos/MyClassLib" ; dotnet new classlib-coree --PackageAuthor Me --name "MyClassLib" --output "src" --force ; git init ; cd "src" ; dotnet test ; dotnet pack ; cd .. ; code -n . ; cd $HOME
 ```
 
 Windows cmd (Sample useage):
 ```
-dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\repos\MyClassLib" & cd "source\repos\MyClassLib" & dotnet new classlib-coree --PackageAuthor Me --name "MyClassLib" --output "src" --force & git init & cd "src" & dotnet pack & cd.. & code -n . & cd /D %userprofile%
+dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\repos\MyClassLib" & cd "source\repos\MyClassLib" & dotnet new classlib-coree --PackageAuthor Me --name "MyClassLib" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd /D %userprofile%
 ```
 
 ## .NET Tool

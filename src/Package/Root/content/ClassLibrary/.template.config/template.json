@@ -146,6 +146,13 @@
       "description": "Add globals.json sdk at solution",
       "displayName": "Add globals.json sdk at solution"
     },
+    "AddDotNetToolsJson": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "false",
+      "description": "Add dotnet-tools.json + csproj restore and use dotnet-project-licenses",
+      "displayName": "Add dotnet-tools.json + csproj restore and use dotnet-project-licenses"
+    },
     "AddDocfx": {
       "type": "parameter",
       "dataType": "bool",
@@ -221,6 +228,12 @@
             "ClassLibrary.MSTest/Docfx/build/docs/introduction.md",
             "ClassLibrary.MSTest/Docfx/build/docs/getting-started.md",
             "ClassLibrary.MSTest/.config/dotnet-tools.json"
+          ]
+        },
+        {
+          "condition": "(!AddDotNetToolsJson)",
+          "exclude": [
+            "ClassLibrary/.config/dotnet-tools.json"
           ]
         }
 

@@ -2,10 +2,10 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "dotnet-trace": {
-      "version": "8.0.452401",
+    "dotnet-project-licenses": {
+      "version": "2.7.1",
       "commands": [
-        "dotnet-trace"
+        "dotnet-project-licenses"
       ]
     }
   }

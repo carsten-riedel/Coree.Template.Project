@@ -8,9 +8,16 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <!--#if (AddDotNetToolsJson == true) -->
   <Target Name="CustomBeforeBuild" BeforeTargets="BeforeBuild">
     <Exec Command="dotnet tool restore" />
   </Target>
+
+  <Target Name="CustomBeforeBuild" AfterTargets="AfterBuild">
+    <Exec Command="dotnet dotnet-project-licenses -i &quot;../&quot; -u -m -o --outfile &quot;license_sln.md&quot; --output-directory &quot;../ClassLibrary.MSTest/LicenseReport/&quot; " />
+    <Exec Command="dotnet dotnet-project-licenses -i  &quot;./&quot; -u -m -o --outfile &quot;license_prj.md&quot; --output-directory &quot;../ClassLibrary.MSTest/LicenseReport/&quot; " />
+  </Target>
+  <!--#endif -->
   
   <!-- 
     Since during pack all ProjectReference will be transformed to Package dependencies. And version number is cascading into all package.

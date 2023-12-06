@@ -86,7 +86,7 @@ The package contains the following templates:
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
-In the packages dir `PackageSpecs.props` you can add `<LocalPackagesDir>$(userprofile)\localpackage</LocalPackagesDir>`
+In the packages dir `PackageSpecs.props` you can add `<LocalPackagesDir>$(userprofile)\source\packages</LocalPackagesDir>`
 
 Then add a local package source.
 
@@ -128,6 +128,17 @@ dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\
 
 ## .NET Class library
 This template provides a foundation for building a .NET compatible library. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
+
+**Features:**
+
+- **MSTest Project**: Integrated for robust functionality testing.
+- **Coverlet Code Coverage**: Measures code coverage to ensure comprehensive testing.
+- **ReportGenerator**: Generates detailed reports on code coverage.
+- **BenchmarkDotNet**: Included for performance benchmarking.
+- **Docfx**: Facilitates documentation generation from source code and Markdown files.
+- **NLog**: Implemented for basic logging, enhancing debugging and monitoring capabilities.
+- **Global.json & dotnet-tools.json**: Specify SDK versions and local tool dependencies for a consistent development environment.
+- **Solution Items**: Organized for better management of global solution-related files.
 
 ```
 dotnet new classlibrary-coree --PackageAuthor Me

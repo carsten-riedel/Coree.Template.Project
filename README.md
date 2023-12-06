@@ -129,6 +129,17 @@ dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\
 ## .NET Class library
 This template provides a foundation for building a .NET compatible library. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
 
+**Features:**
+
+- **MSTest Project**: Integrated for robust functionality testing.
+- **Coverlet Code Coverage**: Measures code coverage to ensure comprehensive testing.
+- **ReportGenerator**: Generates detailed reports on code coverage.
+- **BenchmarkDotNet**: Included for performance benchmarking.
+- **Docfx**: Facilitates documentation generation from source code and Markdown files.
+- **NLog**: Implemented for basic logging, enhancing debugging and monitoring capabilities.
+- **Global.json & dotnet-tools.json**: Specify SDK versions and local tool dependencies for a consistent development environment.
+- **Solution Items**: Organized for better management of global solution-related files.
+
 ```
 dotnet new classlibrary-coree --PackageAuthor Me
 ```

@@ -49,8 +49,8 @@
  
   <!-- Note index.md toc.yml and docs folder will be used for rendering the output _site, statictoc is needed for start the index.html locally  -->
   <Target Name="BuildDocfx" AfterTargets="PostBuildEvent">
-    <Exec Command="dotnet docfx Docfx\build\docfx_web.json" />
-    <Exec Command="dotnet docfx Docfx\build\docfx_local.json -t statictoc" />
+    <Exec Command="dotnet docfx Docfx/build/docfx_web.json" />
+    <Exec Command="dotnet docfx Docfx/build/docfx_local.json -t statictoc" />
   </Target>
   <!--#endif -->
 

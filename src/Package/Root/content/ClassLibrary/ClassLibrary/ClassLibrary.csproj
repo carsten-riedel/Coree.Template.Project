@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <!--#if (AddDotNetToolsJson == true) -->
-  <Target Name="CustomBeforeBuild" BeforeTargets="BeforeBuild">
+  <Target Name="ToolRestore" BeforeTargets="PreBuildEvent">
     <Exec Command="dotnet tool restore" />
   </Target>
 

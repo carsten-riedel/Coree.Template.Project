@@ -43,7 +43,7 @@
   <!--#endif -->
 
   <!--#if (AddDocfx == true) -->
-  <Target Name="RestoreDotfxtool" BeforeTargets="BeforeBuild">
+  <Target Name="ToolRestore" BeforeTargets="PreBuildEvent">
     <Exec Command="dotnet tool restore" />
   </Target>
  
@@ -55,8 +55,11 @@
   <!--#endif -->
 
   <Target Name="ListVulnerable" AfterTargets="PostBuildEvent">
-    <Exec Condition="!$([MSBuild]::IsOSUnixLike())" Command="cd .. %26 dotnet list package --vulnerable --include-transitive" />
-    <Exec Condition="$([MSBuild]::IsOSUnixLike())" Command="cd .. %3B dotnet list package --vulnerable --include-transitive" />
+    <MakeDir Directories="$(MSBuildThisFileDirectory)NugetReport" />
+    <Exec Condition="!$([MSBuild]::IsOSUnixLike())" Command="cd .. %26 dotnet list package --vulnerable --include-transitive %3E ClassLibrary.MSTest/NugetReport/PackageVulnerable.txt" />
+    <Exec Condition="$([MSBuild]::IsOSUnixLike())"  Command="cd .. %3B dotnet list package --vulnerable --include-transitive %3E ClassLibrary.MSTest/NugetReport/PackageVulnerable.txt" />
+    <Exec Condition="!$([MSBuild]::IsOSUnixLike())" Command="cd .. %26 dotnet list package %3E ClassLibrary.MSTest/NugetReport/PackageList.txt" />
+    <Exec Condition="$([MSBuild]::IsOSUnixLike())"  Command="cd .. %3B dotnet list package %3E ClassLibrary.MSTest/NugetReport/PackageList.txt" />
   </Target>
 
   <ItemGroup>

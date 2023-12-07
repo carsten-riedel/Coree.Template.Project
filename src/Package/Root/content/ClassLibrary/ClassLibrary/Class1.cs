@@ -6,6 +6,7 @@ using System.IO;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using NLog.Layouts;
 #endif
 
 namespace ClassLibrary

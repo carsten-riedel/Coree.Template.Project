@@ -20,8 +20,10 @@ namespace ClassLibrary
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
 #pragma warning disable IDE0052 // Remove unread private members
-        private static readonly LogFactory _ = NLog.LogManager.Setup(SetupBuilder => {
-            SetupBuilder.LoadConfiguration(LoadConfigurationBuilder => {
+        private static readonly LogFactory _ = NLog.LogManager.Setup(SetupBuilder =>
+        {
+            SetupBuilder.LoadConfiguration(LoadConfigurationBuilder =>
+            {
                 LoadConfigurationBuilder.Configuration = new LoggingConfiguration();
                 LoadConfigurationBuilder.Configuration.AddRuleForAllLevels(new ConsoleTarget() { Name = "Console" });
                 LoadConfigurationBuilder.Configuration.AddRuleForAllLevels(new FileTarget()
@@ -35,6 +37,28 @@ namespace ClassLibrary
                     ArchiveNumbering = ArchiveNumberingMode.Date,
                     ArchiveEvery = FileArchivePeriod.Day,
                     ArchiveOldFileOnStartup = true,
+                    Layout = new JsonLayout
+                    {
+                        Attributes =
+                        {
+                            new JsonAttribute("time", "${longdate}"),
+                            new JsonAttribute("level", "${level}"),
+                            new JsonAttribute("hostname", "${hostname}"),
+                            new JsonAttribute("environment-user", "${environment-user}"),
+                            new JsonAttribute("message", "${message}"),
+                            new JsonAttribute("properties", new JsonLayout { IncludeEventProperties = true, MaxRecursionLimit = 2}, encode: false),
+                            new JsonAttribute("exception", new JsonLayout
+                            {
+                                Attributes =
+                                {
+                                    new JsonAttribute("type", "${exception:format=type}"),
+                                    new JsonAttribute("message", "${exception:format=message}"),
+                                    new JsonAttribute("stacktrace", "${exception:format=tostring}"),
+                                }
+                            },
+                            encode: false) // don't escape layout
+                        }
+                    }
                 });
             });
         });
@@ -49,7 +73,7 @@ namespace ClassLibrary
         public static string Foo()
         {
             #if( AddNlog )
-            logger.Info("call");
+            logger.Info("{shopitem} added to basket by {user}", new { Id = 6, Name = "Jacket", Color = "Orange" }, "Kenny");
             #endif
             return "123";
         }

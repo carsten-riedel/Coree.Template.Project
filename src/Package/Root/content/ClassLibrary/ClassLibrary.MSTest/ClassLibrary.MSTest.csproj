@@ -54,6 +54,11 @@
   </Target>
   <!--#endif -->
 
+  <Target Name="ListVulnerable" AfterTargets="PostBuildEvent">
+    <Exec Condition="!$([MSBuild]::IsOSUnixLike())" Command="cd .. %26 dotnet list package --vulnerable --include-transitive" />
+    <Exec Condition="$([MSBuild]::IsOSUnixLike())" Command="cd .. %3B dotnet list package --vulnerable --include-transitive" />
+  </Target>
+
   <ItemGroup>
     <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
   </ItemGroup>

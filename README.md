@@ -108,11 +108,11 @@ dotnet nuget remove source "SourcePackages"
 ## .NET MSBuild Task library
 This template provides a foundation for building a .NET Standard compatible MSBuild task library, essential for tasks like build automation. It includes an MSTest project for testing the functionality you develop. The template is structured to support NuGet packaging and publishing, requiring an author's specification for these purposes.
 
+General use:
 ```
 dotnet new msbuildtasklib-coree --PackageAuthor Me
 ```
 **Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory.**
-
 
 Linux/WSL (Sample useage):
 ```
@@ -144,8 +144,9 @@ If you keep the default setting, you can remove the test project without any imp
 - **Solution Items**: Organized for better management of global solution-related files.
 - **Nuget-license overview**: Uses the dotnet-project-licenses tool to document licenses used.
 
+General use:
 ```
-dotnet new classlibrary-coree --PackageAuthor Me
+dotnet new classlib-coree --PackageAuthor Me
 ```
 
 **Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory.**
@@ -164,6 +165,7 @@ dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\
 This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.
 The final command will be the ToolCommandName. The Packagename is the Project and ToolCommandName
 
+General use:
 ```
 dotnet new nettool-coree --PackageAuthor Me --ToolCommandName helloworld
 ```
@@ -196,17 +198,21 @@ Hello, World!
 ## .NET Wpf (Windows only)
 This template serves as a base for developing WPF applications, optimized primarily for .NET publishing as an executable. It includes five distinct configurations tailored for the dotnet publish process. Enhanced with basic visual improvements, the template utilizes the MaterialDesignThemes.MahApps package. You can tailor the App.xaml to your requirements, particularly by altering color keys like `<Color x:Key="Primary200">#76bddf</Color>`, to suit your design preferences.
 
+General use:
+```
+dotnet new wpfapp-coree --Author Me
+```
+Windows cmd (Sample useage):
+```
+cd /D %userprofile% & mkdir "MyWpfApp" & cd "MyWpfApp" & dotnet new wpfapp-coree --Author Me --force & dotnet publish & cd /D %userprofile%
+```
+
 Publish settings.
 1) Framework-required. (Purpose: Installer)
 2) Framework-required, Single-file. (Purpose: Copy smallest) <- DEFAULT
 3) Framework-included. (Purpose: Installer)
 4) Framework-included, Single-file. (Purpose: Copy large)
 5) Framework-included, Single-file, Compressed. (Purpose: Copy medium)
-
-Windows cmd (Sample useage):
-```
-cd /D %userprofile% & mkdir "MyWpfApp" & cd "MyWpfApp" & dotnet new wpfapp-coree --Author Me --force & dotnet publish & cd /D %userprofile%
-```
 
 The Single-file selection will have the following settings.
 ```
@@ -222,6 +228,11 @@ The Single-file selection will have the following settings.
 
 ## .NET Project Template
 Indeed, it may sound a bit perplexing at first – a project template for creating project templates. However, it's quite straightforward. For a project to generate templates, these must be situated within the packages/root/content folder. Additionally, a default class library is incorporated, complete with the provided names, to kickstart your project template creation. For more detailed guidance, refer to the educational section at the beginning of this readme.
+
+General use:
+```
+dotnet new projecttemplate-coree --PackageAuthor "me" --SampleTemplateName "Testing template" --SampleTemplateShortName "test"
+```
 
 Linux/WSL (Sample useage):
 ```

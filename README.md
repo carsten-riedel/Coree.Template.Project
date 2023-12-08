@@ -145,7 +145,7 @@ If you keep the default setting, you can remove the test project without any imp
 - **Nuget-license overview**: Uses the dotnet-project-licenses tool to document licenses used.
 
 ```
-dotnet new classlibrary-coree --PackageAuthor Me
+dotnet new classlib-coree --PackageAuthor Me
 ```
 
 **Modify the metadata for your NuGet package by accessing the PackageMetadata.props file located in the Package directory.**
@@ -196,6 +196,10 @@ Hello, World!
 ## .NET Wpf (Windows only)
 This template serves as a base for developing WPF applications, optimized primarily for .NET publishing as an executable. It includes five distinct configurations tailored for the dotnet publish process. Enhanced with basic visual improvements, the template utilizes the MaterialDesignThemes.MahApps package. You can tailor the App.xaml to your requirements, particularly by altering color keys like `<Color x:Key="Primary200">#76bddf</Color>`, to suit your design preferences.
 
+```
+dotnet new wpfapp-coree --Author Me
+```
+
 Publish settings.
 1) Framework-required. (Purpose: Installer)
 2) Framework-required, Single-file. (Purpose: Copy smallest) <- DEFAULT
@@ -222,6 +226,10 @@ The Single-file selection will have the following settings.
 
 ## .NET Project Template
 Indeed, it may sound a bit perplexing at first – a project template for creating project templates. However, it's quite straightforward. For a project to generate templates, these must be situated within the packages/root/content folder. Additionally, a default class library is incorporated, complete with the provided names, to kickstart your project template creation. For more detailed guidance, refer to the educational section at the beginning of this readme.
+
+```
+dotnet new projecttemplate-coree --PackageAuthor "me" --SampleTemplateName "Testing template" --SampleTemplateShortName "test"
+```
 
 Linux/WSL (Sample useage):
 ```

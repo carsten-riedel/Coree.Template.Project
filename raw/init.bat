@@ -1,2 +1,2 @@
 echo from init.bat
-REM Endofline
+echo from init.bat2

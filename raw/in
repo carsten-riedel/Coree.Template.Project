@@ -10,6 +10,6 @@ fi
 :WIN
 @echo off
 if "%comspec%" == "C:\Windows\system32\cmd.exe" (
- cls
+ 	cls
 	curl -sSL https://raw.githubusercontent.com/carsten-riedel/Coree.Template.Project/main/raw/init.bat | cmd
 )

@@ -17,10 +17,19 @@ addToBashrc() {
     fi
 }
 
+doesCommandExist() {
+    command -v "$1" >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        echo "true"
+    else
+        echo "false"
+    fi
+}
 
 
 # Update the system
 sudo apt-get -y update
+#sudo apt-get -y -o APT::Get::Always-Include-Phased-Updates=true upgrade
 sudo apt-get -y upgrade
 
 # Install dotnet
@@ -36,7 +45,13 @@ echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $HOME/.bashrc
 
 dotnet tool install --global PowerShell 2>nul
 
-wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb
+
+result=$(doesCommandExist code)
+if [ "$result" != "true" ]; then
+    wget --no-clobber --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb    
+fi
+
+
 
 export DONT_PROMPT_WSL_INSTALL=1 ;
 

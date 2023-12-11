@@ -39,11 +39,14 @@ sudo apt-get -y update
 #sudo apt-get -y -o APT::Get::Always-Include-Phased-Updates=true upgrade
 sudo apt-get -y upgrade
 
-# Install dotnet
+# https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-install-script
+curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 1.1
+curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 2.1
+curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 3.1
+curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 5.0
 curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 6.0
 curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 7.0
 curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 8.0
-
 
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools

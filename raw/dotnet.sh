@@ -40,7 +40,6 @@ sudo apt-get -y update
 sudo apt-get -y upgrade
 
 # https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-install-script
-curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 1.1
 curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 2.1
 curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 3.1
 curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 5.0
@@ -50,8 +49,8 @@ curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 8.0
 
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
-echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $HOME/.bashrc
-echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $HOME/.bashrc
+addLineToFile "export DOTNET_ROOT=$HOME/.dotnet" "$HOME/.bashrc"
+addLineToFile "export DOTNET_ROOT=$HOME/.dotnet" "$HOME/.bashrc"
 
 dotnet tool install --global PowerShell 2>nul
 

@@ -18,9 +18,9 @@ addLineToFile() {
 
     if ! grep -qF -- "$lineToAdd" "$targetFile"; then
         echo "$lineToAdd" >> "$targetFile"
-        echo "Line added to $targetFile"
+        echo "Line $lineToAdd added to $targetFile"
     else
-        echo "Line already present in $targetFile"
+        echo "Line $lineToAdd already present in $targetFile"
     fi
 }
 

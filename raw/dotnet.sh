@@ -2,18 +2,25 @@
 # sudo curl -sSL https://raw.githubusercontent.com/carsten-riedel/Coree.Template.Project/main/raw/dotnet.sh | bash
 clear
 
-addToBashrc() {
-    local exportLine=$1
-    if [ -z "$exportLine" ]; then
-        echo "No export line provided."
+addLineToFile() {
+    local lineToAdd=$1
+    local targetFile=$2
+
+    if [ -z "$lineToAdd" ]; then
+        echo "No line provided to add."
         return 1
     fi
 
-    if ! grep -qF -- "$exportLine" "$HOME/.bashrc"; then
-        echo "$exportLine" >> "$HOME/.bashrc"
-        echo "Line added to .bashrc"
+    if [ -z "$targetFile" ]; then
+        echo "No target file specified."
+        return 1
+    fi
+
+    if ! grep -qF -- "$lineToAdd" "$targetFile"; then
+        echo "$lineToAdd" >> "$targetFile"
+        echo "Line added to $targetFile"
     else
-        echo "Line already present in .bashrc"
+        echo "Line already present in $targetFile"
     fi
 }
 
@@ -54,7 +61,7 @@ fi
 
 
 export DONT_PROMPT_WSL_INSTALL=1 ;
+addLineToFile "export DONT_PROMPT_WSL_INSTALL=1" "$HOME/.bashrc"
 
-addToBashrc "export DONT_PROMPT_WSL_INSTALL=1"
 mkdir -p "$HOME/source/repos"
 mkdir -p "$HOME/source/packages"

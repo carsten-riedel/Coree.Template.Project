@@ -60,8 +60,6 @@ if [ "$result" != "true" ]; then
     wget --no-clobber --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb    
 fi
 
-
-
 export DONT_PROMPT_WSL_INSTALL=1 ;
 addLineToFile "export DONT_PROMPT_WSL_INSTALL=1" "$HOME/.bashrc"
 

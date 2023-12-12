@@ -121,16 +121,20 @@ function fetchContentRelative(relativePath) {
 }
 
 
-	function fetchContent(url) {
-		fetch(url)
-			.then(response => response.text())
-			.then(markdown => {
-				const content = document.getElementById('content');
-				content.innerHTML = md.render(markdown);
-				addCopyButtons(content);
-			})
-			.catch(error => console.error('Error loading markdown:', error));
-	}
+  function fetchContent(url) {
+      // Initialize markdown-it inside the function
+      const md = new markdownit();
+
+      fetch(url)
+          .then(response => response.text())
+          .then(markdown => {
+              const content = document.getElementById('content');
+              content.innerHTML = md.render(markdown);
+              addCopyButtons(content);
+          })
+          .catch(error => console.log('Error loading markdown:', error));
+  }
+
 
 	function addCopyButtons(container) {
     container.querySelectorAll('pre').forEach(function(pre) {
@@ -166,10 +170,6 @@ function fetchContentRelative(relativePath) {
     });
 
     $(document).ready(function() {
-    // Initialize markdown-it
-    const md = new markdownit();
-
-    // Fetch default content on page load
     fetchContentRelativeRooted('index.md');
 });
 

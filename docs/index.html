@@ -4,8 +4,87 @@
 <head>
   <meta charset="utf-8" />
   <title>Coree Project Template</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script>
+
+    function fetchContentRelativeRooted(relativePath) {
+      // Manually set root URL
+      var rootUrl = 'https://raw.githubusercontent.com/carsten-riedel/Coree.Template.Project/main/docs/';
+
+      // Default to 'index.md' if relativePath is empty or undefined
+      if (!relativePath) {
+        relativePath = 'index.md';
+      }
+
+      // Construct the full URL
+      var fullUrl = rootUrl + relativePath;
+
+      // Fetch and display the content
+      fetchContent(fullUrl);
+    }
+
+    function fetchContent(url) {
+      // Initialize markdown-it inside the function
+      const md = new markdownit();
+      console.log("URL:", url);
+      fetch(url)
+        .then(response => response.text())
+        .then(markdown => {
+          const content = document.getElementById('content');
+          content.innerHTML = md.render(markdown);
+          addCopyButtons(content);
+        })
+        .catch(error => console.log('Error loading markdown:', error));
+    }
+
+    function addCopyButtons(container) {
+      container.querySelectorAll('pre').forEach(function (pre) {
+        // Create the div wrapper and set its class
+        var divWrapper = document.createElement('div');
+        divWrapper.className = 'codeblocks'; // Replace with your desired class name
+
+        // Move the pre element inside the div wrapper
+        pre.parentNode.insertBefore(divWrapper, pre);
+        divWrapper.appendChild(pre);
+
+        // Create and add the copy button
+        var button = document.createElement('button');
+        button.className = 'copy-button';
+        button.textContent = 'Copy';
+
+        // Append the button to the div wrapper, not the pre element
+        divWrapper.appendChild(button);
+
+        var code = pre.querySelector('code'); // Targeting the code element
+
+        button.addEventListener('click', function () {
+          var textToCopy = code ? code.textContent.trim() : pre.textContent.trim();
+          navigator.clipboard.writeText(textToCopy).then(function () {
+            /* Clipboard successfully set */
+            button.textContent = 'Done';
+            setTimeout(function () { button.textContent = 'Copy'; }, 1000);
+          }, function () {
+            /* Clipboard write failed */
+            button.textContent = 'Failed to copy';
+          });
+        });
+      });
+
+
+    }
+
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      fetchContent('https://raw.githubusercontent.com/carsten-riedel/Coree.Template.Project/main/README.md');
+    });
+  </script>
+
   <style>
     /* Media query for larger screens (e.g., desktop) */
     @media (min-width: 992px) {
@@ -76,114 +155,6 @@
       /* Allows pre to take up available space */
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/markdown-it/dist/markdown-it.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-  <script>
-
-    function fetchContentRelativeRooted(relativePath) {
-      // Manually set root URL
-      var rootUrl = 'https://raw.githubusercontent.com/carsten-riedel/Coree.Template.Project/main/docs/';
-
-      // Default to 'index.md' if relativePath is empty or undefined
-      if (!relativePath) {
-        relativePath = 'index.md';
-      }
-
-      // Construct the full URL
-      var fullUrl = rootUrl + relativePath;
-
-      console.log("Base URL:", fullUrl);
-
-      // Fetch and display the content
-      fetchContent(fullUrl);
-    }
-
-    function fetchContentRelative(relativePath) {
-      // Get the current URL
-      var currentLocation = window.location.href;
-
-      // Create a URL object
-      var url = new URL(currentLocation);
-
-      // Get the pathname and remove the trailing slash if it exists
-      var path = url.pathname.replace(/\/$/, "");
-
-      // Remove the last segment (file name or last directory name)
-      var currentDir = path.substring(0, path.lastIndexOf('/'));
-
-      // Construct the full URL using the current directory and relative path
-      var baseUrl = `${currentDir}/${relativePath}`;
-
-      // Log the base URL to the console
-      console.log("Base URL:", baseUrl);
-
-      // Fetch and display the content
-      fetchContent(baseUrl);
-    }
-
-
-    function fetchContent(url) {
-      // Initialize markdown-it inside the function
-      const md = new markdownit();
-
-      fetch(url)
-        .then(response => response.text())
-        .then(markdown => {
-          const content = document.getElementById('content');
-          content.innerHTML = md.render(markdown);
-          addCopyButtons(content);
-        })
-        .catch(error => console.log('Error loading markdown:', error));
-    }
-
-
-    function addCopyButtons(container) {
-      container.querySelectorAll('pre').forEach(function (pre) {
-        // Create the div wrapper and set its class
-        var divWrapper = document.createElement('div');
-        divWrapper.className = 'codeblocks'; // Replace with your desired class name
-
-        // Move the pre element inside the div wrapper
-        pre.parentNode.insertBefore(divWrapper, pre);
-        divWrapper.appendChild(pre);
-
-        // Create and add the copy button
-        var button = document.createElement('button');
-        button.className = 'copy-button';
-        button.textContent = 'Copy';
-
-        // Append the button to the div wrapper, not the pre element
-        divWrapper.appendChild(button);
-
-        var code = pre.querySelector('code'); // Targeting the code element
-
-        button.addEventListener('click', function () {
-          var textToCopy = code ? code.textContent.trim() : pre.textContent.trim();
-          navigator.clipboard.writeText(textToCopy).then(function () {
-            /* Clipboard successfully set */
-            button.textContent = 'Done';
-            setTimeout(function () { button.textContent = 'Copy'; }, 1000);
-          }, function () {
-            /* Clipboard write failed */
-            button.textContent = 'Failed to copy';
-          });
-        });
-      });
-
-
-    }
-
-  </script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      fetchContentRelativeRooted('index.md');
-    });
-  </script>
 </head>
 
 <body>
@@ -191,9 +162,6 @@
     <button onclick="fetchContentRelativeRooted('test.md')">Fetch Content</button>
   </div>
   <div id="content" class="container"></div>
-
-
-
 </body>
 
 </html>

@@ -54,14 +54,13 @@ addLineToFile "export PATH=\$PATH:\$DOTNET_ROOT:\$DOTNET_ROOT/tools" "$HOME/.bas
 
 dotnet tool install --global PowerShell 2>nul
 
-
 result=$(doesCommandExist code)
 if [ "$result" != "true" ]; then
-    wget --no-clobber --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb    
+    wget --no-clobber --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb   
 fi
 
 export DONT_PROMPT_WSL_INSTALL=1 ;
-addLineToFile "export DONT_PROMPT_WSL_INSTALL=1" "$HOME/.bashrc"
+addLineToFile "export DONT_PROMPT_WSL_INSTALL=1" "$HOME/.bashrc" 
 
 mkdir -p "$HOME/source/repos"
 mkdir -p "$HOME/source/packages"

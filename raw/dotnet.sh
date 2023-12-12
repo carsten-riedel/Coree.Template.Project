@@ -50,7 +50,7 @@ curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 8.0
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
 addLineToFile "export DOTNET_ROOT=$HOME/.dotnet" "$HOME/.bashrc"
-addLineToFile "export DOTNET_ROOT=$HOME/.dotnet" "$HOME/.bashrc"
+addLineToFile "export PATH=`$PATH:`$DOTNET_ROOT:`$DOTNET_ROOT/tools" "$HOME/.bashrc"
 
 dotnet tool install --global PowerShell 2>nul
 

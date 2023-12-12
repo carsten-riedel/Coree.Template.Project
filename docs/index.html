@@ -96,26 +96,29 @@
     fetchContent(fullUrl);
 }
 
-	function fetchContentRelative(relativePath) {
-		// Get the current URL
-		var currentLocation = window.location.href;
+function fetchContentRelative(relativePath) {
+    // Get the current URL
+    var currentLocation = window.location.href;
 
-		// Create a URL object
-		var url = new URL(currentLocation);
+    // Create a URL object
+    var url = new URL(currentLocation);
 
-		// Get the pathname and remove the trailing slash if it exists
-		var path = url.pathname.replace(/\/$/, "");
+    // Get the pathname and remove the trailing slash if it exists
+    var path = url.pathname.replace(/\/$/, "");
 
-		// Remove the last segment (file name or last directory name)
-		var currentDir = path.substring(0, path.lastIndexOf('/'));
+    // Remove the last segment (file name or last directory name)
+    var currentDir = path.substring(0, path.lastIndexOf('/'));
 
-		// Construct the full URL using the current directory and relative path
-		var baseUrl = `${currentDir}/${relativePath}`;
-		
+    // Construct the full URL using the current directory and relative path
+    var baseUrl = `${currentDir}/${relativePath}`;
 
-		// Fetch and display the content
-		fetchContent(baseUrl);
-	}
+    // Log the base URL to the console
+    console.log("Base URL:", baseUrl);
+
+    // Fetch and display the content
+    fetchContent(baseUrl);
+}
+
 
 	function fetchContent(url) {
 		fetch(url)
@@ -165,7 +168,7 @@
         // Fetch default content on page load
         fetchContentRelativeRooted('index.md');
     });
-    
+
 }
 
   </script>

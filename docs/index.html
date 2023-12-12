@@ -78,7 +78,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
   <script>
-    const md = new markdownit();
  
     function fetchContentRelativeRooted(relativePath) {
     // Manually set root URL
@@ -167,9 +166,12 @@ function fetchContentRelative(relativePath) {
     });
 
     $(document).ready(function() {
-        // Fetch default content on page load
-        fetchContentRelativeRooted('index.md');
-    });
+    // Initialize markdown-it
+    const md = new markdownit();
+
+    // Fetch default content on page load
+    fetchContentRelativeRooted('index.md');
+});
 
 }
 

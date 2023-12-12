@@ -8,25 +8,41 @@
     /* Media query for larger screens (e.g., desktop) */
     @media (min-width: 992px) {
         .container {
-            max-width: 864px; /* Adjust this value as needed */
+            max-width: 800px; /* Adjust this value as needed */
+			
         }
     }
 	
 	.container {
         border: 1px solid rgb(216, 222, 228); /* Thin border, change color as needed */
         border-radius: 5px; /* Rounded corners, adjust radius as desired */
+        padding: 32px;
     }
+	
+	img {
+		max-width: 100%;
+	}
 	
 	h1, h2 {
         border-bottom: 1px solid rgb(216, 222, 228); /* Solid line, adjust color and thickness as needed */
+		padding-bottom: 0.3em
     }
 
-    .your-special-class {
+    .codeblocks {
 		background: rgb(246, 248, 250);
 		margin: 1em 0px;
         display: flex;
         align-items: start; /* Aligns items to the top of the container */
     }
+	
+	li code {
+		background: rgb(246, 248, 250);
+		color: black;
+		padding-left: 0.4em;
+		padding-top: 0.2em;
+		padding-bottom: 0.2em;
+		padding-right: 0.4em;
+	}
 
     .copy-button {
         cursor: pointer;
@@ -70,7 +86,7 @@
     container.querySelectorAll('pre').forEach(function(pre) {
         // Create the div wrapper and set its class
         var divWrapper = document.createElement('div');
-        divWrapper.className = 'your-special-class'; // Replace with your desired class name
+        divWrapper.className = 'codeblocks'; // Replace with your desired class name
 
         // Move the pre element inside the div wrapper
         pre.parentNode.insertBefore(divWrapper, pre);

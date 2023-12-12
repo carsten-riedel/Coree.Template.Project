@@ -161,11 +161,11 @@
         });
     });
 
-    // Add DOMContentLoaded event listener
-    document.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
         // Fetch default content on page load
-        fetchContentRelativeRooted('');
+        fetchContentRelativeRooted('index.md');
     });
+    
 }
 
   </script>

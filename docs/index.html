@@ -79,25 +79,22 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
   <script>
     const md = new markdownit();
-    fetch('https://raw.githubusercontent.com/carsten-riedel/Coree.Template.Project/main/README.md')
-      .then(response => response.text())
-      .then(markdown => {
-        const content = document.getElementById('content');
-        content.innerHTML = md.render(markdown);
-        addCopyButtons(content);
-      })
-      .catch(error => console.error('Error loading markdown:', error));
-
+ 
     function fetchContentRelativeRooted(relativePath) {
-        // Manually set root URL
-        var rootUrl = 'https://raw.githubusercontent.com/carsten-riedel/Coree.Template.Project/main/';
+    // Manually set root URL
+    var rootUrl = 'https://raw.githubusercontent.com/carsten-riedel/Coree.Template.Project/main/docs/';
 
-        // Construct the full URL
-        var fullUrl = rootUrl + relativePath;
-
-        // Fetch and display the content
-        fetchContent(fullUrl);
+    // Default to 'index.md' if relativePath is empty or undefined
+    if (!relativePath) {
+        relativePath = 'index.md';
     }
+
+    // Construct the full URL
+    var fullUrl = rootUrl + relativePath;
+
+    // Fetch and display the content
+    fetchContent(fullUrl);
+}
 
 	function fetchContentRelative(relativePath) {
 		// Get the current URL
@@ -162,6 +159,12 @@
                 button.textContent = 'Failed to copy';
             });
         });
+    });
+
+    // Add DOMContentLoaded event listener
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fetch default content on page load
+        fetchContentRelativeRooted('');
     });
 }
 

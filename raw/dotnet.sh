@@ -37,21 +37,22 @@ addLineToFile() {
         return 1
     fi
 
-    if [ ! -w "$targetfile" ]; then
-        echo "Target file is not writable."
-        return 1
+    if [ "$withsudo" != true ]; then
+        if [ ! -w "$targetfile" ]; then
+            echo "Target file is not writable without sudo."
+        fi
     fi
 
     # Create directory if needed
     createDirectoryIfNeeded "$targetfile" "$withsudo"
 
-    if ! grep -qF -- "$linetoadd" "$targetfile"; then
-       
-        if [ ! -f "$targetfile" ] && [ "$withsudo" = true ]; then
+    if [ ! -f "$targetfile" ] && [ "$withsudo" = true ]; then
             sudo touch "$targetfile"
         elif [ ! -f "$targetfile" ] && [ "$withsudo" != true ]; then
             touch "$targetfile"
         fi
+
+    if ! grep -qF -- "$linetoadd" "$targetfile"; then
 
         if [ "$withsudo" = true ]; then
             echo "$linetoadd" | sudo tee -a "$targetfile" > /dev/null
@@ -133,7 +134,10 @@ if [ "$resultJenkins" != "true" ]; then
     sudo apt-get install -y jenkins
     addLineToFile "[Service]" "/etc/systemd/system/jenkins.service.d/override.conf" true
     addLineToFile "Environment=\"JENKINS_PORT=8181\"" "/etc/systemd/system/jenkins.service.d/override.conf" true
-    addLineToFile "Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true\"" true
+    addLineToFile "Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true\"" "/etc/systemd/system/jenkins.service.d/override.conf" true
+    sudo systemctl daemon-reload
+    sudo systemctl restart jenkins
+    echo "Jenkins initial password:" && sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 fi
 
 #echo 'deb blah ... blah' | sudo tee -a /etc/apt/sources.list > /dev/null
@@ -155,4 +159,6 @@ fi
 
 #Shows the current wsl image ip
 #hostname -I
+
+#sudo service jenkins restart
 

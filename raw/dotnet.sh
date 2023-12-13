@@ -3,26 +3,38 @@
 clear
 
 addLineToFile() {
-    local lineToAdd=$1
-    local targetFile=$2
+    local linetoadd="$1"
+    local targetfile="$2"
+    local withsudo="$3"
 
-    if [ -z "$lineToAdd" ]; then
+    if [ -z "$linetoadd" ]; then
         echo "No line provided to add."
         return 1
     fi
 
-    if [ -z "$targetFile" ]; then
+    if [ -z "$targetfile" ]; then
         echo "No target file specified."
         return 1
     fi
 
-    if ! grep -qF -- "$lineToAdd" "$targetFile"; then
-        echo "$lineToAdd" >> "$targetFile"
-        echo "Line $lineToAdd added to $targetFile"
+    if [ ! -w "$targetfile" ]; then
+        echo "Target file is not writable."
+        return 1
+    fi
+
+    if ! grep -qF -- "$linetoadd" "$targetfile"; then
+        if [ "$withsudo" = true ]; then
+            echo "$linetoadd" | sudo tee -a "$targetfile" > /dev/null
+        else
+            echo "$linetoadd" | tee -a "$targetfile" > /dev/null
+        fi
+
+        echo "Line $linetoadd added to $targetfile"
     else
-        echo "Line $lineToAdd already present in $targetFile"
+        echo "Line $linetoadd already present in $targetfile"
     fi
 }
+
 
 doesCommandExist() {
     command -v "$1" >/dev/null 2>&1
@@ -81,15 +93,35 @@ if [ "$resultChrome" != "true" ]; then
     sudo chmod -v -R 777 /var/www/html
 fi
 
-sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
-sudo apt-get update
-sudo apt install fontconfig openjdk-17-jre
-sudo apt-get install jenkins
+resultJenkins=$(doesCommandExist jenkins)
+if [ "$resultJenkins" != "true" ]; then
+    sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+    echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+    sudo apt-get update
+    sudo apt install fontconfig openjdk-17-jre
+    sudo apt-get install jenkins
+    addLineToFile "[Service]" "/etc/systemd/system/jenkins.service.d/override.conf" true
+    addLineToFile "Environment=\"JENKINS_PORT=8181\"" "/etc/systemd/system/jenkins.service.d/override.conf" true
+    addLineToFile "Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true\"" true
+fi
+
+#echo 'deb blah ... blah' | sudo tee -a /etc/apt/sources.list > /dev/null
+
+#sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+#echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+#sudo apt-get update
+#sudo apt install fontconfig openjdk-17-jre
+#sudo apt-get install jenkins
 
 #sudo systemctl edit jenkins /etc/systemd/system/jenkins.service.d/override.conf
 #[Service]
 #Environment="JENKINS_PORT=8181"
 #Environment="JAVA_OPTS=-Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true"
 #check http://[::1]
+
+#Shows the vEthernet(WSL) from windows
+#ip route show | grep -i default | awk '{ print $3}'
+
+#Shows the current wsl image ip
+#hostname -I
 

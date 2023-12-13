@@ -140,18 +140,6 @@ if [ "$resultJenkins" != "true" ]; then
     echo "Jenkins initial password:" && sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 fi
 
-#echo 'deb blah ... blah' | sudo tee -a /etc/apt/sources.list > /dev/null
-
-#sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-#echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
-#sudo apt-get update
-#sudo apt install fontconfig openjdk-17-jre
-#sudo apt-get install jenkins
-
-#sudo systemctl edit jenkins /etc/systemd/system/jenkins.service.d/override.conf
-#[Service]
-#Environment="JENKINS_PORT=8181"
-#Environment="JAVA_OPTS=-Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true"
 #check http://[::1]
 
 #Shows the vEthernet(WSL) from windows

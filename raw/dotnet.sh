@@ -23,6 +23,13 @@ addLineToFile() {
     fi
 
     if ! grep -qF -- "$linetoadd" "$targetfile"; then
+       
+        if [ ! -f "$targetfile" ] && [ "$withsudo" = true ]; then
+            sudo touch "$targetfile"
+        elif [ ! -f "$targetfile" ] && [ "$withsudo" != true ]; then
+            touch "$targetfile"
+        fi
+
         if [ "$withsudo" = true ]; then
             echo "$linetoadd" | sudo tee -a "$targetfile" > /dev/null
         else
@@ -50,6 +57,8 @@ doesCommandExist() {
 sudo apt-get -y update
 #sudo apt-get -y -o APT::Get::Always-Include-Phased-Updates=true upgrade
 sudo apt-get -y upgrade
+
+sudo apt-get -y install mc
 
 # https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-install-script
 curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 2.1
@@ -98,8 +107,8 @@ if [ "$resultJenkins" != "true" ]; then
     sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
     echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
     sudo apt-get update
-    sudo apt install fontconfig openjdk-17-jre
-    sudo apt-get install jenkins
+    sudo apt-get install fontconfig openjdk-17-jre
+    sudo apt-get install -y jenkins
     addLineToFile "[Service]" "/etc/systemd/system/jenkins.service.d/override.conf" true
     addLineToFile "Environment=\"JENKINS_PORT=8181\"" "/etc/systemd/system/jenkins.service.d/override.conf" true
     addLineToFile "Environment=\"JAVA_OPTS=-Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv4Addresses=true\"" true

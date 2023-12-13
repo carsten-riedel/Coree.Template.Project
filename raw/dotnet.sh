@@ -2,6 +2,26 @@
 # sudo curl -sSL https://raw.githubusercontent.com/carsten-riedel/Coree.Template.Project/main/raw/dotnet.sh | bash
 clear
 
+createDirectoryIfNeeded() {
+    local filepath="$1"
+    local withsudo="$2"
+    local dir="${filepath%/*}"
+
+    # Check if the directory exists
+    if [ ! -d "$dir" ]; then
+        # Create the directory with sudo if withsudo is true
+        if [ "$withsudo" = true ]; then
+            sudo mkdir -p "$dir"
+            echo "Directory created with sudo: $dir"
+        else
+            mkdir -p "$dir"
+            echo "Directory created: $dir"
+        fi
+    else
+        echo "Directory already exists: $dir"
+    fi
+}
+
 addLineToFile() {
     local linetoadd="$1"
     local targetfile="$2"
@@ -22,6 +42,9 @@ addLineToFile() {
         return 1
     fi
 
+    # Create directory if needed
+    createDirectoryIfNeeded "$targetfile" "$withsudo"
+
     if ! grep -qF -- "$linetoadd" "$targetfile"; then
        
         if [ ! -f "$targetfile" ] && [ "$withsudo" = true ]; then
@@ -41,7 +64,6 @@ addLineToFile() {
         echo "Line $linetoadd already present in $targetfile"
     fi
 }
-
 
 doesCommandExist() {
     command -v "$1" >/dev/null 2>&1

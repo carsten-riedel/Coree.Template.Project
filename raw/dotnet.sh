@@ -79,7 +79,7 @@ mkdir -p "$HOME/source/repos"
 mkdir -p "$HOME/source/packages"
 
 # Chrome
-resultChrome=$(doesCommandExist chrome)
+resultChrome=$(doesCommandExist google-chrome)
 if [ "$resultChrome" != "true" ]; then
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     sudo apt -y install ./google-chrome-stable_current_amd64.deb

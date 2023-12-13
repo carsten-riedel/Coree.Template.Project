@@ -150,3 +150,22 @@ fi
 
 #sudo service jenkins restart
 
+#I have several WSL2 environments, using a startup script will autorun the WSL2 Ubuntu instance and it will keep running in the background.
+
+#Put a cmd script file, e.g. startwsl.cmd in the Windows startup folder.
+#(For Windows 10/11, press WIN+R, enter shell:startup.)
+
+#:: This keeps a process running under init
+#wsl bash -c "nohup bash -c 'while true; do sleep 1h; done &' &>/dev/null "
+#timeout /t 3
+#WSL2 version info
+
+#WSL version: 1.2.5.0
+#Kernel version: 5.15.90.1
+#WSLg version: 1.0.51
+#MSRDC version: 1.2.3770
+#Direct3D version: 1.608.2-61064218
+#DXCore version: 10.0.25131.1002-220531-1700.rs-onecore-base2-hyp
+#Windows version: 10.0.22621.1555
+#https://stackoverflow.com/questions/12050021/how-to-make-xvfb-display-visible
+

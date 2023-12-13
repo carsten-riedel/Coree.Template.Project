@@ -155,8 +155,9 @@ fi
 #Put a cmd script file, e.g. startwsl.cmd in the Windows startup folder.
 #(For Windows 10/11, press WIN+R, enter shell:startup.)
 
+#-u root bash /etc/wslinit.sh
 #:: This keeps a process running under init
-#wsl bash -c "nohup bash -c 'while true; do sleep 1h; done &' &>/dev/null "
+#wsl bash -c "nohup bash -c 'while true; do sleep 1h; done &' &>/dev/null"
 #timeout /t 3
 #WSL2 version info
 

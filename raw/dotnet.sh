@@ -2,6 +2,10 @@
 # sudo curl -sSL https://raw.githubusercontent.com/carsten-riedel/Coree.Template.Project/main/raw/dotnet.sh | bash
 clear
 
+
+sudo su && exit
+su $SUDO_USER
+
 createDirectoryIfNeeded() {
     local filepath="$1"
     local withsudo="$2"
@@ -138,6 +142,7 @@ if [ "$resultJenkins" != "true" ]; then
     sudo systemctl daemon-reload
     sudo systemctl restart jenkins
     echo "Jenkins initial password:" && sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+    sudo chmod -v -R 777 /jenkins-agent
 fi
 
 #check http://[::1]
@@ -169,4 +174,23 @@ fi
 #DXCore version: 10.0.25131.1002-220531-1700.rs-onecore-base2-hyp
 #Windows version: 10.0.22621.1555
 #https://stackoverflow.com/questions/12050021/how-to-make-xvfb-display-visible
+
+#sudo bash -c "nohup bash -c 'java -jar agent.jar -jnlpUrl http://127.0.0.1:8181/computer/Standard/jenkins-agent.jnlp -secret 7ff6a0eea1dad904ccf5feaba246b069ff5262718a31ce156353f73d6bbdc88c -workDir "/jenkins-agent-new"&' &>/dev/null"
+
+#runlevel to get the runlevel
+#chmod 755 myscript
+#ln -s /etc/init.d/myscript /etc/rc5.d/S05myscript
+#/etc/init.d/startit
+#!/bin/bash
+
+#!/bin/bash
+#echo "run it $(date)" >> ~/run.log
+#cd ~/
+#curl --retry-connrefused --retry-delay 10 --retry 10 -O http://127.0.0.1:8181/jnlpJars/agent.jar &>> ~/curl.log
+#java -jar ~/agent.jar -jnlpUrl http://127.0.0.1:8181/computer/Standard/jenkins-agent.jnlp -secret 7ff6a0eea1dad904ccf5feaba246b069ff5262718a31ce156353f73d6bbdc88c -workDir "/jenkins-agent-new" &>> java.log
+
+
+
+
+
 

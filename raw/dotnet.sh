@@ -111,6 +111,9 @@ if [ "$result" != "true" ]; then
     addLineToFile "export DONT_PROMPT_WSL_INSTALL=1" "$HOME/.bashrc" 
 fi
 
+#code --install-extension mads-hartmann.bash-ide-vscode
+#code --install-extension ms-vscode.PowerShell
+
 mkdir -p "$HOME/source/repos"
 mkdir -p "$HOME/source/packages"
 
@@ -190,7 +193,7 @@ fi
 #java -jar ~/agent.jar -jnlpUrl http://127.0.0.1:8181/computer/Standard/jenkins-agent.jnlp -secret 7ff6a0eea1dad904ccf5feaba246b069ff5262718a31ce156353f73d6bbdc88c -workDir "/jenkins-agent-new" &>> java.log
 
 
-
+#cmd /C wsl bash -c "nohup bash -c 'while true; do sleep 1m; done &' &>/dev/null"
 
 
 

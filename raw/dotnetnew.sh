@@ -79,6 +79,7 @@ clear
 sudo apt-get -y update
 sudo apt-get -y upgrade
 
+#optional
 sudo apt-get -y install mc geany
 
 curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 2.1

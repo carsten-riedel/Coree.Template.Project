@@ -1,11 +1,24 @@
+<!--#if (AddMultipublish == true) -->
+<Project>
+
+  <!-- Import the default propertys and targets (below) for Microsoft.NET.Sdk to modify the default targets -->
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+<!--#else -->
 <Project Sdk="Microsoft.NET.Sdk">
+<!--#endif -->
 
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
-    <TargetFrameworks>net6.0</TargetFrameworks> <!-- using TargetFramework will produce NU5128 and won't generate dependency in .nuspec -->
     <LangVersion>latest</LangVersion>
+    <!--#if (AddMultipublish == true) -->
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    <RuntimeIdentifiers>win-x86;win-x64;linux-x64;linux-musl-arm64;linux-arm;linux-arm64;osx-x64</RuntimeIdentifiers>
+    <UseRidGraph>true</UseRidGraph>
+    <!--#else -->
+    <TargetFrameworks>net6.0</TargetFrameworks> <!-- using TargetFramework will produce NU5128 and won't generate dependency in .nuspec -->
+    <!--#endif -->
   </PropertyGroup>
 
   <!--#if (AddDotNetToolsJson == true) -->
@@ -38,5 +51,110 @@
   </ItemGroup>
   <!--#endif -->
 
+  <!--#if (AddMultipublish == true) -->
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
+    <RuntimeName>Debian-Ubuntu-CentOS-Fedora</RuntimeName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-musl-x64'">
+    <RuntimeName>Alpine</RuntimeName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-musl-arm64'">
+    <RuntimeName>Docker</RuntimeName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm'">
+    <RuntimeName>RaspberryPiModel2</RuntimeName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-arm64'">
+    <RuntimeName>RaspberryPiModel3UbuntuServer</RuntimeName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-bionic-arm64'">
+    <RuntimeName>Termux</RuntimeName>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
+    <RuntimeName>macOS</RuntimeName>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x86'">
+    <RuntimeName>Windows32bit</RuntimeName>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64'">
+    <RuntimeName>Windows64bit</RuntimeName>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(RuntimeName)' == ''">
+    <RuntimeName>$(RuntimeIdentifier)</RuntimeName>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <PublishDir>bin\Publish\$(Configuration)\$(TargetFramework)\$(RuntimeName)</PublishDir>
+  </PropertyGroup>
+
+  <!-- Inline task to generate combinations -->
+  <UsingTask TaskName="GenerateCombinations" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+      <ParameterGroup>
+        <RuntimeIdentifiers ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+        <TargetFrameworks ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+        <Combinations Output="true" ParameterType="Microsoft.Build.Framework.ITaskItem[]" />
+      </ParameterGroup>
+      <Task>
+        <Code Type="Fragment" Language="cs">
+          <![CDATA[
+        var combinations = new List<Microsoft.Build.Framework.ITaskItem>();
+        foreach (var rid in RuntimeIdentifiers)
+        {
+          foreach (var tf in TargetFrameworks)
+          {
+            string combination = $"RuntimeIdentifier={rid.ItemSpec};TargetFramework={tf.ItemSpec}";
+            combinations.Add(new Microsoft.Build.Utilities.TaskItem(combination));
+          }
+        }
+        Combinations = combinations.ToArray();
+        ]]>
+        </Code>
+      </Task>
+  </UsingTask>
+
+  <!-- Import Sdk.targets if SdkDefaultTargetsOnly is not true (default case when not supplied). -->
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" Condition="'$(SdkDefaultTargetsOnly)' != 'true'" />
+
+  <!-- Custom Publish Target for complex publishing scenarios. Executed in default case (when SdkDefaultTargetsOnly not supplied). Overriding the publish target. -->
+  <Target Name="Publish" Condition="'$(SdkDefaultTargetsOnly)' != 'true'">
+
+    <!-- Define runtime and framework properties. -->
+    <PropertyGroup>
+      <RuntimeIdentifiersProperty Condition="'$(RuntimeIdentifier)' != ''">$(RuntimeIdentifier)</RuntimeIdentifiersProperty>
+      <RuntimeIdentifiersProperty Condition="'$(RuntimeIdentifiers)' != ''">$(RuntimeIdentifiers)</RuntimeIdentifiersProperty>
+      <TargetFrameworksProperty Condition="'$(TargetFramework)' != ''">$(TargetFramework)</TargetFrameworksProperty>
+      <TargetFrameworksProperty Condition="'$(TargetFrameworks)' != ''">$(TargetFrameworks)</TargetFrameworksProperty>
+    </PropertyGroup>
+    
+    <!-- Create item groups for runtime identifiers and frameworks. -->
+    <ItemGroup>
+      <DefinedRuntimeIdentifier Include="$(RuntimeIdentifiersProperty.Split(';'))"/>
+      <DefinedTargetFramework Include="$(TargetFrameworksProperty.Split(';'))"/>
+    </ItemGroup>
+
+    <!-- Generate combinations of runtime identifiers and frameworks. -->
+    <GenerateCombinations RuntimeIdentifiers="@(DefinedRuntimeIdentifier)" TargetFrameworks="@(DefinedTargetFramework)">
+      <Output TaskParameter="Combinations" ItemName="AllCombinations"/>
+    </GenerateCombinations>
+
+    <!-- Nested MSBuild calls for Restore, Clean, Build, and Publish. -->
+    <MSBuild Projects="$(MSBuildProjectFile)" Targets="Restore" Properties="SdkDefaultTargetsOnly=true;RuntimeIdentifiers=$(RuntimeIdentifiersProperty);TargetFrameworks=$(TargetFrameworksProperty)" />
+    <MSBuild Projects="$(MSBuildProjectFile)" Targets="Clean;Build;Publish" Properties="SdkDefaultTargetsOnly=true;%(AllCombinations.Identity)" />
+  </Target>
+
+  <!-- 
+    With SdkDefaultTargetsOnly=true only the default will be imported
+  -->
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" Condition="'$(SdkDefaultTargetsOnly)' == 'true'" />
+  <!--#endif -->
 
 </Project>

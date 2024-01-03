@@ -21,6 +21,7 @@ namespace ClassLibrary
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
 #pragma warning disable IDE0052 // Remove unread private members
+#pragma warning disable CA1823 // Unused field _
         private static readonly LogFactory _ = NLog.LogManager.Setup(SetupBuilder =>
         {
             SetupBuilder.LoadConfiguration(LoadConfigurationBuilder =>
@@ -64,6 +65,7 @@ namespace ClassLibrary
             });
         });
 #pragma warning restore IDE0052 // Remove unread private members
+#pragma warning restore CA1823 // Unused field _
         #endif
 
         /// <summary>

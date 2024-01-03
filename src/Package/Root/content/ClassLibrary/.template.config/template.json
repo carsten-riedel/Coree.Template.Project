@@ -167,6 +167,13 @@
       "description": "Add preconfigured NLOG to the ClassLibrary",
       "displayName": "Add preconfigured NLOG to the ClassLibrary"
     },
+    "AddMultipublish": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Override default publish to multipublish",
+      "displayName": "Override default publish to multipublish"
+    },
     "IsNet6": {
       "type": "computed",
       "value": "(Framework == \"net6.0\")"

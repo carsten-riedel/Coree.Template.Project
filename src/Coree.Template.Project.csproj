@@ -8,4 +8,7 @@
   <Import Project="Package/Config/PackageMetadata.props" />
   <Import Project="Package/Config/PackageSpecs.props" />
 
+  <!-- dotnet pack -c Debug -->
+  <!-- dotnet new install bin\Package\Coree.Template.Project.0.2.8863.32697-prerelease.nupkg -->
+  <!-- dotnet new uninstall Coree.Template.Project -->
 </Project>

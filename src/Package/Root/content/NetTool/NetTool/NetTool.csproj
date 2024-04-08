@@ -4,6 +4,7 @@
   <!-- https://learn.microsoft.com/de-de/dotnet/core/tools/global-tools-how-to-create -->
 
   <!-- dotnet tool list -g -->
+  <!-- dotnet tool install PackageName -global -prerelease //Use double minus not allowed in xml comments -->
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>

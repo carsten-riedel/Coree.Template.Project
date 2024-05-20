@@ -1,0 +1,28 @@
+git fetch --prune
+git branch -vv | Select-String "\: gone\]" | ForEach-Object { $branchName = $_.Line.Trim().Substring(0, $_.Line.Trim().IndexOf(' ')); git branch -D $branchName }
+
+
+###
+git merge origin develop
+
+git merge feature MSTest
+
+
+
+### force backmerge master to release
+git fetch --all
+git checkout release
+git reset --hard origin/master
+git push origin release --force
+
+### force backmerge release to develop
+git fetch --all
+git checkout develop
+git reset --hard origin/release
+git push origin develop --force
+
+
+#
+git checkout develop
+git checkout -b feature/fix_underconstruction
+git push -u origin feature/fix_underconstruction

@@ -18,6 +18,8 @@ Start-Transcript -Path "$(Join-Path -Path "$PSScriptRoot" -ChildPath "$($(Get-Ch
 . "$PSScriptRoot/cicd_build_config.ps1"
 . "$PSScriptRoot/cicd_build.ps1"
 
+. "$PSScriptRoot/cicd_deploy.ps1"
+
 
 #git status --porcelain $sourceCodeFolder
 

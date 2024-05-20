@@ -7,7 +7,7 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "Coree.Template.Project/0.1.8906.17621-develop": {
+      "Coree.Template.Project/0.1.8906.17819-develop": {
         "dependencies": {
           "NETStandard.Library": "2.0.3"
         },
@@ -24,7 +24,7 @@
     }
   },
   "libraries": {
-    "Coree.Template.Project/0.1.8906.17621-develop": {
+    "Coree.Template.Project/0.1.8906.17819-develop": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

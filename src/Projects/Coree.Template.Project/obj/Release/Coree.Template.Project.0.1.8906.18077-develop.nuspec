@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>Coree.Template.Project</id>
-    <version>0.1.8906.17819-develop</version>
+    <version>0.1.8906.18077-develop</version>
     <authors>Carsten Riedel</authors>
     <license type="file">License.txt</license>
     <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
@@ -18,7 +18,7 @@
     <packageTypes>
       <packageType name="Template" />
     </packageTypes>
-    <repository type="git" url="https://github.com/carsten-riedel/Coree.Template.Project" commit="6c67255e258e9273215496e98f71eb2844b61e1a" />
+    <repository type="git" url="https://github.com/carsten-riedel/Coree.Template.Project" commit="d412e414b798d6d3f9defc5108cf9350bdb132a8" />
   </metadata>
   <files>
     <file src="C:\Users\Valgrind\source\VCS\github.com\carsten-riedel\Coree.Template.Project\src\Projects\Coree.Template.Project\Package\Root\content\ClassLibrary\.gitignore" target="content\ClassLibrary\.gitignore" />

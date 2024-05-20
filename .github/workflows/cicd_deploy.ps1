@@ -74,7 +74,7 @@ Execute-Command -Command "git commit -m ""Updated form Workflow [no ci]""" -Expe
 Execute-Command -Command "git push origin $branchName"
 Execute-Command -Command "git tag -a ""$tag"" -m ""[no ci]"""
 Execute-Command -Command "git push origin ""$tag"""
-Execute-Command -Command "gh auth login --with-token ""$PAT"""
+Execute-Command -Command "gh auth login --with-token ""$PAT""" -ExpectedExitCodes @(0,1)
 Execute-Command -Command "gh release create ""$tag"" --notes ""auto create release $tag"""
 Execute-Command -Command "gh release upload ""$tag"" ""$($firstFileMatch.FullName)"" --clobber"
 

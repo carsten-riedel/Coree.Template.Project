@@ -184,7 +184,7 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
-    "version": "0.1.8906.18303-develop",
+    "version": "0.1.8906.18497-develop",
     "restore": {
       "projectUniqueName": "C:\\Users\\Valgrind\\source\\VCS\\github.com\\carsten-riedel\\Coree.Template.Project\\src\\Projects\\Coree.Template.Project\\Coree.Template.Project.csproj",
       "projectName": "Coree.Template.Project",

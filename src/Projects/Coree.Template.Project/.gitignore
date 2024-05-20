@@ -1,0 +1,10 @@
+.vs/**
+src/*/.vs/**
+src/*/bin/**/*
+src/*/obj/**/*
+
+src/*/bin/**/*
+src/*/obj/**/*
+
+src/Projects/Coree.Template.Project/bin/*
+src/Projects/Coree.Template.Project/bin/** */

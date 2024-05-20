@@ -1,6 +1,6 @@
 # Coree.Template.Project
 
-![brand](https://github.com/carsten-riedel/Coree.Template.Project/blob/main/assets/images/brand.png?raw=true)
+![brand](https://raw.githubusercontent.com/carsten-riedel/Coree.Template.Project/main/assets/images/brand.png)
 
 Welcome to the Coree.Template.Project repository! This project offers a comprehensive suite of templates for Visual Studio and dotnet CLI, designed to streamline the creation of various .NET projects. From MSBuild tasks to class libraries and WPF applications, this repository serves as a one-stop resource for developers looking to enhance their .NET development workflow.
 

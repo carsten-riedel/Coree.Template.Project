@@ -32,3 +32,11 @@ git push -u origin feature/fix_underconstruction
 ### force
 git checkout develop
 git fetch --all
+git checkout release
+git reset --hard origin/develop
+git push origin release --force
+
+git fetch --all
+git checkout main
+git reset --hard origin/release
+git push origin main --force

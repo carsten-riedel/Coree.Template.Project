@@ -15,7 +15,7 @@ Log-Block -Stage "Prebuild envars" -Section "Prepare" -Task "Set fixed values"
 
 $sourceCodeFolder = "src"
 $versionMajor = "0"
-$versionMinor = "1"
+$versionMinor = "2"
 $versionBuild = Get-BaseVersionBuild
 $versionRevision = Get-BaseVersionRevision
 $fullVersion = "$versionMajor.$versionMinor.$versionBuild.$versionRevision"

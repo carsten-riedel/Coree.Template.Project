@@ -9,10 +9,11 @@ git merge feature MSTest
 
 
 
-### force backmerge master to release
+### force backmerge main to release
+git checkout main
 git fetch --all
 git checkout release
-git reset --hard origin/master
+git reset --hard origin/main
 git push origin release --force
 
 ### force backmerge release to develop

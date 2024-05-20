@@ -1,0 +1,58 @@
+<Project>
+
+  <!-- Package metadata-->
+  <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
+
+  <PropertyGroup>
+    <Authors>Carsten Riedel</Authors>
+    <Owners>Carsten Riedel</Owners>
+    <Company></Company>
+    <Copyright>Copyright © 2024 Carsten Riedel</Copyright>
+    <PackageId>Coree.Template.Project</PackageId>
+    <PackageTags>Project;Templates;.NET</PackageTags>
+    <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>
+      <![CDATA[
+          Templates for Visual Studio and dotnet CLI that allows you to create various types of .NET projects . MSBuild tasks, class libraries, .NET tools, PowerShell cmdlets, WinForms applications, WPF applications, and a Project Template.
+	    ]]>
+    </Description>
+
+    <VersionMajor Condition="'$(VersionPrefix)' == ''">0</VersionMajor>
+    <VersionMinor Condition="'$(VersionPrefix)' == ''">2</VersionMinor>
+    <VersionBuild Condition="'$(VersionPrefix)' == ''">0</VersionBuild>
+    <VersionRevision Condition="'$(VersionPrefix)' == ''">0</VersionRevision>
+
+    <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
+    <TicksPerDay>$([System.TimeSpan]::TicksPerDay)</TicksPerDay>
+    <TicksPerSecond>$([System.TimeSpan]::TicksPerSecond)</TicksPerSecond>
+    <AssemblyVersionBuild>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerDay)))))</AssemblyVersionBuild>
+    <AssemblyVersionTotalSeconds>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerSecond)))))</AssemblyVersionTotalSeconds>
+    <AssemblyVersionRemainingSeconds>$([System.Math]::Truncate($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
+    <AssemblyVersionRevision>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
+    <VersionBuild Condition="'$(VersionBuild)' == '0'">$(AssemblyVersionBuild)</VersionBuild>
+    <VersionRevision Condition="'$(VersionRevision)' == '0'">$(AssemblyVersionRevision)</VersionRevision>
+
+    <VersionSuffix Condition="'$(VersionPrefix)' == ''">local</VersionSuffix>
+    <VersionPrefix Condition="'$(VersionPrefix)' == ''">$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+    
+    <PackageVersion Condition="'$(PackageVersion)' == '' AND '$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+    <PackageVersion Condition="'$(PackageVersion)' == '' AND '$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+    
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageIcon>Icon.png</PackageIcon>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)ReleaseNotes.txt"))</PackageReleaseNotes>
+  </PropertyGroup>
+
+
+</Project>
+
+
+
+
+

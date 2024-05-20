@@ -1,0 +1,30 @@
+<Project>
+
+  <!-- Package specs -->
+
+  <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)\Package\Root\**\*" Exclude="$(MSBuildProjectDirectory)\Package\Root\**\**\bin\**;$(MSBuildProjectDirectory)\Package\Root\**\**\obj\**;$(MSBuildProjectDirectory)\Package\Root\**\**\.vs\**" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\Package\Config\**\*"  Pack="false" PackagePath="" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackRelease>false</PackRelease>
+    <PublishRelease>false</PublishRelease>
+    <IncludeBuildOutput>False</IncludeBuildOutput>
+    <IncludeSource>False</IncludeSource>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <EnableDefaultItems>False</EnableDefaultItems>
+    <IsPackable>true</IsPackable>
+    <IsShipping>false</IsShipping>
+    <NoWarn>2008;NU5105</NoWarn>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <SuppressDependenciesWhenPacking>True</SuppressDependenciesWhenPacking>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <PackageType>Template</PackageType>
+    <!-- Suppress creation of contentFiles directory -->
+    <ContentTargetFolders>.\</ContentTargetFolders>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Package</PackageOutputPath>
+  </PropertyGroup>
+
+</Project>

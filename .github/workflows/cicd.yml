@@ -51,5 +51,5 @@ jobs:
       run: pwsh --version
 
     - name: Workflow Build/Deploy
-      run: .github/workflows/cicd_main.ps1 "${{ secrets.PAT }}" "${{ secrets.NUGET_PAT }}" "${{ secrets.NUGET_TEST_PAT }}"
+      run: .github/workflows/cicd.ps1 "${{ secrets.PAT }}" "${{ secrets.NUGET_PAT }}" "${{ secrets.NUGET_TEST_PAT }}"
       shell: pwsh 

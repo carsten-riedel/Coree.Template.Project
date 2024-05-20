@@ -1,6 +1,6 @@
 
 ######################################################################################
-Log-Block -Stage "Checking" -Section "Preconditions" -Task "Commands setup."
+Log-Block -Stage "Prebuild enviroment" -Section "Requirments" -Task "Commands setup."
 
 # Check availability of required commands
 $result = Test-CommandsAvailabilities -CommandList @("git", "dotnet", "pwsh" , "curl" , "gh")
@@ -10,7 +10,7 @@ if (-not $result) {
 }
 
 ######################################################################################
-Log-Block -Stage "Checking" -Section "Preconditions" -Task "Git setup."
+Log-Block -Stage "Prebuild enviroment" -Section "Requirments" -Task "Git setup."
 
 # Verify that the current directory is a Git repository
 $result = Test-IsGitDirectory
@@ -27,7 +27,7 @@ if (-not $result) {
 }
 
 ######################################################################################
-Log-Block -Stage "Checking" -Section "Preconditions" -Task "Github setup."
+Log-Block -Stage "Prebuild enviroment" -Section "Requirments" -Task "Github setup."
 
 $result = Test-GitHubRemoteExistence
 if (-not $result) {

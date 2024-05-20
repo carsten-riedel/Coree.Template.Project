@@ -15,25 +15,9 @@ if ($null -ne $dotnet_build_param)
 }
 
 ######################################################################################
-Log-Block -Stage "Build" -Section "Test" -Task "Building the solution."
-
-if ($null -ne $dotnet_test_param)
-{
-    Execute-Command "dotnet test $topLevelPath/$sourceCodeFolder $dotnet_test_param"
-}
-
-######################################################################################
 Log-Block -Stage "Build" -Section "Pack" -Task "Creating a nuget package."
 
 if ($null -ne $dotnet_pack_param)
 {
     Execute-Command "dotnet pack $topLevelPath/$sourceCodeFolder $dotnet_pack_param"
-}
-
-######################################################################################
-Log-Block -Stage "Build" -Section "Docfx" -Task "Creating the docs."
-
-if ($null -ne $docfx_param)
-{
-    Execute-Command "docfx $docfx_param"
 }

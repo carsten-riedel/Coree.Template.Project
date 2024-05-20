@@ -40,8 +40,6 @@ function Get-NormalizedPathSegments {
     }
 }
 
-$global:BaseVersionTicks
-$global:BaseVersionTicksPerDay
 
 function Set-BaseVersion {
     

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "nS2RymBZK3ch86AdHsrGUL8N+qf60iFRtdO7R2nYYGZZR7nUg8kfsQ6nc1pWmu/HDN50I7CMzL+9GHbxXtLI0g==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Valgrind\\source\\VCS\\github.com\\carsten-riedel\\Coree.Template.Project\\src\\Projects\\Coree.Template.Project\\Coree.Template.Project.csproj",
+  "expectedPackageFiles": [
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

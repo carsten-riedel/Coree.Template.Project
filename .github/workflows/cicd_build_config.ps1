@@ -27,7 +27,7 @@ if ($branchNameSegment -ieq "feature") {
     $dotnet_build_param = "--no-restore --configuration Release --property:ContinuousIntegrationBuild=true --property:WarningLevel=3 $version";
     $dotnet_pack_param =  "--force --configuration Release --property:ContinuousIntegrationBuild=true --property:WarningLevel=3 $version";
     
-} elseif ($branchNameSegment -ieq "master") {
+} elseif ($branchNameSegment -ieq "main") {
 
     $version = "--property:AssemblyVersion=$fullVersion --property:VersionPrefix=$fullVersion"
 

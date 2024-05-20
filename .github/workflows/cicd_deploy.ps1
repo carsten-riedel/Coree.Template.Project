@@ -24,7 +24,7 @@ if ($branchNameSegment -ieq "feature") {
 
     dotnet nuget push "$($firstFileMatch.FullName)" --api-key $NUGET_TEST_PAT --source https://apiint.nugettest.org/v3/index.json
 
-} elseif ($branchNameSegment -ieq "master") {
+} elseif ($branchNameSegment -ieq "main") {
 
     $basePath = "$topLevelPath/src/Projects/Coree.Template.Project"
     $pattern = "*.nupkg"
@@ -46,7 +46,7 @@ if ($branchNameSegment -ieq "feature") {
 ######################################################################################
 Log-Block -Stage "Post Deploy" -Section "Tag and Push" -Task ""
 
-if ($branchNameSegment -eq "master" -OR $branchNameSegment -eq "release" -OR $branchNameSegment -eq "hostfix")
+if ($branchNameSegment -eq "main" -OR $branchNameSegment -eq "release" -OR $branchNameSegment -eq "hostfix")
 {
     $tag = "v$fullVersion"
 }

@@ -2,7 +2,7 @@
 ######################################################################################
 Log-Block -Stage "Call" -Section "Dispatch" -Task "dispatching a other job"
 
-if ($branchNameSegment -ieq "master") {
+if ($branchNameSegment -ieq "main") {
     $worklowFileName = "pages.yml"
     $uri = "https://api.github.com/repos/$gitOwner/$gitRepo/actions/workflows/$worklowFileName/dispatches"
     $headers = @{

@@ -9,12 +9,12 @@ on:
     paths:
       - 'src/**'
     branches:
-      - 'master'
+      - 'main'
       - 'release'
       - 'develop'
       - 'feature'
       - 'hotfix'
-      - 'master/**'
+      - 'main/**'
       - 'release/**'
       - 'develop/**'
       - 'feature/**'

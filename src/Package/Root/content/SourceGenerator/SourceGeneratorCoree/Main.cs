@@ -7,6 +7,8 @@ namespace SourceGeneratorCoree
 
     //https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.cookbook.md
 
+    //https://learn.microsoft.com/en-us/nuget/guides/analyzers-conventions#analyzers-path-format
+
     [Generator]
     public class HelloGenerator : ISourceGenerator
     {

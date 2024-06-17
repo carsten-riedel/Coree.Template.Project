@@ -1,0 +1,134 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWindowsForms>true</UseWindowsForms>
+    <DebugType>embedded</DebugType>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <!--#if (RuntimeIdentifier == win-x86) -->
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
+    <!--#endif -->
+    <!--#if (RuntimeIdentifier == win-x64) -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <!--#endif -->
+  </PropertyGroup>
+  
+  <!-- Specific package specs -->
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <PublishRelease>false</PublishRelease>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PublishDir>bin\Publish\$(Configuration)\$(TargetFramework)\$(RuntimeIdentifier)</PublishDir>
+    <!--#if (Publish == FrameworkRequired) -->
+    <SelfContained>false</SelfContained>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkRequiredSingle) -->
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkIncluded) -->
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkIncludedSingle) -->
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <!--#endif -->
+    <!--#if (Publish == FrameworkIncludedSingleCompressed) -->
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionMajor>0</VersionMajor>
+    <VersionMinor>1</VersionMinor>
+    <VersionBuild>0</VersionBuild>
+    <VersionRevision>0</VersionRevision>
+    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+    <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
+    <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+    <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>MyAuthor</Authors>
+    <!--#if (PackageCompany != '') -->
+    <Owners>MyCompany</Owners>
+    <!--#endif -->
+    <!--#if (PackageCompany == '') -->
+    <Owners>MyAuthor</Owners>
+    <!--#endif -->
+    <!--#if (PackageCompany != '') -->
+    <Company>MyCompany</Company>
+    <!--#endif -->
+    <!--#if (PackageCompany == '') -->
+    <Company></Company>
+    <!--#endif -->
+    <!--#if (PackageCompany != '') -->
+    <Copyright>Copyright © MyCompany 1975</Copyright>
+    <!--#endif -->
+    <!--#if (PackageCompany == '') -->
+    <Copyright>Copyright © MyAuthor 1975</Copyright>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <!--#if (AssemblyVersioningScheme == true) -->
+  <Target Name="OverrideBuildRevision" BeforeTargets="GenerateNuspec" AfterTargets="BeforeBuild" >
+    <PropertyGroup>
+      <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
+      <TicksPerDay>$([System.TimeSpan]::TicksPerDay)</TicksPerDay>
+      <TicksPerSecond>$([System.TimeSpan]::TicksPerSecond)</TicksPerSecond>
+      <AssemblyVersionBuild>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerDay)))))</AssemblyVersionBuild>
+      <AssemblyVersionTotalSeconds>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerSecond)))))</AssemblyVersionTotalSeconds>
+      <AssemblyVersionRemainingSeconds>$([System.Math]::Truncate($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
+      <AssemblyVersionRevision>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
+      <VersionBuild>$(AssemblyVersionBuild)</VersionBuild>
+      <VersionRevision>$(AssemblyVersionRevision)</VersionRevision>
+      <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+       <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+      <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+      <InformationalVersion>$(PackageVersion)</InformationalVersion>
+      <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+    </PropertyGroup>
+  </Target>
+  <!--#endif -->
+
+  <ItemGroup>
+    <Content Include="Properties\appsettings.json">
+      <TargetPath>%(Filename)%(Extension)</TargetPath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <PropertyGroup>
+    <ApplicationIcon>Resources\application.ico</ApplicationIcon>
+  </PropertyGroup>
+    
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\application.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WinformsDI.Library\WinformsDI.Library.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+  </ItemGroup>
+ 
+</Project>

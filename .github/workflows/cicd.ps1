@@ -1,8 +1,13 @@
 param (
-    [string]$PAT = $args[0],
-    [string]$NUGET_PAT = $args[1],
-    [string]$NUGET_TEST_PAT= $args[2]
+    [string]$PAT,
+    [Alias("NUGET_PAT")]
+    [string]$SECRET_NUGET_APIKEY,
+    [Alias("NUGET_TEST_PAT")]
+    [string]$SECRET_INTTESTNUGET_APIKEY
 )
+
+$NUGET_PAT = $SECRET_NUGET_APIKEY
+$NUGET_TEST_PAT = $SECRET_INTTESTNUGET_APIKEY
 
 $ErrorActionPreference = 'Stop'
 

@@ -1,12 +1,30 @@
+<!--#if (UseWebSdk) -->
+<Project Sdk="Microsoft.NET.Sdk.Web">
+<!--#else -->
 <Project Sdk="Microsoft.NET.Sdk">
+<!--#endif -->
 
+  <!-- Packaging and publish configuration -->
   <PropertyGroup>
-    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>true</IsPackable>
+    <IsPublishable>true</IsPublishable>
+    <IsTestProject>false</IsTestProject>
+    <PackAsTool>false</PackAsTool>
+  </PropertyGroup>
+
+  <!-- General build settings: defines the output type and target framework -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
+    <TargetFramework>__TargetFramework__</TargetFramework>
+  </PropertyGroup>
+
+  <!-- C# language features and debugging configuration -->
+  <PropertyGroup>
+    <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <DebugType>embedded</DebugType>
     <LangVersion>latest</LangVersion>
-    <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
-    <TargetFramework>__TargetFramework__</TargetFramework>
   </PropertyGroup>
 
   <!-- 

@@ -1,12 +1,104 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- Branding information -->
+  <PropertyGroup>
+    <Branding>Carsten Riedel</Branding>
+  </PropertyGroup>
+
+    <!-- Company and copyright information -->
+  <PropertyGroup>
+    <Copyright>Copyright (c) 2026 $(Branding)</Copyright>
+    <Company></Company>
+  </PropertyGroup>
+
+    <!-- C# language features and debugging configuration -->
+  <PropertyGroup>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <DebugType>embedded</DebugType>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <!-- NuGet Package configuration -->
-  <Import Project="Package/Config/PackageMetadata.props" />
-  <Import Project="Package/Config/PackageSpecs.props" />
+
+  <!-- Package metadata-->
+  <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
+
+  <PropertyGroup>
+    <Authors>Carsten Riedel</Authors>
+    <Owners>Carsten Riedel</Owners>
+    <PackageId>Coree.Template.Project</PackageId>
+    <PackageTags>Project;Templates;.NET</PackageTags>
+    <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Description>
+      <![CDATA[
+          Templates for Visual Studio and dotnet CLI that allows you to create various types of .NET projects . MSBuild tasks, class libraries, .NET tools, PowerShell cmdlets, WinForms applications, WPF applications, and a Project Template.
+	    ]]>
+    </Description>
+
+    <VersionMajor Condition="'$(VersionPrefix)' == ''">0</VersionMajor>
+    <VersionMinor Condition="'$(VersionPrefix)' == ''">3</VersionMinor>
+    <VersionBuild Condition="'$(VersionPrefix)' == ''">0</VersionBuild>
+    <VersionRevision Condition="'$(VersionPrefix)' == ''">0</VersionRevision>
+
+    <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
+    <TicksPerDay>$([System.TimeSpan]::TicksPerDay)</TicksPerDay>
+    <TicksPerSecond>$([System.TimeSpan]::TicksPerSecond)</TicksPerSecond>
+    <AssemblyVersionBuild>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerDay)))))</AssemblyVersionBuild>
+    <AssemblyVersionTotalSeconds>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerSecond)))))</AssemblyVersionTotalSeconds>
+    <AssemblyVersionRemainingSeconds>$([System.Math]::Truncate($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
+    <AssemblyVersionRevision>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
+    <VersionBuild Condition="'$(VersionBuild)' == '0'">$(AssemblyVersionBuild)</VersionBuild>
+    <VersionRevision Condition="'$(VersionRevision)' == '0'">$(AssemblyVersionRevision)</VersionRevision>
+
+    <VersionSuffix Condition="'$(VersionPrefix)' == ''">local</VersionSuffix>
+    <VersionPrefix Condition="'$(VersionPrefix)' == ''">$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+    
+    <PackageVersion Condition="'$(PackageVersion)' == '' AND '$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+    <PackageVersion Condition="'$(PackageVersion)' == '' AND '$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+    
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <PackageIcon>Icon.png</PackageIcon>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
+  </PropertyGroup>
+
+
+  <!-- Package specs -->
+  <ItemGroup>
+  <!-- Can make a problem if slnx is opened by visual studio exclude bin, obj and .vs directories -->
+    <None Include="$(MSBuildProjectDirectory)\Templates\**\*" Exclude="$(MSBuildProjectDirectory)\Templates\**\**\bin\**;$(MSBuildProjectDirectory)\Templates\**\**\obj\**;$(MSBuildProjectDirectory)\Templates\**\**\.vs\**" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\NugetAssets\**\*"  Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackRelease>false</PackRelease>
+    <PublishRelease>false</PublishRelease>
+    <IncludeBuildOutput>False</IncludeBuildOutput>
+    <IncludeSource>False</IncludeSource>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <EnableDefaultItems>False</EnableDefaultItems>
+    <IsPackable>true</IsPackable>
+    <IsShipping>false</IsShipping>
+    <NoWarn>2008;NU5105</NoWarn>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <SuppressDependenciesWhenPacking>True</SuppressDependenciesWhenPacking>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <PackageType>Template</PackageType>
+    <!-- Suppress creation of contentFiles directory -->
+    <ContentTargetFolders>.\</ContentTargetFolders>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Package</PackageOutputPath>
+  </PropertyGroup>
 
   <!-- dotnet pack -c Debug -->
   <!-- dotnet new install bin\Package\Coree.Template.Project.0.2.8863.32697-prerelease.nupkg -->

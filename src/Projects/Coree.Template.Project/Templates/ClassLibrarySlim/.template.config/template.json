@@ -1,0 +1,251 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Carsten Riedel",
+  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "ClassLibrary", "ClassLibrarySlim", "Library", "Coree" ],
+  "identity": "CoreeTemplatesProjectClassLibrarySlim",
+  "name": ".NET Class library Slim",
+  "shortName": "classlibslim-coree",
+  "tags": {
+    "language": "C#",
+    "type": "solution",
+    // Opts Visual Studio into its solution-template UI instead of the project-template UI.
+    "editorTreatAs": "solution"
+  },
+  "defaultName": "Organization.Domain.ClassLibrary", // Organization.Domain.Functionality
+  "sourceName": "ClassLibrary", // Matching nameingscheme csproj and namespace
+  // Visual Studio creates the outer solution directory; true would add another name directory.
+  "preferNameDirectory": false,
+  "symbols": {
+    // Host-specific output behavior below distinguishes Visual Studio from the CLI.
+    "HostIdentifier": {
+      "type": "bind",
+      "binding": "host:HostIdentifier",
+      "defaultValue": "dotnetcli"
+    },
+    // User-selectable target frameworks. Multiple values are supported for multi-targeting.
+    "TargetFrameworks": {
+      "type": "parameter",
+      "description": "The target framework for the project TargetFrameworks property.",
+      "datatype": "choice",
+      "allowMultipleValues": true,
+      "enableQuotelessLiterals": true,
+      "choices": [
+        {
+          "choice": "net6.0",
+          "description": "Target net6.0",
+          "displayName": ".NET 6.0"
+        },
+        {
+          "choice": "net7.0",
+          "description": "Target net7.0",
+          "displayName": ".NET 7.0"
+        },
+        {
+          "choice": "net8.0",
+          "description": "Target net8.0",
+          "displayName": ".NET 8.0"
+        },
+        {
+          "choice": "net9.0",
+          "description": "Target net9.0",
+          "displayName": ".NET 9.0"
+        },
+        {
+          "choice": "net10.0",
+          "description": "Target net10.0",
+          "displayName": ".NET 10.0"
+        }
+      ],
+      "defaultValue": "net8.0|net10.0"
+    },
+    // Converts the selected framework values to the semicolon-separated MSBuild list.
+    "TargetFrameworksValue": {
+      "type": "generated",
+      "generator": "join",
+      "replaces": "__TargetFrameworks__",
+      "parameters": {
+        "symbols": [
+          {
+            "type": "ref",
+            "value": "TargetFrameworks"
+          }
+        ],
+        "separator": ";",
+        "removeEmptyValues": true
+      }
+    },
+    // Resolves the highest selected framework to one value for single-framework paths and filenames.
+    "TargetFrameworkValue": {
+      "type": "generated",
+      "generator": "switch",
+      "replaces": "__TargetFramework__",
+      "parameters": {
+        "datatype": "string",
+        "cases": [
+          {
+            "condition": "(TargetFrameworks == \"net10.0\")",
+            "value": "net10.0"
+          },
+          {
+            "condition": "(TargetFrameworks == \"net9.0\")",
+            "value": "net9.0"
+          },
+          {
+            "condition": "(TargetFrameworks == \"net8.0\")",
+            "value": "net8.0"
+          },
+          {
+            "condition": "(TargetFrameworks == \"net7.0\")",
+            "value": "net7.0"
+          },
+          {
+            "condition": "(TargetFrameworks == \"net6.0\")",
+            "value": "net6.0"
+          }
+        ]
+      }
+    },
+    // Package metadata parameters replace their matching placeholders in the project and package assets.
+    "PackageAuthor": {
+      "type": "parameter",
+      "dataType": "string",
+      "replaces": "MyAuthor",
+      "description": "The nuget package author of your project.",
+      "displayName": "Package author",
+      "isRequired": "true"
+    },
+    "PackageCompany": {
+      "type": "parameter",
+      "dataType": "string",
+      "defaultValue": "",
+      "replaces": "MyCompany",
+      "description": "The nuget company of your project.",
+      "displayName": "Package company"
+    },
+    // License.txt uses this value to choose the company or author copyright text.
+    "PackageCompanyIsSet": {
+      "type": "computed",
+      "value": "(PackageCompany != \"\")"
+    },
+    // Date generators replace fixed template placeholders in project metadata and package assets.
+    "copyrightYear": {
+      "type": "generated",
+      "generator": "now",
+      "replaces": "1975",
+      "parameters": {
+        "format": "yyyy"
+      }
+    },
+    "datenowsort": {
+      "type": "generated",
+      "generator": "now",
+      "replaces": "1975-01-01",
+      "parameters": {
+        "format": "yyyy-MM-dd"
+      }
+    },
+    "PackageDescription": {
+      "type": "parameter",
+      "dataType": "string",
+      "defaultValue": "PackageDescription",
+      "replaces": "PackageDescription",
+      "description": "The nuget package description of your project.",
+      "displayName": "Package description"
+    },
+    // Controls the optional date-based version calculation in ClassLibrary.csproj.
+    "AssemblyVersioningScheme": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Generates nuget and assembly versioning scheme utilizing build and revision date.",
+      "displayName": "Automatic nuget and assembly version."
+    },
+    // These options affect only the generated MSTest project; the library remains free of test tooling.
+    "CoverletMSBuild": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Add a coverlet code coverage to the test project.",
+      "displayName": "Add a coverlet code coverage to the test project."
+    },
+    "ReportGenerator": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Add ReportGenerator for the coverlet output.",
+      "displayName": "Add ReportGenerator for the coverlet output."
+    },
+    // Keeps BenchmarkDotNet isolated in an optional executable project.
+    "BenchmarkProject": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "false",
+      "description": "Add an optional BenchmarkDotNet console project.",
+      "displayName": "Add optional BenchmarkDotNet console project"
+    }
+  },
+  // Registers conditional processing for .slnx files because this extension is not
+  // handled consistently by the built-in conditional processor in every host.
+  "specialCustomOperations": {
+    "**/*.slnx": {
+      "operations": [
+        {
+          "type": "conditional",
+          "configuration": {
+            "if": [ "<!--#if" ],
+            "else": [ "<!--#else" ],
+            "elseif": [ "<!--#elseif" ],
+            "endif": [ "<!--#endif" ],
+            "trim": true,
+            "wholeLine": true,
+            "evaluator": "C++"
+          }
+        }
+      ]
+    }
+  },
+  // Filters optional files and applies host-specific source filename changes.
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(BenchmarkProject == false)",
+          "exclude": [
+            "prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj",
+            "prj/ClassLibrary.Benchmark/Program.cs"
+          ]
+        },
+        // Keep a distinct source filename for Visual Studio; the CLI receives the conventional solution name.
+        {
+          "condition": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")",
+          "rename": {
+            "ClassLibrary.generated.slnx": "ClassLibrary.slnx"
+          }
+        }
+
+      ]
+    }
+  ],
+  // Reports the main generated files to the template host; this does not create or filter files.
+  "primaryOutputs": [
+    {
+      "path": "ClassLibrary.generated.slnx"
+    },
+    {
+      "path": "wrk/ClassLibrary/Readme.md"
+    }
+  ],
+  // Opens the generated Readme automatically in IDE hosts; CLI hosts skip this action.
+  "postActions": [
+      {
+        "condition": "(HostIdentifier != \"dotnetcli\")",
+        "description": "Opens Readme.md in the editor",
+        "manualInstructions": [ ],
+        "actionId": "84C0DA21-51C8-4541-9940-6CA19AF04EE6",
+        "args": {
+          "files": "1"
+        },
+        "continueOnError": true
+      }
+  ]
+}

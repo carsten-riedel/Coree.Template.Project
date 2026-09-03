@@ -1,0 +1,17 @@
+<Project>
+
+  <!--
+    TargetFramework selects the default build/publish target, while pack uses
+    every TargetFrameworks entry. Build all selected frameworks first so plain
+    dotnet publish and dotnet pack work with both properties and pack includes
+    all framework assets instead of failing with NU5026.
+  -->
+  <Target Name="BuildAllTargetFrameworksForPack" BeforeTargets="_WalkEachTargetPerFramework" Condition="'$(TargetFrameworks)' != '' and '$(NoBuild)' != 'true'">
+    <ItemGroup>
+      <_PackTargetFramework Include="$(TargetFrameworks)" />
+    </ItemGroup>
+    <!-- Match pack's configuration so it can find each generated assembly. -->
+    <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="Build" Properties="TargetFramework=%(_PackTargetFramework.Identity);Configuration=$(Configuration)" BuildInParallel="true" />
+  </Target>
+
+</Project>

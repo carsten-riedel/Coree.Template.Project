@@ -56,7 +56,28 @@ function Invoke-TemplatePackageRemoval {
     }
 }
 
+function Remove-LocalPackageArtifacts {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$PackageDirectory,
+        [Parameter(Mandatory = $true)]
+        [string]$PackagePattern
+    )
+
+    if (-not (Test-Path -LiteralPath $PackageDirectory -PathType Container)) {
+        New-Item -ItemType Directory -Path $PackageDirectory -Force | Out-Null
+    }
+
+    Get-ChildItem -LiteralPath $PackageDirectory -Filter $PackagePattern -File |
+        Remove-Item -Force
+}
+
+if (Get-Process -Name 'devenv' -ErrorAction SilentlyContinue) {
+    throw 'Close all Visual Studio instances before running this script so its template cache cannot retain an older package.'
+}
+
 Invoke-TemplatePackageRemoval -PackageId $packageId
+Remove-LocalPackageArtifacts -PackageDirectory $packageOutputDirectory -PackagePattern $localPackagePattern
 
 if (-not (Test-Path -LiteralPath $sourceRoot -PathType Container)) {
     throw "Source directory not found: $sourceRoot"
@@ -70,15 +91,19 @@ finally {
     Pop-Location
 }
 
-$localPackage = Get-ChildItem -LiteralPath $packageOutputDirectory -Filter $localPackagePattern -File |
-    Sort-Object -Property LastWriteTimeUtc -Descending |
-    Select-Object -First 1
+$localPackages = @(Get-ChildItem -LiteralPath $packageOutputDirectory -Filter $localPackagePattern -File)
 
-if ($null -eq $localPackage) {
-    throw "No local package matching '$localPackagePattern' was found in '$packageOutputDirectory'."
+if ($localPackages.Count -ne 1) {
+    throw "Expected exactly one local package in '$packageOutputDirectory', found $($localPackages.Count)."
 }
 
-Invoke-DotNet -Arguments @('new', 'install', $localPackage.FullName)
+$localPackage = $localPackages[0]
+
+Invoke-DotNet -Arguments @('new', 'install', $localPackage.FullName, '--force')
+
+if (-not (Test-TemplatePackageInstalled -PackageId $packageId)) {
+    throw "Template package '$packageId' was not registered after installation."
+}
 
 Write-Output "Installed local template package: $($localPackage.FullName)"
 Write-Output "The local template package is ready for testing."

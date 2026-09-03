@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <LangVersion>latest</LangVersion>
+    <PackRelease>false</PackRelease>
+    <PublishRelease>false</PublishRelease>
+    <!--#if (CoverletMSBuild == true) -->
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
+    <CoverletOutput>./CoverletOutput/</CoverletOutput>
+    <!--#endif -->
+    <VSTestLogger>trx%3bLogFileName=$(MSBuildThisFileDirectory)\MSTestResults\$(MSBuildProjectName).trx;html%3bLogFileName=$(MSBuildThisFileDirectory)\MSTestResults\result.html</VSTestLogger>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.4.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.4.0" />
+    <!--#if (CoverletMSBuild == true) -->
+    <PackageReference Include="coverlet.msbuild" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <!--#endif -->
+    <!--#if (ReportGenerator == true) -->
+    <PackageReference Include="ReportGenerator" Version="5.2.0" />
+    <!--#endif -->
+  </ItemGroup>
+
+  <!--#if (ReportGenerator == true) -->
+  <Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
+    <ReportGenerator ReportFiles="@(CoverletReport)" TargetDirectory="ReportGeneratorOutput" ReportTypes="Html;MarkdownSummaryGithub;MarkdownSummary;CsvSummary;Clover;Badges" />
+  </Target>
+  <!--#endif -->
+
+  <Target Name="ListVulnerable" AfterTargets="PostBuildEvent">
+    <MakeDir Directories="$(MSBuildThisFileDirectory)NugetReport" />
+    <Exec Condition="!$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package --vulnerable --include-transitive %3E &quot;$(MSBuildProjectDirectory)\NugetReport\PackageVulnerable.txt&quot;" IgnoreExitCode="true" />
+    <Exec Condition="$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package --vulnerable --include-transitive %3E &quot;$(MSBuildProjectDirectory)/NugetReport/PackageVulnerable.txt&quot;" IgnoreExitCode="true" />
+    <Exec Condition="!$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package %3E &quot;$(MSBuildProjectDirectory)\NugetReport\PackageList.txt&quot;" IgnoreExitCode="true" />
+    <Exec Condition="$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package %3E &quot;$(MSBuildProjectDirectory)/NugetReport/PackageList.txt&quot;" IgnoreExitCode="true" />
+  </Target>
+
+  <!-- Keep both test TFMs and reference the matching ClassLibrary TFM for each test build. -->
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj">
+      <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

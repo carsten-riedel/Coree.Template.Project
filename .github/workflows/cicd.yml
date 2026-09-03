@@ -51,5 +51,5 @@ jobs:
       run: pwsh --version
 
     - name: Workflow Build/Deploy
-      run: .github/workflows/cicd.ps1 -PAT "${{ secrets.PAT }}" -SECRET_NUGET_APIKEY "${{ secrets.SECRET_NUGET_APIKEY }}" -SECRET_INTTESTNUGET_APIKEY "${{ secrets.SECRET_INTTESTNUGET_APIKEY }}"
+      run: .github/workflows/cicd.ps1 -PAT "$env:GH_TOKEN" -SECRET_NUGET_APIKEY "${{ secrets.SECRET_NUGET_APIKEY }}" -SECRET_INTTESTNUGET_APIKEY "${{ secrets.SECRET_INTTESTNUGET_APIKEY }}"
       shell: pwsh 

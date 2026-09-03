@@ -31,16 +31,6 @@
       "enableQuotelessLiterals": true,
       "choices": [
         {
-          "choice": "net6.0",
-          "description": "Target net6.0",
-          "displayName": ".NET 6.0"
-        },
-        {
-          "choice": "net7.0",
-          "description": "Target net7.0",
-          "displayName": ".NET 7.0"
-        },
-        {
           "choice": "net8.0",
           "description": "Target net8.0",
           "displayName": ".NET 8.0"
@@ -101,14 +91,6 @@
           {
             "condition": "(TargetFrameworks == \"net8.0\")",
             "value": "net8.0"
-          },
-          {
-            "condition": "(TargetFrameworks == \"net7.0\")",
-            "value": "net7.0"
-          },
-          {
-            "condition": "(TargetFrameworks == \"net6.0\")",
-            "value": "net6.0"
           }
         ]
       }
@@ -122,18 +104,24 @@
       "displayName": "Package author",
       "isRequired": "true"
     },
-    "PackageCompany": {
+    "PackageCopyrightHolder": {
       "type": "parameter",
       "dataType": "string",
       "defaultValue": "",
-      "replaces": "MyCompany",
-      "description": "The nuget company of your project.",
-      "displayName": "Package company"
+      "replaces": "MyCopyrightHolder",
+      "description": "Copyright holder for the package and license. Defaults to the package author when empty.",
+      "displayName": "Copyright holder"
     },
-    // License.txt uses this value to choose the company or author copyright text.
-    "PackageCompanyIsSet": {
+    "PackageCopyrightHolderIsSet": {
       "type": "computed",
-      "value": "(PackageCompany != \"\")"
+      "value": "(PackageCopyrightHolder != \"\")"
+    },
+    "PackageCopyrightHolderIsOrganization": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "false",
+      "description": "Set when the copyright holder is an organization. Controls NuGet Company metadata only.",
+      "displayName": "Copyright holder is an organization"
     },
     // Date generators replace fixed template placeholders in project metadata and package assets.
     "copyrightYear": {
@@ -160,15 +148,7 @@
       "description": "The nuget package description of your project.",
       "displayName": "Package description"
     },
-    // Controls the optional date-based version calculation in ClassLibrary.csproj.
-    "AssemblyVersioningScheme": {
-      "type": "parameter",
-      "dataType": "bool",
-      "defaultValue": "true",
-      "description": "Generates nuget and assembly versioning scheme utilizing build and revision date.",
-      "displayName": "Automatic nuget and assembly version."
-    },
-    // These options affect only the generated MSTest project; the library remains free of test tooling.
+    // These options affect only the generated test project; the library remains free of test tooling.
     "CoverletMSBuild": {
       "type": "parameter",
       "dataType": "bool",

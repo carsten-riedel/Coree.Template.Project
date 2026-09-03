@@ -6,7 +6,7 @@ After running the tests, you'll find that the local links are now active. Additi
 dotnet test
 ```
 
-[MSTest results in trx format (html is generated too)](prj/ClassLibrary.MSTest/MSTestResults/ClassLibrary.MSTest.trx)
+[Test results in trx format (html is generated too)](prj/ClassLibrary.Tests/MSTestResults/ClassLibrary.Tests.trx)
 <!--#if (BenchmarkProject == true) -->
 Run the optional benchmarks with:
 
@@ -15,8 +15,8 @@ dotnet run --project prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj -c
 ```
 <!--#endif -->
 <!--#if (CoverletMSBuild) -->
-[CoverletOutput](prj/ClassLibrary.MSTest/CoverletOutput/coverage.__TargetFramework__.opencover.xml)
+[CoverletOutput](prj/ClassLibrary.Tests/CoverletOutput/coverage.__TargetFramework__.opencover.xml)
 <!--#endif -->
 <!--#if (ReportGenerator) -->
-[ReportGeneratorOutput](prj/ClassLibrary.MSTest/ReportGeneratorOutput/SummaryGithub.md)
+[ReportGeneratorOutput](prj/ClassLibrary.Tests/ReportGeneratorOutput/SummaryGithub.md)
 <!--#endif -->

@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 
-namespace ClassLibrary.MSTest
+namespace ClassLibrary.Tests
 {
     [TestClass]
     public class FunctionalTests

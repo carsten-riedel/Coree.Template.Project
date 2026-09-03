@@ -3,7 +3,7 @@
     <File Path="wrk/ClassLibrary/Readme.md" />
   </Folder>
   <Folder Name="/prj/">
-    <Project Path="prj/ClassLibrary.MSTest/ClassLibrary.MSTest.csproj" />
+    <Project Path="prj/ClassLibrary.Tests/ClassLibrary.Tests.csproj" />
     <Project Path="prj/ClassLibrary/ClassLibrary.csproj" />
     <!--#if (BenchmarkProject == true) -->
     <Project Path="prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj" />

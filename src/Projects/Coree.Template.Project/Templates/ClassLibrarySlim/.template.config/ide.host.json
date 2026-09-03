@@ -14,15 +14,15 @@
       "isVisible": true
     },
     {
-      "id": "PackageCompany",
+      "id": "PackageCopyrightHolder",
+      "isVisible": true
+    },
+    {
+      "id": "PackageCopyrightHolderIsOrganization",
       "isVisible": true
     },
     {
       "id": "PackageDescription",
-      "isVisible": true
-    },
-    {
-      "id": "AssemblyVersioningScheme",
       "isVisible": true
     },
     {

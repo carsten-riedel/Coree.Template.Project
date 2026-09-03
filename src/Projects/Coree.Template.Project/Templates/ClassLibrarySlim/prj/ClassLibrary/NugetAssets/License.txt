@@ -1,9 +1,9 @@
 MIT License
 
-//#if (PackageCompanyIsSet)
-Copyright (c) MyCompany 1975
+//#if (PackageCopyrightHolderIsSet)
+Copyright (c) 1975 MyCopyrightHolder
 //#else
-Copyright (c) MyAuthor 1975 
+Copyright (c) 1975 MyAuthor
 //#endif
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

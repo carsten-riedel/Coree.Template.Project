@@ -4,19 +4,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 <!--#endif -->
 
+  <!-- General build settings: defines the output type and target framework -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
+    <TargetFramework>__TargetFramework__</TargetFramework>
+  </PropertyGroup>
+
   <!-- Packaging and publish configuration -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <IsPublishable>true</IsPublishable>
     <IsTestProject>false</IsTestProject>
     <PackAsTool>false</PackAsTool>
-  </PropertyGroup>
-
-  <!-- General build settings: defines the output type and target framework -->
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
-    <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
-    <TargetFramework>__TargetFramework__</TargetFramework>
   </PropertyGroup>
 
   <!-- C# language features and debugging configuration -->
@@ -36,23 +36,24 @@
 
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
-    <!--#if (PackageCompany != '') -->
-    <Owners>MyCompany</Owners>
-    <!--#endif -->
-    <!--#if (PackageCompany == '') -->
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Owners>MyCopyrightHolder</Owners>
+    <!--#else -->
     <Owners>MyAuthor</Owners>
     <!--#endif -->
-    <!--#if (PackageCompany != '') -->
-    <Company>MyCompany</Company>
+    <!--#if (PackageCopyrightHolderIsOrganization == true) -->
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Company>MyCopyrightHolder</Company>
+    <!--#else -->
+    <Company>MyAuthor</Company>
     <!--#endif -->
-    <!--#if (PackageCompany == '') -->
+    <!--#else -->
     <Company></Company>
     <!--#endif -->
-    <!--#if (PackageCompany != '') -->
-    <Copyright>Copyright © MyCompany 1975</Copyright>
-    <!--#endif -->
-    <!--#if (PackageCompany == '') -->
-    <Copyright>Copyright © MyAuthor 1975</Copyright>
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Copyright>Copyright © 1975 MyCopyrightHolder</Copyright>
+    <!--#else -->
+    <Copyright>Copyright © 1975 MyAuthor</Copyright>
     <!--#endif -->
     <PackageId>ClassLibrary</PackageId>
     <PackageTags>dotnet;class;library</PackageTags>
@@ -60,16 +61,7 @@
     <RepositoryUrl></RepositoryUrl>
     <RepositoryType></RepositoryType>
 
-    <VersionMajor>0</VersionMajor>
-    <VersionMinor>1</VersionMinor>
-    <VersionBuild>0</VersionBuild>
-    <VersionRevision>0</VersionRevision>
-    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
-    <VersionSuffix Condition="'$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
-    <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
-    <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
-    <InformationalVersion>$(PackageVersion)</InformationalVersion>
-    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+
 
     <Description>
      <![CDATA[PackageDescription]]>
@@ -80,26 +72,19 @@
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
-  <!--#if (AssemblyVersioningScheme == true) -->
-  <Target Name="OverrideBuildRevision" BeforeTargets="GenerateNuspec" AfterTargets="BeforeBuild" >
-    <PropertyGroup>
-      <AssemblyVersionBaseTicks>$([MSBuild]::Subtract($([System.DateTime]::UtcNow.Ticks), 630822816000000000))</AssemblyVersionBaseTicks>
-      <TicksPerDay>$([System.TimeSpan]::TicksPerDay)</TicksPerDay>
-      <TicksPerSecond>$([System.TimeSpan]::TicksPerSecond)</TicksPerSecond>
-      <AssemblyVersionBuild>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerDay)))))</AssemblyVersionBuild>
-      <AssemblyVersionTotalSeconds>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionBaseTicks), $(TicksPerSecond)))))</AssemblyVersionTotalSeconds>
-      <AssemblyVersionRemainingSeconds>$([System.Math]::Truncate($([MSBuild]::Modulo($(AssemblyVersionTotalSeconds), 86400))))</AssemblyVersionRemainingSeconds>
-      <AssemblyVersionRevision>$([System.Math]::Truncate($([MSBuild]::Divide($(AssemblyVersionRemainingSeconds), 2))))</AssemblyVersionRevision>
-      <VersionBuild>$(AssemblyVersionBuild)</VersionBuild>
-      <VersionRevision>$(AssemblyVersionRevision)</VersionRevision>
-      <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
-      <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
-      <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
-      <InformationalVersion>$(PackageVersion)</InformationalVersion>
-      <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
-    </PropertyGroup>
-  </Target>
-  <!--#endif -->
+  <!-- Versioning -->
+  <PropertyGroup>
+    <VersionMajor>0</VersionMajor>
+    <VersionMinor>1</VersionMinor>
+    <VersionBuild>0</VersionBuild>
+    <VersionRevision>0</VersionRevision>
+    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+    <VersionSuffix Condition="'$(VersionSuffix)' == '' and '$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
+    <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+    <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+  </PropertyGroup>
 
   <!-- Package specs -->
   <ItemGroup>
@@ -111,11 +96,27 @@
     <LocalPackagesDir></LocalPackagesDir>
   </PropertyGroup>
 
+	<PropertyGroup Condition="'$(_IsPublishing)' == 'true'">
+		<!-- Flat publish output -->
+		<PublishDir Condition="'$(PublishDir)' == ''">$(MSBuildProjectDirectory)\bin\Publish\</PublishDir>
+		<PublishAot>false</PublishAot>
+		<PublishTrimmed>false</PublishTrimmed>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(_IsPublishing)' == 'true' and '$(OutputType)' != 'Library'">
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<PublishSelfContained>true</PublishSelfContained>
+		<PublishSingleFile>true</PublishSingleFile>
+		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+	</PropertyGroup>
+
   <Target Name="CopyToLocalPackages" AfterTargets="Pack" Condition="'$(LocalPackagesDir)'!=''">
     <Message Text="Copy $(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg to $(LocalPackagesDir)" Importance="high" />
     <Copy SourceFiles="$(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(LocalPackagesDir)"  />
   </Target>
 
-  <Import Project="BuildForPack.targets" />
+  <Import Project="Build/BuildForPack.targets" />
+  <Import Project="Build/SourceControlState.targets" />
 
 </Project>

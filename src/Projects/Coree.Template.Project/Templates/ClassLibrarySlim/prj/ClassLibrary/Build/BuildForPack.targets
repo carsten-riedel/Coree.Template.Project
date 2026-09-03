@@ -10,8 +10,8 @@
     <ItemGroup>
       <_PackTargetFramework Include="$(TargetFrameworks)" />
     </ItemGroup>
-    <!-- Match pack's configuration so it can find each generated assembly. -->
-    <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="Build" Properties="TargetFramework=%(_PackTargetFramework.Identity);Configuration=$(Configuration)" BuildInParallel="true" />
+    <!-- Serial inner builds: parallel TFM builds race on shared obj/bin and fail pack/publish. -->
+    <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="Build" Properties="TargetFramework=%(_PackTargetFramework.Identity);Configuration=$(Configuration);BuildInParallel=false" BuildInParallel="false" />
   </Target>
 
 </Project>

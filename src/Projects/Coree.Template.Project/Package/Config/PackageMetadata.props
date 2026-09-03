@@ -7,7 +7,7 @@
     <Authors>Carsten Riedel</Authors>
     <Owners>Carsten Riedel</Owners>
     <Company></Company>
-    <Copyright>Copyright © 2024 Carsten Riedel</Copyright>
+    <Copyright>Copyright © 2026 Carsten Riedel</Copyright>
     <PackageId>Coree.Template.Project</PackageId>
     <PackageTags>Project;Templates;.NET</PackageTags>
     <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
@@ -20,7 +20,7 @@
     </Description>
 
     <VersionMajor Condition="'$(VersionPrefix)' == ''">0</VersionMajor>
-    <VersionMinor Condition="'$(VersionPrefix)' == ''">2</VersionMinor>
+    <VersionMinor Condition="'$(VersionPrefix)' == ''">3</VersionMinor>
     <VersionBuild Condition="'$(VersionPrefix)' == ''">0</VersionBuild>
     <VersionRevision Condition="'$(VersionPrefix)' == ''">0</VersionRevision>
 

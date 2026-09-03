@@ -77,6 +77,21 @@ The commands below demonstrate how to install or uninstall the templates, primar
 dotnet new install Coree.Template.Project
 dotnet new uninstall Coree.Template.Project
 ```
+
+### Local package integration test
+
+On Windows, run the parameterless repository-root PowerShell script to remove an existing global installation, create a fresh Debug package, select the newest local package output, and install it ready for testing:
+
+```powershell
+.\Test-LocalTemplatePackage.ps1
+```
+
+The script performs cleanup before every build using the package ID without a version:
+
+```powershell
+dotnet new uninstall Coree.Template.Project
+```
+
 The package contains the following templates:
   1. [.NET MSBuild Task library](#Net-MSBuild-Task-library)
   2. [.NET Class library](#Net-class-library)

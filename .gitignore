@@ -8,3 +8,20 @@ src/*/obj/**/*
 
 src/Projects/Coree.Template.Project/bin/*
 src/Projects/Coree.Template.Project/bin/** */
+
+# Sensitive PowerShell and JSON file name patterns
+*[Ss][Ee][Cc][Rr][Ee][Tt]*.[Pp][Ss]1
+*[Ss][Ee][Cc][Rr][Ee][Tt]*.[Jj][Ss][Oo][Nn]
+
+# Local agent instruction files
+AGENTS.md
+AGENTS/
+.agents/**/*
+
+# Local build and publish artifacts
+[Bb]in/
+[Oo]bj/
+.vs/
+[Dd]ebug/
+[Rr]elease/
+artifacts/

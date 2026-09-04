@@ -11,6 +11,8 @@
     <IsPackable>false</IsPackable>
     <IsPublishable>false</IsPublishable>
     <IsTestProject>true</IsTestProject>
+    <!-- Multi-target tests and all generated reports are isolated per TFM. -->
+    <TestTfmsInParallel>true</TestTfmsInParallel>
     <PackAsTool>false</PackAsTool>
   </PropertyGroup>
 
@@ -48,16 +50,16 @@
 
   <!--#if (ReportGenerator == true) -->
   <Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
-    <ReportGenerator ReportFiles="@(CoverletReport)" TargetDirectory="ReportGeneratorOutput" ReportTypes="Html;MarkdownSummaryGithub;MarkdownSummary;CsvSummary;Clover;Badges" />
+    <ReportGenerator ReportFiles="@(CoverletReport)" TargetDirectory="ReportGeneratorOutput\$(TargetFramework)" ReportTypes="Html;MarkdownSummaryGithub;MarkdownSummary;CsvSummary;Clover;Badges" />
   </Target>
   <!--#endif -->
 
   <Target Name="ListVulnerable" AfterTargets="PostBuildEvent">
-    <MakeDir Directories="$(MSBuildThisFileDirectory)NugetReport" />
-    <Exec Condition="!$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package --vulnerable --include-transitive %3E &quot;$(MSBuildProjectDirectory)\NugetReport\PackageVulnerable.txt&quot;" IgnoreExitCode="true" />
-    <Exec Condition="$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package --vulnerable --include-transitive %3E &quot;$(MSBuildProjectDirectory)/NugetReport/PackageVulnerable.txt&quot;" IgnoreExitCode="true" />
-    <Exec Condition="!$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package %3E &quot;$(MSBuildProjectDirectory)\NugetReport\PackageList.txt&quot;" IgnoreExitCode="true" />
-    <Exec Condition="$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package %3E &quot;$(MSBuildProjectDirectory)/NugetReport/PackageList.txt&quot;" IgnoreExitCode="true" />
+    <MakeDir Directories="$(MSBuildThisFileDirectory)NugetReport\$(TargetFramework)" />
+    <Exec Condition="!$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package --vulnerable --include-transitive %3E &quot;$(MSBuildProjectDirectory)\NugetReport\$(TargetFramework)\PackageVulnerable.txt&quot;" IgnoreExitCode="true" />
+    <Exec Condition="$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package --vulnerable --include-transitive %3E &quot;$(MSBuildProjectDirectory)/NugetReport/$(TargetFramework)/PackageVulnerable.txt&quot;" IgnoreExitCode="true" />
+    <Exec Condition="!$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package %3E &quot;$(MSBuildProjectDirectory)\NugetReport\$(TargetFramework)\PackageList.txt&quot;" IgnoreExitCode="true" />
+    <Exec Condition="$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package %3E &quot;$(MSBuildProjectDirectory)/NugetReport/$(TargetFramework)/PackageList.txt&quot;" IgnoreExitCode="true" />
   </Target>
 
   <!-- Keep both test TFMs and reference the matching ClassLibrary TFM for each test build. -->

@@ -25,11 +25,13 @@ dotnet build
 
 ## Test
 
-From .NET 9, `dotnet test` runs target frameworks in parallel. Sequential TFMs keep coverage and result files from being written at the same time:
+The test project explicitly allows target frameworks to run in parallel. Test results, coverage files, vulnerability reports, and ReportGenerator output are isolated per target framework. No parallelism switch is needed on the command line:
 
 ```bash
-dotnet test -p:TestTfmsInParallel=false
+dotnet test
 ```
+
+MSTest is explicitly configured for method-level parallel execution within one test assembly. Tests must therefore not share mutable global state.
 
 After a test run, the links below point to generated reports. Each selected target framework writes its own files (`net8.0`, `net10.0`, …).
 
@@ -39,7 +41,7 @@ After a test run, the links below point to generated reports. Each selected targ
 [Coverlet output](prj/ClassLibrary.Tests/CoverletOutput/coverage.__TargetFramework__.opencover.xml)
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
-[ReportGenerator summary](prj/ClassLibrary.Tests/ReportGeneratorOutput/SummaryGithub.md)
+ReportGenerator writes one summary per target framework under `prj/ClassLibrary.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
 <!--#endif -->
 
 ## Pack
@@ -66,12 +68,12 @@ Writes library output to `prj/ClassLibrary/bin/Publish/`. This is a class librar
 
 ## CI
 
-Use these flags so a pipeline does not depend on machine load. `-m:1` serializes MSBuild (avoids occasional file locks when the library is built as a solution project and as a test `ProjectReference` at the same time). `TestTfmsInParallel=false` serializes multi-target tests.
+Use `-m:1` for the build so a pipeline does not depend on machine load. It avoids occasional file locks when the library is built as a solution project and as a test `ProjectReference` at the same time. Multi-target test execution is already configured as parallel in the test project.
 
 ```bash
 dotnet restore
 dotnet build --no-restore -m:1
-dotnet test --no-build -p:TestTfmsInParallel=false
+dotnet test --no-build
 dotnet pack
 ```
 <!--#if (BenchmarkProject == true) -->

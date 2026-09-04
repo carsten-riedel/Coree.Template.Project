@@ -27,13 +27,22 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
-  <!-- 
-    Since during pack all ProjectReference will be transformed to Package dependencies. And version number is cascading into all package.
-  -->
+  <!-- Versioning -->
+  <PropertyGroup>
+    <VersionMajor>0</VersionMajor>
+    <VersionMinor>1</VersionMinor>
+    <VersionBuild>0</VersionBuild>
+    <VersionRevision>0</VersionRevision>
+    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+    <VersionSuffix Condition="'$(VersionSuffix)' == '' and '$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
+    <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+    <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+  </PropertyGroup>
 
   <!-- Package metadata -->
   <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
-
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
     <!--#if (PackageCopyrightHolderIsSet) -->
@@ -69,20 +78,6 @@
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
-  <!-- Versioning -->
-  <PropertyGroup>
-    <VersionMajor>0</VersionMajor>
-    <VersionMinor>1</VersionMinor>
-    <VersionBuild>0</VersionBuild>
-    <VersionRevision>0</VersionRevision>
-    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
-    <VersionSuffix Condition="'$(VersionSuffix)' == '' and '$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
-    <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
-    <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
-    <InformationalVersion>$(PackageVersion)</InformationalVersion>
-    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
-  </PropertyGroup>
-
   <!-- Package specs -->
   <ItemGroup>
     <None Include="$(MSBuildProjectDirectory)\NugetAssets\**\*" Pack="true" PackagePath="" />
@@ -93,6 +88,7 @@
     <LocalPackagesDir></LocalPackagesDir>
   </PropertyGroup>
 
+  <!-- Publish behavior keep slim for library specs -->
 	<PropertyGroup Condition="'$(_IsPublishing)' == 'true'">
 		<!-- Flat publish output -->
 		<PublishDir Condition="'$(PublishDir)' == ''">$(MSBuildProjectDirectory)\bin\Publish\</PublishDir>
@@ -100,6 +96,7 @@
 		<PublishTrimmed>false</PublishTrimmed>
 	</PropertyGroup>
 
+  <!-- Publish behavior for executable future useage program main etc -->
 	<PropertyGroup Condition="'$(_IsPublishing)' == 'true' and '$(OutputType)' != 'Library'">
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 		<PublishSelfContained>true</PublishSelfContained>
@@ -113,7 +110,9 @@
     <Copy SourceFiles="$(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(LocalPackagesDir)"  />
   </Target>
 
+  <!-- Import for pack target multiplaform build for pack always -->
   <Import Project="Build/BuildForPack.targets" />
+  <!-- Import for version information already integrated in < net8.0 -->
   <Import Project="Build/SourceControlState.targets" />
 
 </Project>

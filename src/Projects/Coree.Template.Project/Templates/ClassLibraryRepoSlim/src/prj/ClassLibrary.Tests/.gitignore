@@ -1,0 +1,6 @@
+.vs/
+bin/
+obj/
+CoverletOutput/
+ReportGeneratorOutput/
+MSTestResults/

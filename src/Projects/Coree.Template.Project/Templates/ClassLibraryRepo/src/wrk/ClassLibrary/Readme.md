@@ -1,6 +1,8 @@
 # ClassLibrary
 
-This folder is the generated solution root. Open a terminal here and run the commands as written. The CLI finds the solution; you do not pass a `.slnx` or `.csproj` path.
+The solution root is the repository's `src/` directory. Open a terminal there for the commands below. The CLI finds the solution; you do not pass a `.slnx` or `.csproj` path.
+
+When creating this template through `dotnet new`, add `--TryOpenInVisualStudio --allow-scripts yes` to try opening the solution in Visual Studio 2026 on Windows. The temporary `src/wrk/Open-VisualStudio.ps1` helper uses `vswhere` to select VS 2026 and deletes itself after launching the process. If launching fails, the repository remains available and the helper stays for another attempt. Without the switch, no helper is generated.
 
 ```text
 ./                         you are here

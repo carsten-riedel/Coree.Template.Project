@@ -24,6 +24,12 @@
       "binding": "host:HostIdentifier",
       "defaultValue": "dotnetcli"
     },
+    "TryOpenInVisualStudio": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "false",
+      "description": "After CLI creation on Windows, try to open the src solution in Visual Studio 2026. The launcher deletes itself after starting VS."
+    },
     // User-selectable target frameworks. Multiple values are supported for multi-targeting.
     "TargetFrameworks": {
       "type": "parameter",
@@ -216,6 +222,10 @@
     {
       "modifiers": [
         {
+          "condition": "(TryOpenInVisualStudio == false)",
+          "exclude": [ "src/wrk/Open-VisualStudio.ps1" ]
+        },
+        {
           "condition": "(BenchmarkProject == false)",
           "exclude": [
             "src/prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj",
@@ -234,17 +244,31 @@
       "path": "src/wrk/ClassLibrary/Readme.md"
     }
   ],
-  // Tryout: ask the IDE document service to open the nested SLNX after creation.
-  // This action does not guarantee that the IDE activates it as a solution.
+  // IDE hosts can open the README. Only the CLI runs the optional VS launcher.
   "postActions": [
       {
         "condition": "(HostIdentifier != \"dotnetcli\")",
-        "description": "Open the repository solution under src",
+        "description": "Opens Readme.md in the editor",
         "manualInstructions": [ ],
         "actionId": "84C0DA21-51C8-4541-9940-6CA19AF04EE6",
         "args": {
-          "files": "0"
+          "files": "1"
         },
+        "continueOnError": true
+      },
+      {
+        "condition": "(TryOpenInVisualStudio && (HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\"))",
+        "description": "Try to open the src solution in Visual Studio 2026",
+        "actionId": "3A7C4B45-1F5D-4A30-959A-51B88E82B5D2",
+        "args": {
+          "executable": "powershell.exe",
+          "args": "-NoProfile -ExecutionPolicy Bypass -File ./src/wrk/Open-VisualStudio.ps1",
+          "redirectStandardOutput": false,
+          "redirectStandardError": false
+        },
+        "manualInstructions": [
+          { "text": "Open the SLNX under src manually, or run src/wrk/Open-VisualStudio.ps1 on Windows." }
+        ],
         "continueOnError": true
       }
   ]

@@ -2,6 +2,10 @@
   "$schema": "https://json.schemastore.org/ide.host",
   "symbolInfo": [
     {
+      "id": "TryOpenInVisualStudio",
+      "isVisible": false
+    },
+    {
       "id": "TargetFrameworks",
       "isVisible": true
     },

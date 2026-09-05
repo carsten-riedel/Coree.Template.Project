@@ -27,6 +27,11 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <!-- Keep Git configuration on disk without showing it as a project item -->
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
   <!-- Versioning -->
   <PropertyGroup>
     <VersionMajor>0</VersionMajor>

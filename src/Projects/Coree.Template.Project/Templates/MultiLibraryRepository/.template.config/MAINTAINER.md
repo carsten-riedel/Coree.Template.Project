@@ -35,7 +35,7 @@ dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "Organization.Do
 dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.ClassLibrary3" --output "C:\Users\Valgrind\source\repos\MultiLibraryRepository-multisolution-optin"
 ```
 
-After the first call the repo root has `README.md`, `TEMPLATE-RELEASE-CHECKPOINT.md`, and `.gitattributes`. Calls 2 and 3 add `src/prj` / `src/wrk` trees only. Passing `--InitDefaultRepoItems Readme` again into the same folder is Exit 73 (collision); `--force` would overwrite.
+After the first call the repo root has `README.md`, `TEMPLATE-RELEASE-CHECKPOINT.md`, and `.gitattributes`. Calls 2 and 3 add `src/prj` / `src/sln` trees only. Passing `--InitDefaultRepoItems Readme` again into the same folder is Exit 73 (collision); `--force` would overwrite.
 
 One switch, values separated by **spaces**. Repeating `--InitDefaultRepoItems` per value also works. A quoted `Readme|AIReleaseCheckpoint|GitAttributes` string is **not** valid CLI input on current `dotnet new`; `|` is only the host default separator in `ide.host.json`.
 
@@ -57,7 +57,7 @@ The generated product still contains placeholders that can only become true **af
 
 **Yes:** one repo-root file, `TEMPLATE-RELEASE-CHECKPOINT.md`, stamped only when `InitDefaultRepoItems` includes `AIReleaseCheckpoint` (first create). It is a **Template-Checkpoint-Release**: close template residue, then **self-dissolve**. After that, new chats read the libraries and the real NuGet docs.
 
-Why the repo root, not `src/wrk/{Name}/`: the first look at a combo repo is the customer surface; one fat checklist can say “update every NuGet readme in this repository” without a per-library marker. Libraries added later are in scope until the file is deleted.
+Why the repo root, not `src/sln/{Name}/`: the first look at a combo repo is the customer surface; one fat checklist can say “update every NuGet readme in this repository” without a per-library marker. Libraries added later are in scope until the file is deleted.
 
 The VS label **AI-supported release checkpoint** names the *job*, not a recurring agent run. The switch does not start a model. Someone later (person or LLM) works that file to 100% observable items, then deletes it. “AI-supported” belongs in the choice display name; it must not read as “edit with AI on every create.”
 
@@ -74,9 +74,17 @@ Multi-choice (`allowMultipleValues`), not N bools. Visual Studio shows **one gro
 
 `None` is first in the choice list. `sources` exclude each root file unless its choice is selected; `None` excludes all of them.
 
+## Project roles and Git ignores
+
+The library is packable and publishable. Tests and the optional BenchmarkDotNet executable explicitly set `IsPackable` and `IsPublishable` to `false`, including when automation calls each `.csproj` directly. The benchmark keeps one target framework (the highest selected) and runs with `dotnet run -c Release`.
+
+All three project files remove `.gitignore` from their `None` items so it stays on disk without appearing as a project item. The test ignore also covers generated `NugetReport/` output.
+
+With `PlaceSolutionInSolutionFolder=true`, each `src/sln/{Name}/` gets its own `.gitignore` for `.vs/`. This creates no shared files on later library additions. The root-solution variant leaves repository-root ignore policy to the repository owner; it does not create or overwrite a shared root `.gitignore`. The same applies to the temporary root `.vs/` left by Visual Studio's extra solution.
+
 ## Other symbols worth not breaking
 
-- **`PlaceSolutionInSrc`**: default true → `src/*.slnx`. False on CLI renames to a root `.slnx`; false in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS’s conventional root `.slnx`.
+- **`PlaceSolutionInSolutionFolder`**: default true → `src/sln/ClassLibrary/ClassLibrary.slnx` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). False on CLI renames to a root `.slnx`; false in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS’s conventional root `.slnx`. False also stacks every library’s `.slnx` in one directory.
 - **`HostIdentifier` / `IsCliHost`**: bind + computed; used for that rename and for VS-only post-actions.
 - **`PackageAuthor`**: required.
 - Conditionals in `.md` / `.slnx` use `<!--#if` on their own lines (`specialCustomOperations`, `wholeLine`).

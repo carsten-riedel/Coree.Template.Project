@@ -1,25 +1,26 @@
 <Solution>
   <!-- Paths are relative to this file's final location.
-       PlaceSolutionInSrc true  → file is src/*.slnx, so prj/ and wrk/.
-       PlaceSolutionInSrc false → file is at repo root, so src/prj/ and src/wrk/. -->
-  <Folder Name="/wrk/ClassLibrary/">
-<!--#if (PlaceSolutionInSrc) -->
-    <File Path="wrk/ClassLibrary/Readme.md" />
+       PlaceSolutionInSolutionFolder true  → src/sln/ClassLibrary/ClassLibrary.slnx
+         (Readme.md beside this file; projects are ../../prj/).
+       PlaceSolutionInSolutionFolder false → repo root, so src/prj/ and src/sln/. -->
+  <Folder Name="/sln/ClassLibrary/">
+<!--#if (PlaceSolutionInSolutionFolder) -->
+    <File Path="Readme.md" />
 <!--#else -->
-    <File Path="src/wrk/ClassLibrary/Readme.md" />
+    <File Path="src/sln/ClassLibrary/Readme.md" />
 <!--#endif -->
   </Folder>
   <Folder Name="/prj/">
-<!--#if (PlaceSolutionInSrc) -->
-    <Project Path="prj/ClassLibrary.Tests/ClassLibrary.Tests.csproj" />
-    <Project Path="prj/ClassLibrary/ClassLibrary.csproj" />
+<!--#if (PlaceSolutionInSolutionFolder) -->
+    <Project Path="../../prj/ClassLibrary.Tests/ClassLibrary.Tests.csproj" />
+    <Project Path="../../prj/ClassLibrary/ClassLibrary.csproj" />
 <!--#else -->
     <Project Path="src/prj/ClassLibrary.Tests/ClassLibrary.Tests.csproj" />
     <Project Path="src/prj/ClassLibrary/ClassLibrary.csproj" />
 <!--#endif -->
 <!--#if (BenchmarkProject == true) -->
-<!--#if (PlaceSolutionInSrc) -->
-    <Project Path="prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj" />
+<!--#if (PlaceSolutionInSolutionFolder) -->
+    <Project Path="../../prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj" />
 <!--#else -->
     <Project Path="src/prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj" />
 <!--#endif -->

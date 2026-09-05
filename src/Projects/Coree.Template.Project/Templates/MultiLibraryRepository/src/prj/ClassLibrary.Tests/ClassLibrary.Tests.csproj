@@ -24,6 +24,11 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <!-- Keep Git configuration on disk without showing it as a project item -->
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
   <PropertyGroup>
     <!--#if (CoverletMSBuild == true) -->
     <CollectCoverage>true</CollectCoverage>

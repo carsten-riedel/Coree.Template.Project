@@ -65,18 +65,21 @@
         }
       ]
     },
-    // Where the TEMPLATE solution file is written. Default true: src/*.slnx
-    // (CLI has only that file). Visual Studio always also writes a root .slnx;
-    // when this is true those two files do not collide (different folders).
-    // When false the template solution must sit at repo root, which WOULD
-    // collide with Visual Studio's conventional {Name}.slnx — see sources
-    // rename and ClassLibrary.generated.slnx (same trick as ClassLibrarySlim).
-    "PlaceSolutionInSrc": {
+    // Where the TEMPLATE solution file is written. Default true:
+    // src/sln/ClassLibrary/ClassLibrary.slnx (one folder per library so
+    // `dotnet` in that directory does not see sibling .slnx files).
+    // Visual Studio always also writes a root .slnx; those two do not
+    // collide. When false the template solution sits at repo root, which
+    // WOULD collide with Visual Studio's conventional {Name}.slnx — see
+    // sources rename and ClassLibrary.generated.slnx (same trick as
+    // ClassLibrarySlim). False also puts every library's .slnx in one
+    // directory, so CLI/CI must pass a solution path if more than one exists.
+    "PlaceSolutionInSolutionFolder": {
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "description": "Place the template solution under src/. Turn off to place it at the repository root.",
-      "displayName": "Place solution under src/"
+      "description": "Place each .slnx under src/sln/{name}/. Turn off to place it at the repository root.",
+      "displayName": "Place solution in the solution folder"
     },
     // True for dotnet new / preview CLI. Used so only CLI renames
     // .generated.slnx → ClassLibrary.slnx at repo root. Visual Studio keeps
@@ -275,13 +278,12 @@
   // Sources: optional files plus solution placement.
   // The template always starts from ClassLibrary.generated.slnx at the
   // template root. Paths inside that file are switched with <!--#if
-  // (PlaceSolutionInSrc) --> (src-relative vs repo-relative).
+  // (PlaceSolutionInSolutionFolder) --> (sln-folder-relative vs repo-relative).
   //
-  // PlaceSolutionInSrc true  → rename to src/ClassLibrary.slnx (CLI and VS).
-  // PlaceSolutionInSrc false + CLI → rename to ClassLibrary.slnx at repo root.
-  // PlaceSolutionInSrc false + VS  → no rename; file stays
-  //   ClassLibrary.generated.slnx so it does not collide with Visual Studio's
-  //   {Name}.slnx at the same folder.
+  // true  → rename to src/sln/ClassLibrary/ClassLibrary.slnx (CLI and VS).
+  // false + CLI → rename to ClassLibrary.slnx at repo root.
+  // false + VS  → no rename; file stays ClassLibrary.generated.slnx so it
+  //   does not collide with Visual Studio's {Name}.slnx at the same folder.
   "sources": [
     {
       "modifiers": [
@@ -312,13 +314,19 @@
           ]
         },
         {
-          "condition": "(PlaceSolutionInSrc)",
+          "condition": "(PlaceSolutionInSolutionFolder)",
           "rename": {
-            "ClassLibrary.generated.slnx": "src/ClassLibrary.slnx"
+            "ClassLibrary.generated.slnx": "src/sln/ClassLibrary/ClassLibrary.slnx"
           }
         },
         {
-          "condition": "((PlaceSolutionInSrc == false) && IsCliHost)",
+          "condition": "(PlaceSolutionInSolutionFolder == false)",
+          "exclude": [
+            "src/sln/ClassLibrary/.gitignore"
+          ]
+        },
+        {
+          "condition": "((PlaceSolutionInSolutionFolder == false) && IsCliHost)",
           "rename": {
             "ClassLibrary.generated.slnx": "ClassLibrary.slnx"
           }
@@ -332,19 +340,19 @@
   // the pre-CLI-rename .generated path, matching ClassLibrarySlim.
   "primaryOutputs": [
     {
-      "path": "src/wrk/ClassLibrary/Readme.md"
+      "path": "src/sln/ClassLibrary/Readme.md"
     },
     {
-      "condition": "(PlaceSolutionInSrc)",
-      "path": "src/ClassLibrary.slnx"
+      "condition": "(PlaceSolutionInSolutionFolder)",
+      "path": "src/sln/ClassLibrary/ClassLibrary.slnx"
     },
     {
-      "condition": "(PlaceSolutionInSrc == false)",
+      "condition": "(PlaceSolutionInSolutionFolder == false)",
       "path": "ClassLibrary.generated.slnx"
     }
   ],
   // Visual Studio only. CLI ignores open-file and we skip display actions there.
-  // 84C0DA21 opens the wrk readme. AC1156F7 is a message box after create
+  // 84C0DA21 opens the sln readme. AC1156F7 is a message box after create
   // (not run-script; that dialog appeared before create).
   "postActions": [
       {
@@ -358,23 +366,23 @@
         "continueOnError": true
       },
       {
-        "condition": "(HostIdentifier == \"vs\" && PlaceSolutionInSrc)",
+        "condition": "(HostIdentifier == \"vs\" && PlaceSolutionInSolutionFolder)",
         "description": "Finish the repository layout",
         "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
         "manualInstructions": [
           {
-            "text": "Close Visual Studio, open the .slnx under src/, and delete the extra .slnx Visual Studio created in the repository root."
+            "text": "Close Visual Studio, open the .slnx under src/sln/, and delete the extra .slnx Visual Studio created in the repository root."
           }
         ],
         "continueOnError": true
       },
       {
-        "condition": "(HostIdentifier == \"vs\" && (PlaceSolutionInSrc == false))",
+        "condition": "(HostIdentifier == \"vs\" && (PlaceSolutionInSolutionFolder == false))",
         "description": "Finish the repository layout",
         "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
         "manualInstructions": [
           {
-            "text": "Visual Studio created a conventional root .slnx. Open the .generated.slnx in the repository root for the template layout (includes wrk). Delete the extra conventional .slnx if you do not need it."
+            "text": "Visual Studio created a conventional root .slnx. Open the .generated.slnx in the repository root for the template layout (includes sln). Delete the extra conventional .slnx if you do not need it."
           }
         ],
         "continueOnError": true

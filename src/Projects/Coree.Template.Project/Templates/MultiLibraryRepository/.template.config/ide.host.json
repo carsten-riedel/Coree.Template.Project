@@ -14,14 +14,14 @@
       }
     },
     {
-      "id": "PlaceSolutionInSrc",
+      "id": "PlaceSolutionInSolutionFolder",
       "isVisible": true,
       "persistenceScope": "none",
       "name": {
-        "text": "Place solution under /src folder"
+        "text": "Place solution in src/sln folder"
       },
       "description": {
-        "text": "Creates the template solution under src/. Visual Studio also creates a root .slnx; close Visual Studio, open the src solution, and delete the extra root .slnx."
+        "text": "Puts each .slnx next to that library's notes under src/sln/{name}/ so multiple libraries do not share one directory. Visual Studio also creates a root .slnx; close Visual Studio, open the src/sln solution, and delete the extra root .slnx."
       }
     },
     {

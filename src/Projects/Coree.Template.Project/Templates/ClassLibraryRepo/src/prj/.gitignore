@@ -1,7 +1,0 @@
-**/.vs/
-**/bin/
-**/obj/
-**/BenchmarkDotNet.Artifacts/
-**/CoverletOutput/
-**/ReportGeneratorOutput/
-**/MSTestResults/

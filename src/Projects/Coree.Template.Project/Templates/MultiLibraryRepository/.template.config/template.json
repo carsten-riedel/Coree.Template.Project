@@ -2,11 +2,11 @@
   "$schema": "http://json.schemastore.org/template",
   "author": "Carsten Riedel",
   // Opts Visual Studio into category display in the New Project dialog
-  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "ClassLibrary", "Library", "Coree" ],
-  "identity": "CoreeTemplatesProjectClassLibraryRepo",
+  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "ClassLibrary", "Library", "Coree", "Repository", "Multi-project" ],
+  "identity": "CoreeTemplatesProjectMultiLibraryRepository",
   // Displayname is used in the New Project dialog and in the dotnet new list output.
-  "name": ".NET Class library Repo",
-  "shortName": "classlibrepo-coree",
+  "name": ".NET multi-library repository",
+  "shortName": "multilibraryrepo-coree",
   "tags": {
     "language": "C#",
     "type": "solution",
@@ -18,17 +18,72 @@
   // Visual Studio creates the outer solution directory; true would add another name directory.
   "preferNameDirectory": false,
   "symbols": {
-    // Host-specific output behavior below distinguishes Visual Studio from the CLI.
+    // HostIdentifier is bound by the template host (dotnetcli, vs, …).
+    // Default "dotnetcli" so CLI-only dry runs still evaluate CLI rename rules.
     "HostIdentifier": {
       "type": "bind",
       "binding": "host:HostIdentifier",
       "defaultValue": "dotnetcli"
     },
-    "TryOpenInVisualStudio": {
+    // One multi-choice instead of N root bools (VS stays one group, like TFMs).
+    // CLI default is empty: later libraries omit the switch, no root collisions.
+    // Visual Studio does not allow an empty multi-choice (at least one value).
+    // None is the explicit empty set; it is first so a host that snaps to the
+    // first choice still writes no root files. None also overrides other
+    // selections if the IDE leaves leftover checks on.
+    // Visual Studio selects the real items via ide.host.json defaultValue.
+    // In conditions, == means "this value is among the selected choices".
+    "InitDefaultRepoItems": {
+      "type": "parameter",
+      "datatype": "choice",
+      "allowMultipleValues": true,
+      "enableQuotelessLiterals": true,
+      "isRequired": false,
+      "defaultValue": "",
+      "description": "Repository-root files. Pass on the first solution in a new repository; omit on later libraries in the same folder. Visual Studio cannot leave this empty: choose None.",
+      "displayName": "Repository root items",
+      "choices": [
+        {
+          "choice": "None",
+          "description": "Do not add repository-root files. Use this in Visual Studio when adding another library to an existing repository.",
+          "displayName": "None"
+        },
+        {
+          "choice": "Readme",
+          "description": "Add the repository-root README.md.",
+          "displayName": "Root README.md"
+        },
+        {
+          "choice": "AIReleaseCheckpoint",
+          "description": "Add TEMPLATE-RELEASE-CHECKPOINT.md. Fill it from the product before the first publish, then delete it.",
+          "displayName": "AI-supported release checkpoint"
+        },
+        {
+          "choice": "GitAttributes",
+          "description": "Add a repository-root .gitattributes.",
+          "displayName": "Root .gitattributes"
+        }
+      ]
+    },
+    // Where the TEMPLATE solution file is written. Default true: src/*.slnx
+    // (CLI has only that file). Visual Studio always also writes a root .slnx;
+    // when this is true those two files do not collide (different folders).
+    // When false the template solution must sit at repo root, which WOULD
+    // collide with Visual Studio's conventional {Name}.slnx — see sources
+    // rename and ClassLibrary.generated.slnx (same trick as ClassLibrarySlim).
+    "PlaceSolutionInSrc": {
       "type": "parameter",
       "dataType": "bool",
-      "defaultValue": "false",
-      "description": "After CLI creation on Windows, try to open the src solution in Visual Studio 2026. The launcher deletes itself after starting VS."
+      "defaultValue": "true",
+      "description": "Place the template solution under src/. Turn off to place it at the repository root.",
+      "displayName": "Place solution under src/"
+    },
+    // True for dotnet new / preview CLI. Used so only CLI renames
+    // .generated.slnx → ClassLibrary.slnx at repo root. Visual Studio keeps
+    // the .generated name and therefore does not overwrite its own root .slnx.
+    "IsCliHost": {
+      "type": "computed",
+      "value": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")"
     },
     // User-selectable target frameworks. Multiple values are supported for multi-targeting.
     "TargetFrameworks": {
@@ -217,57 +272,110 @@
       ]
     }
   },
-  // Filters optional files. The solution already has its final name under src.
+  // Sources: optional files plus solution placement.
+  // The template always starts from ClassLibrary.generated.slnx at the
+  // template root. Paths inside that file are switched with <!--#if
+  // (PlaceSolutionInSrc) --> (src-relative vs repo-relative).
+  //
+  // PlaceSolutionInSrc true  → rename to src/ClassLibrary.slnx (CLI and VS).
+  // PlaceSolutionInSrc false + CLI → rename to ClassLibrary.slnx at repo root.
+  // PlaceSolutionInSrc false + VS  → no rename; file stays
+  //   ClassLibrary.generated.slnx so it does not collide with Visual Studio's
+  //   {Name}.slnx at the same folder.
   "sources": [
     {
       "modifiers": [
         {
-          "condition": "(TryOpenInVisualStudio == false)",
-          "exclude": [ "src/wrk/Open-VisualStudio.ps1" ]
+          "condition": "((InitDefaultRepoItems == \"None\") || (InitDefaultRepoItems != \"Readme\"))",
+          "exclude": [
+            "README.md"
+          ]
+        },
+        {
+          "condition": "((InitDefaultRepoItems == \"None\") || (InitDefaultRepoItems != \"AIReleaseCheckpoint\"))",
+          "exclude": [
+            "TEMPLATE-RELEASE-CHECKPOINT.md"
+          ]
+        },
+        {
+          "condition": "((InitDefaultRepoItems == \"None\") || (InitDefaultRepoItems != \"GitAttributes\"))",
+          "exclude": [
+            ".gitattributes"
+          ]
         },
         {
           "condition": "(BenchmarkProject == false)",
           "exclude": [
             "src/prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj",
-            "src/prj/ClassLibrary.Benchmark/Program.cs"
+            "src/prj/ClassLibrary.Benchmark/Program.cs",
+            "src/prj/ClassLibrary.Benchmark/.gitignore"
           ]
+        },
+        {
+          "condition": "(PlaceSolutionInSrc)",
+          "rename": {
+            "ClassLibrary.generated.slnx": "src/ClassLibrary.slnx"
+          }
+        },
+        {
+          "condition": "((PlaceSolutionInSrc == false) && IsCliHost)",
+          "rename": {
+            "ClassLibrary.generated.slnx": "ClassLibrary.slnx"
+          }
         }
       ]
     }
   ],
-  // Reports the main generated files to the template host; this does not create or filter files.
+  // Host bookkeeping only. Readme is index 0 for the VS open-file post action.
+  // Solution paths are the names AFTER source rename, BEFORE sourceName replace.
+  // The false+CLI actual file is ClassLibrary.slnx; primaryOutputs still names
+  // the pre-CLI-rename .generated path, matching ClassLibrarySlim.
   "primaryOutputs": [
     {
+      "path": "src/wrk/ClassLibrary/Readme.md"
+    },
+    {
+      "condition": "(PlaceSolutionInSrc)",
       "path": "src/ClassLibrary.slnx"
     },
     {
-      "path": "src/wrk/ClassLibrary/Readme.md"
+      "condition": "(PlaceSolutionInSrc == false)",
+      "path": "ClassLibrary.generated.slnx"
     }
   ],
-  // IDE hosts can open the README. Only the CLI runs the optional VS launcher.
+  // Visual Studio only. CLI ignores open-file and we skip display actions there.
+  // 84C0DA21 opens the wrk readme. AC1156F7 is a message box after create
+  // (not run-script; that dialog appeared before create).
   "postActions": [
       {
-        "condition": "(HostIdentifier != \"dotnetcli\")",
+        "condition": "(HostIdentifier == \"vs\")",
         "description": "Opens Readme.md in the editor",
         "manualInstructions": [ ],
         "actionId": "84C0DA21-51C8-4541-9940-6CA19AF04EE6",
         "args": {
-          "files": "1"
+          "files": "0"
         },
         "continueOnError": true
       },
       {
-        "condition": "(TryOpenInVisualStudio && (HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\"))",
-        "description": "Try to open the src solution in Visual Studio 2026",
-        "actionId": "3A7C4B45-1F5D-4A30-959A-51B88E82B5D2",
-        "args": {
-          "executable": "powershell.exe",
-          "args": "-NoProfile -ExecutionPolicy Bypass -File ./src/wrk/Open-VisualStudio.ps1",
-          "redirectStandardOutput": false,
-          "redirectStandardError": false
-        },
+        "condition": "(HostIdentifier == \"vs\" && PlaceSolutionInSrc)",
+        "description": "Finish the repository layout",
+        "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
         "manualInstructions": [
-          { "text": "Open the SLNX under src manually, or run src/wrk/Open-VisualStudio.ps1 on Windows." }
+          {
+            "text": "Close Visual Studio, open the .slnx under src/, and delete the extra .slnx Visual Studio created in the repository root."
+          }
+        ],
+        "continueOnError": true
+      },
+      {
+        "condition": "(HostIdentifier == \"vs\" && (PlaceSolutionInSrc == false))",
+        "description": "Finish the repository layout",
+        "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
+        "manualInstructions": [
+          {
+            "text": "Visual Studio created a conventional root .slnx. Open the .generated.slnx in the repository root for the template layout (includes wrk). Delete the extra conventional .slnx if you do not need it."
+          }
         ],
         "continueOnError": true
       }

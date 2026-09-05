@@ -1,6 +1,6 @@
 # ClassLibrary
 
-.NET class library repository (Repo Slim template). The GitHub landing page is this file.
+.NET multi-library repository. The GitHub landing page is this file.
 <!--#if (PlaceSolutionInSrc) -->
 The solution and CLI commands live under `src/`.
 <!--#else -->

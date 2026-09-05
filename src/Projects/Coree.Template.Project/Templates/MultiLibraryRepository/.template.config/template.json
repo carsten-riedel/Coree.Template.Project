@@ -240,7 +240,8 @@
   },
   // Registers XML-style conditionals for extensions that hosts do not always
   // treat the same as the built-in XML/.md processor. Tokens must sit on their
-  // own lines because wholeLine is true.
+  // own lines because wholeLine is true. .targets is required so UseWebSdk can
+  // pick Sdk.targets inside Build/ImportSdkTargets.targets at generate time.
   "specialCustomOperations": {
     "**/*.slnx": {
       "operations": [
@@ -259,6 +260,22 @@
       ]
     },
     "**/*.md": {
+      "operations": [
+        {
+          "type": "conditional",
+          "configuration": {
+            "if": [ "<!--#if" ],
+            "else": [ "<!--#else" ],
+            "elseif": [ "<!--#elseif" ],
+            "endif": [ "<!--#endif" ],
+            "trim": true,
+            "wholeLine": true,
+            "evaluator": "C++"
+          }
+        }
+      ]
+    },
+    "**/*.targets": {
       "operations": [
         {
           "type": "conditional",

@@ -1,0 +1,39 @@
+<Project>
+  <!--
+    Why this file exists
+
+    The generated library is multi-targeted and is used with bare
+    `dotnet pack` and `dotnet publish` (no -f, no extra properties).
+
+    Pack must put every selected TFM into the nupkg. The SDK already does
+    that when the project has only TargetFrameworks.
+
+    Publish cannot do the same: the SDK refuses to publish several
+    frameworks into one folder (NETSDK1129) and demands -f. This template
+    still wants one default output under bin/Publish, using the highest
+    selected framework (__TargetFramework__).
+
+    So this target is the missing default: the outer Publish calls the
+    normal SDK Publish once with that framework. Everything else (restore,
+    build, test, pack, ProjectReference) stays on TargetFrameworks alone.
+
+    Do not "fix" publish by also setting TargetFramework on the csproj.
+    That is the old approach. MSBuild then treats the library as a single
+    TFM, pack needs a homemade pre-build of every framework (BuildForPack),
+    and a net8.0 consumer cannot reference a library that advertises
+    net8.0;net10.0. Gating TargetFramework on _IsPublishing looks smaller
+    but still breaks `dotnet publish` of that same net8.0 consumer, because
+    the CLI sets _IsPublishing on the whole graph.
+
+    This file is imported only on the outer evaluation (see
+    ImportSdkTargets.targets). The empty _DotNetCLIPostPublish applies
+    there only; the inner framework publish keeps the SDK post-publish
+    (needed for the Web SDK).
+  -->
+  <Target Name="Publish" Condition="'$(IsPublishable)' != 'false'">
+    <MSBuild Projects="$(MSBuildProjectFullPath)"
+             Targets="Publish"
+             Properties="TargetFramework=__TargetFramework__" />
+  </Target>
+  <Target Name="_DotNetCLIPostPublish" />
+</Project>

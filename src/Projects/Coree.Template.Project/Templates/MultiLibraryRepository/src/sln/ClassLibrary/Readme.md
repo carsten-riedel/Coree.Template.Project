@@ -97,7 +97,7 @@ dotnet pack -p:LocalPackagesDir="path/to/local/packages"
 dotnet publish
 ```
 
-Writes library output to `src/prj/ClassLibrary/bin/Publish/`. This is a class library, not an executable.
+Writes library output to `src/prj/ClassLibrary/bin/Publish/` for the highest selected target framework. This is a class library, not an executable.
 
 ## CI
 

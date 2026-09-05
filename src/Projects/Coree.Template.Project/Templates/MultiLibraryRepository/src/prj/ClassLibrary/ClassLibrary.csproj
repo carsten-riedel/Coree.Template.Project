@@ -1,20 +1,22 @@
 <!--#if (UseWebSdk) -->
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk.Web" />
 <!--#else -->
-<Project Sdk="Microsoft.NET.Sdk">
+<Project>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 <!--#endif -->
 
   <!-- General build settings: defines the output type and target framework -->
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
-    <TargetFramework>__TargetFramework__</TargetFramework>
   </PropertyGroup>
 
   <!-- Packaging and publish configuration -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <IsPublishable>true</IsPublishable>
+    <PublishRelease>true</PublishRelease>
     <IsTestProject>false</IsTestProject>
     <PackAsTool>false</PackAsTool>
   </PropertyGroup>
@@ -115,9 +117,9 @@
     <Copy SourceFiles="$(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(LocalPackagesDir)"  />
   </Target>
 
-  <!-- Import for pack target multiplaform build for pack always -->
-  <Import Project="Build/BuildForPack.targets" />
   <!-- Import for version information already integrated in < net8.0 -->
   <Import Project="Build/SourceControlState.targets" />
+  <!-- Closes the SDK after this file; outer publish dispatch is nested inside. -->
+  <Import Project="Build/ImportSdkTargets.targets" />
 
 </Project>

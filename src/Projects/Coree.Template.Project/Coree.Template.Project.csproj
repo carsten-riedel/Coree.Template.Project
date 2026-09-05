@@ -75,8 +75,9 @@
 
   <!-- Package specs -->
   <ItemGroup>
-  <!-- Can make a problem if slnx is opened by visual studio exclude bin, obj and .vs directories -->
-    <None Include="$(MSBuildProjectDirectory)\Templates\**\*" Exclude="$(MSBuildProjectDirectory)\Templates\**\**\bin\**;$(MSBuildProjectDirectory)\Templates\**\**\obj\**;$(MSBuildProjectDirectory)\Templates\**\**\.vs\**" Pack="true" PackagePath="" />
+  <!-- NuGet template layout. Exclude bin/obj/.vs (VS can create those if an slnx is opened)
+       and maintainer markdown under .template.config (not template content, not shipped). -->
+    <None Include="$(MSBuildProjectDirectory)\Templates\**\*" Exclude="$(MSBuildProjectDirectory)\Templates\**\**\bin\**;$(MSBuildProjectDirectory)\Templates\**\**\obj\**;$(MSBuildProjectDirectory)\Templates\**\**\.vs\**;$(MSBuildProjectDirectory)\Templates\**\.template.config\**\*.md" Pack="true" PackagePath="" />
     <None Include="$(MSBuildProjectDirectory)\NugetAssets\**\*"  Pack="true" PackagePath="" />
   </ItemGroup>
 

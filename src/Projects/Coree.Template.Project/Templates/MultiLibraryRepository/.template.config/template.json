@@ -122,17 +122,6 @@
       "description": "Use Microsoft.NET.Sdk.Web instead of Microsoft.NET.Sdk for the class library project.",
       "displayName": "Use the ASP.NET Core Web SDK"
     },
-    // VS Additional-information no-op bool separator. Hidden on CLI.
-    // Not used in conditions or replaces. Default checked. Rule length 20.
-    // Winner: emoji inside the bracket, so the rule stays symmetric and the
-    // rocket does not sit next to the checkbox. No text in the badge.
-    "UiSepVisRocket20": {
-      "type": "parameter",
-      "dataType": "bool",
-      "defaultValue": "true",
-      "description": "Separators are not available in templates. This checkbox has no effect.",
-      "displayName": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500[ \uD83D\uDE80 ]\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"
-    },
     // One multi-choice for C# / debug / documentation in library, tests, and
     // benchmark (VS combobox, like TFMs and InitDefaultRepoItems). Checked =
     // current product default. Unchecked = the other explicit value.

@@ -16,10 +16,6 @@
     "UseProjectLicenseAsRepoLicense": {
       "longName": "UseProjectLicenseAsRepoLicense",
       "shortName": ""
-    },
-    "UiSepVisRocket20": {
-      "isHidden": true,
-      "shortName": ""
     }
   }
 }

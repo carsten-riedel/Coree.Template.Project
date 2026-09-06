@@ -33,18 +33,6 @@
       "isVisible": true
     },
     {
-      "id": "UiSepVisRocket20",
-      "isVisible": true,
-      "defaultValue": "true",
-      "persistenceScope": "none",
-      "name": {
-        "text": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500[ \uD83D\uDE80 ]\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"
-      },
-      "description": {
-        "text": "Separators are not available in templates. This checkbox has no effect."
-      }
-    },
-    {
       "id": "CSharpProjectOptions",
       "isVisible": true,
       "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded|GenerateDocumentationFile",

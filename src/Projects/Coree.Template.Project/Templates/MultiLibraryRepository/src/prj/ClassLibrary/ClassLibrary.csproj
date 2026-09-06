@@ -12,6 +12,50 @@
     <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
   </PropertyGroup>
 
+  <!-- C# language features and debugging configuration -->
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "DisableImplicitUsings") -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!--#else -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "Nullable") -->
+    <Nullable>enable</Nullable>
+    <!--#else -->
+    <Nullable>disable</Nullable>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "DebugEmbedded") -->
+    <DebugType>embedded</DebugType>
+    <!--#else -->
+    <DebugType>none</DebugType>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "LangLatest") -->
+    <LangVersion>latest</LangVersion>
+    <!--#else -->
+    <LangVersion>default</LangVersion>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <!-- XML documentation file -->
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "GenerateDocumentationFile") -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!--#else -->
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <!--#if (ProjectEditorGlobalConfig == true) -->
+  <!-- Keep global analyzer scoped to the project directory config file on disk without showing it as a project item. -->
+  <!-- EnforceCodeStyleInBuild is required or IDE1006 stays IDE-only and `dotnet build` ignores the file. -->
+  <PropertyGroup>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <GlobalAnalyzerConfigFiles Include="$(MSBuildProjectDirectory)\.project.editor.globalconfig" Visible="false" />
+  </ItemGroup>
+  <!--#endif -->
+
   <!-- Packaging and publish configuration -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
@@ -20,19 +64,6 @@
     <IsTestProject>false</IsTestProject>
     <PackAsTool>false</PackAsTool>
   </PropertyGroup>
-
-  <!-- C# language features and debugging configuration -->
-  <PropertyGroup>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <DebugType>embedded</DebugType>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <!-- Keep Git configuration on disk without showing it as a project item -->
-  <ItemGroup>
-    <None Remove=".gitignore" />
-  </ItemGroup>
 
   <!-- Versioning -->
   <PropertyGroup>
@@ -80,14 +111,30 @@
      <![CDATA[PackageDescription]]>
     </Description>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <!--#if (ProjectLicense == "MIT") -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <!--#endif -->
+    <!--#if (ProjectLicense == "BSD3Clause") -->
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <!--#endif -->
+    <!--#if (ProjectLicense == "Apache2") -->
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <!--#endif -->
+    <!--#if (ProjectLicense == "Custom") -->
     <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <!--#endif -->
     <PackageIcon>Icon-128x128.png</PackageIcon>
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
-  <!-- Package specs -->
+  <!-- Extra nupkg files from NugetAssets/ (readme, icon, release notes). -->
+  <!-- Standard licenses: License.txt stays on disk (PackageLicenseExpression). -->
+  <!-- Custom: pack License.txt as PackageLicenseFile. -->
   <ItemGroup>
-    <None Include="$(MSBuildProjectDirectory)\NugetAssets\**\*" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\NugetAssets\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\NugetAssets\License.txt" />
+    <!--#if (ProjectLicense == "Custom") -->
+    <None Include="$(MSBuildProjectDirectory)\NugetAssets\License.txt" Pack="true" PackagePath="" />
+    <!--#endif -->
   </ItemGroup>
 
   <PropertyGroup>
@@ -117,9 +164,20 @@
     <Copy SourceFiles="$(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(LocalPackagesDir)"  />
   </Target>
 
-  <!-- Import for version information already integrated in < net8.0 -->
+  <!-- Keep Git configuration on disk without showing it as a project item -->
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+  <!-- Source Link git state as properties (SDK 8+). Target hooks GenerateAssemblyInfo. -->
   <Import Project="Build/SourceControlState.targets" />
-  <!-- Closes the SDK after this file; outer publish dispatch is nested inside. -->
+  <!--
+    Must stay last. This import is Sdk.targets plus the outer Publish dispatch.
+    The SDK reads properties and items while it loads (EnforceCodeStyleInBuild,
+    GlobalAnalyzerConfigFiles, publish). Anything after this line is after the
+    SDK and is ignored for that. Project Sdk="..." would append Sdk.targets
+    after this file and overwrite the Publish override.
+  -->
   <Import Project="Build/ImportSdkTargets.targets" />
 
 </Project>

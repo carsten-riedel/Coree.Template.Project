@@ -6,38 +6,91 @@
     <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
   </PropertyGroup>
 
+  <!-- C# language features and debugging configuration -->
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "DisableImplicitUsings") -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!--#else -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "Nullable") -->
+    <Nullable>enable</Nullable>
+    <!--#else -->
+    <Nullable>disable</Nullable>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "DebugEmbedded") -->
+    <DebugType>embedded</DebugType>
+    <!--#else -->
+    <DebugType>none</DebugType>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "LangLatest") -->
+    <LangVersion>latest</LangVersion>
+    <!--#else -->
+    <LangVersion>default</LangVersion>
+    <!--#endif -->
+  </PropertyGroup>
+
   <!-- Packaging and publish configuration -->
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <IsPublishable>false</IsPublishable>
+    <PublishRelease>false</PublishRelease>
     <IsTestProject>true</IsTestProject>
-    <!-- Multi-target tests and all generated reports are isolated per TFM. -->
-    <TestTfmsInParallel>true</TestTfmsInParallel>
     <PackAsTool>false</PackAsTool>
   </PropertyGroup>
 
-  <!-- C# language features and debugging configuration -->
+  <!-- Test configuration -->
   <PropertyGroup>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <DebugType>embedded</DebugType>
-    <LangVersion>latest</LangVersion>
+    <!-- Multi-target tests and all generated reports are isolated per TFM. -->
+    <TestTfmsInParallel>true</TestTfmsInParallel>
+    <_MSTestResultsDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'MSTestResults'))</_MSTestResultsDir>
+    <VSTestLogger>trx%3bLogFileName=$(_MSTestResultsDir)$(MSBuildProjectName)-$(TargetFramework).trx;html%3bLogFileName=$(_MSTestResultsDir)result-$(TargetFramework).html</VSTestLogger>
   </PropertyGroup>
+
+  <!--#if (CoverletMSBuild == true) -->
+  <!-- coverlet.msbuild: CollectCoverage is enough for `dotnet test` on SDK MSBuild. -->
+  <PropertyGroup>
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
+    <CoverletOutput>./CoverletOutput/</CoverletOutput>
+  </PropertyGroup>
+  <!--#endif -->
+
+  <!--#if (ReportGenerator == true) -->
+  <!-- ReportGenerator HTML/Markdown from Coverlet output, one folder per TFM. -->
+  <PropertyGroup>
+    <_ReportGeneratorOutputDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'ReportGeneratorOutput', '$(TargetFramework)'))</_ReportGeneratorOutputDir>
+  </PropertyGroup>
+  <Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
+    <ReportGenerator ReportFiles="@(CoverletReport)" TargetDirectory="$(_ReportGeneratorOutputDir)" ReportTypes="Html;MarkdownSummaryGithub;MarkdownSummary;CsvSummary;Clover;Badges" />
+  </Target>
+  <!--#endif -->
+
+  <!-- NuGet package inventory next to the other test reports. -->
+  <PropertyGroup>
+    <_NugetReportDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'NugetReport', '$(TargetFramework)'))</_NugetReportDir>
+  </PropertyGroup>
+  <Target Name="ListVulnerable" AfterTargets="PostBuildEvent">
+    <MakeDir Directories="$(_NugetReportDir)" />
+    <Exec Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package --vulnerable --include-transitive %3E &quot;$(_NugetReportDir)PackageVulnerable.txt&quot;" IgnoreExitCode="true" />
+    <Exec Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package %3E &quot;$(_NugetReportDir)PackageList.txt&quot;" IgnoreExitCode="true" />
+  </Target>
+
+
 
   <!-- Keep Git configuration on disk without showing it as a project item -->
   <ItemGroup>
     <None Remove=".gitignore" />
   </ItemGroup>
 
-  <PropertyGroup>
-    <!--#if (CoverletMSBuild == true) -->
-    <CollectCoverage>true</CollectCoverage>
-    <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
-    <CoverletOutput>./CoverletOutput/</CoverletOutput>
-    <!--#endif -->
-    <VSTestLogger>trx%3bLogFileName=$(MSBuildThisFileDirectory)\MSTestResults\$(MSBuildProjectName)-$(TargetFramework).trx;html%3bLogFileName=$(MSBuildThisFileDirectory)\MSTestResults\result-$(TargetFramework).html</VSTestLogger>
-  </PropertyGroup>
+  <!-- Keep both test TFMs and reference the matching ClassLibrary TFM for each test build. -->
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj">
+      <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
+    </ProjectReference>
+  </ItemGroup>
 
+  <!-- External dependencies -->
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="4.4.0" />
@@ -51,27 +104,6 @@
     <!--#if (ReportGenerator == true) -->
     <PackageReference Include="ReportGenerator" Version="5.2.0" />
     <!--#endif -->
-  </ItemGroup>
-
-  <!--#if (ReportGenerator == true) -->
-  <Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
-    <ReportGenerator ReportFiles="@(CoverletReport)" TargetDirectory="ReportGeneratorOutput\$(TargetFramework)" ReportTypes="Html;MarkdownSummaryGithub;MarkdownSummary;CsvSummary;Clover;Badges" />
-  </Target>
-  <!--#endif -->
-
-  <Target Name="ListVulnerable" AfterTargets="PostBuildEvent">
-    <MakeDir Directories="$(MSBuildThisFileDirectory)NugetReport\$(TargetFramework)" />
-    <Exec Condition="!$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package --vulnerable --include-transitive %3E &quot;$(MSBuildProjectDirectory)\NugetReport\$(TargetFramework)\PackageVulnerable.txt&quot;" IgnoreExitCode="true" />
-    <Exec Condition="$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package --vulnerable --include-transitive %3E &quot;$(MSBuildProjectDirectory)/NugetReport/$(TargetFramework)/PackageVulnerable.txt&quot;" IgnoreExitCode="true" />
-    <Exec Condition="!$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package %3E &quot;$(MSBuildProjectDirectory)\NugetReport\$(TargetFramework)\PackageList.txt&quot;" IgnoreExitCode="true" />
-    <Exec Condition="$([MSBuild]::IsOSUnixLike())" Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package %3E &quot;$(MSBuildProjectDirectory)/NugetReport/$(TargetFramework)/PackageList.txt&quot;" IgnoreExitCode="true" />
-  </Target>
-
-  <!-- Keep both test TFMs and reference the matching ClassLibrary TFM for each test build. -->
-  <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj">
-      <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
-    </ProjectReference>
   </ItemGroup>
 
 </Project>

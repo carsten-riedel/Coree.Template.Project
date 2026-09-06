@@ -33,6 +33,30 @@
       "isVisible": true
     },
     {
+      "id": "UiSepVisRocket20",
+      "isVisible": true,
+      "defaultValue": "true",
+      "persistenceScope": "none",
+      "name": {
+        "text": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500[ \uD83D\uDE80 ]\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"
+      },
+      "description": {
+        "text": "Separators are not available in templates. This checkbox has no effect."
+      }
+    },
+    {
+      "id": "CSharpProjectOptions",
+      "isVisible": true,
+      "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded|GenerateDocumentationFile",
+      "persistenceScope": "none",
+      "name": {
+        "text": "C# project options"
+      },
+      "description": {
+        "text": "Checked values write explicit C# and debug properties on the class library, tests, and benchmark. XML documentation is library-only. Uncheck one to write the alternative."
+      }
+    },
+    {
       "id": "PackageAuthor",
       "isVisible": true
     },
@@ -46,6 +70,33 @@
     },
     {
       "id": "PackageDescription",
+      "isVisible": true
+    },
+    {
+      "id": "ProjectLicense",
+      "isVisible": true,
+      "defaultValue": "MIT",
+      "persistenceScope": "none",
+      "name": {
+        "text": "Project license"
+      },
+      "description": {
+        "text": "Default MIT. Standard licenses set PackageLicenseExpression and keep License.txt on disk. Custom packs License.txt as the NuGet license file. Repository root LICENSE is the separate checkbox."
+      }
+    },
+    {
+      "id": "UseProjectLicenseAsRepoLicense",
+      "isVisible": true,
+      "persistenceScope": "none",
+      "name": {
+        "text": "Use project license as repository license"
+      },
+      "description": {
+        "text": "Also write LICENSE at the repository root. First create only."
+      }
+    },
+    {
+      "id": "ProjectEditorGlobalConfig",
       "isVisible": true
     },
     {

@@ -122,6 +122,62 @@
       "description": "Use Microsoft.NET.Sdk.Web instead of Microsoft.NET.Sdk for the class library project.",
       "displayName": "Use the ASP.NET Core Web SDK"
     },
+    // VS Additional-information no-op bool separator. Hidden on CLI.
+    // Not used in conditions or replaces. Default checked. Rule length 20.
+    // Winner: emoji inside the bracket, so the rule stays symmetric and the
+    // rocket does not sit next to the checkbox. No text in the badge.
+    "UiSepVisRocket20": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Separators are not available in templates. This checkbox has no effect.",
+      "displayName": "\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500[ \uD83D\uDE80 ]\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"
+    },
+    // One multi-choice for C# / debug / documentation in library, tests, and
+    // benchmark (VS combobox, like TFMs and InitDefaultRepoItems). Checked =
+    // current product default. Unchecked = the other explicit value.
+    // Properties are always written. GenerateDocumentationFile is in this
+    // choice list; only the class library writes it (own PropertyGroup).
+    // Tests/Benchmark have no XML docs surface. No None: CLI/VS default is
+    // the five product values; Visual Studio keeps at least one checked.
+    // Omit the switch on CLI.
+    "CSharpProjectOptions": {
+      "type": "parameter",
+      "datatype": "choice",
+      "allowMultipleValues": true,
+      "enableQuotelessLiterals": true,
+      "isRequired": false,
+      "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded|GenerateDocumentationFile",
+      "description": "C# and debug settings for the class library, tests, and benchmark. Uncheck an item to write the alternative value.",
+      "displayName": "C# project options",
+      "choices": [
+        {
+          "choice": "DisableImplicitUsings",
+          "description": "Do not add global implicit usings. Uncheck to enable them.",
+          "displayName": "Disable implicit usings"
+        },
+        {
+          "choice": "Nullable",
+          "description": "Enable nullable reference types. Uncheck to disable them.",
+          "displayName": "Nullable"
+        },
+        {
+          "choice": "LangLatest",
+          "description": "Use the newest C# the installed SDK understands. Uncheck for the TFM default.",
+          "displayName": "Latest language version"
+        },
+        {
+          "choice": "DebugEmbedded",
+          "description": "Embed portable PDBs in the assembly. Uncheck for no debug symbols.",
+          "displayName": "Embedded debug symbols"
+        },
+        {
+          "choice": "GenerateDocumentationFile",
+          "description": "Emit an XML documentation file. Uncheck to skip it.",
+          "displayName": "XML documentation file"
+        }
+      ]
+    },
     // Converts the selected framework values to the semicolon-separated MSBuild list.
     "TargetFrameworksValue": {
       "type": "generated",
@@ -213,6 +269,59 @@
       "replaces": "PackageDescription",
       "description": "The nuget package description of your project.",
       "displayName": "Package description"
+    },
+    // Project / NuGet license. Single choice. MIT first and default.
+    // Standard licenses: PackageLicenseExpression; License.txt on disk only
+    // (not packed — NU5033 if combined with PackageLicenseFile).
+    // Custom: copyright-only License.txt packed as PackageLicenseFile.
+    // Repo root LICENSE is a separate bool; default off.
+    "ProjectLicense": {
+      "type": "parameter",
+      "datatype": "choice",
+      "isRequired": false,
+      "defaultValue": "MIT",
+      "description": "License for the class library. Default MIT. Standards set PackageLicenseExpression. Custom packs License.txt. Repository root LICENSE is the separate switch.",
+      "displayName": "Project license",
+      "choices": [
+        {
+          "choice": "MIT",
+          "description": "MIT. PackageLicenseExpression MIT. License.txt on disk only.",
+          "displayName": "MIT"
+        },
+        {
+          "choice": "BSD3Clause",
+          "description": "BSD 3-Clause. PackageLicenseExpression BSD-3-Clause. License.txt on disk only.",
+          "displayName": "BSD 3-Clause"
+        },
+        {
+          "choice": "Apache2",
+          "description": "Apache 2.0. PackageLicenseExpression Apache-2.0. License.txt on disk only.",
+          "displayName": "Apache 2.0"
+        },
+        {
+          "choice": "Custom",
+          "description": "Copyright only (all rights reserved until you add terms). Writes License.txt and packs it as PackageLicenseFile.",
+          "displayName": "Custom (License.txt)"
+        }
+      ]
+    },
+    "UseProjectLicenseAsRepoLicense": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "false",
+      "description": "Also write the selected project license to the repository-root LICENSE file. Use on the first create only.",
+      "displayName": "Use project license as repository license"
+    },
+    // Library-only .project.editor.globalconfig via GlobalAnalyzerConfigFiles.
+    // Default on. The file is a VS-exported style dump, not a build-fail
+    // probe. Wire it before ImportSdkTargets; EnforceCodeStyleInBuild is
+    // required or the file stays IDE-only.
+    "ProjectEditorGlobalConfig": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Add a project-scoped .project.editor.globalconfig for editor/analyzer rules.",
+      "displayName": "Project editor global analyzer config"
     },
     // These options affect only the generated test project; the library remains free of test tooling.
     "CoverletMSBuild": {
@@ -331,6 +440,12 @@
           ]
         },
         {
+          "condition": "(ProjectEditorGlobalConfig == false)",
+          "exclude": [
+            "src/prj/ClassLibrary/.project.editor.globalconfig"
+          ]
+        },
+        {
           "condition": "(PlaceSolutionInSolutionFolder)",
           "rename": {
             "ClassLibrary.generated.slnx": "src/sln/ClassLibrary/ClassLibrary.slnx"
@@ -346,6 +461,25 @@
           "condition": "((PlaceSolutionInSolutionFolder == false) && IsCliHost)",
           "rename": {
             "ClassLibrary.generated.slnx": "ClassLibrary.slnx"
+          }
+        }
+      ]
+    },
+    {
+      "source": "./src/prj/ClassLibrary/NugetAssets/",
+      "target": "./",
+      "condition": "(UseProjectLicenseAsRepoLicense)",
+      "modifiers": [
+        {
+          "exclude": [
+            "Readme.md",
+            "ReleaseNotes.txt",
+            "Icon-128x128.png"
+          ]
+        },
+        {
+          "rename": {
+            "License.txt": "LICENSE"
           }
         }
       ]

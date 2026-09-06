@@ -4,6 +4,22 @@
     "InitDefaultRepoItems": {
       "longName": "InitDefaultRepoItems",
       "shortName": ""
+    },
+    "CSharpProjectOptions": {
+      "longName": "CSharpProjectOptions",
+      "shortName": ""
+    },
+    "ProjectLicense": {
+      "longName": "ProjectLicense",
+      "shortName": ""
+    },
+    "UseProjectLicenseAsRepoLicense": {
+      "longName": "UseProjectLicenseAsRepoLicense",
+      "shortName": ""
+    },
+    "UiSepVisRocket20": {
+      "isHidden": true,
+      "shortName": ""
     }
   }
 }

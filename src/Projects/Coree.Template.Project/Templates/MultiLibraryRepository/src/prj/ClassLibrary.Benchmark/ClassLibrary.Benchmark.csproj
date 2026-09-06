@@ -6,20 +6,36 @@
     <TargetFramework>__TargetFramework__</TargetFramework>
   </PropertyGroup>
 
+  <!-- C# language features and debugging configuration -->
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "DisableImplicitUsings") -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!--#else -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "Nullable") -->
+    <Nullable>enable</Nullable>
+    <!--#else -->
+    <Nullable>disable</Nullable>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "DebugEmbedded") -->
+    <DebugType>embedded</DebugType>
+    <!--#else -->
+    <DebugType>none</DebugType>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "LangLatest") -->
+    <LangVersion>latest</LangVersion>
+    <!--#else -->
+    <LangVersion>default</LangVersion>
+    <!--#endif -->
+  </PropertyGroup>
+
   <!-- Packaging and publish configuration -->
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <IsPublishable>false</IsPublishable>
     <IsTestProject>false</IsTestProject>
     <PackAsTool>false</PackAsTool>
-  </PropertyGroup>
-
-  <!-- C# language features and debugging configuration -->
-  <PropertyGroup>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <DebugType>embedded</DebugType>
-    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <!-- Keep Git configuration on disk without showing it as a project item -->

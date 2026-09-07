@@ -27,9 +27,9 @@ src/prj/ClassLibrary.Benchmark/  optional BenchmarkDotNet console app
 ```
 
 <!--#if (PlaceSolutionInSolutionFolder) -->
-Open a terminal in `src/sln/ClassLibrary/` and run `dotnet restore`, `dotnet build`, `dotnet test`, `dotnet pack`, or `dotnet publish`. The CLI finds the one solution in that folder; you do not pass a `.slnx` or `.csproj` path.
+Open a terminal in `src/sln/ClassLibrary/` and run `dotnet restore`, `dotnet build`, `dotnet test`, or `dotnet pack`. The CLI finds the one solution in that folder; you do not pass a `.slnx` or `.csproj` path.
 <!--#else -->
-Open a terminal in the repository root and run `dotnet restore`, `dotnet build`, `dotnet test`, `dotnet pack`, or `dotnet publish`. The CLI finds the solution only if this directory contains exactly one `.slnx`.
+Open a terminal in the repository root and run `dotnet restore`, `dotnet build`, `dotnet test`, or `dotnet pack`. The CLI finds the solution only if this directory contains exactly one `.slnx`.
 <!--#endif -->
 
 Command details, test-report links, pack output, and CI notes: [src/sln/ClassLibrary/Readme.md](src/sln/ClassLibrary/Readme.md).

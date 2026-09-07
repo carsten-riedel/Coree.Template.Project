@@ -27,21 +27,22 @@
       "defaultValue": "dotnetcli"
     },
     // One multi-choice instead of N root bools (VS stays one group, like TFMs).
-    // CLI default is empty: later libraries omit the switch, no root collisions.
+    // CLI default is empty: later libraries omit both switches, no root collisions.
     // Visual Studio does not allow an empty multi-choice (at least one value).
     // None is the explicit empty set; it is first so a host that snaps to the
     // first choice still writes no root files. None also overrides other
-    // selections if the IDE leaves leftover checks on.
+    // selections if the IDE leaves leftover checks on, including InitAllRepoItems.
     // Visual Studio selects the real items via ide.host.json defaultValue.
+    // CLI first-create set is InitAllRepoItems (bool, hidden in VS).
     // In conditions, == means "this value is among the selected choices".
-    "InitDefaultRepoItems": {
+    "InitRepoItems": {
       "type": "parameter",
       "datatype": "choice",
       "allowMultipleValues": true,
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "",
-      "description": "Repository-root files. Pass on the first solution in a new repository; omit on later libraries in the same folder. Visual Studio cannot leave this empty: choose None.",
+      "description": "Pick individual repository-root files. Omit on later libraries in the same folder. For the full first-create set on CLI, use --InitAllRepoItems. Visual Studio cannot leave this empty: choose None.",
       "displayName": "Repository root items",
       "choices": [
         {
@@ -70,6 +71,16 @@
           "displayName": "LICENSE file at repository root"
         }
       ]
+    },
+    // CLI-only first-create set: README, checkpoint, .gitattributes, LICENSE.
+    // Same items as the Visual Studio ide.host default. Hidden in VS.
+    // None on InitRepoItems still writes nothing.
+    "InitAllRepoItems": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "false",
+      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, LICENSE). Same set as a Visual Studio first create. First create only.",
+      "displayName": "All repository root items"
     },
     // Where the TEMPLATE solution file is written. Default true:
     // src/sln/ClassLibrary/ClassLibrary.slnx (one folder per library so
@@ -129,7 +140,7 @@
       "displayName": "Use the ASP.NET Core Web SDK"
     },
     // One multi-choice for C# / debug / documentation in library, tests, and
-    // benchmark (VS combobox, like TFMs and InitDefaultRepoItems). Checked =
+    // benchmark (VS combobox, like TFMs and InitRepoItems). Checked =
     // current product default. Unchecked = the other explicit value.
     // Properties are always written. GenerateDocumentationFile is in this
     // choice list; only the class library writes it (own PropertyGroup).
@@ -269,7 +280,7 @@
     // Standard licenses: PackageLicenseExpression; License.txt on disk only
     // (not packed — NU5033 if combined with PackageLicenseFile).
     // Custom: copyright-only License.txt packed as PackageLicenseFile.
-    // Repo root LICENSE is InitDefaultRepoItems RepoLicense, not this dropdown.
+    // Repo root LICENSE is InitRepoItems RepoLicense or InitAllRepoItems, not this dropdown.
     "ProjectLicense": {
       "type": "parameter",
       "datatype": "choice",
@@ -402,19 +413,19 @@
     {
       "modifiers": [
         {
-          "condition": "((InitDefaultRepoItems == \"None\") || (InitDefaultRepoItems != \"Readme\"))",
+          "condition": "((InitRepoItems == \"None\") || ((InitAllRepoItems == false) && (InitRepoItems != \"Readme\")))",
           "exclude": [
             "README.md"
           ]
         },
         {
-          "condition": "((InitDefaultRepoItems == \"None\") || (InitDefaultRepoItems != \"AIReleaseCheckpoint\"))",
+          "condition": "((InitRepoItems == \"None\") || ((InitAllRepoItems == false) && (InitRepoItems != \"AIReleaseCheckpoint\")))",
           "exclude": [
             "TEMPLATE-AI-RELEASE-CHECKPOINT.md"
           ]
         },
         {
-          "condition": "((InitDefaultRepoItems == \"None\") || (InitDefaultRepoItems != \"GitAttributes\"))",
+          "condition": "((InitRepoItems == \"None\") || ((InitAllRepoItems == false) && (InitRepoItems != \"GitAttributes\")))",
           "exclude": [
             ".gitattributes"
           ]
@@ -456,7 +467,7 @@
     {
       "source": "./src/prj/ClassLibrary/NugetAssets/",
       "target": "./",
-      "condition": "((InitDefaultRepoItems != \"None\") && (InitDefaultRepoItems == \"RepoLicense\"))",
+      "condition": "((InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"RepoLicense\")))",
       "modifiers": [
         {
           "exclude": [

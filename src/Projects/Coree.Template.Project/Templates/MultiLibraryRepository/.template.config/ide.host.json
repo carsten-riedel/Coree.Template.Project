@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/ide.host",
   "symbolInfo": [
     {
-      "id": "InitDefaultRepoItems",
+      "id": "InitRepoItems",
       "isVisible": true,
       "defaultValue": "Readme|AIReleaseCheckpoint|GitAttributes|RepoLicense",
       "persistenceScope": "none",
@@ -12,6 +12,10 @@
       "description": {
         "text": "Root files for the first create, including LICENSE from the project license. Visual Studio requires at least one value; choose None when adding another library to the same repository."
       }
+    },
+    {
+      "id": "InitAllRepoItems",
+      "isVisible": false
     },
     {
       "id": "PlaceSolutionInSolutionFolder",

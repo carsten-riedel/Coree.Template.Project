@@ -93,11 +93,13 @@ dotnet pack -p:LocalPackagesDir="path/to/local/packages"
 
 ## Publish
 
+The class library sets `IsPublishable` to `false`. Distribution is `dotnet pack`. To write output to `src/prj/ClassLibrary/bin/Publish/` for the highest selected target framework, set `IsPublishable` to `true` and run:
+
 ```bash
 dotnet publish
 ```
 
-Writes library output to `src/prj/ClassLibrary/bin/Publish/` for the highest selected target framework. This is a class library, not an executable.
+This is a class library, not an executable.
 
 ## CI
 

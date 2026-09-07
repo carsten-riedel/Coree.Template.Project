@@ -59,7 +59,7 @@
   <!-- Packaging and publish configuration -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <IsPublishable>true</IsPublishable>
+    <IsPublishable>false</IsPublishable>
     <PublishRelease>true</PublishRelease>
     <IsTestProject>false</IsTestProject>
     <PackAsTool>false</PackAsTool>

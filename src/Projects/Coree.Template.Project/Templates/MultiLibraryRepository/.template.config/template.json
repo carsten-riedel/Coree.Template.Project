@@ -73,13 +73,15 @@
       ]
     },
     // CLI-only first-create set: README, checkpoint, .gitattributes, LICENSE.
-    // Same items as the Visual Studio ide.host default. Hidden in VS.
-    // None on InitRepoItems still writes nothing.
+    // Same four files as the Visual Studio ide.host default. Hidden in VS.
+    // None on InitRepoItems still writes nothing. Root version.json is not
+    // in this set; it is --NerdbankGitVersioning Repo plus first-create Init
+    // (WriteRepoVersionJson).
     "InitAllRepoItems": {
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, LICENSE). Same set as a Visual Studio first create. First create only.",
+      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, LICENSE). Same set as a Visual Studio first create. Does not add version.json. First create only.",
       "displayName": "All repository root items"
     },
     // Where the TEMPLATE solution file is written. Default true:
@@ -276,6 +278,43 @@
       "description": "The nuget package description of your project.",
       "displayName": "Package description"
     },
+    // Single choice (dropdown). Default Off = existing VersionPrefix group.
+    // Nerdbank is --NerdbankGitVersioning Repo or Project. Root version.json
+    // is first-create only (WriteRepoVersionJson), not the choice by itself.
+    "NerdbankGitVersioning": {
+      "type": "parameter",
+      "datatype": "choice",
+      "isRequired": false,
+      "defaultValue": "Off",
+      "enableQuotelessLiterals": true,
+      "description": "Optional Nerdbank.GitVersioning. Default Off keeps VersionPrefix in the library project (no extra package). Repo uses a repository-root version.json (first create only). Project puts version.json under Properties/.",
+      "displayName": "Nerdbank.GitVersioning",
+      "choices": [
+        {
+          "choice": "Off",
+          "description": "VersionMajor / VersionPrefix / PackageVersion in the class library csproj. Default. No Nerdbank.GitVersioning package.",
+          "displayName": "Off (VersionPrefix in the library project)"
+        },
+        {
+          "choice": "Project",
+          "description": "Add Nerdbank.GitVersioning with version.json in this library's Properties folder. Every create; paths do not collide.",
+          "displayName": "Properties/version.json"
+        },
+        {
+          "choice": "Repo",
+          "description": "Add Nerdbank.GitVersioning using a repository-root version.json. The file is written only on a first create (--InitAllRepoItems or Visual Studio root items). Later libraries pass --NerdbankGitVersioning Repo without Init*.",
+          "displayName": "Repository version.json"
+        }
+      ]
+    },
+    "UseNerdbankGitVersioning": {
+      "type": "computed",
+      "value": "(NerdbankGitVersioning == \"Project\" || NerdbankGitVersioning == \"Repo\")"
+    },
+    "WriteRepoVersionJson": {
+      "type": "computed",
+      "value": "(NerdbankGitVersioning == \"Repo\") && (InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"Readme\") || (InitRepoItems == \"AIReleaseCheckpoint\") || (InitRepoItems == \"GitAttributes\") || (InitRepoItems == \"RepoLicense\"))"
+    },
     // Project / NuGet license. Single choice. MIT first and default.
     // Standard licenses: PackageLicenseExpression; License.txt on disk only
     // (not packed — NU5033 if combined with PackageLicenseFile).
@@ -445,6 +484,18 @@
           ]
         },
         {
+          "condition": "(NerdbankGitVersioning != \"Repo\")",
+          "exclude": [
+            "src/prj/ClassLibrary/Build/NerdbankRepositoryVersion.targets",
+            "src/prj/ClassLibrary/Build/Nerdbank.version.json"
+          ]
+        },
+        {
+          "exclude": [
+            "VersioningAssets/**"
+          ]
+        },
+        {
           "condition": "(PlaceSolutionInSolutionFolder)",
           "rename": {
             "ClassLibrary.generated.slnx": "src/sln/ClassLibrary/ClassLibrary.slnx"
@@ -463,6 +514,16 @@
           }
         }
       ]
+    },
+    {
+      "source": "./VersioningAssets/",
+      "target": "./",
+      "condition": "WriteRepoVersionJson"
+    },
+    {
+      "source": "./VersioningAssets/",
+      "target": "./src/prj/ClassLibrary/Properties/",
+      "condition": "(NerdbankGitVersioning == \"Project\")"
     },
     {
       "source": "./src/prj/ClassLibrary/NugetAssets/",

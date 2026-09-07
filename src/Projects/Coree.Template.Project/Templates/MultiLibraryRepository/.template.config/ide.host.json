@@ -10,7 +10,7 @@
         "text": "Repository root items"
       },
       "description": {
-        "text": "Root files for the first create, including LICENSE from the project license. Visual Studio requires at least one value; choose None when adding another library to the same repository."
+        "text": "Root files for the first create, including LICENSE from the project license. version.json is not a checkbox here; choose Repository version.json on a first create to add it. Visual Studio requires at least one value; choose None when adding another library to the same repository."
       }
     },
     {
@@ -63,6 +63,18 @@
     {
       "id": "PackageDescription",
       "isVisible": true
+    },
+    {
+      "id": "NerdbankGitVersioning",
+      "isVisible": true,
+      "defaultValue": "Off",
+      "persistenceScope": "none",
+      "name": {
+        "text": "Nerdbank.GitVersioning"
+      },
+      "description": {
+        "text": "Optional extra package. Default Off keeps VersionPrefix in the library project. Repository version.json is written on a first create (root items plus Repository). Later libraries keep Repository and choose None for root items."
+      }
     },
     {
       "id": "ProjectLicense",

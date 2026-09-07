@@ -65,6 +65,19 @@
     <PackAsTool>false</PackAsTool>
   </PropertyGroup>
 
+  <!--#if (UseNerdbankGitVersioning) -->
+  <!-- Versioning: Nerdbank -->
+  <!--#if (NerdbankGitVersioning == "Project") -->
+  <PropertyGroup>
+    <GitVersionBaseDirectory>$(MSBuildProjectDirectory)\Properties</GitVersionBaseDirectory>
+  </PropertyGroup>
+  <!--#endif -->
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <!--#else -->
   <!-- Versioning -->
   <PropertyGroup>
     <VersionMajor>0</VersionMajor>
@@ -78,6 +91,7 @@
     <InformationalVersion>$(PackageVersion)</InformationalVersion>
     <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
   </PropertyGroup>
+  <!--#endif -->
 
   <!-- Package metadata -->
   <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
@@ -171,6 +185,9 @@
 
   <!-- Source Link git state as properties (SDK 8+). Target hooks GenerateAssemblyInfo. -->
   <Import Project="Build/SourceControlState.targets" />
+  <!--#if (NerdbankGitVersioning == "Repo") -->
+  <Import Project="Build/NerdbankRepositoryVersion.targets" />
+  <!--#endif -->
   <!--
     Must stay last. This import is Sdk.targets plus the outer Publish dispatch.
     The SDK reads properties and items while it loads (EnforceCodeStyleInBuild,

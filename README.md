@@ -201,7 +201,17 @@ dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./M
 dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Inventory"
 ```
 
-The first call creates the shared directory layout and initializes the optional repository-level files. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` directory and omit `--InitAllRepoItems`, adding only their own library-specific project, test, and solution structure.
+The first call creates the shared directory layout and initializes the optional repository-level files. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. It does not add `version.json` and does not add Nerdbank. Later calls use the same `--output` directory and omit `--InitAllRepoItems`.
+
+Nerdbank is opt-in. Same combo folder, repository-level `version.json` once:
+
+```powershell
+dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Core" --InitAllRepoItems --NerdbankGitVersioning Repo
+dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Payments" --NerdbankGitVersioning Repo
+dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Inventory" --NerdbankGitVersioning Repo
+```
+
+Per-library `version.json` under `Properties/` (no shared root file): `--NerdbankGitVersioning Project` on each call instead of `Repo`.
 
 Because the output location and library name are separate arguments, the same composition model works naturally from a script:
 

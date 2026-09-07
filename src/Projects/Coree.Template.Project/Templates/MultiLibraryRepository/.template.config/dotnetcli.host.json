@@ -16,6 +16,10 @@
     "ProjectLicense": {
       "longName": "ProjectLicense",
       "shortName": ""
+    },
+    "NerdbankGitVersioning": {
+      "longName": "NerdbankGitVersioning",
+      "shortName": ""
     }
   }
 }

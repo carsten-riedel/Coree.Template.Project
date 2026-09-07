@@ -4,13 +4,13 @@
     {
       "id": "InitDefaultRepoItems",
       "isVisible": true,
-      "defaultValue": "Readme|AIReleaseCheckpoint|GitAttributes",
+      "defaultValue": "Readme|AIReleaseCheckpoint|GitAttributes|RepoLicense",
       "persistenceScope": "none",
       "name": {
         "text": "Repository root items"
       },
       "description": {
-        "text": "Root files for the first create. Visual Studio requires at least one value; choose None when adding another library to the same repository."
+        "text": "Root files for the first create, including LICENSE from the project license. Visual Studio requires at least one value; choose None when adding another library to the same repository."
       }
     },
     {
@@ -69,23 +69,19 @@
         "text": "Project license"
       },
       "description": {
-        "text": "Default MIT. Standard licenses set PackageLicenseExpression and keep License.txt on disk. Custom packs License.txt as the NuGet license file. Repository root LICENSE is the separate checkbox."
-      }
-    },
-    {
-      "id": "UseProjectLicenseAsRepoLicense",
-      "isVisible": true,
-      "persistenceScope": "none",
-      "name": {
-        "text": "Use project license as repository license"
-      },
-      "description": {
-        "text": "Also write LICENSE at the repository root. First create only."
+        "text": "Default MIT. Standard licenses set PackageLicenseExpression and keep License.txt on disk. Custom packs License.txt as the NuGet license file. The LICENSE file at repository root copies this license."
       }
     },
     {
       "id": "ProjectEditorGlobalConfig",
-      "isVisible": true
+      "isVisible": true,
+      "persistenceScope": "none",
+      "name": {
+        "text": "Code style rules for library project"
+      },
+      "description": {
+        "text": "Adds editor and analyzer rules beside the library project and applies them to that project in the IDE and on build. Test and benchmark projects are not affected."
+      }
     },
     {
       "id": "CoverletMSBuild",

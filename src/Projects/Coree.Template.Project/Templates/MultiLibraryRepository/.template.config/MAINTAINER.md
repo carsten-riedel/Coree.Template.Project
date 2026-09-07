@@ -12,7 +12,7 @@ The generated root `README.md` lives beside this folder, one level up. That file
 | --- | --- |
 | `template.json` | Identity, symbols, sources, post-actions. |
 | `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**. `persistenceScope: none` so the New Project dialog does not reuse the last create. |
-| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitDefaultRepoItems`, `CSharpProjectOptions`, `ProjectLicense`, and `UseProjectLicenseAsRepoLicense` so they do not steal single-letter aliases. |
+| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitDefaultRepoItems`, `CSharpProjectOptions`, and `ProjectLicense` so they do not steal single-letter aliases. |
 | `MAINTAINER.md` | This file. |
 
 ## Intended usage
@@ -30,14 +30,14 @@ dotnet new install "C:\dev\github.com\carsten-riedel\Coree.Template.Project\src\
 Combo repo, three libraries, root files only once:
 
 ```powershell
-dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.ClassLibrary1" --output "C:\Users\Valgrind\source\repos\MultiLibraryRepository-multisolution-optin" --InitDefaultRepoItems Readme AIReleaseCheckpoint GitAttributes
+dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.ClassLibrary1" --output "C:\Users\Valgrind\source\repos\MultiLibraryRepository-multisolution-optin" --InitDefaultRepoItems Readme AIReleaseCheckpoint GitAttributes RepoLicense
 dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.ClassLibrary2" --output "C:\Users\Valgrind\source\repos\MultiLibraryRepository-multisolution-optin"
 dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.ClassLibrary3" --output "C:\Users\Valgrind\source\repos\MultiLibraryRepository-multisolution-optin"
 ```
 
-After the first call the repo root has `README.md`, `TEMPLATE-RELEASE-CHECKPOINT.md`, and `.gitattributes`. Calls 2 and 3 add `src/prj` / `src/sln` trees only. Passing `--InitDefaultRepoItems Readme` again into the same folder is Exit 73 (collision); `--force` would overwrite.
+After the first call the repo root has `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, and `LICENSE`. Calls 2 and 3 add `src/prj` / `src/sln` trees only. Passing `--InitDefaultRepoItems Readme` again into the same folder is Exit 73 (collision); `--force` would overwrite.
 
-One switch, values separated by **spaces**. Repeating `--InitDefaultRepoItems` per value also works. A quoted `Readme|AIReleaseCheckpoint|GitAttributes` string is **not** valid CLI input on current `dotnet new`; `|` is only the host default separator in `ide.host.json`.
+One switch, values separated by **spaces**. Repeating `--InitDefaultRepoItems` per value also works. A quoted `Readme|AIReleaseCheckpoint|GitAttributes|RepoLicense` string is **not** valid CLI input on current `dotnet new`; `|` is only the host default separator in `ide.host.json`.
 
 Subset on the first create (checkpoint only, no landing README):
 
@@ -45,7 +45,7 @@ Subset on the first create (checkpoint only, no landing README):
 dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.ClassLibrary1" --output "<repo>" --InitDefaultRepoItems AIReleaseCheckpoint
 ```
 
-**Visual Studio:** `ide.host.json` selects Readme, checkpoint, and `.gitattributes` for a first create. The IDE requires at least one choice; for a second library into an existing repo choose **None** (it overrides leftover checks). Folgelibraries in the same folder are the CLI path above.
+**Visual Studio:** `ide.host.json` selects Readme, checkpoint, `.gitattributes`, and LICENSE file at repository root for a first create. The IDE requires at least one choice; for a second library into an existing repo choose **None** (it overrides leftover checks). Folgelibraries in the same folder are the CLI path above.
 
 ## AI-supported release checkpoint
 
@@ -55,7 +55,7 @@ The generated product still contains placeholders that can only become true **af
 **Not:** a forever queue in the GitHub `README.md`. That file is the customer landing page.  
 **Not:** a template-stamped `AGENTS.md`. That would collide with the consumer’s own agent file and would outlive the scaffold.
 
-**Yes:** one repo-root file, `TEMPLATE-RELEASE-CHECKPOINT.md`, stamped only when `InitDefaultRepoItems` includes `AIReleaseCheckpoint` (first create). It is a **Template-Checkpoint-Release**: close template residue, then **self-dissolve**. After that, new chats read the libraries and the real NuGet docs.
+**Yes:** one repo-root file, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, stamped only when `InitDefaultRepoItems` includes `AIReleaseCheckpoint` (first create). `TEMPLATE-` marks it as delete-me scaffold; `AI` matches the VS choice. It is a **Template-Checkpoint-Release**: close template residue, then **self-dissolve**. After that, new chats read the libraries and the real NuGet docs. The file is written for a person; an assistant can fill it from the product. It is not a prompt and not standing agent rules.
 
 Why the repo root, not `src/sln/{Name}/`: the first look at a combo repo is the customer surface; one fat checklist can say “update every NuGet readme in this repository” without a per-library marker. Libraries added later are in scope until the file is deleted.
 
@@ -70,7 +70,7 @@ Multi-choice (`allowMultipleValues`), not N bools. Visual Studio shows **one gro
 | Host | Default | Empty set |
 | --- | --- | --- |
 | CLI | none selected (`defaultValue` `""`) | omit the switch |
-| Visual Studio | `Readme\|AIReleaseCheckpoint\|GitAttributes` | not allowed; choose `None` |
+| Visual Studio | `Readme\|AIReleaseCheckpoint\|GitAttributes\|RepoLicense` | not allowed; choose `None` |
 
 `None` is first in the choice list. `sources` exclude each root file unless its choice is selected; `None` excludes all of them.
 
@@ -94,7 +94,7 @@ Benchmark previously hardcoded `ImplicitUsings` enable. It now follows the switc
 
 ## `ProjectLicense`
 
-Single choice (dropdown, not a checkbox group). Project + NuGet only; the git repo license is a different file.
+Single choice (dropdown, not a checkbox group). Project + NuGet only. Repository-root `LICENSE` is `InitDefaultRepoItems` choice `RepoLicense` (UI: **LICENSE file at repository root**), not a second bool.
 
 | Choice | `NugetAssets/License.txt` | NuGet |
 | --- | --- | --- |
@@ -105,11 +105,11 @@ Single choice (dropdown, not a checkbox group). Project + NuGet only; the git re
 
 Do not set `PackageLicenseFile` together with an expression (NU5033). The glob excludes `License.txt` except for `Custom`.
 
-`UseProjectLicenseAsRepoLicense` default **false**. When true, a second source stamps the same text as repository-root `LICENSE` (GitHub convention, no extension). First create only; a later library with the bool on collides (Exit 73), same as root README.
+`RepoLicense` is off on CLI unless listed in `--InitDefaultRepoItems`. Visual Studio includes it in the first-create default. A second source then stamps the same text as repository-root `LICENSE` (GitHub convention, no extension). First create only; a later library with `RepoLicense` selected collides (Exit 73), same as root README. `None` excludes it even if leftover checks remain.
 
 ## `ProjectEditorGlobalConfig`
 
-Library-only bool, default **true**. Drops `src/prj/{Name}/.project.editor.globalconfig` and wires `GlobalAnalyzerConfigFiles` plus `EnforceCodeStyleInBuild`. Tests and benchmark do not get the file.
+Library-only bool, default **true**. UI label **Code style rules for library project** (packable class-library project only; `is_global` is the analyzer-config technical term). Drops `src/prj/{Name}/.project.editor.globalconfig` and wires `GlobalAnalyzerConfigFiles` plus `EnforceCodeStyleInBuild`. Tests and benchmark do not get the file. Keep the symbol and disk name. Do not use a bare "project" label: **C# project options** already applies to library, tests, and benchmark.
 
 The file is a VS-exported style dump (`is_global = true`), not an always-fail naming probe. Naming rules in `.globalconfig` do **not** fail `dotnet build`. `EnforceCodeStyleInBuild` is the only non-default that matters (SDK default is false); without it the file stays IDE-only. Do not add `EnableNETAnalyzers` / `RunAnalyzers*` `true` noise — those already default true on net8/net10.
 
@@ -133,7 +133,7 @@ With `PlaceSolutionInSolutionFolder=true`, each `src/sln/{Name}/` gets its own `
 
 ## Other symbols worth not breaking
 
-- **`ProjectLicense` / `UseProjectLicenseAsRepoLicense`**: see section above. Default MIT. SPDX expression for standards; `PackageLicenseFile` only for `Custom`.
+- **`ProjectLicense` / `RepoLicense`**: see section above. Default MIT. SPDX expression for standards; `PackageLicenseFile` only for `Custom`. Root `LICENSE` is the `RepoLicense` root item.
 - **`CSharpProjectOptions`**: see section above. Do not split back into per-property dropdowns.
 - **`ProjectEditorGlobalConfig`**: see section above. Keep the file and the csproj wire-up on the library only, before `ImportSdkTargets`.
 - **`PlaceSolutionInSolutionFolder`**: default true → `src/sln/ClassLibrary/ClassLibrary.slnx` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). False on CLI renames to a root `.slnx`; false in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS’s conventional root `.slnx`. False also stacks every library’s `.slnx` in one directory.

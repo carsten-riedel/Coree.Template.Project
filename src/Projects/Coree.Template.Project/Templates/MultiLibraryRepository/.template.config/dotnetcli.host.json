@@ -12,10 +12,6 @@
     "ProjectLicense": {
       "longName": "ProjectLicense",
       "shortName": ""
-    },
-    "UseProjectLicenseAsRepoLicense": {
-      "longName": "UseProjectLicenseAsRepoLicense",
-      "shortName": ""
     }
   }
 }

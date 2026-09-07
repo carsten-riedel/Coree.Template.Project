@@ -6,6 +6,7 @@
   "identity": "CoreeTemplatesProjectMultiLibraryRepository",
   // Displayname is used in the New Project dialog and in the dotnet new list output.
   "name": ".NET multi-library repository",
+  "description": "Repository layout for one or more packable class libraries, with an optional AI-supported release checkpoint to finish before the first publish.",
   "shortName": "multilibraryrepo-coree",
   "tags": {
     "language": "C#",
@@ -50,18 +51,23 @@
         },
         {
           "choice": "Readme",
-          "description": "Add the repository-root README.md.",
-          "displayName": "Root README.md"
+          "description": "Add README.md at the top of the repository.",
+          "displayName": "README.md"
         },
         {
           "choice": "AIReleaseCheckpoint",
-          "description": "Add TEMPLATE-RELEASE-CHECKPOINT.md. Fill it from the product before the first publish, then delete it.",
+          "description": "Add TEMPLATE-AI-RELEASE-CHECKPOINT.md. Complete it from the product (yourself or with an assistant) before the first publish, then delete it.",
           "displayName": "AI-supported release checkpoint"
         },
         {
           "choice": "GitAttributes",
-          "description": "Add a repository-root .gitattributes.",
-          "displayName": "Root .gitattributes"
+          "description": "Add .gitattributes at the top of the repository.",
+          "displayName": ".gitattributes"
+        },
+        {
+          "choice": "RepoLicense",
+          "description": "Copy the selected project license into a LICENSE file at the repository root (GitHub convention). First repository create only.",
+          "displayName": "LICENSE file at repository root"
         }
       ]
     },
@@ -263,13 +269,13 @@
     // Standard licenses: PackageLicenseExpression; License.txt on disk only
     // (not packed — NU5033 if combined with PackageLicenseFile).
     // Custom: copyright-only License.txt packed as PackageLicenseFile.
-    // Repo root LICENSE is a separate bool; default off.
+    // Repo root LICENSE is InitDefaultRepoItems RepoLicense, not this dropdown.
     "ProjectLicense": {
       "type": "parameter",
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "MIT",
-      "description": "License for the class library. Default MIT. Standards set PackageLicenseExpression. Custom packs License.txt. Repository root LICENSE is the separate switch.",
+      "description": "License for the class library. Default MIT. Standards set PackageLicenseExpression. Custom packs License.txt. The LICENSE file at repository root copies this license.",
       "displayName": "Project license",
       "choices": [
         {
@@ -294,13 +300,6 @@
         }
       ]
     },
-    "UseProjectLicenseAsRepoLicense": {
-      "type": "parameter",
-      "dataType": "bool",
-      "defaultValue": "false",
-      "description": "Also write the selected project license to the repository-root LICENSE file. Use on the first create only.",
-      "displayName": "Use project license as repository license"
-    },
     // Library-only .project.editor.globalconfig via GlobalAnalyzerConfigFiles.
     // Default on. The file is a VS-exported style dump, not a build-fail
     // probe. Wire it before ImportSdkTargets; EnforceCodeStyleInBuild is
@@ -309,8 +308,8 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "description": "Add a project-scoped .project.editor.globalconfig for editor/analyzer rules.",
-      "displayName": "Project editor global analyzer config"
+      "description": "Add editor and analyzer rules beside the library project and apply them to that project in the IDE and on build. Test and benchmark projects are not affected.",
+      "displayName": "Code style rules for library project"
     },
     // These options affect only the generated test project; the library remains free of test tooling.
     "CoverletMSBuild": {
@@ -411,7 +410,7 @@
         {
           "condition": "((InitDefaultRepoItems == \"None\") || (InitDefaultRepoItems != \"AIReleaseCheckpoint\"))",
           "exclude": [
-            "TEMPLATE-RELEASE-CHECKPOINT.md"
+            "TEMPLATE-AI-RELEASE-CHECKPOINT.md"
           ]
         },
         {
@@ -457,7 +456,7 @@
     {
       "source": "./src/prj/ClassLibrary/NugetAssets/",
       "target": "./",
-      "condition": "(UseProjectLicenseAsRepoLicense)",
+      "condition": "((InitDefaultRepoItems != \"None\") && (InitDefaultRepoItems == \"RepoLicense\"))",
       "modifiers": [
         {
           "exclude": [

@@ -95,9 +95,10 @@ dotnet new uninstall Coree.Template.Project
 The package contains the following templates:
   1. [.NET MSBuild Task library](#Net-MSBuild-Task-library)
   2. [.NET Class library](#Net-class-library)
-  3. [.NET Tool](#Net-Tool)
-  4. [.NET Wpf](#Net-Wpf-Windows-only)
-  5. [.NET Project Template](#Net-Project-Template)
+  3. [.NET Multi-library repository](#Net-Multi-library-repository)
+  4. [.NET Tool](#Net-Tool)
+  5. [.NET Wpf](#Net-Wpf-Windows-only)
+  6. [.NET Project Template](#Net-Project-Template)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -175,6 +176,86 @@ Windows cmd (Sample useage):
 ```
 dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\repos\MyClassLib" & cd "source\repos\MyClassLib" & dotnet new classlib-coree --PackageAuthor Me --name "MyClassLib" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd /D %userprofile%
 ```
+
+## .NET Multi-library repository
+
+Create and grow a repository-like structure containing one or more independently packable .NET class libraries using repeatable `dotnet new` calls.
+
+Initialize the shared repository layout once, then add additional libraries whenever you need them.
+
+Instead of deciding the complete structure up front, `multilibraryrepo-coree` lets you compose it incrementally:
+
+- create the shared repository layout with the first library;
+- add more libraries later using the same template;
+- keep every library in a predictable `src/prj` / `src/sln` structure;
+- package each library independently;
+- use the same workflow interactively, from PowerShell, or from automation.
+
+**Initialize the layout once. Compose as many libraries as you need.**
+
+General use:
+
+```powershell
+dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Core" --InitAllRepoItems
+dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Payments"
+dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Inventory"
+```
+
+The first call creates the shared directory layout and initializes the optional repository-level files. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` directory and omit `--InitAllRepoItems`, adding only their own library-specific project, test, and solution structure.
+
+Because the output location and library name are separate arguments, the same composition model works naturally from a script:
+
+```powershell
+$repo = "./MyCompany.Core"
+$names = @("MyCompany.Core", "MyCompany.Payments", "MyCompany.Inventory", "MyCompany.Reporting")
+
+for ($i = 0; $i -lt $names.Count; $i++) {
+    $arguments = @("new", "multilibraryrepo-coree", "--PackageAuthor", "Carsten Riedel", "--output", $repo, "--name", $names[$i])
+    if ($i -eq 0) { $arguments += "--InitAllRepoItems" }
+    dotnet @arguments
+}
+```
+
+After creating `MyCompany.Core`, `MyCompany.Payments`, and `MyCompany.Inventory`, the directory tree looks roughly like this:
+
+```text
+MyCompany.Core/
+├── README.md
+├── LICENSE
+├── .gitattributes
+├── TEMPLATE-AI-RELEASE-CHECKPOINT.md
+└── src/
+    ├── prj/
+    │   ├── MyCompany.Core/
+    │   │   ├── Build/
+    │   │   ├── NugetAssets/
+    │   │   ├── Class1.cs
+    │   │   └── MyCompany.Core.csproj
+    │   ├── MyCompany.Core.Tests/
+    │   │   └── MyCompany.Core.Tests.csproj
+    │   ├── MyCompany.Payments/
+    │   │   └── MyCompany.Payments.csproj
+    │   ├── MyCompany.Payments.Tests/
+    │   │   └── MyCompany.Payments.Tests.csproj
+    │   ├── MyCompany.Inventory/
+    │   │   └── MyCompany.Inventory.csproj
+    │   └── MyCompany.Inventory.Tests/
+    │       └── MyCompany.Inventory.Tests.csproj
+    └── sln/
+        ├── MyCompany.Core/
+        │   ├── MyCompany.Core.slnx
+        │   └── Readme.md
+        ├── MyCompany.Payments/
+        │   ├── MyCompany.Payments.slnx
+        │   └── Readme.md
+        └── MyCompany.Inventory/
+            ├── MyCompany.Inventory.slnx
+            └── Readme.md
+```
+
+The top-level directory is shared. Each additional `dotnet new` call contributes another library-specific project, test project, and solution area. Each library remains its own independently buildable and packable unit while sharing the same repository-like structure.
+
+You do not need a different template for a single-library layout and a multi-library layout. Start with one, add another when you need it, or generate the complete set from a script.
 
 ## .NET Tool
 This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.

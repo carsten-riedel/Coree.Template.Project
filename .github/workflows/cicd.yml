@@ -41,7 +41,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - name: Diagnostic print enviroment vars
+    - name: Diagnostic print environment vars
       run: printenv
 
     - name: Display dotnet version

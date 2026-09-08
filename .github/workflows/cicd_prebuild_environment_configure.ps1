@@ -1,6 +1,6 @@
 
 ######################################################################################
-#Log-Block -Stage "cicd_prebuild_enviroment_prepare" -Section "Tools" -Task "Install dotnet tools"
+#Log-Block -Stage "cicd_prebuild_environment_prepare" -Section "Tools" -Task "Install dotnet tools"
 
 #if (-not (Test-CommandAvailability -CommandName "docfx"))
 #{
@@ -8,7 +8,7 @@
 #}
 
 ######################################################################################
-#Log-Block -Stage "cicd_prebuild_enviroment_prepare" -Section "Tools" -Task "Install powershell modules"
+#Log-Block -Stage "cicd_prebuild_environment_prepare" -Section "Tools" -Task "Install powershell modules"
 
 #if (-not (Test-CommandAvailability -CommandName "New-PGPKey"))
 #{
@@ -17,7 +17,7 @@
 
 
 ######################################################################################
-Log-Block -Stage "Prebuild enviroment" -Section "Prepare" -Task "Add github nuget source"
+Log-Block -Stage "Prebuild environment" -Section "Prepare" -Task "Add github nuget source"
 
 Execute-Command "dotnet nuget remove source github" -ExpectedExitCodes @(0,1)
 Execute-Command "dotnet nuget add source --username carsten-riedel --password $PAT --store-password-in-clear-text --name github ""https://nuget.pkg.github.com/carsten-riedel/index.json"""

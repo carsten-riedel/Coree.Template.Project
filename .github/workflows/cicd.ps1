@@ -14,10 +14,10 @@ $ErrorActionPreference = 'Stop'
 Start-Transcript -Path "$(Join-Path -Path "$PSScriptRoot" -ChildPath "$($(Get-ChildItem "$PSCommandPath").BaseName)-$(Get-Date -f 'yyyyMMdd_HHmmss').log")"
 
 . "$PSScriptRoot/cicd_util.ps1"
-. "$PSScriptRoot/cicd_prebuild_enviroment_requirments.ps1"
+. "$PSScriptRoot/cicd_prebuild_environment_requirements.ps1"
 . "$PSScriptRoot/cicd_prebuild_envars_prepare.ps1"
 . "$PSScriptRoot/cicd_prebuild_envars_check.ps1"
-. "$PSScriptRoot/cicd_prebuild_enviroment_configure.ps1"
+. "$PSScriptRoot/cicd_prebuild_environment_configure.ps1"
 
 . "$PSScriptRoot/cicd_build_clean.ps1"
 . "$PSScriptRoot/cicd_build_config.ps1"

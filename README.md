@@ -4,7 +4,7 @@
 
 Welcome to the Coree.Template.Project repository! This project offers a comprehensive suite of templates for Visual Studio and dotnet CLI, designed to streamline the creation of various .NET projects. From MSBuild tasks to class libraries and WPF applications, this repository serves as a one-stop resource for developers looking to enhance their .NET development workflow.
 
-## Preperation (Prerequirments)
+## Preparation (Prerequisites)
   
 ### Windows Setup
 
@@ -21,9 +21,9 @@ To install dotnet and powershell core from cmd in Windows:
   2. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 6.0"` to install the .NET 6.0 SDK.
   3. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 7.0"` to install the .NET 7.0 SDK.
   4. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 8.0"` to install the .NET 8.0 SDK.
-  5. Execute: `powershell -NoProfile -ExecutionPolicy Unrestricted -Command "& {[Environment]::SetEnvironmentVariable('DOTNET_ROOT', \"$env:localappdata\Microsoft\dotnet\", 'User')}"` to set the enviroment variables.
-  6. Execute: `powershell -NoProfile -ExecutionPolicy Unrestricted -Command "& {[Environment]::SetEnvironmentVariable('PATH', \"$($env:path);$env:localappdata\Microsoft\dotnet\", 'User')}"`  to set the enviroment variables.
-  7. Execute: `SET "DOTNET_ROOT=%localappdata%\Microsoft\dotnet" & SET "PATH=%PATH%;%localappdata%\Microsoft\dotnet"`  to set the current session enviroment variables.
+  5. Execute: `powershell -NoProfile -ExecutionPolicy Unrestricted -Command "& {[Environment]::SetEnvironmentVariable('DOTNET_ROOT', \"$env:localappdata\Microsoft\dotnet\", 'User')}"` to set the environment variables.
+  6. Execute: `powershell -NoProfile -ExecutionPolicy Unrestricted -Command "& {[Environment]::SetEnvironmentVariable('PATH', \"$($env:path);$env:localappdata\Microsoft\dotnet\", 'User')}"`  to set the environment variables.
+  7. Execute: `SET "DOTNET_ROOT=%localappdata%\Microsoft\dotnet" & SET "PATH=%PATH%;%localappdata%\Microsoft\dotnet"`  to set the current session environment variables.
   8. Execute: `dotnet tool install --global Powershell --no-cache` 
 
 ### WSL Setup
@@ -58,7 +58,7 @@ To install dotnet powershell and vscode:
   3. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 6.0` to install the .NET 6.0 SDK.
   4. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 7.0` to install the .NET 7.0 SDK.
   5. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 8.0` to install the .NET 8.0 SDK.
-  6. Execute:  `export DOTNET_ROOT=$HOME/.dotnet ; export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools ; echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $HOME/.bashrc && echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $HOME/.bashrc` to add the dotnet root and path to the enviroment and shell startup.
+  6. Execute:  `export DOTNET_ROOT=$HOME/.dotnet ; export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools ; echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $HOME/.bashrc && echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $HOME/.bashrc` to add the dotnet root and path to the environment and shell startup.
   7. Execute:  `dotnet tool install --global PowerShell` if you want to use Powershell Core.
   8. Execute:  `sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb` to install Visual Studio code.
   9. Execute:  `export DONT_PROMPT_WSL_INSTALL=1 ; echo 'export DONT_PROMPT_WSL_INSTALL=1' >> $HOME/.bashrc ; mkdir -p "$HOME/source/repos" ; mkdir -p "$HOME/source/packages"` to get rid of the Visual Studio code prompt, and to create some default directories.

@@ -153,7 +153,6 @@
 
   <PropertyGroup>
     <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Pack</PackageOutputPath>
-    <LocalPackagesDir></LocalPackagesDir>
   </PropertyGroup>
 
   <!-- Publish behavior keep slim for library specs -->
@@ -172,11 +171,6 @@
 		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
-
-  <Target Name="CopyToLocalPackages" AfterTargets="Pack" Condition="'$(LocalPackagesDir)'!=''">
-    <Message Text="Copy $(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg to $(LocalPackagesDir)" Importance="high" />
-    <Copy SourceFiles="$(PackageOutputPath)/$(PackageId).$(PackageVersion).nupkg" DestinationFolder="$(LocalPackagesDir)"  />
-  </Target>
 
   <!-- Keep Git configuration on disk without showing it as a project item -->
   <ItemGroup>

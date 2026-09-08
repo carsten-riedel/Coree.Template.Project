@@ -85,12 +85,6 @@ dotnet pack
 
 Creates one `.nupkg` in `src/prj/ClassLibrary/bin/Pack/` containing the library for all selected target frameworks. Test and optional benchmark projects are not packed.
 
-Optional: copy the package to a local feed by setting `LocalPackagesDir` in the library project, or:
-
-```bash
-dotnet pack -p:LocalPackagesDir="path/to/local/packages"
-```
-
 ## Publish
 
 The class library sets `IsPublishable` to `false`. Distribution is `dotnet pack`. To write output to `src/prj/ClassLibrary/bin/Publish/` for the highest selected target framework, set `IsPublishable` to `true` and run:

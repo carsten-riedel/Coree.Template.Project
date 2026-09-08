@@ -84,6 +84,12 @@ dotnet pack
 ```
 
 Creates one `.nupkg` in `src/prj/ClassLibrary/bin/Pack/` containing the library for all selected target frameworks. Test and optional benchmark projects are not packed.
+<!--#if (PublicApiAnalyzers) -->
+
+## Public API baseline
+
+The class library uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first real `dotnet build` writes `src/prj/ClassLibrary/Properties/PublicAPI/PublicAPI.Shipped.txt` and `PublicAPI.Unshipped.txt` if they are missing, then records the current public surface. Commit those files. Later public additions belong in `PublicAPI.Unshipped.txt` (analyzer RS0016 / `dotnet format analyzers` with `--diagnostics RS0016`).
+<!--#endif -->
 
 ## Publish
 

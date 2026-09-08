@@ -20,6 +20,10 @@
     "NerdbankGitVersioning": {
       "longName": "NerdbankGitVersioning",
       "shortName": ""
+    },
+    "PublicApiAnalyzers": {
+      "longName": "PublicApiAnalyzers",
+      "shortName": ""
     }
   }
 }

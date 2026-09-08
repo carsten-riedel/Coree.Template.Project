@@ -1,0 +1,62 @@
+<Project>
+  <UsingTask TaskName="WaitForPublicApiBaseline" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <UnshippedFile ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Linq" />
+      <Using Namespace="System.Threading" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        var deadline = DateTime.UtcNow.AddMinutes(2);
+        while (DateTime.UtcNow < deadline)
+        {
+          try
+          {
+            if (File.Exists(UnshippedFile))
+            {
+              string text;
+              using (var stream = new FileStream(UnshippedFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete))
+              using (var reader = new StreamReader(stream))
+              {
+                text = reader.ReadToEnd();
+              }
+              var lines = text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(line => line.Trim())
+                .Where(line => line.Length > 0 && line != "#nullable enable")
+                .ToArray();
+              if (lines.Length > 0)
+              {
+                return true;
+              }
+            }
+          }
+          catch (IOException)
+          {
+          }
+          Thread.Sleep(100);
+        }
+        Log.LogWarning("Public API baseline was still empty after waiting: " + UnshippedFile);
+      ]]></Code>
+    </Task>
+  </UsingTask>
+
+  <!--
+    First real build writes the baseline and runs format so VS does not need a
+    separate command. Nested format sets PublicApiInitializing=1 and skips.
+    Sibling inner TFMs wait until Unshipped has API lines.
+  -->
+  <Target Name="InitializePublicApi" BeforeTargets="DispatchToInnerBuilds;PrepareForBuild;CoreCompile" Condition="'$(DesignTimeBuild)' != 'true' and '$(PublicApiInitializing)' != '1'">
+    <PropertyGroup>
+      <_PublicApiShippedFile>$(PublicApiDirectory)\PublicAPI.Shipped.txt</_PublicApiShippedFile>
+      <_PublicApiUnshippedFile>$(PublicApiDirectory)\PublicAPI.Unshipped.txt</_PublicApiUnshippedFile>
+      <_PublicApiNeedsFormat Condition="!Exists('$(_PublicApiShippedFile)') or !Exists('$(_PublicApiUnshippedFile)')">true</_PublicApiNeedsFormat>
+    </PropertyGroup>
+    <MakeDir Directories="$(PublicApiDirectory)" Condition="'$(_PublicApiNeedsFormat)' == 'true'" />
+    <Message Text="Initializing public API baseline for $(MSBuildProjectName)." Importance="high" Condition="'$(_PublicApiNeedsFormat)' == 'true'" />
+    <WriteLinesToFile File="$(_PublicApiShippedFile)" Lines="#nullable enable" Overwrite="true" Condition="'$(_PublicApiNeedsFormat)' == 'true' and !Exists('$(_PublicApiShippedFile)')" />
+    <WriteLinesToFile File="$(_PublicApiUnshippedFile)" Lines="#nullable enable" Overwrite="true" Condition="'$(_PublicApiNeedsFormat)' == 'true' and !Exists('$(_PublicApiUnshippedFile)')" />
+    <Exec Command="dotnet format analyzers &quot;$(MSBuildProjectFullPath)&quot; --diagnostics RS0016 --no-restore --verbosity quiet" WorkingDirectory="$(MSBuildProjectDirectory)" EnvironmentVariables="PublicApiInitializing=1" Condition="'$(_PublicApiNeedsFormat)' == 'true'" />
+    <WaitForPublicApiBaseline UnshippedFile="$(_PublicApiUnshippedFile)" />
+  </Target>
+</Project>

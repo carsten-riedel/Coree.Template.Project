@@ -12,7 +12,7 @@ The generated root `README.md` lives beside this folder, one level up. That file
 | --- | --- |
 | `template.json` | Identity, symbols, sources, post-actions. |
 | `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**. `persistenceScope: none` so the New Project dialog does not reuse the last create. Host mapping: **CLI ↔ Visual Studio**. |
-| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `CSharpProjectOptions`, `ProjectLicense`, and `NerdbankGitVersioning` so they do not steal single-letter aliases. |
+| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, and `PublicApiAnalyzers` so they do not steal single-letter aliases. |
 | `MAINTAINER.md` | This file. |
 
 ## Intended usage
@@ -138,7 +138,7 @@ A combo repository is two or more `dotnet new` calls into the **same** `--output
 Other host-only switch behavior (not root files, same class of reason):
 
 - **`PlaceSolutionInSolutionFolder` false:** CLI renames to `{Name}.slnx` at repo root. Visual Studio keeps `{Name}.generated.slnx` so it does not overwrite the `{Name}.slnx` the IDE always writes. Post-actions that open the sln readme and tell you to close/reopen are `HostIdentifier == "vs"` only.
-- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning`:** same defaults on both hosts (`NerdbankGitVersioning` `Off`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again.
+- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `PublicApiAnalyzers`:** same defaults on both hosts (`NerdbankGitVersioning` `Off`, `PublicApiAnalyzers` `false`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again.
 - **`PackageAuthor`:** required on both.
 
 ## `InitRepoItems` / `InitAllRepoItems`
@@ -344,6 +344,17 @@ The file is a VS-exported style dump (`is_global = true`), not an always-fail na
 
 This PropertyGroup/ItemGroup must appear **before** `ImportSdkTargets`. After that import the SDK has already loaded and ignores the items.
 
+## `PublicApiAnalyzers`
+
+Library-only bool, default **false**. UI label **Public API analyzers**. CLI long name **`--PublicApiAnalyzers`**. Separate from repository-root Init* and from versioning. Tests and benchmark are not in this switch.
+
+When on, the class library references `Microsoft.CodeAnalysis.PublicApiAnalyzers` 5.6.0 and sets `PublicApiDirectory` to `Properties/PublicAPI`. `dotnet new` does **not** stamp `PublicAPI.Shipped.txt` / `PublicAPI.Unshipped.txt`. `Build/InitializePublicApi.targets` (imported only when this switch is on, before `ImportSdkTargets`) writes those files on the first real build if they are missing, then runs `dotnet format analyzers --diagnostics RS0016`. AdditionalFiles are always listed so a first solution compile can see the paths. Nested format sets `PublicApiInitializing` and skips the target. Sibling inner TFMs wait until Unshipped has API lines. Combo later libraries pass `--PublicApiAnalyzers` again; paths are per library (`src/prj/{Name}/Properties/PublicAPI/`).
+
+```powershell
+dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --PublicApiAnalyzers
+dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --PublicApiAnalyzers
+```
+
 ## Project roles and Git ignores
 
 The library is packable. `IsPublishable` is `false` on the class library (NuGet pack is the distribution path). Set it `true` to use the existing `PublishDefaultFramework` dispatch. `Properties/AssemblyInfo.cs` grants `InternalsVisibleTo` the test assembly (`ClassLibrary.Tests` via `sourceName`). The test project’s root `AssemblyInfo.cs` is only MSTest `Parallelize`. Tests and the optional BenchmarkDotNet executable explicitly set `IsPackable` and `IsPublishable` to `false`, including when automation calls each `.csproj` directly. The benchmark keeps one target framework (the highest selected) and runs with `dotnet run -c Release`. Versioning default is the VersionPrefix group in the library csproj. Tests and benchmark are not packable. Optional Nerdbank is **`--NerdbankGitVersioning`** `Repo` or `Project`.
@@ -354,7 +365,7 @@ The library is packable. `IsPublishable` is `false` on the class library (NuGet 
 
 Do not put `TargetFramework` next to `TargetFrameworks` to avoid `-f`. That was the previous library: MSBuild saw a single TFM, pack needed `BuildForPack`, and a `net8.0` consumer could not reference the project. `_IsPublishing` on `TargetFramework` still fails when that consumer publishes (the flag is global).
 
-Implementation (do not “simplify” into one always-imported file or back to `<Project Sdk="...">`): `ImportSdkTargets.targets` always closes `Sdk.targets`; `PublishDefaultFramework.targets` loads only when `IsCrossTargetingBuild` is true. **`ImportSdkTargets` must be the last import in the library csproj.** That file *is* `Sdk.targets` plus the outer publish dispatch. The SDK reads properties and items while it loads (`EnforceCodeStyleInBuild`, `GlobalAnalyzerConfigFiles`, publish). Anything after that line is after the SDK and is ignored for those. `Project Sdk="..."` would append `Sdk.targets` after this file and overwrite the Publish override. `SourceControlState.targets` is a `BeforeTargets` hook on `GenerateAssemblyInfo` (SDK 8+ Source Link); it can sit just above the SDK close. `PublishRelease` keeps a direct project `dotnet publish` on Release. Tests may keep `SetTargetFramework`; external consumers must not need it. `<!--#if` in `.targets` is generate-time (`**/*.targets` in `specialCustomOperations`).
+Implementation (do not “simplify” into one always-imported file or back to `<Project Sdk="...">`): `ImportSdkTargets.targets` always closes `Sdk.targets`; `PublishDefaultFramework.targets` loads only when `IsCrossTargetingBuild` is true. **`ImportSdkTargets` must be the last import in the library csproj.** That file *is* `Sdk.targets` plus the outer publish dispatch. The SDK reads properties and items while it loads (`EnforceCodeStyleInBuild`, `GlobalAnalyzerConfigFiles`, publish). Anything after that line is after the SDK and is ignored for those. `Project Sdk="..."` would append `Sdk.targets` after this file and overwrite the Publish override. `SourceControlState.targets` is a `BeforeTargets` hook on `GenerateAssemblyInfo` (SDK 8+ Source Link); it can sit just above the SDK close. `InitializePublicApi.targets` is imported only when `PublicApiAnalyzers` is on, also just above the SDK close. `PublishRelease` keeps a direct project `dotnet publish` on Release. Tests may keep `SetTargetFramework`; external consumers must not need it. `<!--#if` in `.targets` is generate-time (`**/*.targets` in `specialCustomOperations`).
 
 All three project files remove `.gitignore` from their `None` items so it stays on disk without appearing as a project item. The test ignore also covers generated `NugetReport/` output.
 
@@ -366,6 +377,7 @@ With `PlaceSolutionInSolutionFolder=true`, each `src/sln/{Name}/` gets its own `
 - **`NerdbankGitVersioning` / `WriteRepoVersionJson`**: see section above. Default `Off`. Root `version.json` is first-create only.
 - **`CSharpProjectOptions`**: see section above. Do not split back into per-property dropdowns.
 - **`ProjectEditorGlobalConfig`**: see section above. Keep the file and the csproj wire-up on the library only, before `ImportSdkTargets`.
+- **`PublicApiAnalyzers`**: see section above. Default `false`. Library only. Baseline files are first-build, not generate-time.
 - **`PlaceSolutionInSolutionFolder`**: default true → `src/sln/ClassLibrary/ClassLibrary.slnx` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). False on CLI renames to a root `.slnx`; false in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS’s conventional root `.slnx`. False also stacks every library’s `.slnx` in one directory.
 - **`HostIdentifier` / `IsCliHost`**: bind + computed; used for that rename and for VS-only post-actions.
 - **`PackageAuthor`**: required.

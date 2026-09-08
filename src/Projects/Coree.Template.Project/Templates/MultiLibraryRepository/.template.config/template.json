@@ -361,6 +361,15 @@
       "description": "Add editor and analyzer rules beside the library project and apply them to that project in the IDE and on build. Test and benchmark projects are not affected.",
       "displayName": "Code style rules for library project"
     },
+    // Library-only. Default off. First real build writes Properties/PublicAPI
+    // baseline files if they are missing. Not a repository-root Init* item.
+    "PublicApiAnalyzers": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "false",
+      "description": "Add Microsoft.CodeAnalysis.PublicApiAnalyzers to the class library. The first real build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected.",
+      "displayName": "Public API analyzers"
+    },
     // These options affect only the generated test project; the library remains free of test tooling.
     "CoverletMSBuild": {
       "type": "parameter",
@@ -488,6 +497,12 @@
           "exclude": [
             "src/prj/ClassLibrary/Build/NerdbankRepositoryVersion.targets",
             "src/prj/ClassLibrary/Build/Nerdbank.version.json"
+          ]
+        },
+        {
+          "condition": "(PublicApiAnalyzers == false)",
+          "exclude": [
+            "src/prj/ClassLibrary/Build/InitializePublicApi.targets"
           ]
         },
         {

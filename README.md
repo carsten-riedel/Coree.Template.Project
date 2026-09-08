@@ -213,6 +213,8 @@ dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./M
 
 Per-library `version.json` under `Properties/` (no shared root file): `--NerdbankGitVersioning Project` on each call instead of `Repo`.
 
+Public API tracking is a separate opt-in on each library (`--PublicApiAnalyzers`). It is not part of `--InitAllRepoItems`. The first build writes `Properties/PublicAPI` baseline files if they are missing.
+
 Because the output location and library name are separate arguments, the same composition model works naturally from a script:
 
 ```powershell

@@ -100,6 +100,17 @@
       }
     },
     {
+      "id": "PublicApiAnalyzers",
+      "isVisible": true,
+      "persistenceScope": "none",
+      "name": {
+        "text": "Public API analyzers"
+      },
+      "description": {
+        "text": "Adds Microsoft.CodeAnalysis.PublicApiAnalyzers to this class library. The first build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected."
+      }
+    },
+    {
       "id": "CoverletMSBuild",
       "isVisible": true
     },

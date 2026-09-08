@@ -77,6 +77,17 @@
       }
     },
     {
+      "id": "PublicApiAnalyzers",
+      "isVisible": true,
+      "persistenceScope": "none",
+      "name": {
+        "text": "Public API analyzers"
+      },
+      "description": {
+        "text": "Adds Microsoft.CodeAnalysis.PublicApiAnalyzers to this class library. The first build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected."
+      }
+    },
+    {
       "id": "ProjectLicense",
       "isVisible": true,
       "defaultValue": "MIT",
@@ -97,17 +108,6 @@
       },
       "description": {
         "text": "Adds editor and analyzer rules beside the library project and applies them to that project in the IDE and on build. Test and benchmark projects are not affected."
-      }
-    },
-    {
-      "id": "PublicApiAnalyzers",
-      "isVisible": true,
-      "persistenceScope": "none",
-      "name": {
-        "text": "Public API analyzers"
-      },
-      "description": {
-        "text": "Adds Microsoft.CodeAnalysis.PublicApiAnalyzers to this class library. The first build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected."
       }
     },
     {

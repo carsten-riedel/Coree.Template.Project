@@ -90,6 +90,12 @@ Creates one `.nupkg` in `src/prj/ClassLibrary/bin/Pack/` containing the library 
 
 The class library uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first real `dotnet build` writes `src/prj/ClassLibrary/Properties/PublicAPI/PublicAPI.Shipped.txt` and `PublicAPI.Unshipped.txt` if they are missing, then records the current public surface. Commit those files. Later public additions belong in `PublicAPI.Unshipped.txt` (analyzer RS0016 / `dotnet format analyzers` with `--diagnostics RS0016`).
 <!--#endif -->
+<!--#if (WritePackageDocTemplate) -->
+
+## Package documentation template
+
+`src/prj/ClassLibrary/NugetAssets/documentation/DocTemplate.html` is the offline documentation seed. It packs with the nupkg (`documentation/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this library. Repository-root `documentation/` is a separate site if present.
+<!--#endif -->
 
 ## Publish
 

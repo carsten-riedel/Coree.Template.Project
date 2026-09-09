@@ -12,6 +12,9 @@ The solution lives at the repository root; projects live under `src/`. If this r
 <!--#if (WriteRepoVersionJson) -->
 version.json               Nerdbank.GitVersioning (this repository)
 <!--#endif -->
+<!--#if (WriteRepoDocTemplate) -->
+documentation/             offline documentation template (this repository)
+<!--#endif -->
 <!--#if (PlaceSolutionInSolutionFolder) -->
 src/sln/ClassLibrary/      this library's .slnx and notes
 <!--#else -->

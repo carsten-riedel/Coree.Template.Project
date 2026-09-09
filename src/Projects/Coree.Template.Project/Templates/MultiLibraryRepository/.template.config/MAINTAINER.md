@@ -12,7 +12,7 @@ The generated root `README.md` lives beside this folder, one level up. That file
 | --- | --- |
 | `template.json` | Identity, symbols, sources, post-actions. |
 | `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**. `persistenceScope: none` so the New Project dialog does not reuse the last create. Host mapping: **CLI ↔ Visual Studio**. |
-| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, and `PublicApiAnalyzers` so they do not steal single-letter aliases. |
+| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, `PublicApiAnalyzers`, and `DocumentationTemplate` so they do not steal single-letter aliases. |
 | `MAINTAINER.md` | This file. |
 
 ## Intended usage
@@ -138,7 +138,7 @@ A combo repository is two or more `dotnet new` calls into the **same** `--output
 Other host-only switch behavior (not root files, same class of reason):
 
 - **`PlaceSolutionInSolutionFolder` false:** CLI renames to `{Name}.slnx` at repo root. Visual Studio keeps `{Name}.generated.slnx` so it does not overwrite the `{Name}.slnx` the IDE always writes. Post-actions that open the sln readme and tell you to close/reopen are `HostIdentifier == "vs"` only.
-- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `PublicApiAnalyzers`:** same defaults on both hosts (`NerdbankGitVersioning` `Off`, `PublicApiAnalyzers` `false`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again.
+- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `PublicApiAnalyzers` / `DocumentationTemplate`:** same defaults on both hosts (`NerdbankGitVersioning` `Off`, `PublicApiAnalyzers` `false`, `DocumentationTemplate` empty/`None`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again. `--DocumentationTemplate Package` is safe on later libraries; `--DocumentationTemplate Repository` on a later library is Exit 73.
 - **`PackageAuthor`:** required on both.
 
 ## `InitRepoItems` / `InitAllRepoItems`
@@ -355,6 +355,28 @@ dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library1" --
 dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --PublicApiAnalyzers
 ```
 
+## `DocumentationTemplate`
+
+Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `DocumentationAssets/DocTemplate.html` seed, two destinations. Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack.
+
+| Choice | Path | When | Combo later library |
+| --- | --- | --- | --- |
+| `Package` | `src/prj/{Name}/NugetAssets/documentation/DocTemplate.html` | every create | pass `Package` again |
+| `Repository` | `documentation/DocTemplate.html` | first create | omit `Repository` (Exit 73 if stamped again) |
+| `None` | nothing | — | wins over the other choices |
+
+```powershell
+# combo gut
+dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --DocumentationTemplate Package Repository
+dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --DocumentationTemplate Package
+
+# combo error (Exit 73) — Call 2 stamps documentation/DocTemplate.html again
+# dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --DocumentationTemplate Repository
+# dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --DocumentationTemplate Repository
+```
+
+`NugetAssets/documentation` is packed with the nupkg (`PackagePath` empty, so `documentation/` inside the package). Repo-root `documentation/` is not packed. The name is not GitHub Pages `docs/`. The checkpoint infers package vs repository documentation from those locations; it does not name this switch.
+
 ## Project roles and Git ignores
 
 The library is packable. `IsPublishable` is `false` on the class library (NuGet pack is the distribution path). Set it `true` to use the existing `PublishDefaultFramework` dispatch. `Properties/AssemblyInfo.cs` grants `InternalsVisibleTo` the test assembly (`ClassLibrary.Tests` via `sourceName`). The test project’s root `AssemblyInfo.cs` is only MSTest `Parallelize`. Tests and the optional BenchmarkDotNet executable explicitly set `IsPackable` and `IsPublishable` to `false`, including when automation calls each `.csproj` directly. The benchmark keeps one target framework (the highest selected) and runs with `dotnet run -c Release`. Versioning default is the VersionPrefix group in the library csproj. Tests and benchmark are not packable. Optional Nerdbank is **`--NerdbankGitVersioning`** `Repo` or `Project`.
@@ -378,6 +400,7 @@ With `PlaceSolutionInSolutionFolder=true`, each `src/sln/{Name}/` gets its own `
 - **`CSharpProjectOptions`**: see section above. Do not split back into per-property dropdowns.
 - **`ProjectEditorGlobalConfig`**: see section above. Keep the file and the csproj wire-up on the library only, before `ImportSdkTargets`.
 - **`PublicApiAnalyzers`**: see section above. Default `false`. Library only. Baseline files are first-build, not generate-time.
+- **`DocumentationTemplate` / `WritePackageDocTemplate` / `WriteRepoDocTemplate`**: see section above. Default empty/`None`. Seed only; not the vendored site.
 - **`PlaceSolutionInSolutionFolder`**: default true → `src/sln/ClassLibrary/ClassLibrary.slnx` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). False on CLI renames to a root `.slnx`; false in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS’s conventional root `.slnx`. False also stacks every library’s `.slnx` in one directory.
 - **`HostIdentifier` / `IsCliHost`**: bind + computed; used for that rename and for VS-only post-actions.
 - **`PackageAuthor`**: required.

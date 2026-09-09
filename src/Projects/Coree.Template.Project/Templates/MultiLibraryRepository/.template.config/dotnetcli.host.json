@@ -24,6 +24,10 @@
     "PublicApiAnalyzers": {
       "longName": "PublicApiAnalyzers",
       "shortName": ""
+    },
+    "DocumentationTemplate": {
+      "longName": "DocumentationTemplate",
+      "shortName": ""
     }
   }
 }

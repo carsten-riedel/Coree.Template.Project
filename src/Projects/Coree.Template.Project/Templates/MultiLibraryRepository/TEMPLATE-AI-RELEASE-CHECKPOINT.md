@@ -13,4 +13,7 @@ Walk the whole repository, including libraries added after the first `dotnet new
 7. Package version is a conscious first publish (including whether `0.1` and a prerelease suffix are still correct).
 8. Solution notes under `src/sln/*/Readme.md` do not contradict the layout you kept (`.slnx` under `src/sln/{name}/` vs repository root, host-specific leftover instructions).
 9. `dotnet pack` of each packable library succeeds, and the NuGet readme is inside the `.nupkg`.
-10. This file is deleted. Later chats should read the libraries and the real package docs, not this checkpoint.
+10. If `DocTemplate.html` is present, bootstrap that documentation root and then write a short real site. Infer the kind of documentation from the location; do not mix them. If none of these files exist, skip this item.
+    - `src/prj/<name>/NugetAssets/documentation/DocTemplate.html` is **package** documentation for that library (install, public surface, pack/consume). Follow the template's initial bootstrap, then replace the minimal `index.html` with a short package guide from the actual code. Keep later libraries' package docs in their own `NugetAssets/documentation` tree.
+    - `documentation/DocTemplate.html` at the repository root is **repository** documentation (how this multi-library repo is composed, how to add another library, layout). Bootstrap that tree independently. Do not copy one library's API into the repository site.
+11. This file is deleted. Later chats should read the libraries and the real package docs, not this checkpoint.

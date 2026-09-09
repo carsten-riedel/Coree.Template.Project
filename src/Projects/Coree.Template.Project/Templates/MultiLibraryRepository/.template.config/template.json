@@ -324,6 +324,46 @@
       "description": "Add Microsoft.CodeAnalysis.PublicApiAnalyzers to the class library. The first real build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected.",
       "displayName": "Public API analyzers"
     },
+    // Multi-choice. Default empty/None. Same DocTemplate.html seed, two
+    // destinations. Package is per library (no combo collision). Repository
+    // is repo-root documentation/ and collides on a later library (Exit 73).
+    // Not part of InitAllRepoItems. Do not vendor the 25-file site here:
+    // bootstrap follows DocTemplate.html and takes the versions it pins then.
+    "DocumentationTemplate": {
+      "type": "parameter",
+      "datatype": "choice",
+      "allowMultipleValues": true,
+      "enableQuotelessLiterals": true,
+      "isRequired": false,
+      "defaultValue": "",
+      "description": "Optional offline documentation template (DocTemplate.html). Package writes it under this library's NugetAssets/documentation (packed with the nupkg). Repository writes it under repo-root documentation/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
+      "displayName": "Documentation template",
+      "choices": [
+        {
+          "choice": "None",
+          "description": "Do not add a documentation template.",
+          "displayName": "None"
+        },
+        {
+          "choice": "Package",
+          "description": "Add DocTemplate.html under this library's NugetAssets/documentation. Every create; paths do not collide. Packed with the nupkg.",
+          "displayName": "NuGet package docs (NugetAssets/documentation)"
+        },
+        {
+          "choice": "Repository",
+          "description": "Add DocTemplate.html under documentation/ at the repository root. First create only; a later library in the same folder that selects this again is Exit 73.",
+          "displayName": "Repository docs (documentation/)"
+        }
+      ]
+    },
+    "WritePackageDocTemplate": {
+      "type": "computed",
+      "value": "(DocumentationTemplate == \"Package\") && (DocumentationTemplate != \"None\")"
+    },
+    "WriteRepoDocTemplate": {
+      "type": "computed",
+      "value": "(DocumentationTemplate == \"Repository\") && (DocumentationTemplate != \"None\")"
+    },
     // Project / NuGet license. Single choice. MIT first and default.
     // Standard licenses: PackageLicenseExpression; License.txt on disk only
     // (not packed — NU5033 if combined with PackageLicenseFile).
@@ -507,7 +547,8 @@
         },
         {
           "exclude": [
-            "VersioningAssets/**"
+            "VersioningAssets/**",
+            "DocumentationAssets/**"
           ]
         },
         {
@@ -539,6 +580,16 @@
       "source": "./VersioningAssets/",
       "target": "./src/prj/ClassLibrary/Properties/",
       "condition": "(NerdbankGitVersioning == \"Project\")"
+    },
+    {
+      "source": "./DocumentationAssets/",
+      "target": "./src/prj/ClassLibrary/NugetAssets/documentation/",
+      "condition": "WritePackageDocTemplate"
+    },
+    {
+      "source": "./DocumentationAssets/",
+      "target": "./documentation/",
+      "condition": "WriteRepoDocTemplate"
     },
     {
       "source": "./src/prj/ClassLibrary/NugetAssets/",

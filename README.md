@@ -215,6 +215,8 @@ Per-library `version.json` under `Properties/` (no shared root file): `--Nerdban
 
 Public API tracking is a separate opt-in on each library (`--PublicApiAnalyzers`). It is not part of `--InitAllRepoItems`. The first build writes `Properties/PublicAPI` baseline files if they are missing.
 
+Offline documentation is a separate opt-in (`--DocumentationTemplate`). `Package` seeds `NugetAssets/documentation/DocTemplate.html` on each library. `Repository` seeds repo-root `documentation/` on a first create only.
+
 Because the output location and library name are separate arguments, the same composition model works naturally from a script:
 
 ```powershell

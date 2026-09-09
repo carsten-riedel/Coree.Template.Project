@@ -88,6 +88,18 @@
       }
     },
     {
+      "id": "DocumentationTemplate",
+      "isVisible": true,
+      "defaultValue": "None",
+      "persistenceScope": "none",
+      "name": {
+        "text": "Documentation template"
+      },
+      "description": {
+        "text": "Optional DocTemplate.html seed. NuGet package docs go under this library's NugetAssets/documentation and pack with the nupkg. Repository docs go under documentation/ at the repo root (first create only). Choose None when adding another library unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
+      }
+    },
+    {
       "id": "ProjectLicense",
       "isVisible": true,
       "defaultValue": "MIT",

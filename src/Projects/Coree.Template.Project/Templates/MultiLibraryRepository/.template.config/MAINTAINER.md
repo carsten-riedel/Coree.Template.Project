@@ -11,9 +11,22 @@ The generated root `README.md` lives beside this folder, one level up. That file
 | File | Role |
 | --- | --- |
 | `template.json` | Identity, symbols, sources, post-actions. |
-| `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**. `persistenceScope: none` so the New Project dialog does not reuse the last create. Host mapping: **CLI ↔ Visual Studio**. |
+| `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**. `persistenceScope: none` so the New Project dialog does not reuse the last create. Host mapping: **CLI ↔ Visual Studio**. No `icon` property: see **Visual Studio template icon**. |
 | `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, `PublicApiAnalyzers`, and `DocumentationTemplate` so they do not steal single-letter aliases. |
+| `icon.png` | **Intentionally absent.** Visual Studio then uses the template **package** icon. |
 | `MAINTAINER.md` | This file. |
+
+## Visual Studio template icon
+
+Create a new project shows one icon per template. Two files can supply it; they are not the same surface.
+
+| Source | Path | What uses it |
+| --- | --- | --- |
+| Template package | `src/Projects/Coree.Template.Project/NugetAssets/Icon.png` (`PackageIcon` on `Coree.Template.Project.csproj`) | NuGet listing **and** the VS picker when this template does not declare its own icon. |
+| This template | `.template.config/icon.png`, optional `ide.host.json` `"icon": "icon.png"` | VS picker for **this** template only. Overrides the package icon. |
+| Generated library | `src/prj/{Name}/NugetAssets/Icon-128x128.png` | The **consumer** nupkg after `dotnet pack`. Not the template picker. |
+
+Verified in Visual Studio (Create a new project, Recent project templates): a template with `.template.config/icon.png` showed that image; sibling Coree templates without one showed the package icon. Leave this template’s picker icon **undefined** so the package icon is used. Ship per-template picker icons later; do not copy `Icon-128x128.png` here as a stand-in.
 
 ## Intended usage
 
@@ -244,7 +257,7 @@ WriteRepoVersionJson      =
 
 There is no `version.json` checkbox in `InitRepoItems`. Generate-time root file is `WriteRepoVersionJson` (`Repo` plus first-create Init). If that file is still missing, the Repo library writes it once at build (`if not exists`). Later VS library: **None** plus **Repository version.json**.
 
-Canonical JSON is `VersioningAssets/version.json` (`0.1.0`, `pathFilters` `["."]`). `Off` is first in the choice list because it is the default.
+Canonical JSON is `TemplateAssets/version.json` (`0.1.0`, `pathFilters` `["."]`). Extra sources copy that file only (`exclude` of `DocTemplate.html`). `Off` is first in the choice list because it is the default.
 
 ### What each symbol stamps
 
@@ -357,7 +370,7 @@ dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --
 
 ## `DocumentationTemplate`
 
-Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `DocumentationAssets/DocTemplate.html` seed, two destinations. Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack.
+Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocTemplate.html` seed, two destinations. Extra sources copy that file only (`exclude` of `version.json`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack.
 
 | Choice | Path | When | Combo later library |
 | --- | --- | --- | --- |

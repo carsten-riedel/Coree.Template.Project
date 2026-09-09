@@ -32,13 +32,13 @@
     <Authors>Carsten Riedel</Authors>
     <Owners>Carsten Riedel</Owners>
     <PackageId>Coree.Template.Project</PackageId>
-    <PackageTags>Project;Templates;.NET</PackageTags>
+    <PackageTags>Project;Templates;.NET;ClassLibrary;Library;Repository;Multi-project;NuGet;Coree;MSBuild;WPF</PackageTags>
     <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
     <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Description>
       <![CDATA[
-          Templates for Visual Studio and dotnet CLI that allows you to create various types of .NET projects . MSBuild tasks, class libraries, .NET tools, PowerShell cmdlets, WinForms applications, WPF applications, and a Project Template.
+          Templates for Visual Studio and the dotnet CLI: MSBuild tasks, class libraries, a multi-library repository, .NET tools, PowerShell cmdlets, WinForms, WPF, and a project template.
 	    ]]>
     </Description>
 

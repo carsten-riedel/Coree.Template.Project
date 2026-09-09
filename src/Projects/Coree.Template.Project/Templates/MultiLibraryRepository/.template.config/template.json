@@ -2,11 +2,11 @@
   "$schema": "http://json.schemastore.org/template",
   "author": "Carsten Riedel",
   // Opts Visual Studio into category display in the New Project dialog
-  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "ClassLibrary", "Library", "Coree", "Repository", "Multi-project" ],
+  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "ClassLibrary", "Library", "NuGet", "Test", "Solution", "Repository", "Multi-project", "Coree" ],
   "identity": "CoreeTemplatesProjectMultiLibraryRepository",
   // Displayname is used in the New Project dialog and in the dotnet new list output.
   "name": ".NET multi-library repository",
-  "description": "Repository layout for one or more packable class libraries, with an optional AI-supported release checkpoint to finish before the first publish.",
+  "description": "Repository of one or more independently packable C# class libraries (NuGet). Tests and coverage included; optional BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, ASP.NET Web SDK, and documentation template.",
   "shortName": "multilibraryrepo-coree",
   "tags": {
     "language": "C#",
@@ -547,8 +547,7 @@
         },
         {
           "exclude": [
-            "VersioningAssets/**",
-            "DocumentationAssets/**"
+            "TemplateAssets/**"
           ]
         },
         {
@@ -572,24 +571,52 @@
       ]
     },
     {
-      "source": "./VersioningAssets/",
+      "source": "./TemplateAssets/",
       "target": "./",
-      "condition": "WriteRepoVersionJson"
+      "condition": "WriteRepoVersionJson",
+      "modifiers": [
+        {
+          "exclude": [
+            "DocTemplate.html"
+          ]
+        }
+      ]
     },
     {
-      "source": "./VersioningAssets/",
+      "source": "./TemplateAssets/",
       "target": "./src/prj/ClassLibrary/Properties/",
-      "condition": "(NerdbankGitVersioning == \"Project\")"
+      "condition": "(NerdbankGitVersioning == \"Project\")",
+      "modifiers": [
+        {
+          "exclude": [
+            "DocTemplate.html"
+          ]
+        }
+      ]
     },
     {
-      "source": "./DocumentationAssets/",
+      "source": "./TemplateAssets/",
       "target": "./src/prj/ClassLibrary/NugetAssets/documentation/",
-      "condition": "WritePackageDocTemplate"
+      "condition": "WritePackageDocTemplate",
+      "modifiers": [
+        {
+          "exclude": [
+            "version.json"
+          ]
+        }
+      ]
     },
     {
-      "source": "./DocumentationAssets/",
+      "source": "./TemplateAssets/",
       "target": "./documentation/",
-      "condition": "WriteRepoDocTemplate"
+      "condition": "WriteRepoDocTemplate",
+      "modifiers": [
+        {
+          "exclude": [
+            "version.json"
+          ]
+        }
+      ]
     },
     {
       "source": "./src/prj/ClassLibrary/NugetAssets/",

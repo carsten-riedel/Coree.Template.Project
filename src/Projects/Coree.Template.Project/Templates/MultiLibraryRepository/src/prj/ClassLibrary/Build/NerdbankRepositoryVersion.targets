@@ -3,7 +3,7 @@
     Template generate cannot skip-or-write: a second dotnet new that stamps
     root version.json is Exit 73. This target is imported only when Repo.
     Same-build Nerdbank must see the file, so run before GetBuildVersion.
-    Seed is Build/Nerdbank.version.json (same payload as VersioningAssets).
+    Seed is Build/Nerdbank.version.json (same payload as TemplateAssets/version.json).
   -->
   <UsingTask
     TaskName="CopyFileIfNotExists"

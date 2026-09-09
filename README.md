@@ -191,6 +191,8 @@ Instead of deciding the complete structure up front, `multilibraryrepo-coree` le
 - package each library independently;
 - use the same workflow interactively, from PowerShell, or from automation.
 
+Each library keeps its `.slnx` in its own `src/sln/{name}/` folder so CI can `dotnet pack` / `dotnet publish` against that solution without seeing sibling `.slnx` files in one directory. One solution may still contain several projects (library, tests, optional benchmark); how much you put in one `.slnx` depends on the pipeline. Splitting by library removes the usual “which solution?” limits.
+
 **Initialize the layout once. Compose as many libraries as you need.**
 
 General use:

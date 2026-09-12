@@ -74,11 +74,17 @@
           "choice": "RepoLicense",
           "description": "Copy the selected project license into a LICENSE file at the repository root (GitHub convention). First repository create only.",
           "displayName": "LICENSE file at repository root"
+        },
+        {
+          "choice": "PackageBoundaries",
+          "description": "Add ChoosingPackageBoundaries.md at the repository root. Decision guide for NuGet package, project, and compatibility boundaries. First create only.",
+          "displayName": "Choosing package boundaries"
         }
       ]
     },
-    // CLI-only first-create set: README, checkpoint, .gitattributes, .gitignore, LICENSE.
-    // Same five files as the Visual Studio ide.host default. Hidden in VS.
+    // CLI-only first-create set: README, checkpoint, .gitattributes, .gitignore,
+    // LICENSE, ChoosingPackageBoundaries.md. Same six files as the Visual Studio
+    // ide.host default. Hidden in VS.
     // None on InitRepoItems still writes nothing. Root version.json is not
     // in this set; it is --NerdbankGitVersioning Repo plus first-create Init
     // (WriteRepoVersionJson).
@@ -86,7 +92,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, .gitignore, LICENSE). Same set as a Visual Studio first create. Does not add version.json. First create only.",
+      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, .gitignore, LICENSE, ChoosingPackageBoundaries.md). Same set as a Visual Studio first create. Does not add version.json. First create only.",
       "displayName": "All repository root items"
     },
     // Where the TEMPLATE solution file is written. Default true:
@@ -311,11 +317,15 @@
     },
     "WriteRepoVersionJson": {
       "type": "computed",
-      "value": "(NerdbankGitVersioning == \"Repo\") && (InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"Readme\") || (InitRepoItems == \"AIReleaseCheckpoint\") || (InitRepoItems == \"GitAttributes\") || (InitRepoItems == \"GitIgnore\") || (InitRepoItems == \"RepoLicense\"))"
+      "value": "(NerdbankGitVersioning == \"Repo\") && (InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"Readme\") || (InitRepoItems == \"AIReleaseCheckpoint\") || (InitRepoItems == \"GitAttributes\") || (InitRepoItems == \"GitIgnore\") || (InitRepoItems == \"RepoLicense\") || (InitRepoItems == \"PackageBoundaries\"))"
     },
     "WriteRepoLicense": {
       "type": "computed",
       "value": "(InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"RepoLicense\"))"
+    },
+    "WriteChoosingPackageBoundaries": {
+      "type": "computed",
+      "value": "(InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"PackageBoundaries\"))"
     },
     // Library-only. Default off. First real build writes Properties/PublicAPI
     // baseline files if they are missing. Not a repository-root Init* item.
@@ -659,6 +669,12 @@
           "condition": "((InitRepoItems == \"None\") || ((InitAllRepoItems == false) && (InitRepoItems != \"GitIgnore\")))",
           "exclude": [
             ".gitignore"
+          ]
+        },
+        {
+          "condition": "((InitRepoItems == \"None\") || ((InitAllRepoItems == false) && (InitRepoItems != \"PackageBoundaries\")))",
+          "exclude": [
+            "ChoosingPackageBoundaries.md"
           ]
         },
         {

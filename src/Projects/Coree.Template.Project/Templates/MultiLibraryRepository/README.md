@@ -12,6 +12,9 @@ The solution lives at the repository root; projects live under `src/`. If this r
 <!--#if (WriteRepoVersionJson) -->
 version.json               Nerdbank.GitVersioning (this repository)
 <!--#endif -->
+<!--#if (WriteChoosingPackageBoundaries) -->
+ChoosingPackageBoundaries.md  NuGet package and compatibility boundaries
+<!--#endif -->
 <!--#if (WriteRepoDocTemplate) -->
 docs/                      offline documentation template (this repository)
 <!--#endif -->

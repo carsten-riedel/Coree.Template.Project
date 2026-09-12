@@ -188,7 +188,7 @@ dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./M
 dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Inventory"
 ```
 
-The first call creates the shared directory layout and initializes the optional repository-level files. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Nerdbank defaults to **Project**: `version.json` under each library's `Properties/` folder. Later calls use the same `--output` directory and omit `--InitAllRepoItems`.
+The first call creates the shared directory layout and initializes the optional repository-level files. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, and `ChoosingPackageBoundaries.md`. Nerdbank defaults to **Project**: `version.json` under each library's `Properties/` folder. Later calls use the same `--output` directory and omit `--InitAllRepoItems`.
 
 One shared repository-root `version.json` instead: `--NerdbankGitVersioning Repo` on each call (the root file is written on the first create only). `--NerdbankGitVersioning Off` keeps `VersionPrefix` in the library project.
 
@@ -218,6 +218,7 @@ MyCompany.Core/
 ├── .gitattributes
 ├── .gitignore
 ├── TEMPLATE-AI-RELEASE-CHECKPOINT.md
+├── ChoosingPackageBoundaries.md
 └── src/
     ├── prj/
     │   ├── MyCompany.Core/

@@ -72,7 +72,7 @@ dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --
 # dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --InitAllRepoItems
 ```
 
-Call 1 writes the five root files. Call 2 only adds `src/prj` / `src/sln`. Both libraries get `Properties/version.json`.
+Call 1 writes the six root files. Call 2 only adds `src/prj` / `src/sln`. Both libraries get `Properties/version.json`.
 
 **Nerdbank repository, multi-library**
 
@@ -103,9 +103,9 @@ dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "Organization.Do
 
 Each `--output` is its own first create.
 
-After the first call in the default combo the repo root has `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.gitignore`, and `LICENSE`. Each library gets `Properties/version.json`. Calls 2 and 3 add `src/prj` / `src/sln` trees only. Passing `--InitAllRepoItems` or `--InitRepoItems Readme` again into the same folder is Exit 73 (collision); `--force` would overwrite.
+After the first call in the default combo the repo root has `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.gitignore`, `LICENSE`, and `ChoosingPackageBoundaries.md`. Each library gets `Properties/version.json`. Calls 2 and 3 add `src/prj` / `src/sln` trees only. Passing `--InitAllRepoItems` or `--InitRepoItems Readme` again into the same folder is Exit 73 (collision); `--force` would overwrite.
 
-`--InitAllRepoItems` is the CLI first-create set (same five files as Visual Studio). It does **not** add `version.json`. `--InitRepoItems` picks individual files. Values are separated by **spaces**. Repeating `--InitRepoItems` per value also works. A quoted `Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense` string is **not** valid CLI input on current `dotnet new`; `|` is only the host default separator in `ide.host.json`.
+`--InitAllRepoItems` is the CLI first-create set (same six files as Visual Studio). It does **not** add `version.json`. `--InitRepoItems` picks individual files. Values are separated by **spaces**. Repeating `--InitRepoItems` per value also works. A quoted `Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense|PackageBoundaries` string is **not** valid CLI input on current `dotnet new`; `|` is only the host default separator in `ide.host.json`.
 
 Subset on the first create (checkpoint only, no landing README):
 
@@ -113,7 +113,7 @@ Subset on the first create (checkpoint only, no landing README):
 dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.ClassLibrary1" --output "<repo>" --InitRepoItems AIReleaseCheckpoint
 ```
 
-**Visual Studio:** first create uses the `ide.host.json` default (same five root files as `--InitAllRepoItems`). A second library in the IDE cannot omit the group: choose **None**. Folgelibraries in the same folder are otherwise the CLI path above. Why the two hosts differ is in **CLI ↔ Visual Studio** below.
+**Visual Studio:** first create uses the `ide.host.json` default (same six root files as `--InitAllRepoItems`). A second library in the IDE cannot omit the group: choose **None**. Folgelibraries in the same folder are otherwise the CLI path above. Why the two hosts differ is in **CLI ↔ Visual Studio** below.
 
 ## CLI ↔ Visual Studio
 
@@ -121,23 +121,23 @@ The generated first-create product is meant to match. The **switches** cannot be
 
 ### Why CLI defaults stay empty
 
-A combo repository is two or more `dotnet new` calls into the **same** `--output`. The template engine has **one** CLI default for every call. If `InitRepoItems` defaulted to the five root files, the second library would hit Exit 73 (collision) unless the caller passed `None` or `--force`. Visual Studio’s New Project dialog is a **first create** into an empty folder; it can check the five boxes by default. CLI later-libraries omit `--InitAllRepoItems` and `--InitRepoItems`. `NerdbankGitVersioning` defaults to **`Project`** on both hosts (per-library `Properties/version.json`; later creates do not collide). `--NerdbankGitVersioning Repo` does not write the root `version.json` by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again without Exit 73.
+A combo repository is two or more `dotnet new` calls into the **same** `--output`. The template engine has **one** CLI default for every call. If `InitRepoItems` defaulted to the six root files, the second library would hit Exit 73 (collision) unless the caller passed `None` or `--force`. Visual Studio’s New Project dialog is a **first create** into an empty folder; it can check the six boxes by default. CLI later-libraries omit `--InitAllRepoItems` and `--InitRepoItems`. `NerdbankGitVersioning` defaults to **`Project`** on both hosts (per-library `Properties/version.json`; later creates do not collide). `--NerdbankGitVersioning Repo` does not write the root `version.json` by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again without Exit 73.
 
 ### CLI → Visual Studio
 
 | CLI | Visual Studio equivalent | Why |
 | --- | --- | --- |
-| `--InitAllRepoItems` | Leave **Repository root items** at the ide.host default (all five files checked) | Bool flag with no value list. The engine cannot treat a bare `--InitRepoItems` as “all”; that is Exit 127. The set is the VS first-create default, not a sixth checkbox. `version.json` is not in this set. |
+| `--InitAllRepoItems` | Leave **Repository root items** at the ide.host default (all six files checked) | Bool flag with no value list. The engine cannot treat a bare `--InitRepoItems` as “all”; that is Exit 127. The set is the VS first-create default, not another checkbox in that group. `version.json` is not in this set. |
 | `--InitRepoItems Readme …` (spaces) | Uncheck the files you do not want | Individual files. `|` is only legal in `ide.host.json` `defaultValue`, not on current `dotnet new`. |
 | omit both switches | **None** | CLI may leave a multi-choice empty. Visual Studio may not. |
 | `--InitRepoItems None` | **None** | Explicit empty set. Also wins over `--InitAllRepoItems` if both are passed. Everyday CLI later-libraries omit the switches instead. |
-| `--InitAllRepoItems` hidden from the wizard | `ide.host.json` `isVisible: false` | A choice `All` inside the same VS group would sit next to `None` and the five files; you cannot hide one choice per host. The bool is CLI convenience only. |
+| `--InitAllRepoItems` hidden from the wizard | `ide.host.json` `isVisible: false` | A choice `All` inside the same VS group would sit next to `None` and the six files; you cannot hide one choice per host. The bool is CLI convenience only. |
 
 ### Visual Studio → CLI
 
 | Visual Studio | CLI equivalent | Why |
 | --- | --- | --- |
-| First create, root items left at default | `--InitAllRepoItems` | Same five files. Do not translate the ide.host string `Readme\|…\|RepoLicense` onto the CLI. |
+| First create, root items left at default | `--InitAllRepoItems` | Same six files. Do not translate the ide.host string `Readme\|…\|PackageBoundaries` onto the CLI. |
 | Uncheck some root items | `--InitRepoItems` plus the remaining choice names | Subset. |
 | Second library: **None** | omit `--InitAllRepoItems` and `--InitRepoItems` | The IDE requires at least one value; leftover checks from persistence would otherwise stamp root files again. `persistenceScope: none` still needs **None** as the empty-set control. CLI empty default is that None. |
 | `InitAllRepoItems` not shown | do not look for it in Additional information | CLI-only. |
@@ -158,9 +158,11 @@ Other host-only switch behavior (not root files, same class of reason):
 | --- | --- | --- |
 | CLI `InitRepoItems` | none selected (`defaultValue` `""`) | omit the switch |
 | CLI `InitAllRepoItems` | `false` | omit the switch |
-| Visual Studio | `Readme\|AIReleaseCheckpoint\|GitAttributes\|GitIgnore\|RepoLicense` | not allowed; choose `None` |
+| Visual Studio | `Readme\|AIReleaseCheckpoint\|GitAttributes\|GitIgnore\|RepoLicense\|PackageBoundaries` | not allowed; choose `None` |
 
 `None` is first in the choice list. `sources` exclude each root file unless `InitAllRepoItems` is on or that choice is selected; `None` excludes all of them, including when `InitAllRepoItems` is on. `==` in conditions means the value is among the selected choices. `GitIgnore` is the same shape as `GitAttributes`: seed is the output name at the template root (`.gitignore`), same exclude condition, no rename. Nested `src/prj` / `src/sln` `.gitignore` files use those full paths (see Benchmark exclude); they are not this switch and stay on every create.
+
+`PackageBoundaries` is `ChoosingPackageBoundaries.md` at the repository root. Same exclude pattern as `GitIgnore` / `Readme` (`InitAllRepoItems` or this choice). Seed lives at the template root next to `README.md` (not under `TemplateAssets/`, or version.json/DocShell extra sources would copy it). Standing decision guide (H1 **Choosing package boundaries**), not `TEMPLATE-` delete-me. Later library with this box or `--InitAllRepoItems` selected is Exit 73.
 
 ## AI-supported release checkpoint
 
@@ -215,7 +217,7 @@ Seeds live under `TemplateAssets/Licenses/` (`MIT.txt`, `BSD3Clause.txt`, `Apach
 
 ## `NerdbankGitVersioning`
 
-Single choice (dropdown), same shape as `ProjectLicense`. CLI long name is **`--NerdbankGitVersioning`** so the extra NuGet dependency is visible. Default **`Project`**: `version.json` under this library's `Properties/` folder. `Repo` uses one root `version.json`. `Off` is the VersionPrefix group, no package. `--InitAllRepoItems` is the five root files only; it does **not** copy root `version.json`. Tests and benchmark are not in this switch.
+Single choice (dropdown), same shape as `ProjectLicense`. CLI long name is **`--NerdbankGitVersioning`** so the extra NuGet dependency is visible. Default **`Project`**: `version.json` under this library's `Properties/` folder. `Repo` uses one root `version.json`. `Off` is the VersionPrefix group, no package. `--InitAllRepoItems` is the six root files only; it does **not** copy root `version.json`. Tests and benchmark are not in this switch.
 
 ```powershell
 # combo gut
@@ -227,7 +229,7 @@ dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --
 # dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
 
-Call 1: five root files plus root `version.json`, library wire is Nerdbank repo. Call 2: `--NerdbankGitVersioning Repo`, **no** Init, **no** second root stamp (Exit 0). Omit `--NerdbankGitVersioning` for **Project** (`Properties/version.json`). `--NerdbankGitVersioning Off` for the VersionPrefix group.
+Call 1: six root files plus root `version.json`, library wire is Nerdbank repo. Call 2: `--NerdbankGitVersioning Repo`, **no** Init, **no** second root stamp (Exit 0). Omit `--NerdbankGitVersioning` for **Project** (`Properties/version.json`). `--NerdbankGitVersioning Off` for the VersionPrefix group.
 
 Two jobs, same split as root `LICENSE`:
 
@@ -247,7 +249,8 @@ WriteRepoVersionJson      =
       || InitRepoItems == AIReleaseCheckpoint
       || InitRepoItems == GitAttributes
       || InitRepoItems == GitIgnore
-      || InitRepoItems == RepoLicense)
+      || InitRepoItems == RepoLicense
+      || InitRepoItems == PackageBoundaries)
 ```
 
 `UseNerdbankGitVersioning` is generate-time `<!--#if` in `ClassLibrary.csproj`. The VersionPrefix group is the `#else` (`Off`). Both branches stay in the **template source**; `dotnet new` keeps one.
@@ -273,7 +276,7 @@ Canonical JSON is `TemplateAssets/version.json` (`0.1.0`, `pathFilters` `["."]`)
 | --- | --- | --- | --- |
 | `Repo` | true | not `None` | write |
 | `Repo` | false | omit | skip |
-| `Repo` | false | `Readme` / checkpoint / `.gitattributes` / `.gitignore` / `RepoLicense` (not `None`) | write |
+| `Repo` | false | `Readme` / checkpoint / `.gitattributes` / `.gitignore` / `RepoLicense` / `PackageBoundaries` (not `None`) | write |
 | `Repo` | true or false | `None` | skip |
 | `Project` | true or false | any | skip |
 | `Off` | true or false | any | skip |
@@ -337,7 +340,7 @@ dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --
 | Calls | Exit | What is wrong |
 | --- | --- | --- |
 | `--NerdbankGitVersioning Repo` on an empty folder, no Init | 0 | `dotnet new` does not stamp root `version.json`. First build/pack writes it if missing. |
-| `--InitAllRepoItems --NerdbankGitVersioning Repo --InitRepoItems None` | 0 | `None` wins; five root files skipped and no root `version.json`. |
+| `--InitAllRepoItems --NerdbankGitVersioning Repo --InitRepoItems None` | 0 | `None` wins; six root files skipped and no root `version.json`. |
 | Call 1 InitAll `--NerdbankGitVersioning Off`, call 2 `--NerdbankGitVersioning Repo` | 0 | Library 1 VersionPrefix, library 2 Nerdbank walking up with no root json. |
 | Call 1 InitAll `--NerdbankGitVersioning Repo`, call 2 omit the switch | 0 | Library 1 Nerdbank + root json, library 2 **Project** (`Properties/version.json`). |
 | Call 1 InitAll (default Project), call 2 `--NerdbankGitVersioning Repo` (or the reverse) | 0 | Mixed `Properties/version.json` and repo-style package with no matching root file. |
@@ -444,7 +447,7 @@ With `PlaceSolutionInSolutionFolder=true`, each `src/sln/{Name}/` gets its own `
 
 ## Other symbols worth not breaking
 
-- **`ProjectLicense` / `RepoLicense` / `InitAllRepoItems` / `GitIgnore`**: see section above. Default MIT. SPDX expression for standards; `PackageLicenseFile` only for `Custom`. Root `LICENSE` is the `RepoLicense` item or the CLI all-set. Root `.gitignore` is `GitIgnore` in that same first-create set.
+- **`ProjectLicense` / `RepoLicense` / `InitAllRepoItems` / `GitIgnore` / `PackageBoundaries`**: see section above. Default MIT. SPDX expression for standards; `PackageLicenseFile` only for `Custom`. Root `LICENSE` is the `RepoLicense` item or the CLI all-set. Root `.gitignore` is `GitIgnore` in that same first-create set. `ChoosingPackageBoundaries.md` is `PackageBoundaries` in that same first-create set.
 - **`NerdbankGitVersioning` / `WriteRepoVersionJson`**: see section above. Default `Project`. Root `version.json` is first-create only (`Repo` plus Init).
 - **`CSharpProjectOptions`**: see section above. Do not split back into per-property dropdowns.
 - **`ProjectEditorGlobalConfig`**: see section above. Default `Strict`. `Default` is suggestions-only. Seeds in `TemplateAssets/CodeStyle/`; generated disk name stays `.project.editor.globalconfig`. Csproj wire-up on the library only, before `ImportSdkTargets`.

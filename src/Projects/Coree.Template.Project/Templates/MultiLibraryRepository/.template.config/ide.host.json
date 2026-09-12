@@ -4,13 +4,13 @@
     {
       "id": "InitRepoItems",
       "isVisible": true,
-      "defaultValue": "Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense",
+      "defaultValue": "Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense|PackageBoundaries",
       "persistenceScope": "none",
       "name": {
         "text": "Repository root items"
       },
       "description": {
-        "text": "Root files for the first create, including LICENSE from the project license and a slim .gitignore. version.json is not a checkbox here; choose This repository on a first create to add the root file. Visual Studio requires at least one value; choose None when adding another library to the same repository."
+        "text": "Root files for the first create, including LICENSE from the project license, a slim .gitignore, and ChoosingPackageBoundaries.md. version.json is not a checkbox here; choose This repository on a first create to add the root file. Visual Studio requires at least one value; choose None when adding another library to the same repository."
       }
     },
     {

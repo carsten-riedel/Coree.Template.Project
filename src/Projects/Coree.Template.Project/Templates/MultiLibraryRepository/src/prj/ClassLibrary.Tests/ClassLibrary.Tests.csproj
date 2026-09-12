@@ -49,10 +49,15 @@
 
   <!--#if (CoverletMSBuild == true) -->
   <!-- coverlet.msbuild: CollectCoverage is enough for `dotnet test` on SDK MSBuild. -->
+  <!-- Include is the packable library only (sourceName). Threshold fails the test run when that assembly is under 100% line/branch/method total. -->
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
     <CoverletOutput>./CoverletOutput/</CoverletOutput>
+    <Include>[ClassLibrary]*</Include>
+    <Threshold>100</Threshold>
+    <ThresholdType>line,branch,method</ThresholdType>
+    <ThresholdStat>total</ThresholdStat>
   </PropertyGroup>
   <!--#endif -->
 

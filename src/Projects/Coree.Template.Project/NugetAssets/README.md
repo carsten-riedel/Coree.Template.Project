@@ -188,21 +188,13 @@ dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./M
 dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Inventory"
 ```
 
-The first call creates the shared directory layout and initializes the optional repository-level files. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. It does not add `version.json` and does not add Nerdbank. Later calls use the same `--output` directory and omit `--InitAllRepoItems`.
+The first call creates the shared directory layout and initializes the optional repository-level files. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Nerdbank defaults to **Project**: `version.json` under each library's `Properties/` folder. Later calls use the same `--output` directory and omit `--InitAllRepoItems`.
 
-Nerdbank is opt-in. Same combo folder, repository-level `version.json` once:
-
-```powershell
-dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Core" --InitAllRepoItems --NerdbankGitVersioning Repo
-dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Payments" --NerdbankGitVersioning Repo
-dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Inventory" --NerdbankGitVersioning Repo
-```
-
-Per-library `version.json` under `Properties/` (no shared root file): `--NerdbankGitVersioning Project` on each call instead of `Repo`.
+One shared repository-root `version.json` instead: `--NerdbankGitVersioning Repo` on each call (the root file is written on the first create only). `--NerdbankGitVersioning Off` keeps `VersionPrefix` in the library project.
 
 Public API tracking is a separate opt-in on each library (`--PublicApiAnalyzers`). It is not part of `--InitAllRepoItems`. The first build writes `Properties/PublicAPI` baseline files if they are missing.
 
-Offline documentation is a separate opt-in (`--DocumentationTemplate`). `Package` seeds `NugetAssets/documentation/DocTemplate.html` on each library. `Repository` seeds repo-root `documentation/` on a first create only.
+Offline documentation is a separate opt-in (`--DocumentationTemplate`). `Package` seeds `NugetAssets/docs/DocShell.html` on each library. `Repository` seeds repo-root `docs/` on a first create only.
 
 Because the output location and library name are separate arguments, the same composition model works naturally from a script:
 
@@ -224,12 +216,14 @@ MyCompany.Core/
 ├── README.md
 ├── LICENSE
 ├── .gitattributes
+├── .gitignore
 ├── TEMPLATE-AI-RELEASE-CHECKPOINT.md
 └── src/
     ├── prj/
     │   ├── MyCompany.Core/
     │   │   ├── Build/
     │   │   ├── NugetAssets/
+    │   │   ├── Properties/
     │   │   ├── Class1.cs
     │   │   └── MyCompany.Core.csproj
     │   ├── MyCompany.Core.Tests/

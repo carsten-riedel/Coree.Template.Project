@@ -46,7 +46,7 @@ dotnet build
 
 ## Test
 
-The test project explicitly allows target frameworks to run in parallel. Test results, coverage files, vulnerability reports, and ReportGenerator output are isolated per target framework. No parallelism switch is needed on the command line:
+The test project explicitly allows target frameworks to run in parallel. Test results and other per-target-framework reports next to the test project are isolated. No parallelism switch is needed on the command line:
 
 ```bash
 dotnet test
@@ -61,6 +61,8 @@ After a test run, the links below point to generated reports. Each selected targ
 [Test results (html)](../../prj/ClassLibrary.Tests/MSTestResults/result-__TargetFramework__.html)
 <!--#if (CoverletMSBuild == true) -->
 [Coverlet output](../../prj/ClassLibrary.Tests/CoverletOutput/coverage.__TargetFramework__.opencover.xml)
+
+Coverlet measures only the class library (`[ClassLibrary]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
 ReportGenerator writes one summary per target framework under `../../prj/ClassLibrary.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
@@ -71,6 +73,8 @@ ReportGenerator writes one summary per target framework under `../../prj/ClassLi
 [Test results (html)](src/prj/ClassLibrary.Tests/MSTestResults/result-__TargetFramework__.html)
 <!--#if (CoverletMSBuild == true) -->
 [Coverlet output](src/prj/ClassLibrary.Tests/CoverletOutput/coverage.__TargetFramework__.opencover.xml)
+
+Coverlet measures only the class library (`[ClassLibrary]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
 ReportGenerator writes one summary per target framework under `src/prj/ClassLibrary.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
@@ -94,7 +98,7 @@ The class library uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first re
 
 ## Package documentation template
 
-`src/prj/ClassLibrary/NugetAssets/documentation/DocTemplate.html` is the offline documentation seed. It packs with the nupkg (`documentation/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this library. Repository-root `documentation/` is a separate site if present.
+`src/prj/ClassLibrary/NugetAssets/docs/DocShell.html` is the offline documentation seed. It packs with the nupkg (`docs/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this library. Repository-root `docs/` is a separate site if present.
 <!--#endif -->
 
 ## Publish

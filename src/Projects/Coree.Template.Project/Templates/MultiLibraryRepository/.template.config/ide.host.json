@@ -4,13 +4,13 @@
     {
       "id": "InitRepoItems",
       "isVisible": true,
-      "defaultValue": "Readme|AIReleaseCheckpoint|GitAttributes|RepoLicense",
+      "defaultValue": "Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense",
       "persistenceScope": "none",
       "name": {
         "text": "Repository root items"
       },
       "description": {
-        "text": "Root files for the first create, including LICENSE from the project license. version.json is not a checkbox here; choose Repository version.json on a first create to add it. Visual Studio requires at least one value; choose None when adding another library to the same repository."
+        "text": "Root files for the first create, including LICENSE from the project license and a slim .gitignore. version.json is not a checkbox here; choose This repository on a first create to add the root file. Visual Studio requires at least one value; choose None when adding another library to the same repository."
       }
     },
     {
@@ -61,19 +61,15 @@
       "isVisible": true
     },
     {
-      "id": "PackageDescription",
-      "isVisible": true
-    },
-    {
       "id": "NerdbankGitVersioning",
       "isVisible": true,
-      "defaultValue": "Off",
+      "defaultValue": "Project",
       "persistenceScope": "none",
       "name": {
         "text": "Nerdbank.GitVersioning"
       },
       "description": {
-        "text": "Optional extra package. Default Off keeps VersionPrefix in the library project. Repository version.json is written on a first create (root items plus Repository). Later libraries keep Repository and choose None for root items."
+        "text": "Default is This library (Properties/version.json) on every create. This repository writes root version.json on a first create; later libraries keep This repository and choose None for root items. Off keeps VersionPrefix in the library project."
       }
     },
     {
@@ -96,7 +92,7 @@
         "text": "Documentation template"
       },
       "description": {
-        "text": "Optional DocTemplate.html seed. NuGet package docs go under this library's NugetAssets/documentation and pack with the nupkg. Repository docs go under documentation/ at the repo root (first create only). Choose None when adding another library unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
+        "text": "Optional DocShell.html seed. NuGet package docs go under this library's NugetAssets/docs and pack with the nupkg. Repository docs go under docs/ at the repo root (first create only). Choose None when adding another library unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
       }
     },
     {
@@ -114,21 +110,38 @@
     {
       "id": "ProjectEditorGlobalConfig",
       "isVisible": true,
+      "defaultValue": "Strict",
       "persistenceScope": "none",
       "name": {
         "text": "Code style rules for library project"
       },
       "description": {
-        "text": "Adds editor and analyzer rules beside the library project and applies them to that project in the IDE and on build. Test and benchmark projects are not affected."
+        "text": "Single choice. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected."
       }
     },
     {
-      "id": "CoverletMSBuild",
-      "isVisible": true
+      "id": "AnalysisMode",
+      "isVisible": true,
+      "defaultValue": "Recommended",
+      "persistenceScope": "none",
+      "name": {
+        "text": "Code analysis mode"
+      },
+      "description": {
+        "text": "SDK CA rules on the class library only. Default Recommended. Minimum is fewer warnings. All is almost every CA rule. Separate from code style Strict and from Public API analyzers."
+      }
     },
     {
-      "id": "ReportGenerator",
-      "isVisible": true
+      "id": "TestCoverage",
+      "isVisible": true,
+      "defaultValue": "Coverlet",
+      "persistenceScope": "none",
+      "name": {
+        "text": "Test coverage"
+      },
+      "description": {
+        "text": "Single choice. Default is Coverlet: dotnet test fails below 100% line, branch, and method coverage on the library. Edit Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. ReportGenerator needs Coverlet output, so the two are not independent checkboxes."
+      }
     },
     {
       "id": "BenchmarkProject",

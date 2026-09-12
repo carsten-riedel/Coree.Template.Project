@@ -45,24 +45,33 @@
     <!--#endif -->
   </PropertyGroup>
 
-  <!--#if (ProjectEditorGlobalConfig == true) -->
+  <!--#if (UseProjectEditorGlobalConfig) -->
   <!-- Keep global analyzer scoped to the project directory config file on disk without showing it as a project item. -->
   <!-- EnforceCodeStyleInBuild is required or IDE1006 stays IDE-only and `dotnet build` ignores the file. -->
+  <!-- OptimizeImplicitlyTriggeredBuild=false: VS Test Explorer / F5 must not skip analyzers (dotnet test does not). -->
   <PropertyGroup>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <OptimizeImplicitlyTriggeredBuild>false</OptimizeImplicitlyTriggeredBuild>
   </PropertyGroup>
   <ItemGroup>
     <GlobalAnalyzerConfigFiles Include="$(MSBuildProjectDirectory)\.project.editor.globalconfig" Visible="false" />
   </ItemGroup>
   <!--#endif -->
 
+  <!-- SDK CA rule set. Always written; omitted AnalysisMode switch means Recommended. -->
+  <PropertyGroup>
+    <AnalysisMode>__AnalysisMode__</AnalysisMode>
+  </PropertyGroup>
+
   <!-- Packaging and publish configuration -->
+  <!-- EnablePackageValidation: TFM/runtime holes on pack. No baseline at generate; set PackageValidationBaselineVersion after the first nuget.org publish. -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <IsPublishable>false</IsPublishable>
     <PublishRelease>true</PublishRelease>
     <IsTestProject>false</IsTestProject>
     <PackAsTool>false</PackAsTool>
+    <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
 
   <!--#if (UseNerdbankGitVersioning) -->
@@ -121,9 +130,7 @@
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
     <RepositoryType></RepositoryType>
-    <Description>
-     <![CDATA[PackageDescription]]>
-    </Description>
+    <Description></Description>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
     <!--#if (ProjectLicense == "MIT") -->
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -204,7 +211,7 @@
   <!--
     Must stay last. This import is Sdk.targets plus the outer Publish dispatch.
     The SDK reads properties and items while it loads (EnforceCodeStyleInBuild,
-    GlobalAnalyzerConfigFiles, publish). Anything after this line is after the
+    GlobalAnalyzerConfigFiles, AnalysisMode, EnablePackageValidation, publish). Anything after this line is after the
     SDK and is ignored for that. Project Sdk="..." would append Sdk.targets
     after this file and overwrite the Publish override.
   -->

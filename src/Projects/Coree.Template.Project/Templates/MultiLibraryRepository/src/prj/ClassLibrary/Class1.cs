@@ -1,8 +1,10 @@
-﻿using System;
+﻿#if( KeepScaffoldUnusedUsings )
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
+#endif
 namespace ClassLibrary
 {
     /// <summary>

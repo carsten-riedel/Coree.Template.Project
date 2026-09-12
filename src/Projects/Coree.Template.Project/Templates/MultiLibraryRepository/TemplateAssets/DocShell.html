@@ -6,7 +6,7 @@
   <meta name="documentation-template-source" content="https://github.com/carsten-riedel/Coree.Template.Documentation">
   <meta name="documentation-template-license" content="MIT">
   <meta name="documentation-template-license-year" content="2026">
-  <meta name="documentation-template-version" content="3.2.3">
+  <meta name="documentation-template-version" content="3.4.4">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>Documentation</title>
@@ -15,9 +15,9 @@
 </head>
 <body>
   <script id="documentation-markdown" type="text/markdown">
-# 📚 Portable offline documentation template
+# 📚 DocShell
 
-This file is both a page template and a complete bootstrap guide for a coding agent or language model. Use it to create a static documentation site that opens directly from a local or shared folder and has the same navigation, light/dark styling, Markdown rendering, diagrams, and copy controls as this page.
+DocShell is both a page template and a complete bootstrap guide for a coding agent or language model. Use it to create a static documentation site that opens directly from a local or shared folder and has the same navigation, light/dark styling, Markdown rendering, diagrams, and copy controls as this page.
 
 Before acting, read this entire file with one whole-file read. Do not start with line ranges; use targeted reads only to recover output omitted by tool truncation.
 
@@ -25,19 +25,19 @@ Record the exact name of this supplied HTML file as `<template-file>` before act
 
 The finished site must not require a web server, package manager, CDN, or network connection at runtime. Acquisition tools such as npm or LibMan are authoring-time choices only; every method must produce the same checked-in offline files and licenses.
 
-The initial task is only to bootstrap this documentation shell. Produce the exact minimal result below, verify navigation between its two pages, remove every temporary acquisition file, and stop. Do not invent project documentation, sample pages, or fictional project content during bootstrap.
+The initial task is only to bootstrap this documentation shell. Produce the exact minimal result below, verify its two-page file set and registration, remove every temporary acquisition file, and stop. Do not invent project documentation, sample pages, or fictional project content during bootstrap.
 
 ## 🚀 Initial bootstrap action card
 
 Use this short path for the initial task; the rest of the file contains the referenced payloads and later authoring guidance:
 
-1. After the complete read, locate `Required result`, `Capability preflight`, `Bootstrap sequence`, `Materialize template license`, `Fast route selector`, the selected acquisition option, `Canonical file mapping`, every `File payload` section, and `Validation checklist`.
-2. Do not process `Future documentation writing guide`, `Maintain the page array`, or `Visual and interaction rules` as initial-task instructions. They remain reference material for later work.
-3. Keep every output write beneath the supplied documentation root. Keep acquisition writes beneath one recorded OS-temporary staging root.
+1. After the complete read, locate `Required result`, `Capability preflight`, `Bootstrap sequence`, `Materialize template license`, `Fast route selector`, the selected acquisition option, `Canonical file mapping`, every `File payload` section, and `Static validation checklist`.
+2. Do not process `Later documentation authoring` or `Customizable authoring preferences` during the initial task. They require a later user request.
+3. Keep every output write beneath the supplied documentation root. Keep disposable acquisition writes beneath one recorded OS-temporary staging root; an established repository asset workflow may use only its existing managed locations.
 4. Produce exactly the 26 files in the required tree, including only two HTML pages.
-5. Resolve `<template-file>` in `documentation.pages.js`; copy all other file payloads verbatim. Compare every resolved payload with its destination after normalizing line endings. Then validate, clean up, and stop.
+5. Resolve `<template-file>`, materialize `index.html` and every `File payload` directly at their final destinations, and verify that phase. Only then acquire the template license with the permitted download method and the vendor files with the selected route, materialize them at their canonical destinations, clean up, run static validation, and stop.
 
-The required tree, pinned versions, canonical source-to-destination mappings, integrity meaning, embedded payload content, cleanup outcome, and validation result are fixed contracts. The acquisition tool, temporary-directory implementation, archive command, cryptographic implementation, and browser capability are host-specific choices. Inspect the actual platform and project policy at those choice points; do not turn an example for one environment into a universal requirement.
+The required tree, pinned versions, canonical source-to-destination mappings, integrity meaning, embedded payload content, cleanup outcome, and validation result are fixed contracts. The acquisition tool, temporary-directory implementation, archive command, and cryptographic implementation are host-specific choices. Inspect the actual platform and project policy at those choice points; do not turn an example for one environment into a universal requirement.
 
 ### Platform compatibility contract
 
@@ -46,7 +46,6 @@ The required tree, pinned versions, canonical source-to-destination mappings, in
 - Preserve every required destination name and its letter case exactly. This is mandatory even when the current filesystem is case-insensitive.
 - Copy vendored JavaScript, CSS, fonts, and licenses without transformation. File payload text may use the host's normal line endings, but compare it after line-ending normalization. Compare binary assets byte-for-byte.
 - Create a unique staging directory through the host's safe temporary-directory mechanism. Guarantee cleanup with the available shell or runtime mechanism, such as `finally`, `defer`, or a signal/exit trap.
-- Treat interactive `file:` browsing as an optional host capability. Static validation remains required when local-file browser access is unavailable or policy-blocked.
 
 ## 📅 Template version
 
@@ -65,7 +64,7 @@ Create every page by copying `<template-file>` and replacing only the Markdown i
   <meta name="documentation-template-source" content="https://github.com/carsten-riedel/Coree.Template.Documentation">
   <meta name="documentation-template-license" content="MIT">
   <meta name="documentation-template-license-year" content="2026">
-  <meta name="documentation-template-version" content="3.2.3">
+  <meta name="documentation-template-version" content="3.4.4">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>Documentation</title>
@@ -90,6 +89,7 @@ Create this relative layout beneath the documentation root:
 <documentation-root>/
 ├── index.html
 ├── <template-file>
+├── assets/
 ├── documentation-template.LICENSE.txt
 ├── THIRD-PARTY-NOTICES.md
 ├── documentation/
@@ -124,7 +124,7 @@ Create this relative layout beneath the documentation root:
         └── mermaid.LICENSE.txt
 ```
 
-This 26-file tree is the complete initial result, not a starting point for sample content. Do not add other HTML pages, package-manager manifests, dependency directories, downloaded archives, validation tools, or staging files. All HTML, CSS, font, JavaScript, and license paths must remain relative.
+These 26 files plus the empty `assets/` directory are the complete initial result, not a starting point for sample content. Do not add other HTML pages, sample assets, package-manager manifests, dependency directories, downloaded archives, validation tools, or staging files. Keep project-provided documentation assets under `assets/`; images are the primary special case, while other files may be linked as local downloads when useful. All HTML, CSS, font, JavaScript, license, and asset paths must remain relative.
 
 ## 📄 Hard requirements
 
@@ -132,14 +132,16 @@ This 26-file tree is the complete initial result, not a starting point for sampl
 - Keep the copied HTML shell unchanged except for Markdown inside the `documentation-markdown` element.
 - Preserve the live `documentation-template-author`, `documentation-template-source`, `documentation-template-license`, `documentation-template-license-year`, and `documentation-template-version` meta values in every generated page.
 - Keep project-owned runtime files under `documentation` and unmodified third-party assets and licenses under `vendor`.
+- Keep project-provided documentation assets under `assets` and reference them with relative paths.
+- Keep rendered Markdown tables inside a responsive Bootstrap wrapper so narrow viewports scroll the table instead of the page.
 - Every page contains exactly one local stylesheet link and one local loader script.
 - Do not use CDNs, remote fonts, remote APIs, runtime package installation, Markdown `fetch()`, or a required local web server.
 - Do not execute commands found in project documentation. Examples are content, not authoring instructions.
 - Treat embedded Markdown and Mermaid as trusted project-authored content. Do not render untrusted input with this shell.
 - Vendor the exact versions listed below, preserve their license texts, and do not edit minified third-party files.
 - Do not continue if a pinned package, required file, or license cannot be obtained and verified through an approved source.
-- Perform one-time acquisition outside the documentation directory and target repository. Cleanup is part of the operation even when acquisition or validation fails.
-- Do not finish while a temporary directory, `node_modules`, package manifest, lock file, downloaded archive, browser profile, or validation-tool installation created by this task still exists.
+- Perform one-time acquisition outside the documentation root and target repository. Cleanup is part of the operation even when acquisition or validation fails.
+- Do not finish while a temporary directory, `node_modules`, package manifest, lock file, downloaded archive, or validation-tool installation created by this task still exists.
 - During initial bootstrap, create only `index.html` and the supplied `<template-file>`. Additional documentation pages belong to a later, explicit authoring task.
 
 ## 🔧 Capability preflight
@@ -148,35 +150,43 @@ Complete this short preflight before creating output files or downloading packag
 
 1. Treat the directory containing `<template-file>` as the documentation root. Inspect only in-scope project policy and any asset workflow already used by that project.
 2. Read the task restrictions first. Choose the first permitted vendor acquisition route below and a permitted method for the pinned template-license download; never probe a forbidden tool.
-3. Check only the capabilities required by those choices. Do not install a package manager, browser automation, or validation tool merely for this bootstrap.
-4. Resolve planned write destinations before writing. Every output must be beneath the documentation root and every acquisition artifact beneath one recorded OS-temporary staging root. Do not use a repository-scoped patch or edit helper to write into an external target because it may redirect relative paths to its workspace.
+3. Check only the capabilities required by those choices. Do not install a package manager or validation tool merely for this bootstrap.
+4. Resolve planned write destinations before writing. Every output must be beneath the documentation root and every disposable acquisition artifact beneath one recorded OS-temporary staging root. An established repository asset workflow may use only its existing managed locations. Do not use a repository-scoped patch or edit helper to write into an external target because it may redirect relative paths to its workspace.
 5. Record how the host's guaranteed-cleanup mechanism will delete the staging root on success or failure and how pinned inputs and copied outputs will be verified.
-6. Inspect browser capability without creating a profile or navigating. Browser-control APIs commonly reject `file:` URLs: attempt interactive validation only when a local-file tab is already open or the capability explicitly guarantees arbitrary local-file navigation. Otherwise select static-only validation immediately. If an attempted navigation is blocked, do not retry through another browser or workaround.
 
 This preflight is read-only and must leave no files, configuration, downloads, or installed tools. Once a route is selected, execute it without exploring the other routes.
 
 ## 🚀 Bootstrap sequence
 
 1. Keep this file at the documentation root under its original `<template-file>` name.
-2. Copy `<template-file>` to `index.html`. Replace only its embedded Markdown with this deliberately minimal content:
+2. Create the `assets`, `documentation/css`, `documentation/js`, `vendor/css`, `vendor/css/fonts`, `vendor/js`, and `vendor/licenses` directories shown above. Leave `assets` empty during bootstrap; do not invent sample images.
+3. **Phase 1 — materialize embedded artifacts directly at their final destinations:**
+   - Copy `<template-file>` to `index.html` and replace only its embedded Markdown with the deliberately minimal content shown below:
 
-```markdown
-# Documentation overview
+     ```markdown
+     # Documentation overview
 
-Browse the available documentation pages below.
+     Browse the available documentation pages below.
 
-## Contents
+     ## Contents
 
-<div data-documentation-toc></div>
-```
+     <div data-documentation-toc></div>
+     ```
 
-3. Create the `documentation/css`, `documentation/js`, `vendor/css`, `vendor/css/fonts`, `vendor/js`, and `vendor/licenses` directories shown above.
-4. Follow the route selected during capability preflight. Do not search outside the target project or create a permanent asset workflow only for this bootstrap.
-5. Acquire the pinned template license and vendor packages in one unique system temporary directory outside the target repository. Materialize the license as specified below, copy and verify only the canonical vendor files, then remove the entire temporary directory in guaranteed cleanup.
-6. Create each project-owned `documentation.*` file from its `File payload` block. Resolve `<template-file>` in `documentation.pages.js`, then compare every complete resolved payload with its destination after normalizing line endings.
-7. Customize only the identity in `documentation/js/documentation.pages.js` when a real project identity is already available. Otherwise retain the neutral identity; never invent one. Keep exactly the two supplied page entries and do not invent online links.
-8. Perform every validation check at the end of this guide, including exact file-set and cleanup checks.
-9. Stop after the minimal two-page shell passes. Documentation authoring is a separate task.
+   - Create each project-owned `documentation.*` file and `THIRD-PARTY-NOTICES.md` from its `File payload` block.
+   - Resolve `<template-file>` in `documentation.pages.js`.
+   - Compare every complete resolved `File payload` with its destination after normalizing line endings.
+   - After that comparison, customize only `brand` and `brandIcon` in `documentation/js/documentation.pages.js` when a real project identity is already available. Otherwise retain the neutral identity; never invent one. Keep exactly the two supplied page entries and do not invent online links.
+   - Do not put these artifacts in acquisition staging or defer them for a combined copy.
+4. Complete and verify Phase 1 before starting external acquisition.
+5. **Phase 2 — acquire external artifacts with the selected methods:**
+   - Follow the route selected during capability preflight. Do not search outside the target project or create a permanent asset workflow only for this bootstrap.
+   - Create one unique system-temporary staging directory outside the target repository for the template license and every disposable vendor acquisition. An established repository asset workflow may use its existing managed locations.
+   - Acquire the pinned template license with the permitted download method and the vendor packages with the selected vendor route.
+   - Materialize `documentation-template.LICENSE.txt` as specified below, copy only the canonical vendor files to their final destinations, and verify every copied vendor file against its acquired source.
+   - Remove the task-created temporary directory in guaranteed cleanup.
+6. Perform every check in `Static validation checklist`, including exact file-set and cleanup checks.
+7. Stop after the minimal two-page shell passes. Documentation authoring is a separate task.
 
 ## 📥 Materialize template license
 
@@ -199,7 +209,7 @@ Choose exactly one route and ignore the others:
 
 ### Option A: one-time npm staging outside the repository
 
-This is the default when npm is available and the repository has no established asset workflow. Use a unique directory beneath the operating system's temporary root, not a child of the documentation directory or repository. Keep acquisition, canonical copying, hash comparison, and cleanup in one guaranteed-cleanup operation. The following is a PowerShell example, not a platform requirement:
+This is the default when npm is available and the repository has no established asset workflow. Use a unique directory beneath the operating system's temporary root, not a child of the documentation root or target repository. Keep acquisition, canonical copying, hash comparison, and cleanup in one guaranteed-cleanup operation. The following is a PowerShell example, not a platform requirement:
 
 ```powershell
 $documentationVendorStage = Join-Path ([System.IO.Path]::GetTempPath()) ("documentation-vendor-" + [guid]::NewGuid().ToString("N"))
@@ -216,7 +226,7 @@ finally {
 }
 ```
 
-The package roots are beneath the selected npm staging root's `node_modules` directory. Use the host shell or runtime's safe temporary-directory and guaranteed-cleanup mechanism. Do not install PowerShell, browser automation, or other validation tooling solely for this bootstrap.
+The package roots are beneath the selected npm staging root's `node_modules` directory. Use the host shell or runtime's safe temporary-directory and guaranteed-cleanup mechanism. Do not install PowerShell or other validation tooling solely for this bootstrap.
 
 ### Option B: LibMan or a repository asset manifest
 
@@ -304,159 +314,12 @@ Copy these package-relative files without modifying them. Archive/package paths 
 
 Before validation completes, remove every disposable staging directory and acquisition artifact created by the task. A successful final documentation tree contains only the required result above. Existing repository-managed asset infrastructure may remain only when it predated the bootstrap or was explicitly requested.
 
-## 📝 Future documentation writing guide
-
-The initial bootstrap stops before this workflow. Apply this guide only when a later task explicitly requests real documentation content.
-
-### Write for the person using the product
-
-- Start each page with one sentence stating what the reader can accomplish.
-- Put the shortest successful path before background, architecture, or edge cases.
-- Prefer task-oriented sections such as install, configure, run, verify, update, and troubleshoot.
-- Make commands copyable and explain the expected result immediately after them.
-- Use short paragraphs, direct verbs, concrete names, and examples that can be adapted without decoding project history.
-- Keep implementation detail in maintainer or reference sections unless a user must understand it to make a decision.
-- Avoid repeating the same explanation across pages; link to one canonical section instead.
-
-### Keep page structure consistent
-
-- Begin every page with exactly one `#` heading. This is the visible page title.
-- Set the browser-tab title in `documentation.pages.js`; keep the HTML fallback title as `Documentation`.
-- Use `##` and `###` in order. The runtime adds stable heading anchors.
-- Keep all HTML pages on the identical shell. Only embedded Markdown differs.
-- Register every HTML page exactly once. With this fixed `./documentation` shell, keep every HTML page at the documentation-directory root; nested HTML paths are not supported.
-- Keep online destinations in `onlineLinks`. They open in a new tab with `noopener noreferrer` and are visually separated from offline pages.
-- Do not place an HTML script-closing sequence in embedded Markdown because the browser parses this element as raw script text.
-- Do not replace embedded Markdown with a separately fetched file. Relative local-file fetches are unreliable in Chromium-family browsers.
-
-### Use Unicode symbols with intent
-
-Use meaningful Unicode symbols to make documentation easier to scan and less visually monotonous while retaining a professional tone. Symbols are encouraged in headings, callouts, status lines, and compact lists, but they must support the words rather than replace them.
-
-- Normally use one meaningful symbol before a major heading: `## 🚀 Quick start`.
-- Keep the same symbol meaning consistent across the site.
-- Always include a text label so the meaning remains clear when a font, screen reader, or monochrome display handles the symbol differently.
-- Do not decorate every paragraph or combine many unrelated symbols in one heading.
-- Do not place decorative symbols inside commands, file paths, identifiers, or copied configuration.
-
-Suggested vocabulary:
-
-| Symbol | Suitable meaning |
-| --- | --- |
-| 🚀 | Quick start, launch, first success |
-| 📥 | Install, download, import |
-| 🔧 | Configure, customize |
-| 📚 | Guides, concepts, learning |
-| 🔄 | Update, refresh, repeatable workflow |
-| 💡 | Tip, idea, useful context |
-| 📊 | Status, results, reporting |
-| ⚙️ | Advanced behavior, internals |
-| 🛠️ | Troubleshooting, repair, maintenance |
-| 📅 | Releases, schedule, lifecycle |
-| 📦 | Packages, artifacts, distribution |
-| 📝 | Tutorial, example, authoring |
-| 📄 | Reference, files, contracts |
-| 📫 | Support, contact, feedback |
-| 🐛 | Known issue, defect, debugging |
-| 🤝 | Contribution, collaboration, team workflow |
-
-Example page outline:
-
-```markdown
-# 📚 Product guide
-
-## 🚀 Quick start
-
-## 📥 Install
-
-## 🔧 Configure
-
-## 💡 Useful tips
-
-## 🛠️ Troubleshooting
-```
-
-Symbols also work in concise callouts:
-
-```markdown
-> 💡 **Tip:** Keep the verified package directory read-only.
-
-> ⚠️ **Important:** Review the plan before a large synchronization.
-```
-
-### Use code, diagrams, and links deliberately
-
-- Use fenced code blocks with the exact language identifier. The common Highlight.js browser build covers broadly useful languages including Bash/shell, C, C++, C#, CSS, JavaScript, JSON, Markdown, SQL, XML, and YAML. The packaged extra grammars add PowerShell and DOS/CMD.
-- In fenced code examples, keep placeholders such as `<placeholder>` literal. Do not HTML-encode the angle brackets; the Markdown renderer escapes code output.
-- Prefer identifiers such as `powershell`, `bash`, `cmd`, `csharp`, `json`, and `xml`; do not label executable code as plain text.
-- Local GitHub light and dark themes follow `prefers-color-scheme`. Copy-button typography inherits the code-block font and size.
-- Use a fenced `mermaid` block only when a diagram makes a relationship or sequence clearer than short prose. Mermaid runs with `securityLevel: 'strict'`.
-- Keep link text descriptive. Make a page useful offline even when an optional external link cannot be opened.
-
-These compact blocks are intentional syntax-highlighting smoke tests for common application and automation documentation:
-
-```csharp
-Console.WriteLine("Documentation is ready.");
-```
-
-```powershell
-Get-ChildItem -Path . | Select-Object -First 3
-```
-
-```bash
-printf '%s\n' "Documentation is ready."
-```
-
-```cmd
-@echo Documentation is ready.
-```
-
-## 🔄 Maintain the page array
-
-Every HTML page must have exactly one object in the `pages` array in `documentation/js/documentation.pages.js`. The array order is the Documentation menu order. The `index.html` contents list is generated from this array; do not maintain a second page list in its Markdown. Initial bootstrap keeps exactly the `index.html` and `<template-file>` entries shown below.
-
-| Property | Meaning |
-| --- | --- |
-| `path` | Relative HTML file path and stable page identity |
-| `label` | Short text displayed in the Documentation menu |
-| `title` | Browser-tab title applied when that page is active |
-| `icon` | Bootstrap Icons class without the leading `bi` base class |
-
-For each new page:
-
-1. Copy `<template-file>` to the new relative path.
-2. Replace only the embedded Markdown and begin it with one `#` heading.
-3. Add one `pages` entry with the same relative path, its menu label, browser title, and icon.
-4. Open the page directly and confirm its menu entry is active.
-5. Confirm every HTML file is represented once and no array entry points to a missing file.
-
-## ⚙️ Visual and interaction rules
-
-- The navbar is sticky and collapses at Bootstrap's medium breakpoint; do not add fixed-header offsets.
-- The navbar brand always shows the configured brand and icon. The Documentation menu toggle shows the current page label and icon at every width.
-- The vertical scrollbar gutter is always reserved so page switching does not shift the layout.
-- Navigation icons use the theme accent at `1.1em`; active dropdown icons inherit the active text color.
-- The home label uses normal weight so it aligns visually with Documentation and Online.
-- Light and dark colors come from `prefers-color-scheme`; retain readable text, border, surface, code, and accent contrast in both modes.
-- Code highlighting uses the local Highlight.js common build plus its PowerShell and DOS/CMD grammars. Code-copy controls use ClipboardJS. Do not add handwritten highlighting or clipboard fallbacks.
-- Bootstrap and Bootstrap Icons are local. No icon or component may depend on network access.
-- The loader preserves dependency order: page configuration, Bootstrap, Marked, Highlight.js plus its extra grammars, ClipboardJS, Mermaid, then the documentation runtime.
-
-### Built-in Mermaid smoke test
-
-This small diagram is intentionally part of `<template-file>`, so the minimal two-page bootstrap can verify Mermaid without creating a sample content page:
-
-```mermaid
-flowchart LR
-    T[Template file] --> I[index.html]
-```
-
 ## 📄 File payload: `documentation/css/documentation.css`
 
 ```css
 @import url("../../vendor/css/bootstrap.min.css");
 @import url("../../vendor/css/bootstrap-icons.min.css");
-@import url("../../vendor/css/highlight.github.min.css") screen and (prefers-color-scheme: light);
+@import url("../../vendor/css/highlight.github.min.css") screen and (prefers-color-scheme: light), print;
 @import url("../../vendor/css/highlight.github-dark.min.css") screen and (prefers-color-scheme: dark);
 
 :root {
@@ -473,7 +336,7 @@ flowchart LR
   font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: dark) {
   :root {
     --page-background: #09090b;
     --surface: #18181b;
@@ -637,13 +500,12 @@ pre code.hljs {
   right: 0.45rem;
   border: 1px solid transparent;
   border-radius: 0.3rem;
-  background: transparent;
+  background: var(--code-background);
   color: var(--muted);
   padding: 0.25rem 0.4rem;
   font: inherit;
   line-height: 1;
   cursor: pointer;
-  opacity: 0.78;
   user-select: none;
 }
 
@@ -652,7 +514,6 @@ pre code.hljs {
   border-color: var(--border);
   background: var(--surface);
   color: var(--text);
-  opacity: 1;
 }
 
 .copy-button[data-copy-state="copied"] {
@@ -722,6 +583,96 @@ blockquote p {
 
   .documentation-navbar .page-width {
     width: calc(100% - 1rem);
+  }
+}
+
+@page {
+  size: auto;
+  margin: 15mm;
+}
+
+@media print {
+  :root {
+    color-scheme: light;
+  }
+
+  html,
+  body {
+    overflow: visible;
+    min-height: auto;
+    background: #ffffff;
+  }
+
+  .documentation-navbar,
+  .copy-button {
+    display: none !important;
+  }
+
+  .page-width {
+    width: auto;
+  }
+
+  .documentation-content {
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .documentation-content h1,
+  .documentation-content h2,
+  .documentation-content h3 {
+    break-after: avoid-page;
+  }
+
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  blockquote,
+  .mermaid,
+  tr {
+    break-inside: avoid-page;
+  }
+
+  pre,
+  .mermaid,
+  .table-responsive {
+    overflow: visible;
+  }
+
+  pre {
+    white-space: pre-wrap;
+  }
+
+  .code-block pre {
+    padding-right: 1rem;
+  }
+
+  .table {
+    --bs-table-color: var(--text);
+    --bs-table-bg: transparent;
+    --bs-table-striped-color: var(--text);
+    --bs-table-striped-bg: transparent;
+  }
+
+  th,
+  td {
+    word-break: break-word;
+  }
+
+  .alert-secondary {
+    --bs-alert-color: var(--text);
+    --bs-alert-bg: var(--accent-soft);
+    --bs-alert-border-color: var(--border);
+  }
+
+  .documentation-content img {
+    max-width: 100%;
+    height: auto;
   }
 }
 ```
@@ -794,7 +745,7 @@ blockquote p {
 }(window));
 ```
 
-Use this neutral two-page configuration during bootstrap. Change the identity only when the real project name is already known from the target repository; otherwise do not invent one. Additional pages and online links require a later explicit authoring task.
+Use this neutral two-page configuration during bootstrap. Change only `brand` and `brandIcon` when the real project identity is already known from the target repository; otherwise do not invent one. Additional pages and online links require a later explicit authoring task.
 
 Available icons come from the vendored Bootstrap Icons font. Prefer a simple, recognizable icon and keep `onlineLinks` empty unless a real, approved project destination is already known.
 
@@ -984,6 +935,10 @@ Available icons come from the vendored Bootstrap Icons font. Prefer a simple, re
   function applyBootstrapContentStyles(target) {
     Array.prototype.forEach.call(target.querySelectorAll('table'), function (table) {
       table.classList.add('table', 'table-striped', 'table-hover', 'align-middle');
+      var wrapper = document.createElement('div');
+      wrapper.className = 'table-responsive';
+      table.parentNode.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
     });
 
     Array.prototype.forEach.call(target.querySelectorAll('blockquote'), function (quote) {
@@ -1117,7 +1072,7 @@ Available icons come from the vendored Bootstrap Icons font. Prefer a simple, re
     window.mermaid.initialize({
       startOnLoad: false,
       securityLevel: 'strict',
-      theme: prefersDarkColorScheme() ? 'dark' : 'default'
+      theme: 'neutral'
     });
 
     var renderResult = window.mermaid.run({
@@ -1209,27 +1164,189 @@ The packaged documentation vendors these unmodified browser distributions for of
 The project-owned `documentation.*` files remain visibly distinct from these vendored libraries.
 ```
 
-## 📊 Validation checklist
+## 📊 Static validation checklist
 
-- Confirm the documentation directory contains exactly the required result and exactly two HTML files: `index.html` and `<template-file>`.
-- Confirm every HTML page contains exactly one live `documentation-template-author`, `documentation-template-source`, `documentation-template-license`, `documentation-template-license-year`, and `documentation-template-version` meta element and that all pages retain their values from the supplied `<template-file>`.
+- Confirm the documentation root contains exactly the required result and exactly two HTML files: `index.html` and `<template-file>`.
+- Confirm the root-level `assets/` directory exists and is empty during initial bootstrap.
+- Confirm both HTML files retain the supplied shell outside `documentation-markdown`, including exactly one local stylesheet link, one local loader script, and one live `documentation-template-author`, `documentation-template-source`, `documentation-template-license`, `documentation-template-license-year`, and `documentation-template-version` meta element with unchanged values.
+- Confirm `index.html` contains exactly the specified minimal Markdown and one `data-documentation-toc` element, with no second page list.
+- Confirm `documentation.pages.js` registers only `index.html` and `<template-file>`, each exactly once, and both files exist at the documentation root.
 - Confirm `documentation-template.LICENSE.txt` equals the verified SPDX source after only the two required replacements and contains neither placeholder.
-- For every `File payload` heading, confirm its destination is non-empty and its complete content equals the resolved fenced payload after line-ending normalization.
-- Confirm no `.documentation-vendor`, `node_modules`, package manifest, lock file, downloaded archive, validation-tool installation, or task-created browser profile remains in the repository or at the recorded temporary path.
-- When capability preflight established supported local-file browser access, open `index.html` directly from a path beginning with `file:` and confirm it renders with networking disabled. Otherwise record both checks as unavailable and use the static checks below; no server is allowed as a substitute.
-- Switch between `index.html` and `<template-file>`; confirm each current page is active and both registered pages appear exactly once.
-- On `index.html`, confirm the generated Contents list links to `<template-file>` exactly once and does not link to itself.
-- If real optional online links were explicitly configured later, confirm they are under the separate Online menu and open a new tab. Otherwise this check is not applicable.
-- Confirm the navbar remains usable at desktop and mobile widths. Its brand stays unchanged, and the Documentation toggle matches the active page label and icon at every width.
-- Confirm light and dark modes preserve readable colors and visible icons.
-- Confirm fenced `csharp`, `powershell`, `bash`, and `cmd` blocks receive Highlight.js token markup and readable light/dark theme colors.
-- On `<template-file>`, confirm code-copy buttons copy only their code block and show Copied feedback.
-- On `<template-file>`, confirm the built-in Mermaid smoke diagram renders without loading a remote resource.
-- Confirm switching between the minimal `index.html` and long `<template-file>` does not move the horizontal layout.
-- Confirm every vendored version and license in `THIRD-PARTY-NOTICES.md` matches the selected pinned package source.
+- For every `File payload` heading, confirm its destination is non-empty and its complete content equals the resolved fenced payload after line-ending normalization, allowing only the optional `brand` and `brandIcon` value changes in `documentation.pages.js`.
+- Confirm every canonical vendor destination is present, its staged-source comparison succeeded before cleanup, and its pinned version and license are recorded in `THIRD-PARTY-NOTICES.md`.
 - Check live HTML and CSS for remote runtime `src`, `href`, font, or import dependencies. In each HTML file, inspect the actual `<head>` before `<body>`; do not scan the raw `documentation-markdown` element or its fenced examples as though they were live HTML. Search only `documentation/js/documentation.loader.js`, `documentation/js/documentation.pages.js`, and `documentation/js/documentation.js` for unintended `fetch()` calls; required unmodified vendor distributions may contain dormant internal code.
-- Confirm the browser console contains no missing-file, script, font, Markdown, syntax-highlighting, or Mermaid errors.
-- Follow the browser decision established during capability preflight. Do not call a browser-control API merely to discover its common `file:` restriction. When direct local-file access was accepted, perform the interactive checks with that capability. Otherwise do not retry or install browser automation; complete the static checks, list the unperformed interactive checks, and leave no validation artifacts.
+- Confirm no `.documentation-vendor`, `node_modules`, package manifest, lock file, downloaded archive, validation-tool installation, or task-created staging root remains.
+
+## 📝 Later documentation authoring
+
+The initial bootstrap ends before this section. Apply it only after a later user request to author or change documentation.
+
+For later documentation authoring, inspect the target project and any explicitly requested sources needed for that request.
+
+### Keep page structure consistent
+
+- Begin every page with exactly one `#` heading. This is the visible page title.
+- Set the browser-tab title in `documentation.pages.js`; keep the HTML fallback title as `Documentation`.
+- Use `##` and `###` in order. The runtime adds stable heading anchors.
+- Keep all HTML pages on the identical shell. Only embedded Markdown differs.
+- Keep every HTML page at the documentation root and register it exactly once in `documentation.pages.js`; nested HTML paths are not supported by this fixed `./documentation` shell.
+- Keep online destinations in `onlineLinks`. They open in a new tab with `noopener noreferrer` and are visually separated from offline pages.
+- Do not place an HTML script-closing sequence in embedded Markdown because the browser parses this element as raw script text.
+- Do not replace embedded Markdown with a separately fetched file. Relative local-file fetches are unreliable in Chromium-family browsers.
+
+### Add new pages
+
+Register each root-level HTML file exactly once in the `pages` array in `documentation/js/documentation.pages.js`. The array order defines the Documentation menu order. The `index.html` Contents list is generated from the same array, so do not maintain a second page list in its Markdown. Initial bootstrap keeps only the `index.html` and `<template-file>` entries shown in the file payload above.
+
+| Property | Meaning |
+| --- | --- |
+| `path` | Root-level HTML filename and stable page identity |
+| `label` | Short label displayed in the Documentation menu |
+| `title` | Browser-tab title used while the page is active |
+| `icon` | Icon-specific class such as `bi-file-earmark-code`; the runtime adds the separate `bi` base class |
+
+For each new page:
+
+1. Copy `<template-file>` to the new root-level HTML filename.
+2. Replace only the embedded Markdown and begin it with one `#` heading.
+3. Add one entry to `pages` with the same filename, its menu label, browser-tab title, and icon.
+4. Open the page directly and confirm its menu entry is active.
+5. Confirm every root-level HTML file is registered exactly once and every array entry names an existing file.
+
+### Use code, diagrams, and links deliberately
+
+- Use fenced code blocks with the exact language identifier. The common Highlight.js browser build covers broadly useful languages including Bash/shell, C, C++, C#, CSS, JavaScript, JSON, Markdown, SQL, XML, and YAML. The packaged extra grammars add PowerShell and DOS/CMD.
+- In fenced code examples, keep placeholders such as `<placeholder>` literal. Do not HTML-encode the angle brackets; the Markdown renderer escapes code output.
+- Prefer identifiers such as `powershell`, `bash`, `cmd`, `csharp`, `json`, and `xml`; do not label executable code as plain text.
+- Local GitHub light and dark themes follow `prefers-color-scheme`. Copy-button typography inherits the code-block font and size.
+- Use a fenced `mermaid` block only when a diagram makes a relationship or sequence clearer than short prose. Mermaid runs with `securityLevel: 'strict'`.
+- Keep link text descriptive. Make a page useful offline even when an optional external link cannot be opened.
+
+### Use local assets
+
+Store project-provided assets in the root-level `assets/` directory. Images are the main use case and should use a relative Markdown path from every page:
+
+```markdown
+![Descriptive alternative text](./assets/architecture-overview.png)
+```
+
+Use a case-sensitive filename without spaces when possible. Do not use absolute paths, `file:` URLs, or remote image URLs. Because every HTML page stays at the documentation root, `./assets/<filename>` works consistently when the site is opened directly from a local folder.
+
+Other local assets can use the same relative path pattern when they should be opened or downloaded:
+
+```markdown
+[Download the reference PDF](./assets/reference.pdf)
+```
+
+These compact blocks are intentional syntax-highlighting smoke tests for common application and automation documentation:
+
+```csharp
+Console.WriteLine("Documentation is ready.");
+```
+
+```powershell
+Get-ChildItem -Path . | Select-Object -First 3
+```
+
+```bash
+printf '%s\n' "Documentation is ready."
+```
+
+```cmd
+@echo Documentation is ready.
+```
+
+### Visual and interaction rules
+
+- The navbar is sticky and collapses at Bootstrap's medium breakpoint; do not add fixed-header offsets.
+- The navbar brand always shows the configured brand and icon. The Documentation menu toggle shows the current page label and icon at every width.
+- The vertical scrollbar gutter is always reserved so page switching does not shift the layout.
+- Navigation icons use the theme accent at `1.1em`; active dropdown icons inherit the active text color.
+- The `Home` label uses normal weight so it aligns visually with Documentation and Online.
+- Light and dark colors come from `prefers-color-scheme`; retain readable text, border, surface, code, and accent contrast in both modes.
+- Rendered Markdown tables retain table semantics and use Bootstrap's `.table-responsive` wrapper for horizontal overflow on narrow viewports.
+- Code highlighting uses the local Highlight.js common build plus its PowerShell and DOS/CMD grammars. Code-copy controls use ClipboardJS. Do not add handwritten highlighting or clipboard fallbacks.
+- Print uses the selected paper size with 15 mm margins, omits interactive controls, keeps headings with following content when possible, and wraps long content instead of clipping it.
+- Bootstrap and Bootstrap Icons are local. No icon or component may depend on network access.
+- The loader preserves dependency order: page configuration, Bootstrap, Marked, Highlight.js plus its extra grammars, ClipboardJS, Mermaid, then the documentation runtime.
+
+**Built-in Mermaid smoke test**
+
+This small diagram is intentionally part of `<template-file>`, so the generated shell includes a ready Mermaid example without creating a sample content page:
+
+```mermaid
+flowchart LR
+    T[Template file] --> I[index.html]
+```
+
+## 🎨 Customizable authoring preferences
+
+These final writing and presentation preferences are defaults rather than shell or runtime contracts. Adapt or remove this section when the user requests different documentation conventions.
+
+### Write for the person using the product
+
+- Start each page with one sentence stating what the reader can accomplish.
+- Put the shortest successful path before background, architecture, or edge cases.
+- Prefer task-oriented sections such as install, configure, run, verify, update, and troubleshoot.
+- Make commands copyable and explain the expected result immediately after them.
+- Use short paragraphs, direct verbs, concrete names, and examples that can be adapted without decoding project history.
+- Keep implementation detail in maintainer or reference sections unless a user must understand it to make a decision.
+- Avoid repeating the same explanation across pages; link to one canonical section instead.
+
+### Use Unicode symbols with intent
+
+Use meaningful Unicode symbols to make documentation easier to scan and less visually monotonous while retaining a professional tone. Symbols are encouraged in headings, callouts, status lines, and compact lists, but they must support the words rather than replace them.
+
+- Normally use one meaningful symbol before a major heading: `## 🚀 Quick start`.
+- Keep the same symbol meaning consistent across the site.
+- Always include a text label so the meaning remains clear when a font, screen reader, or monochrome display handles the symbol differently.
+- Do not decorate every paragraph or combine many unrelated symbols in one heading.
+- Do not place decorative symbols inside commands, file paths, identifiers, or copied configuration.
+
+Suggested vocabulary:
+
+| Symbol | Suitable meaning |
+| --- | --- |
+| 🚀 | Quick start, launch, first success |
+| 📥 | Install, download, import |
+| 🔧 | Configure, customize |
+| 📚 | Guides, concepts, learning |
+| 🔄 | Update, refresh, repeatable workflow |
+| 💡 | Tip, idea, useful context |
+| 📊 | Status, results, reporting |
+| ⚙️ | Advanced behavior, internals |
+| 🛠️ | Troubleshooting, repair, maintenance |
+| 📅 | Releases, schedule, lifecycle |
+| 📦 | Packages, artifacts, distribution |
+| 📝 | Tutorial, example, authoring |
+| 📄 | Reference, files, contracts |
+| 📫 | Support, contact, feedback |
+| 🐛 | Known issue, defect, debugging |
+| 🤝 | Contribution, collaboration, team workflow |
+
+Example page outline:
+
+```markdown
+# 📚 Product guide
+
+## 🚀 Quick start
+
+## 📥 Install
+
+## 🔧 Configure
+
+## 💡 Useful tips
+
+## 🛠️ Troubleshooting
+```
+
+Symbols also work in concise callouts:
+
+```markdown
+> 💡 **Tip:** Keep the verified package directory read-only.
+
+> ⚠️ **Important:** Review the plan before a large synchronization.
+```
   </script>
   <noscript>This packaged documentation requires JavaScript enabled for local files.</noscript>
 </body>

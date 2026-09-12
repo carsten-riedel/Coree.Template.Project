@@ -6,7 +6,7 @@
   "identity": "CoreeTemplatesProjectMultiLibraryRepository",
   // Displayname is used in the New Project dialog and in the dotnet new list output.
   "name": ".NET multi-library repository",
-  "description": "Repository of one or more independently packable C# class libraries (NuGet). Tests and coverage included; optional BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, ASP.NET Web SDK, and documentation template.",
+  "description": "Repository of one or more independently packable C# class libraries (NuGet). Tests and Coverlet coverage included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, ASP.NET Web SDK, and documentation template.",
   "shortName": "multilibraryrepo-coree",
   "tags": {
     "language": "C#",
@@ -66,14 +66,19 @@
           "displayName": ".gitattributes"
         },
         {
+          "choice": "GitIgnore",
+          "description": "Add .gitignore at the top of the repository. Nested src/prj and src/sln ignores stay. First create only.",
+          "displayName": ".gitignore"
+        },
+        {
           "choice": "RepoLicense",
           "description": "Copy the selected project license into a LICENSE file at the repository root (GitHub convention). First repository create only.",
           "displayName": "LICENSE file at repository root"
         }
       ]
     },
-    // CLI-only first-create set: README, checkpoint, .gitattributes, LICENSE.
-    // Same four files as the Visual Studio ide.host default. Hidden in VS.
+    // CLI-only first-create set: README, checkpoint, .gitattributes, .gitignore, LICENSE.
+    // Same five files as the Visual Studio ide.host default. Hidden in VS.
     // None on InitRepoItems still writes nothing. Root version.json is not
     // in this set; it is --NerdbankGitVersioning Repo plus first-create Init
     // (WriteRepoVersionJson).
@@ -81,7 +86,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, LICENSE). Same set as a Visual Studio first create. Does not add version.json. First create only.",
+      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, .gitignore, LICENSE). Same set as a Visual Studio first create. Does not add version.json. First create only.",
       "displayName": "All repository root items"
     },
     // Where the TEMPLATE solution file is written. Default true:
@@ -270,40 +275,33 @@
         "format": "yyyy-MM-dd"
       }
     },
-    "PackageDescription": {
-      "type": "parameter",
-      "dataType": "string",
-      "defaultValue": "PackageDescription",
-      "replaces": "PackageDescription",
-      "description": "The nuget package description of your project.",
-      "displayName": "Package description"
-    },
-    // Single choice (dropdown). Default Off = existing VersionPrefix group.
-    // Nerdbank is --NerdbankGitVersioning Repo or Project. Root version.json
-    // is first-create only (WriteRepoVersionJson), not the choice by itself.
+    // Single choice (dropdown). Default Project = version.json under
+    // Properties/. Combo-safe: later libraries do not collide. Off keeps
+    // the VersionPrefix group. Repo uses one root version.json (first
+    // create only via WriteRepoVersionJson), not the choice by itself.
     "NerdbankGitVersioning": {
       "type": "parameter",
       "datatype": "choice",
       "isRequired": false,
-      "defaultValue": "Off",
+      "defaultValue": "Project",
       "enableQuotelessLiterals": true,
-      "description": "Optional Nerdbank.GitVersioning. Default Off keeps VersionPrefix in the library project (no extra package). Repo uses a repository-root version.json (first create only). Project puts version.json under Properties/.",
+      "description": "Nerdbank.GitVersioning. Default is this library (version.json under Properties/). This repository uses one version.json at the repo root (first create only). Off keeps VersionPrefix in the library project (no extra package).",
       "displayName": "Nerdbank.GitVersioning",
       "choices": [
         {
-          "choice": "Off",
-          "description": "VersionMajor / VersionPrefix / PackageVersion in the class library csproj. Default. No Nerdbank.GitVersioning package.",
-          "displayName": "Off (VersionPrefix in the library project)"
-        },
-        {
           "choice": "Project",
-          "description": "Add Nerdbank.GitVersioning with version.json in this library's Properties folder. Every create; paths do not collide.",
-          "displayName": "Properties/version.json"
+          "description": "Add Nerdbank.GitVersioning with version.json in this library's Properties folder. Default. Every create; paths do not collide.",
+          "displayName": "This library (Properties/version.json)"
         },
         {
           "choice": "Repo",
           "description": "Add Nerdbank.GitVersioning using a repository-root version.json. The file is written only on a first create (--InitAllRepoItems or Visual Studio root items). Later libraries pass --NerdbankGitVersioning Repo without Init*.",
-          "displayName": "Repository version.json"
+          "displayName": "This repository (root version.json)"
+        },
+        {
+          "choice": "Off",
+          "description": "VersionMajor / VersionPrefix / PackageVersion in the class library csproj. No Nerdbank.GitVersioning package.",
+          "displayName": "Off (VersionPrefix in the library project)"
         }
       ]
     },
@@ -313,7 +311,11 @@
     },
     "WriteRepoVersionJson": {
       "type": "computed",
-      "value": "(NerdbankGitVersioning == \"Repo\") && (InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"Readme\") || (InitRepoItems == \"AIReleaseCheckpoint\") || (InitRepoItems == \"GitAttributes\") || (InitRepoItems == \"RepoLicense\"))"
+      "value": "(NerdbankGitVersioning == \"Repo\") && (InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"Readme\") || (InitRepoItems == \"AIReleaseCheckpoint\") || (InitRepoItems == \"GitAttributes\") || (InitRepoItems == \"GitIgnore\") || (InitRepoItems == \"RepoLicense\"))"
+    },
+    "WriteRepoLicense": {
+      "type": "computed",
+      "value": "(InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"RepoLicense\"))"
     },
     // Library-only. Default off. First real build writes Properties/PublicAPI
     // baseline files if they are missing. Not a repository-root Init* item.
@@ -324,11 +326,11 @@
       "description": "Add Microsoft.CodeAnalysis.PublicApiAnalyzers to the class library. The first real build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected.",
       "displayName": "Public API analyzers"
     },
-    // Multi-choice. Default empty/None. Same DocTemplate.html seed, two
+    // Multi-choice. Default empty/None. Same DocShell.html seed, two
     // destinations. Package is per library (no combo collision). Repository
-    // is repo-root documentation/ and collides on a later library (Exit 73).
+    // is repo-root docs/ and collides on a later library (Exit 73).
     // Not part of InitAllRepoItems. Do not vendor the 25-file site here:
-    // bootstrap follows DocTemplate.html and takes the versions it pins then.
+    // bootstrap follows DocShell.html and takes the versions it pins then.
     "DocumentationTemplate": {
       "type": "parameter",
       "datatype": "choice",
@@ -336,7 +338,7 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "",
-      "description": "Optional offline documentation template (DocTemplate.html). Package writes it under this library's NugetAssets/documentation (packed with the nupkg). Repository writes it under repo-root documentation/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
+      "description": "Optional offline documentation template (DocShell.html). Package writes it under this library's NugetAssets/docs (packed with the nupkg). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
       "displayName": "Documentation template",
       "choices": [
         {
@@ -346,13 +348,13 @@
         },
         {
           "choice": "Package",
-          "description": "Add DocTemplate.html under this library's NugetAssets/documentation. Every create; paths do not collide. Packed with the nupkg.",
-          "displayName": "NuGet package docs (NugetAssets/documentation)"
+          "description": "Add DocShell.html under this library's NugetAssets/docs. Every create; paths do not collide. Packed with the nupkg.",
+          "displayName": "NuGet package docs (NugetAssets/docs)"
         },
         {
           "choice": "Repository",
-          "description": "Add DocTemplate.html under documentation/ at the repository root. First create only; a later library in the same folder that selects this again is Exit 73.",
-          "displayName": "Repository docs (documentation/)"
+          "description": "Add DocShell.html under docs/ at the repository root. First create only; a later library in the same folder that selects this again is Exit 73.",
+          "displayName": "Repository docs (docs/)"
         }
       ]
     },
@@ -400,30 +402,119 @@
       ]
     },
     // Library-only .project.editor.globalconfig via GlobalAnalyzerConfigFiles.
-    // Default on. The file is a VS-exported style dump, not a build-fail
-    // probe. Wire it before ImportSdkTargets; EnforceCodeStyleInBuild is
-    // required or the file stays IDE-only.
+    // Strict (default) is the VS style dump plus public-release build gates
+    // (naming/XML/nullable/unused usings as error). Default is the same dump
+    // with suggestions only. Off writes nothing. Generated disk name is always
+    // .project.editor.globalconfig; seeds live under TemplateAssets/CodeStyle/
+    // as .project.editor.globalconfig.{choice}. Wire it before
+    // ImportSdkTargets; EnforceCodeStyleInBuild is required or IDE naming
+    // stays IDE-only. OptimizeImplicitlyTriggeredBuild=false so VS Test
+    // Explorer / F5 do not skip those analyzers (`dotnet test` does not).
     "ProjectEditorGlobalConfig": {
       "type": "parameter",
-      "dataType": "bool",
-      "defaultValue": "true",
-      "description": "Add editor and analyzer rules beside the library project and apply them to that project in the IDE and on build. Test and benchmark projects are not affected.",
-      "displayName": "Code style rules for library project"
+      "datatype": "choice",
+      "isRequired": false,
+      "defaultValue": "Strict",
+      "enableQuotelessLiterals": true,
+      "description": "Editor and analyzer rules beside the library project, applied in the IDE and on build. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected.",
+      "displayName": "Code style rules for library project",
+      "choices": [
+        {
+          "choice": "Strict",
+          "description": "Same style dump as Default, plus naming/XML-doc/nullable/unused-using errors for a packable library. Default. Needs XML docs and nullable on in C# project options.",
+          "displayName": "Strict (public release errors)"
+        },
+        {
+          "choice": "Default",
+          "description": "VS style dump as .project.editor.globalconfig. Naming and style stay suggestions. EnforceCodeStyleInBuild and OptimizeImplicitlyTriggeredBuild=false are still on.",
+          "displayName": "Default (style suggestions)"
+        },
+        {
+          "choice": "Off",
+          "description": "Do not add .project.editor.globalconfig, EnforceCodeStyleInBuild, or OptimizeImplicitlyTriggeredBuild.",
+          "displayName": "Off (no code style file)"
+        }
+      ]
     },
-    // These options affect only the generated test project; the library remains free of test tooling.
-    "CoverletMSBuild": {
+    "UseProjectEditorGlobalConfig": {
+      "type": "computed",
+      "value": "(ProjectEditorGlobalConfig != \"Off\")"
+    },
+    // Default/Off keep unused usings on Class1 so IDE0005 is visible.
+    // Strict omits them or the first build fails (IDE0005 is error).
+    "KeepScaffoldUnusedUsings": {
+      "type": "computed",
+      "value": "(ProjectEditorGlobalConfig != \"Strict\")"
+    },
+    // Library-only SDK CA rule set (AnalysisMode). Not style/CS (that is
+    // ProjectEditorGlobalConfig) and not Public API analyzers. Recommended
+    // is the omit-the-switch default. Always written so the generated csproj
+    // does not follow a later SDK Default shift. Tests and benchmark omit it.
+    "AnalysisMode": {
       "type": "parameter",
-      "dataType": "bool",
-      "defaultValue": "true",
-      "description": "Add a coverlet code coverage to the test project.",
-      "displayName": "Add a coverlet code coverage to the test project."
+      "datatype": "choice",
+      "isRequired": false,
+      "defaultValue": "Recommended",
+      "enableQuotelessLiterals": true,
+      "replaces": "__AnalysisMode__",
+      "description": "SDK code-analysis mode for the class library (CA rules). Default Recommended. Minimum is fewer warnings. All is almost every CA rule as a warning. Test and benchmark projects are not affected.",
+      "displayName": "Code analysis mode",
+      "choices": [
+        {
+          "choice": "Recommended",
+          "description": "Enable the SDK recommended CA rules as build warnings. Default.",
+          "displayName": "Recommended"
+        },
+        {
+          "choice": "Minimum",
+          "description": "Fewer CA rules than Recommended; highly recommended warnings only.",
+          "displayName": "Minimum"
+        },
+        {
+          "choice": "All",
+          "description": "Almost every CA rule as a build warning. Noisier on a new library.",
+          "displayName": "All"
+        }
+      ]
+    },
+    // Test-project coverage. Single choice because ReportGenerator consumes
+    // Coverlet output: Report-without-Coverlet is a dead combo. Default
+    // Coverlet (combo-safe, coverage stats on dotnet test). ReportGenerator
+    // is opt-in presentation. Computed CoverletMSBuild / ReportGenerator
+    // keep the existing csproj and sln-readme #if names.
+    "TestCoverage": {
+      "type": "parameter",
+      "datatype": "choice",
+      "isRequired": false,
+      "defaultValue": "Coverlet",
+      "enableQuotelessLiterals": true,
+      "description": "Test coverage on the test project. Default is Coverlet: dotnet test fails if the library is under 100% line/branch/method coverage. Lower Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. The class library is not affected.",
+      "displayName": "Test coverage",
+      "choices": [
+        {
+          "choice": "Coverlet",
+          "description": "Add coverlet.msbuild and collect coverage on dotnet test. Default. Fails the test run below 100% line/branch/method on the library assembly. Lower Threshold in the test csproj to allow less. Raw Coverlet output only.",
+          "displayName": "Coverlet only (100% gate)"
+        },
+        {
+          "choice": "CoverletAndReport",
+          "description": "Coverlet plus ReportGenerator HTML/Markdown from the Coverlet output, one folder per target framework. Same 100% coverage gate as Coverlet only.",
+          "displayName": "Coverlet and ReportGenerator (100% gate)"
+        },
+        {
+          "choice": "None",
+          "description": "No Coverlet and no ReportGenerator. Tests still run.",
+          "displayName": "None (no coverage)"
+        }
+      ]
+    },
+    "CoverletMSBuild": {
+      "type": "computed",
+      "value": "(TestCoverage != \"None\")"
     },
     "ReportGenerator": {
-      "type": "parameter",
-      "dataType": "bool",
-      "defaultValue": "true",
-      "description": "Add ReportGenerator for the coverlet output.",
-      "displayName": "Add ReportGenerator for the coverlet output."
+      "type": "computed",
+      "value": "(TestCoverage == \"CoverletAndReport\")"
     },
     // Keeps BenchmarkDotNet isolated in an optional executable project.
     "BenchmarkProject": {
@@ -438,7 +529,42 @@
   // treat the same as the built-in XML/.md processor. Tokens must sit on their
   // own lines because wholeLine is true. .targets is required so UseWebSdk can
   // pick Sdk.targets inside Build/ImportSdkTargets.targets at generate time.
+  // .txt / LICENSE: each TemplateAssets/Licenses seed uses a shallow
+  // //#if (PackageCopyrightHolderIsSet) / //#else / //#endif. Do not put
+  // ProjectLicense #if in those files; extra sources pick the seed.
   "specialCustomOperations": {
+    "**/*.txt": {
+      "operations": [
+        {
+          "type": "conditional",
+          "configuration": {
+            "if": [ "//#if" ],
+            "else": [ "//#else" ],
+            "elseif": [ "//#elseif" ],
+            "endif": [ "//#endif" ],
+            "trim": true,
+            "wholeLine": true,
+            "evaluator": "C++"
+          }
+        }
+      ]
+    },
+    "**/LICENSE": {
+      "operations": [
+        {
+          "type": "conditional",
+          "configuration": {
+            "if": [ "//#if" ],
+            "else": [ "//#else" ],
+            "elseif": [ "//#elseif" ],
+            "endif": [ "//#endif" ],
+            "trim": true,
+            "wholeLine": true,
+            "evaluator": "C++"
+          }
+        }
+      ]
+    },
     "**/*.slnx": {
       "operations": [
         {
@@ -519,17 +645,17 @@
           ]
         },
         {
+          "condition": "((InitRepoItems == \"None\") || ((InitAllRepoItems == false) && (InitRepoItems != \"GitIgnore\")))",
+          "exclude": [
+            ".gitignore"
+          ]
+        },
+        {
           "condition": "(BenchmarkProject == false)",
           "exclude": [
             "src/prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj",
             "src/prj/ClassLibrary.Benchmark/Program.cs",
             "src/prj/ClassLibrary.Benchmark/.gitignore"
-          ]
-        },
-        {
-          "condition": "(ProjectEditorGlobalConfig == false)",
-          "exclude": [
-            "src/prj/ClassLibrary/.project.editor.globalconfig"
           ]
         },
         {
@@ -577,7 +703,9 @@
       "modifiers": [
         {
           "exclude": [
-            "DocTemplate.html"
+            "DocShell.html",
+            "CodeStyle/**",
+            "Licenses/**"
           ]
         }
       ]
@@ -589,50 +717,223 @@
       "modifiers": [
         {
           "exclude": [
-            "DocTemplate.html"
+            "DocShell.html",
+            "CodeStyle/**",
+            "Licenses/**"
           ]
         }
       ]
     },
     {
       "source": "./TemplateAssets/",
-      "target": "./src/prj/ClassLibrary/NugetAssets/documentation/",
+      "target": "./src/prj/ClassLibrary/NugetAssets/docs/",
       "condition": "WritePackageDocTemplate",
       "modifiers": [
         {
           "exclude": [
-            "version.json"
+            "version.json",
+            "CodeStyle/**",
+            "Licenses/**"
           ]
         }
       ]
     },
     {
       "source": "./TemplateAssets/",
-      "target": "./documentation/",
+      "target": "./docs/",
       "condition": "WriteRepoDocTemplate",
       "modifiers": [
         {
           "exclude": [
-            "version.json"
+            "version.json",
+            "CodeStyle/**",
+            "Licenses/**"
           ]
         }
       ]
     },
     {
-      "source": "./src/prj/ClassLibrary/NugetAssets/",
-      "target": "./",
-      "condition": "((InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"RepoLicense\")))",
+      "source": "./TemplateAssets/CodeStyle/",
+      "target": "./src/prj/ClassLibrary/",
+      "condition": "(ProjectEditorGlobalConfig == \"Default\")",
       "modifiers": [
         {
           "exclude": [
-            "Readme.md",
-            "ReleaseNotes.txt",
-            "Icon-128x128.png"
+            ".project.editor.globalconfig.strict"
           ]
         },
         {
           "rename": {
-            "License.txt": "LICENSE"
+            ".project.editor.globalconfig.default": ".project.editor.globalconfig"
+          }
+        }
+      ]
+    },
+    {
+      "source": "./TemplateAssets/CodeStyle/",
+      "target": "./src/prj/ClassLibrary/",
+      "condition": "(ProjectEditorGlobalConfig == \"Strict\")",
+      "modifiers": [
+        {
+          "exclude": [
+            ".project.editor.globalconfig.default"
+          ]
+        },
+        {
+          "rename": {
+            ".project.editor.globalconfig.strict": ".project.editor.globalconfig"
+          }
+        }
+      ]
+    },
+    {
+      "source": "./TemplateAssets/Licenses/",
+      "target": "./src/prj/ClassLibrary/NugetAssets/",
+      "condition": "(ProjectLicense == \"MIT\")",
+      "modifiers": [
+        {
+          "exclude": [
+            "BSD3Clause.txt",
+            "Apache2.txt",
+            "Custom.txt"
+          ]
+        },
+        {
+          "rename": {
+            "MIT.txt": "License.txt"
+          }
+        }
+      ]
+    },
+    {
+      "source": "./TemplateAssets/Licenses/",
+      "target": "./src/prj/ClassLibrary/NugetAssets/",
+      "condition": "(ProjectLicense == \"BSD3Clause\")",
+      "modifiers": [
+        {
+          "exclude": [
+            "MIT.txt",
+            "Apache2.txt",
+            "Custom.txt"
+          ]
+        },
+        {
+          "rename": {
+            "BSD3Clause.txt": "License.txt"
+          }
+        }
+      ]
+    },
+    {
+      "source": "./TemplateAssets/Licenses/",
+      "target": "./src/prj/ClassLibrary/NugetAssets/",
+      "condition": "(ProjectLicense == \"Apache2\")",
+      "modifiers": [
+        {
+          "exclude": [
+            "MIT.txt",
+            "BSD3Clause.txt",
+            "Custom.txt"
+          ]
+        },
+        {
+          "rename": {
+            "Apache2.txt": "License.txt"
+          }
+        }
+      ]
+    },
+    {
+      "source": "./TemplateAssets/Licenses/",
+      "target": "./src/prj/ClassLibrary/NugetAssets/",
+      "condition": "(ProjectLicense == \"Custom\")",
+      "modifiers": [
+        {
+          "exclude": [
+            "MIT.txt",
+            "BSD3Clause.txt",
+            "Apache2.txt"
+          ]
+        },
+        {
+          "rename": {
+            "Custom.txt": "License.txt"
+          }
+        }
+      ]
+    },
+    {
+      "source": "./TemplateAssets/Licenses/",
+      "target": "./",
+      "condition": "(WriteRepoLicense && (ProjectLicense == \"MIT\"))",
+      "modifiers": [
+        {
+          "exclude": [
+            "BSD3Clause.txt",
+            "Apache2.txt",
+            "Custom.txt"
+          ]
+        },
+        {
+          "rename": {
+            "MIT.txt": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "source": "./TemplateAssets/Licenses/",
+      "target": "./",
+      "condition": "(WriteRepoLicense && (ProjectLicense == \"BSD3Clause\"))",
+      "modifiers": [
+        {
+          "exclude": [
+            "MIT.txt",
+            "Apache2.txt",
+            "Custom.txt"
+          ]
+        },
+        {
+          "rename": {
+            "BSD3Clause.txt": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "source": "./TemplateAssets/Licenses/",
+      "target": "./",
+      "condition": "(WriteRepoLicense && (ProjectLicense == \"Apache2\"))",
+      "modifiers": [
+        {
+          "exclude": [
+            "MIT.txt",
+            "BSD3Clause.txt",
+            "Custom.txt"
+          ]
+        },
+        {
+          "rename": {
+            "Apache2.txt": "LICENSE"
+          }
+        }
+      ]
+    },
+    {
+      "source": "./TemplateAssets/Licenses/",
+      "target": "./",
+      "condition": "(WriteRepoLicense && (ProjectLicense == \"Custom\"))",
+      "modifiers": [
+        {
+          "exclude": [
+            "MIT.txt",
+            "BSD3Clause.txt",
+            "Apache2.txt"
+          ]
+        },
+        {
+          "rename": {
+            "Custom.txt": "LICENSE"
           }
         }
       ]

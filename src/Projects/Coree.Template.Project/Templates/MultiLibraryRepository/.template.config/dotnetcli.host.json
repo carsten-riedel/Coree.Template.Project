@@ -28,6 +28,18 @@
     "DocumentationTemplate": {
       "longName": "DocumentationTemplate",
       "shortName": ""
+    },
+    "ProjectEditorGlobalConfig": {
+      "longName": "ProjectEditorGlobalConfig",
+      "shortName": ""
+    },
+    "AnalysisMode": {
+      "longName": "AnalysisMode",
+      "shortName": ""
+    },
+    "TestCoverage": {
+      "longName": "TestCoverage",
+      "shortName": ""
     }
   }
 }

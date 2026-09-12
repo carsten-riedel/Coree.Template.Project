@@ -477,6 +477,17 @@
         }
       ]
     },
+    // Library-only. Default on. Restore NuGetAudit is already on; this promotes
+    // high (NU1903) and critical (NU1904) to errors. Low/moderate stay warnings.
+    // Off is for EOL/backport graphs that cannot be cleaned. Tests and
+    // benchmark are not in this switch. Combo-safe.
+    "NuGetAuditHighCriticalAsErrors": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Treat high and critical NuGet vulnerability warnings (NU1903, NU1904) as restore errors on the class library. Default on. Low and moderate stay warnings. Turn off for an EOL or backport graph that cannot be cleaned. Test and benchmark projects are not affected. Does not change NuGetAudit (already on) or the test-project vulnerable report.",
+      "displayName": "Treat high/critical NuGet vulnerabilities as errors"
+    },
     // Test-project coverage. Single choice because ReportGenerator consumes
     // Coverlet output: Report-without-Coverlet is a dead combo. Default
     // Coverlet (combo-safe, coverage stats on dotnet test). ReportGenerator

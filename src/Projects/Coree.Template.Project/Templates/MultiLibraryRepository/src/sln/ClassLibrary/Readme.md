@@ -88,6 +88,10 @@ dotnet pack
 ```
 
 Creates one `.nupkg` in `src/prj/ClassLibrary/bin/Pack/` containing the library for all selected target frameworks. Test and optional benchmark projects are not packed.
+<!--#if (NuGetAuditHighCriticalAsErrors) -->
+
+Restore fails this class library on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. The test-project `NugetReport` listing is still info-only.
+<!--#endif -->
 <!--#if (PublicApiAnalyzers) -->
 
 ## Public API baseline

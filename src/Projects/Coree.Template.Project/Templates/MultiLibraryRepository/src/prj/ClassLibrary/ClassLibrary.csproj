@@ -46,7 +46,8 @@
   </PropertyGroup>
 
   <!--#if (UseProjectEditorGlobalConfig) -->
-  <!-- Keep global analyzer scoped to the project directory config file on disk without showing it as a project item. -->
+  <!-- GlobalAnalyzerConfigFiles is what Roslyn reads. Visible=false so VS does not show that item twice. -->
+  <!-- None+Link is Solution Explorer only. Disk path stays next to the csproj: Properties/ would change analyzer scope. -->
   <!-- EnforceCodeStyleInBuild is required or IDE1006 stays IDE-only and `dotnet build` ignores the file. -->
   <!-- OptimizeImplicitlyTriggeredBuild=false: VS Test Explorer / F5 must not skip analyzers (dotnet test does not). -->
   <PropertyGroup>
@@ -55,6 +56,8 @@
   </PropertyGroup>
   <ItemGroup>
     <GlobalAnalyzerConfigFiles Include="$(MSBuildProjectDirectory)\.project.editor.globalconfig" Visible="false" />
+    <None Remove=".project.editor.globalconfig" />
+    <None Include=".project.editor.globalconfig" Link="Properties\.project.editor.globalconfig" />
   </ItemGroup>
   <!--#endif -->
 
@@ -62,6 +65,13 @@
   <PropertyGroup>
     <AnalysisMode>__AnalysisMode__</AnalysisMode>
   </PropertyGroup>
+
+  <!--#if (NuGetAuditHighCriticalAsErrors) -->
+  <!-- Restore NuGetAudit is already on. High (NU1903) and critical (NU1904) fail restore. Low/moderate stay warnings. -->
+  <PropertyGroup>
+    <WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>
+  </PropertyGroup>
+  <!--#endif -->
 
   <!-- Packaging and publish configuration -->
   <!-- EnablePackageValidation: TFM/runtime holes on pack. No baseline at generate; set PackageValidationBaselineVersion after the first nuget.org publish. -->
@@ -211,7 +221,7 @@
   <!--
     Must stay last. This import is Sdk.targets plus the outer Publish dispatch.
     The SDK reads properties and items while it loads (EnforceCodeStyleInBuild,
-    GlobalAnalyzerConfigFiles, AnalysisMode, EnablePackageValidation, publish). Anything after this line is after the
+    GlobalAnalyzerConfigFiles, AnalysisMode, EnablePackageValidation, WarningsAsErrors, publish). Anything after this line is after the
     SDK and is ignored for that. Project Sdk="..." would append Sdk.targets
     after this file and overwrite the Publish override.
   -->

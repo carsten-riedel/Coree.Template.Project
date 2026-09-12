@@ -132,6 +132,18 @@
       }
     },
     {
+      "id": "NuGetAuditHighCriticalAsErrors",
+      "isVisible": true,
+      "defaultValue": "true",
+      "persistenceScope": "none",
+      "name": {
+        "text": "Treat high/critical NuGet vulnerabilities as errors"
+      },
+      "description": {
+        "text": "Default on. Restore fails this class library on high (NU1903) and critical (NU1904) vulnerable packages. Low and moderate stay warnings. Uncheck for an EOL or backport graph. Test and benchmark projects are not affected. The test-project NugetReport file is still info-only."
+      }
+    },
+    {
       "id": "TestCoverage",
       "isVisible": true,
       "defaultValue": "Coverlet",

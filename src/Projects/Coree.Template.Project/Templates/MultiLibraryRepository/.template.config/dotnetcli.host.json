@@ -37,6 +37,10 @@
       "longName": "AnalysisMode",
       "shortName": ""
     },
+    "NuGetAuditHighCriticalAsErrors": {
+      "longName": "NuGetAuditHighCriticalAsErrors",
+      "shortName": ""
+    },
     "TestCoverage": {
       "longName": "TestCoverage",
       "shortName": ""

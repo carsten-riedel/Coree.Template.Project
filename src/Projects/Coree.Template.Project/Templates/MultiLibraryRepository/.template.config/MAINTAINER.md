@@ -12,7 +12,7 @@ The generated root `README.md` lives beside this folder, one level up. That file
 | --- | --- |
 | `template.json` | Identity, symbols, sources, post-actions. |
 | `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**. `persistenceScope: none` so the New Project dialog does not reuse the last create. Host mapping: **CLI ↔ Visual Studio**. No `icon` property: see **Visual Studio template icon**. |
-| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, `PublicApiAnalyzers`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, and `TestCoverage` so they do not steal single-letter aliases. |
+| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, `PublicApiAnalyzers`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `NuGetAuditHighCriticalAsErrors`, and `TestCoverage` so they do not steal single-letter aliases. |
 | `icon.png` | **Intentionally absent.** Visual Studio then uses the template **package** icon. |
 | `MAINTAINER.md` | This file. |
 
@@ -147,7 +147,7 @@ A combo repository is two or more `dotnet new` calls into the **same** `--output
 Other host-only switch behavior (not root files, same class of reason):
 
 - **`PlaceSolutionInSolutionFolder` false:** CLI renames to `{Name}.slnx` at repo root. Visual Studio keeps `{Name}.generated.slnx` so it does not overwrite the `{Name}.slnx` the IDE always writes. Post-actions that open the sln readme and tell you to close/reopen are `HostIdentifier == "vs"` only.
-- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `PublicApiAnalyzers` / `DocumentationTemplate` / `TestCoverage` / `AnalysisMode`:** same defaults on both hosts (`NerdbankGitVersioning` `Project`, `PublicApiAnalyzers` `false`, `DocumentationTemplate` empty/`None`, `TestCoverage` `Coverlet`, `AnalysisMode` `Recommended`, `ProjectEditorGlobalConfig` `Strict`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again. `--DocumentationTemplate Package` is safe on later libraries; `--DocumentationTemplate Repository` on a later library is Exit 73.
+- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `PublicApiAnalyzers` / `DocumentationTemplate` / `TestCoverage` / `AnalysisMode` / `NuGetAuditHighCriticalAsErrors`:** same defaults on both hosts (`NerdbankGitVersioning` `Project`, `PublicApiAnalyzers` `false`, `DocumentationTemplate` empty/`None`, `TestCoverage` `Coverlet`, `AnalysisMode` `Recommended`, `ProjectEditorGlobalConfig` `Strict`, `NuGetAuditHighCriticalAsErrors` `true`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again. `--DocumentationTemplate Package` is safe on later libraries; `--DocumentationTemplate Repository` on a later library is Exit 73.
 - **`PackageAuthor`:** required on both.
 
 ## `InitRepoItems` / `InitAllRepoItems`
@@ -348,6 +348,8 @@ Keep the same `--NerdbankGitVersioning` value on every library in one `--output`
 
 Library-only single choice, default **`Strict`**. UI label **Code style rules for library project** (packable class-library project only; `is_global` is the analyzer-config technical term). CLI long name **`--ProjectEditorGlobalConfig`**. Stamps `src/prj/{Name}/.project.editor.globalconfig` and wires `GlobalAnalyzerConfigFiles`, `EnforceCodeStyleInBuild`, and `OptimizeImplicitlyTriggeredBuild=false`. `Off` writes nothing. Tests and benchmark do not get the file. Keep the symbol and generated disk name. Do not use a bare "project" label: **C# project options** already applies to library, tests, and benchmark.
 
+Roslyn reads `GlobalAnalyzerConfigFiles` (`Visible="false"`). Visual Studio Solution Explorer uses a separate `None` item with `Link` under `Properties\` so the file is clickable next to `version.json` / Public API. `None Remove` first, or the SDK default glob also shows it at the project root. Do not use `AdditionalFiles` or `Content`. Do not set `CopyToOutputDirectory` (`None` already does not copy or pack). Do not replace `GlobalAnalyzerConfigFiles` with the `None` item. Do **not** move the file into `Properties/` on disk: analyzer-config scope follows the directory of the file, so it must stay next to the csproj. `Link` is UI-only.
+
 Do not rename `Default` to Minimal: both seeds are the same full VS style dump. The split is **severity**, not breadth.
 
 | Choice | Seed | What differs |
@@ -364,7 +366,7 @@ Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that fold
 
 `EnforceCodeStyleInBuild` is required or IDE naming stays IDE-only (SDK default is false). Compiler diagnostics in Strict (CS1591, CS86xx) fail `dotnet build` without that flag; IDE1006 needs it. `OptimizeImplicitlyTriggeredBuild=false` is required with that same `#if`: Visual Studio skips analyzers on Test Explorer / F5 implicit builds (`IsImplicitlyTriggeredBuild`), so Run Tests can stay green while `dotnet test` fails the same IDE errors. Product assumption is VS MSBuild == `dotnet test` for library style gates. Do not add `EnableNETAnalyzers` / `RunAnalyzers*` `true` noise — those already default true on net8/net10. Coverlet `Threshold` still runs only on `dotnet test` (`coverlet.msbuild`), not Test Explorer.
 
-This PropertyGroup/ItemGroup must appear **before** `ImportSdkTargets`. After that import the SDK has already loaded and ignores the items.
+This PropertyGroup/`GlobalAnalyzerConfigFiles` must appear **before** `ImportSdkTargets`. After that import the SDK has already loaded and ignores those items. The `None` Link is Solution Explorer only and can sit in the same `#if` block.
 
 ## `AnalysisMode`
 
@@ -375,6 +377,19 @@ This is the SDK **CA** rule set, not code style and not Public API analyzers. Do
 Warnings only unless the consumer later sets `TreatWarningsAsErrors`. `All` is noisy on `Class1`.
 
 Place the PropertyGroup **before** `ImportSdkTargets`.
+
+## `NuGetAuditHighCriticalAsErrors`
+
+Library-only bool, default **true**. UI label **Treat high/critical NuGet vulnerabilities as errors**. CLI long name **`--NuGetAuditHighCriticalAsErrors`**. Omit the switch → on. `--NuGetAuditHighCriticalAsErrors false` writes nothing. Tests and benchmark are not in this switch. Combo-safe.
+
+SDK restore already runs NuGetAudit (NU1901–NU1904 warnings). This switch only appends `<WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>` on the packable library, before `ImportSdkTargets`. Low (`NU1901`) and moderate (`NU1902`) stay warnings. Do not set `NuGetAudit` / `NuGetAuditMode` / `TreatWarningsAsErrors` here (`NuGetAudit` is already on; multi-TFM with net10 already uses `all`). Do not promote the test-project `ListVulnerable` `dotnet list package --vulnerable` report: that command’s exit code is not a findings gate.
+
+Turn the switch off for an EOL or backport graph (for example net8 after support ends) that cannot be cleaned without dropping a TFM. Do not put this on tests: MSTest/Coverlet CVEs must not fail the nupkg restore.
+
+```powershell
+dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems
+dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --NuGetAuditHighCriticalAsErrors false
+```
 
 ## `PublicApiAnalyzers`
 
@@ -419,7 +434,7 @@ The library is packable. `IsPublishable` is `false` on the class library (NuGet 
 
 Do not put `TargetFramework` next to `TargetFrameworks` to avoid `-f`. That was the previous library: MSBuild saw a single TFM, pack needed `BuildForPack`, and a `net8.0` consumer could not reference the project. `_IsPublishing` on `TargetFramework` still fails when that consumer publishes (the flag is global).
 
-Implementation (do not “simplify” into one always-imported file or back to `<Project Sdk="...">`): `ImportSdkTargets.targets` always closes `Sdk.targets`; `PublishDefaultFramework.targets` loads only when `IsCrossTargetingBuild` is true. **`ImportSdkTargets` must be the last import in the library csproj.** That file *is* `Sdk.targets` plus the outer publish dispatch. The SDK reads properties and items while it loads (`EnforceCodeStyleInBuild`, `GlobalAnalyzerConfigFiles`, `AnalysisMode`, `EnablePackageValidation`, publish). Anything after that line is after the SDK and is ignored for those. `Project Sdk="..."` would append `Sdk.targets` after this file and overwrite the Publish override. `SourceControlState.targets` is a `BeforeTargets` hook on `GenerateAssemblyInfo` (SDK 8+ Source Link); it can sit just above the SDK close. `InitializePublicApi.targets` is imported only when `PublicApiAnalyzers` is on, also just above the SDK close. `PublishRelease` keeps a direct project `dotnet publish` on Release. Tests may keep `SetTargetFramework`; external consumers must not need it. `<!--#if` in `.targets` is generate-time (`**/*.targets` in `specialCustomOperations`).
+Implementation (do not “simplify” into one always-imported file or back to `<Project Sdk="...">`): `ImportSdkTargets.targets` always closes `Sdk.targets`; `PublishDefaultFramework.targets` loads only when `IsCrossTargetingBuild` is true. **`ImportSdkTargets` must be the last import in the library csproj.** That file *is* `Sdk.targets` plus the outer publish dispatch. The SDK reads properties and items while it loads (`EnforceCodeStyleInBuild`, `GlobalAnalyzerConfigFiles`, `AnalysisMode`, `EnablePackageValidation`, `WarningsAsErrors`, publish). Anything after that line is after the SDK and is ignored for those. `Project Sdk="..."` would append `Sdk.targets` after this file and overwrite the Publish override. `SourceControlState.targets` is a `BeforeTargets` hook on `GenerateAssemblyInfo` (SDK 8+ Source Link); it can sit just above the SDK close. `InitializePublicApi.targets` is imported only when `PublicApiAnalyzers` is on, also just above the SDK close. `PublishRelease` keeps a direct project `dotnet publish` on Release. Tests may keep `SetTargetFramework`; external consumers must not need it. `<!--#if` in `.targets` is generate-time (`**/*.targets` in `specialCustomOperations`).
 
 All three project files remove `.gitignore` from their `None` items so it stays on disk without appearing as a project item. The test ignore also covers generated `NugetReport/` output.
 
@@ -434,6 +449,7 @@ With `PlaceSolutionInSolutionFolder=true`, each `src/sln/{Name}/` gets its own `
 - **`CSharpProjectOptions`**: see section above. Do not split back into per-property dropdowns.
 - **`ProjectEditorGlobalConfig`**: see section above. Default `Strict`. `Default` is suggestions-only. Seeds in `TemplateAssets/CodeStyle/`; generated disk name stays `.project.editor.globalconfig`. Csproj wire-up on the library only, before `ImportSdkTargets`.
 - **`AnalysisMode`**: see section above. Default `Recommended`. Library only. CA warnings, not build errors.
+- **`NuGetAuditHighCriticalAsErrors`**: see section above. Default `true`. Library only. NU1903/NU1904 as restore errors. Off for EOL/backport graphs.
 - **`PublicApiAnalyzers`**: see section above. Default `false`. Library only. Baseline files are first-build, not generate-time.
 - **`DocumentationTemplate` / `WritePackageDocTemplate` / `WriteRepoDocTemplate`**: see section above. Default empty/`None`. Seed only; not the vendored site.
 - **`PlaceSolutionInSolutionFolder`**: default true → `src/sln/ClassLibrary/ClassLibrary.slnx` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). False on CLI renames to a root `.slnx`; false in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS’s conventional root `.slnx`. False also stacks every library’s `.slnx` in one directory.

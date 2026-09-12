@@ -13,7 +13,15 @@ The `.slnx` and this readme live in this folder. Open a terminal here for the co
 
 ```text
 ./                         you are here (this readme + ClassLibrary.slnx)
+<!--#if (DirectoryMsBuildFiles) -->
+./Directory.Solution.props  optional empty solution MSBuild landing file
+./Directory.Solution.targets
+<!--#endif -->
 ../../prj/ClassLibrary/    packable class library
+<!--#if (DirectoryMsBuildFiles) -->
+../../prj/ClassLibrary/Directory.Build.props  optional empty library MSBuild landing file
+../../prj/ClassLibrary/Directory.Build.targets
+<!--#endif -->
 ../../prj/ClassLibrary.Tests/  tests (not packed)
 <!--#if (BenchmarkProject == true) -->
 ../../prj/ClassLibrary.Benchmark/  optional BenchmarkDotNet console app
@@ -25,7 +33,15 @@ The solution file lives at the repository root. Open a terminal there for the co
 ```text
 ./                         repository root
 src/sln/ClassLibrary/      this readme
+<!--#if (DirectoryMsBuildFiles) -->
+./Directory.Solution.props  optional empty solution MSBuild landing file (beside the root .slnx)
+./Directory.Solution.targets
+<!--#endif -->
 src/prj/ClassLibrary/      packable class library
+<!--#if (DirectoryMsBuildFiles) -->
+src/prj/ClassLibrary/Directory.Build.props  optional empty library MSBuild landing file
+src/prj/ClassLibrary/Directory.Build.targets
+<!--#endif -->
 src/prj/ClassLibrary.Tests/  tests (not packed)
 <!--#if (BenchmarkProject == true) -->
 src/prj/ClassLibrary.Benchmark/  optional BenchmarkDotNet console app
@@ -90,7 +106,7 @@ dotnet pack
 Creates one `.nupkg` in `src/prj/ClassLibrary/bin/Pack/` containing the library for all selected target frameworks. Test and optional benchmark projects are not packed.
 <!--#if (NuGetAuditHighCriticalAsErrors) -->
 
-Restore fails this class library on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. The test-project `NugetReport` listing is still info-only.
+Restore fails this class library on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that library’s packages (txt/json) and is still info-only.
 <!--#endif -->
 <!--#if (PublicApiAnalyzers) -->
 

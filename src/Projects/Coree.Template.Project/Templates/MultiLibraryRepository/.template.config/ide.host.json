@@ -140,7 +140,7 @@
         "text": "Treat high/critical NuGet vulnerabilities as errors"
       },
       "description": {
-        "text": "Default on. Restore fails this class library on high (NU1903) and critical (NU1904) vulnerable packages. Low and moderate stay warnings. Uncheck for an EOL or backport graph. Test and benchmark projects are not affected. The test-project NugetReport file is still info-only."
+        "text": "Default on. Restore fails this class library on high (NU1903) and critical (NU1904) vulnerable packages. Low and moderate stay warnings. Uncheck for an EOL or backport graph. Test and benchmark projects are not affected. NugetReport next to the tests lists that library and is still info-only."
       }
     },
     {
@@ -158,6 +158,17 @@
     {
       "id": "BenchmarkProject",
       "isVisible": true
+    },
+    {
+      "id": "DirectoryMsBuildFiles",
+      "isVisible": true,
+      "persistenceScope": "none",
+      "name": {
+        "text": "Empty Directory.Build and Directory.Solution files"
+      },
+      "description": {
+        "text": "Default off. Writes empty Directory.Build.props and Directory.Build.targets beside this library, and Directory.Solution.props and Directory.Solution.targets beside this library's .slnx. Landing files for extra MSBuild. Tests and benchmark are not affected. No Directory.Packages.props."
+      }
     }
   ]
 }

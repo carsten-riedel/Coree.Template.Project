@@ -71,14 +71,20 @@
   </Target>
   <!--#endif -->
 
-  <!-- NuGet package inventory next to the other test reports. -->
+  <!-- Package inventory of the packable library, not this test project. -->
   <PropertyGroup>
-    <_NugetReportDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'NugetReport', '$(TargetFramework)'))</_NugetReportDir>
+    <NugetReportDir Condition=" '$(NugetReportDir)' == '' ">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'NugetReport'))</NugetReportDir>
+    <NugetReportProject Condition=" '$(NugetReportProject)' == '' ">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', 'ClassLibrary', 'ClassLibrary.csproj'))</NugetReportProject>
   </PropertyGroup>
-  <Target Name="ListVulnerable" AfterTargets="PostBuildEvent">
-    <MakeDir Directories="$(_NugetReportDir)" />
-    <Exec Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package --vulnerable --include-transitive %3E &quot;$(_NugetReportDir)PackageVulnerable.txt&quot;" IgnoreExitCode="true" />
-    <Exec Command="dotnet list &quot;$(MSBuildProjectFullPath)&quot; package %3E &quot;$(_NugetReportDir)PackageList.txt&quot;" IgnoreExitCode="true" />
+  <Target Name="WriteNugetReport" AfterTargets="PostBuildEvent">
+    <PropertyGroup>
+      <_NugetReportPrefix>$(NugetReportDir)$([System.IO.Path]::GetFileNameWithoutExtension('$(NugetReportProject)'))</_NugetReportPrefix>
+    </PropertyGroup>
+    <MakeDir Directories="$(NugetReportDir)" />
+    <Exec Command="dotnet list &quot;$(NugetReportProject)&quot; package %3E &quot;$(_NugetReportPrefix)-packages.txt&quot;" IgnoreExitCode="true" />
+    <Exec Command="dotnet list &quot;$(NugetReportProject)&quot; package --format json %3E &quot;$(_NugetReportPrefix)-packages.json&quot;" IgnoreExitCode="true" />
+    <Exec Command="dotnet list &quot;$(NugetReportProject)&quot; package --include-transitive --vulnerable %3E &quot;$(_NugetReportPrefix)-vulnerable.txt&quot;" IgnoreExitCode="true" />
+    <Exec Command="dotnet list &quot;$(NugetReportProject)&quot; package --include-transitive --vulnerable --format json %3E &quot;$(_NugetReportPrefix)-vulnerable.json&quot;" IgnoreExitCode="true" />
   </Target>
 
 

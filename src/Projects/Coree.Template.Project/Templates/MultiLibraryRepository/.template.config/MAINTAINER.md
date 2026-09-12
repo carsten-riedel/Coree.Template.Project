@@ -12,7 +12,7 @@ The generated root `README.md` lives beside this folder, one level up. That file
 | --- | --- |
 | `template.json` | Identity, symbols, sources, post-actions. |
 | `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**. `persistenceScope: none` so the New Project dialog does not reuse the last create. Host mapping: **CLI ↔ Visual Studio**. No `icon` property: see **Visual Studio template icon**. |
-| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, `PublicApiAnalyzers`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `NuGetAuditHighCriticalAsErrors`, and `TestCoverage` so they do not steal single-letter aliases. |
+| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, `PublicApiAnalyzers`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `NuGetAuditHighCriticalAsErrors`, `TestCoverage`, and `DirectoryMsBuildFiles` so they do not steal single-letter aliases. |
 | `icon.png` | **Intentionally absent.** Visual Studio then uses the template **package** icon. |
 | `MAINTAINER.md` | This file. |
 
@@ -147,7 +147,7 @@ A combo repository is two or more `dotnet new` calls into the **same** `--output
 Other host-only switch behavior (not root files, same class of reason):
 
 - **`PlaceSolutionInSolutionFolder` false:** CLI renames to `{Name}.slnx` at repo root. Visual Studio keeps `{Name}.generated.slnx` so it does not overwrite the `{Name}.slnx` the IDE always writes. Post-actions that open the sln readme and tell you to close/reopen are `HostIdentifier == "vs"` only.
-- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `PublicApiAnalyzers` / `DocumentationTemplate` / `TestCoverage` / `AnalysisMode` / `NuGetAuditHighCriticalAsErrors`:** same defaults on both hosts (`NerdbankGitVersioning` `Project`, `PublicApiAnalyzers` `false`, `DocumentationTemplate` empty/`None`, `TestCoverage` `Coverlet`, `AnalysisMode` `Recommended`, `ProjectEditorGlobalConfig` `Strict`, `NuGetAuditHighCriticalAsErrors` `true`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again. `--DocumentationTemplate Package` is safe on later libraries; `--DocumentationTemplate Repository` on a later library is Exit 73.
+- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `PublicApiAnalyzers` / `DocumentationTemplate` / `TestCoverage` / `AnalysisMode` / `NuGetAuditHighCriticalAsErrors` / `DirectoryMsBuildFiles`:** same defaults on both hosts (`NerdbankGitVersioning` `Project`, `PublicApiAnalyzers` `false`, `DocumentationTemplate` empty/`None`, `TestCoverage` `Coverlet`, `AnalysisMode` `Recommended`, `ProjectEditorGlobalConfig` `Strict`, `NuGetAuditHighCriticalAsErrors` `true`, `DirectoryMsBuildFiles` `false`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again. `--DocumentationTemplate Package` is safe on later libraries; `--DocumentationTemplate Repository` on a later library is Exit 73.
 - **`PackageAuthor`:** required on both.
 
 ## `InitRepoItems` / `InitAllRepoItems`
@@ -259,7 +259,7 @@ WriteRepoVersionJson      =
 
 There is no `version.json` checkbox in `InitRepoItems`. Generate-time root file is `WriteRepoVersionJson` (`Repo` plus first-create Init). If that file is still missing, the Repo library writes it once at build (`if not exists`). Later VS library: **None** plus **This repository (root version.json)**.
 
-Canonical JSON is `TemplateAssets/version.json` (`0.1.0`, `pathFilters` `["."]`). Extra sources copy that file only (`exclude` of `DocShell.html`, `CodeStyle/**`, and `Licenses/**`). `Project` is first in the choice list because it is the default.
+Canonical JSON is `TemplateAssets/version.json` (`0.1.0`, `pathFilters` `["."]`). Extra sources copy that file only (`exclude` of `DocShell.html`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`). `Project` is first in the choice list because it is the default.
 
 ### What each symbol stamps
 
@@ -363,7 +363,7 @@ Do not rename `Default` to Minimal: both seeds are the same full VS style dump. 
 
 `Strict` needs the product C# defaults (`GenerateDocumentationFile`, `Nullable`, `DisableImplicitUsings`) or those errors fire on every build for the wrong reason. The scaffold `Class1` already has XML docs so a first Strict build can pass. Unused usings stay on `Class1` only for **`Default`** and **`Off`** (`KeepScaffoldUnusedUsings`: `ProjectEditorGlobalConfig != "Strict"`): suggestion vs no style file, without failing the first build. Strict omits them because IDE0005 is error. Do not keep unused usings on Strict to “show” the gate.
 
-Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that folder to the library project, **excludes** the other seed, and **renames** the chosen file to `.project.editor.globalconfig`. Do not leave a seed under `src/prj/ClassLibrary/`: `TemplateAssets/` extra sources for `version.json` and DocShell must `exclude` `CodeStyle/**` and `Licenses/**`.
+Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that folder to the library project, **excludes** the other seed, and **renames** the chosen file to `.project.editor.globalconfig`. Do not leave a seed under `src/prj/ClassLibrary/`: `TemplateAssets/` extra sources for `version.json` and DocShell must `exclude` `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`.
 
 `UseProjectEditorGlobalConfig` is `(ProjectEditorGlobalConfig != "Off")`; the csproj `#if` does not need a new branch per dump.
 
@@ -385,7 +385,7 @@ Place the PropertyGroup **before** `ImportSdkTargets`.
 
 Library-only bool, default **true**. UI label **Treat high/critical NuGet vulnerabilities as errors**. CLI long name **`--NuGetAuditHighCriticalAsErrors`**. Omit the switch → on. `--NuGetAuditHighCriticalAsErrors false` writes nothing. Tests and benchmark are not in this switch. Combo-safe.
 
-SDK restore already runs NuGetAudit (NU1901–NU1904 warnings). This switch only appends `<WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>` on the packable library, before `ImportSdkTargets`. Low (`NU1901`) and moderate (`NU1902`) stay warnings. Do not set `NuGetAudit` / `NuGetAuditMode` / `TreatWarningsAsErrors` here (`NuGetAudit` is already on; multi-TFM with net10 already uses `all`). Do not promote the test-project `ListVulnerable` `dotnet list package --vulnerable` report: that command’s exit code is not a findings gate.
+SDK restore already runs NuGetAudit (NU1901–NU1904 warnings). This switch only appends `<WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>` on the packable library, before `ImportSdkTargets`. Low (`NU1901`) and moderate (`NU1902`) stay warnings. Do not set `NuGetAudit` / `NuGetAuditMode` / `TreatWarningsAsErrors` here (`NuGetAudit` is already on; multi-TFM with net10 already uses `all`). Do not promote the test-project `WriteNugetReport` `dotnet list package` files: that command’s exit code is not a findings gate.
 
 Turn the switch off for an EOL or backport graph (for example net8 after support ends) that cannot be cleaned without dropping a TFM. Do not put this on tests: MSTest/Coverlet CVEs must not fail the nupkg restore.
 
@@ -407,7 +407,7 @@ dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --
 
 ## `DocumentationTemplate`
 
-Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, two destinations. Extra sources copy that file only (`exclude` of `version.json`, `CodeStyle/**`, and `Licenses/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
+Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, two destinations. Extra sources copy that file only (`exclude` of `version.json`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
 
 | Choice | Path | When | Combo later library |
 | --- | --- | --- | --- |
@@ -431,7 +431,7 @@ dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --
 
 The library is packable. `IsPublishable` is `false` on the class library (NuGet pack is the distribution path). Set it `true` to use the existing `PublishDefaultFramework` dispatch. `Properties/AssemblyInfo.cs` grants `InternalsVisibleTo` the test assembly (`ClassLibrary.Tests` via `sourceName`). The test project’s root `AssemblyInfo.cs` is only MSTest `Parallelize`. Tests and the optional BenchmarkDotNet executable explicitly set `IsPackable` and `IsPublishable` to `false`, including when automation calls each `.csproj` directly. The benchmark keeps one target framework (the highest selected) and runs with `dotnet run -c Release`. Versioning default is Nerdbank **Project** (`Properties/version.json`). Tests and benchmark are not packable. **`--NerdbankGitVersioning`** `Off` is VersionPrefix; `Repo` is the shared root file.
 
-**Test project layout.** Mini-scopes in this order: general TFMs, language/debug (from `CSharpProjectOptions`), packaging, test configuration (`TestTfmsInParallel` + MSTest logger), Coverlet `#if` block, ReportGenerator `#if` block, NugetReport + `ListVulnerable`, `.gitignore` hide, `ProjectReference`, then **External dependencies** `PackageReference`s last. Coverage is **`--TestCoverage`**: `Coverlet` (default), `CoverletAndReport`, `None`. Do not restore independent Coverlet/ReportGenerator bools: ReportGenerator consumes `@(CoverletReport)`. Coverlet is `coverlet.msbuild` + `CollectCoverage=true`; that **does** run on `dotnet test` (VSTest path, SDK 10), including Linux/WSL (`dotnet` ships MSBuild). The Coverlet `#if` also writes `Include` `[ClassLibrary]*` (sourceName → the library assembly only) and `Threshold` `100` / `line,branch,method` / `total`. Those are generate-time properties, not wizard fields: Visual Studio cannot show extra inputs only when Coverlet is selected. `--TestCoverage None` omits the whole PropertyGroup. Lower the threshold in the test csproj when 100% is not yet the gate. The scaffold `Class1.Foo` is covered so a first `dotnet test` still passes. Report/logger/NugetReport paths use `$([MSBuild]::NormalizeDirectory(...))` so Linux does not create a folder named `ReportGeneratorOutput\net10.0`.
+**Test project layout.** Mini-scopes in this order: general TFMs, language/debug (from `CSharpProjectOptions`), packaging, test configuration (`TestTfmsInParallel` + MSTest logger), Coverlet `#if` block, ReportGenerator `#if` block, NugetReport + `WriteNugetReport`, `.gitignore` hide, `ProjectReference`, then **External dependencies** `PackageReference`s last. Coverage is **`--TestCoverage`**: `Coverlet` (default), `CoverletAndReport`, `None`. Do not restore independent Coverlet/ReportGenerator bools: ReportGenerator consumes `@(CoverletReport)`. Coverlet is `coverlet.msbuild` + `CollectCoverage=true`; that **does** run on `dotnet test` (VSTest path, SDK 10), including Linux/WSL (`dotnet` ships MSBuild). The Coverlet `#if` also writes `Include` `[ClassLibrary]*` (sourceName → the library assembly only) and `Threshold` `100` / `line,branch,method` / `total`. Those are generate-time properties, not wizard fields: Visual Studio cannot show extra inputs only when Coverlet is selected. `--TestCoverage None` omits the whole PropertyGroup. Lower the threshold in the test csproj when 100% is not yet the gate. The scaffold `Class1.Foo` is covered so a first `dotnet test` still passes. Report/logger/NugetReport paths use `$([MSBuild]::NormalizeDirectory(...))` so Linux does not create a folder named `ReportGeneratorOutput\net10.0`.
 
 **Why `PublishDefaultFramework` exists.** When `IsPublishable` is `true`, generated libraries are used as `dotnet pack` and `dotnet publish` with no `-f` and no extra properties. Pack must include every selected TFM; publish must write one default TFM to `bin/Publish`. The SDK does the pack side from `TargetFrameworks` alone. It does **not** do the publish side: multi-targeting `Publish` is NETSDK1129 unless the caller passes a framework. The dispatch is that default (highest selected TFM, `__TargetFramework__`). Restore, build, test, pack, and `ProjectReference` stay on the stock SDK.
 
@@ -444,6 +444,19 @@ All three project files remove `.gitignore` from their `None` items so it stays 
 The packable library always sets `EnablePackageValidation` (no wizard). That is TFM/runtime consistency on `dotnet pack`, not a baseline against nuget.org. Do not stamp `PackageValidationBaselineVersion` at generate; after the first publish the consumer sets it to that version. Tests and benchmark are not packable.
 
 With `PlaceSolutionInSolutionFolder=true`, each `src/sln/{Name}/` gets its own `.gitignore` for `.vs/`. This creates no shared files on later library additions. Repository-root `.gitignore` is `InitRepoItems` `GitIgnore` / `--InitAllRepoItems` (first create only). Later libraries omit Init and do not overwrite it. If root ignore is off, the root-solution variant and Visual Studio's extra root `.vs/` stay the owner's problem.
+
+## `DirectoryMsBuildFiles`
+
+Library + this library's `.slnx` only. Bool, default **false**. UI label **Empty Directory.Build and Directory.Solution files**. CLI long name **`--DirectoryMsBuildFiles`**. Omit the switch → nothing. Combo-safe on the default layout (`src/prj/{Name}/`, `src/sln/{Name}/`). Not an Init* item and not `Directory.Packages.props` (CPM would not cover sibling tests). Tests and benchmark are not in this switch.
+
+Seeds live under `TemplateAssets/DirectoryMsBuild/`. Extra sources copy `Directory.Build.props` / `.targets` next to the library csproj, and `Directory.Solution.props` / `.targets` next to this library's `.slnx` (`src/sln/{Name}/` when `PlaceSolutionInSolutionFolder`, otherwise repo root — later library then collides, same as stacking `.slnx` files). `TemplateAssets/` extra sources for `version.json` and DocShell must `exclude` `DirectoryMsBuild/**`.
+
+The files are almost empty `<Project>` stubs with comments. MSBuild auto-imports them from those directories. Do not move `ImportSdkTargets` / analyzer config / pack validation into them. The template does not `#if` properties into these files vs the csproj (possible, ugly). The library csproj `None Include`s the two `Directory.Build.*` files with `Link` under `Properties\` (Solution Explorer only). Do **not** move the files into `Properties/` on disk: auto-import follows the directory of the file, same as `.project.editor.globalconfig`. `Directory.Solution.*` stay beside the `.slnx` (solution items, not a project `Link`).
+
+```powershell
+dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --DirectoryMsBuildFiles
+dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --DirectoryMsBuildFiles
+```
 
 ## Other symbols worth not breaking
 
@@ -461,4 +474,5 @@ With `PlaceSolutionInSolutionFolder=true`, each `src/sln/{Name}/` gets its own `
 - **`<Description>`**: not a template parameter. Generate leaves the csproj element empty; the checkpoint fills the NuGet gallery blurb (assistant-supported).
 - **`EnablePackageValidation`**: not a symbol. Always `true` on the packable library (before `ImportSdkTargets`). No `PackageValidationBaselineVersion` at generate.
 - **`TestCoverage`**: single choice, default `Coverlet`. Replaces the two independent Coverlet/ReportGenerator bools. Coverage stats on `dotnet test` are opt-out; ReportGenerator is opt-in (`CoverletAndReport`). There is no Report-without-Coverlet. `--TestCoverage None` drops Coverlet too. Computed `CoverletMSBuild` / `ReportGenerator` drive the test csproj and sln-readme `#if`s.
+- **`DirectoryMsBuildFiles`**: see section above. Default `false`. Empty `Directory.Build.*` beside the library and `Directory.Solution.*` beside this `.slnx`. No `Directory.Packages.props`.
 - Conditionals in `.md` / `.slnx` / `.targets` use `<!--#if` on their own lines (`specialCustomOperations`, `wholeLine`). `.txt` and the renamed root `LICENSE` use `//#if`. License seeds under `TemplateAssets/Licenses/` may use a shallow copyright `//#if` / `//#else`; extra sources pick the file so there is no `ProjectLicense` `#if` in the text. `.targets` is how `UseWebSdk` selects `Sdk.targets` in `ImportSdkTargets.targets`.

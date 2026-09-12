@@ -210,6 +210,16 @@
     <None Remove=".gitignore" />
   </ItemGroup>
 
+  <!--#if (DirectoryMsBuildFiles) -->
+  <!-- Auto-imported from this directory. Link is Solution Explorer only (under Properties\). -->
+  <!-- Do not move the files into Properties/ on disk: MSBuild finds Directory.Build.* by folder. -->
+  <ItemGroup>
+    <None Remove="Directory.Build.props;Directory.Build.targets" />
+    <None Include="Directory.Build.props" Link="Properties\Directory.Build.props" />
+    <None Include="Directory.Build.targets" Link="Properties\Directory.Build.targets" />
+  </ItemGroup>
+  <!--#endif -->
+
   <!-- Source Link git state as properties (SDK 8+). Target hooks GenerateAssemblyInfo. -->
   <Import Project="Build/SourceControlState.targets" />
   <!--#if (NerdbankGitVersioning == "Repo") -->

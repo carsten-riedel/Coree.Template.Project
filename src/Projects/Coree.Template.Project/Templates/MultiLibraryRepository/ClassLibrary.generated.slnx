@@ -9,6 +9,10 @@
 <!--#else -->
     <File Path="src/sln/ClassLibrary/Readme.md" />
 <!--#endif -->
+<!--#if (DirectoryMsBuildFiles) -->
+    <File Path="Directory.Solution.props" />
+    <File Path="Directory.Solution.targets" />
+<!--#endif -->
   </Folder>
   <Folder Name="/prj/">
 <!--#if (PlaceSolutionInSolutionFolder) -->

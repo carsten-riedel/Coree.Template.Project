@@ -18,6 +18,14 @@
   "sourceName": "ClassLibrary", // Matching nameingscheme csproj and namespace
   // Visual Studio creates the outer solution directory; true would add another name directory.
   "preferNameDirectory": false,
+  // Active SDK only (`dotnet --version`). [8.0,) is 8 and later, any feature band — not 8.0.100.
+  // `8.*` would hide the template on SDK 9/10. Unmet: installed but not listed / not instantiated.
+  "constraints": {
+    "sdk": {
+      "type": "sdk-version",
+      "args": "[8.0,)"
+    }
+  },
   "symbols": {
     // HostIdentifier is bound by the template host (dotnetcli, vs, …).
     // Default "dotnetcli" so CLI-only dry runs still evaluate CLI rename rules.
@@ -544,6 +552,19 @@
       "defaultValue": "false",
       "description": "Add an optional BenchmarkDotNet console project.",
       "displayName": "Add optional BenchmarkDotNet console project"
+    },
+    // Opt-in empty Directory.Build.props/.targets next to this library csproj
+    // and Directory.Solution.props/.targets next to this library's .slnx.
+    // Combo-safe (paths include the library name) when the solution sits under
+    // src/sln/{name}/ (the default). Not Init; not repo-root crowding.
+    // No Directory.Packages.props (CPM would not cover sibling tests).
+    // Tests and benchmark are not in this switch. Default off.
+    "DirectoryMsBuildFiles": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "false",
+      "description": "Add empty Directory.Build.props and Directory.Build.targets beside this library project, and Directory.Solution.props and Directory.Solution.targets beside this library's .slnx. Landing files for extra MSBuild you do not want in the csproj. Test and benchmark projects are not affected. Default off.",
+      "displayName": "Empty Directory.Build and Directory.Solution MSBuild files"
     }
   },
   // Registers XML-style conditionals for extensions that hosts do not always
@@ -732,7 +753,8 @@
           "exclude": [
             "DocShell.html",
             "CodeStyle/**",
-            "Licenses/**"
+            "Licenses/**",
+            "DirectoryMsBuild/**"
           ]
         }
       ]
@@ -746,7 +768,8 @@
           "exclude": [
             "DocShell.html",
             "CodeStyle/**",
-            "Licenses/**"
+            "Licenses/**",
+            "DirectoryMsBuild/**"
           ]
         }
       ]
@@ -760,7 +783,8 @@
           "exclude": [
             "version.json",
             "CodeStyle/**",
-            "Licenses/**"
+            "Licenses/**",
+            "DirectoryMsBuild/**"
           ]
         }
       ]
@@ -774,7 +798,8 @@
           "exclude": [
             "version.json",
             "CodeStyle/**",
-            "Licenses/**"
+            "Licenses/**",
+            "DirectoryMsBuild/**"
           ]
         }
       ]
@@ -962,6 +987,45 @@
           "rename": {
             "Custom.txt": "LICENSE"
           }
+        }
+      ]
+    },
+    {
+      "source": "./TemplateAssets/DirectoryMsBuild/",
+      "target": "./src/prj/ClassLibrary/",
+      "condition": "DirectoryMsBuildFiles",
+      "modifiers": [
+        {
+          "exclude": [
+            "Directory.Solution.props",
+            "Directory.Solution.targets"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "./TemplateAssets/DirectoryMsBuild/",
+      "target": "./src/sln/ClassLibrary/",
+      "condition": "(DirectoryMsBuildFiles && PlaceSolutionInSolutionFolder)",
+      "modifiers": [
+        {
+          "exclude": [
+            "Directory.Build.props",
+            "Directory.Build.targets"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "./TemplateAssets/DirectoryMsBuild/",
+      "target": "./",
+      "condition": "(DirectoryMsBuildFiles && (PlaceSolutionInSolutionFolder == false))",
+      "modifiers": [
+        {
+          "exclude": [
+            "Directory.Build.props",
+            "Directory.Build.targets"
+          ]
         }
       ]
     }

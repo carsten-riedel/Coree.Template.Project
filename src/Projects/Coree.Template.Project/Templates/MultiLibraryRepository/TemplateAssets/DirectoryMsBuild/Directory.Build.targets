@@ -1,0 +1,14 @@
+<Project>
+  <!--
+    Landing file for extra targets on this class library only.
+    MSBuild imports it automatically from this directory, after the common targets.
+    Test and benchmark projects do not see it.
+
+    Add Target elements here after create if you want them out of the csproj.
+    Do not move Build/ImportSdkTargets.targets here — that import must stay last in the csproj.
+
+    The template does not emit targets into this file vs the csproj with
+    generate-time #if. Splitting them at create is theoretically possible and
+    gets ugly fast. Move lines here by hand.
+  -->
+</Project>

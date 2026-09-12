@@ -101,8 +101,8 @@
     // Visual Studio always also writes a root .slnx; those two do not
     // collide. When false the template solution sits at repo root, which
     // WOULD collide with Visual Studio's conventional {Name}.slnx — see
-    // sources rename and ClassLibrary.generated.slnx (same trick as
-    // ClassLibrarySlim). False also puts every library's .slnx in one
+    // sources rename and ClassLibrary.generated.slnx. False also puts
+    // every library's .slnx in one
     // directory, so CLI/CI must pass a solution path if more than one exists.
     "PlaceSolutionInSolutionFolder": {
       "type": "parameter",
@@ -969,7 +969,7 @@
   // Host bookkeeping only. Readme is index 0 for the VS open-file post action.
   // Solution paths are the names AFTER source rename, BEFORE sourceName replace.
   // The false+CLI actual file is ClassLibrary.slnx; primaryOutputs still names
-  // the pre-CLI-rename .generated path, matching ClassLibrarySlim.
+  // the pre-CLI-rename .generated path.
   "primaryOutputs": [
     {
       "path": "src/sln/ClassLibrary/Readme.md"

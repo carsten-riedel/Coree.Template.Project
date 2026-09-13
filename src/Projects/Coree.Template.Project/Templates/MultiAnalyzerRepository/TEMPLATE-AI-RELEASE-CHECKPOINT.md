@@ -9,7 +9,7 @@ Walk the whole repository, including libraries added after the first `dotnet new
 3. Every `src/prj/*/NugetAssets/ReleaseNotes.txt` matches the first release, not scaffold text.
 4. Each packable `.csproj` `<Description>` is an empty CDATA block at generate (not a template parameter). Fill it before first publish from that library's public surface; CDATA keeps multiline gallery text. An assistant can draft the blurb from the code. Tags, project URL, and repository URL: match the product, or leave empty only when that emptiness is intentional.
 5. NuGet license metadata matches what you ship: SPDX `PackageLicenseExpression` for MIT / BSD 3-Clause / Apache 2.0, or the packed `NugetAssets/License.txt` when the license is custom (copyright-only until you add grant terms). If a repository-root `LICENSE` is present, it matches that same license. Replace the icon only if the default asset must not ship.
-6. Public surface has no leftover template samples (`SampleAnalyzer`, DebugHost `lowercase` / `UPPER`, tests that do not assert the product, copyright lines that still lie).
+6. Public surface has no leftover template samples (`EmDashAnalyzer`, `SmartQuotesAnalyzer`, DebugHost em dash / typographic quote literals, tests that do not assert the product, copyright lines that still lie).
 7. Package version is a conscious first publish (including whether `0.1` and a prerelease suffix are still correct).
 8. Solution notes under `src/sln/*/Readme.md` do not contradict the layout you kept (`.slnx` under `src/sln/{name}/` vs repository root, host-specific leftover instructions).
 9. `dotnet pack` of each packable library succeeds, and the NuGet readme is inside the `.nupkg`.

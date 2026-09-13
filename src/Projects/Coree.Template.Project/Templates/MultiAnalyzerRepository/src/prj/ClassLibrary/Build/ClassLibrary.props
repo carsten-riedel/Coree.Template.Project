@@ -1,0 +1,15 @@
+<Project>
+  <!--
+    Consuming projects set EmDashAnalyzerSeverity and SmartQuotesAnalyzerSeverity.
+    Values: warning (default), error, message, or off.
+    CompilerVisibleProperty is required or the compiler does not pass the values to the analyzer.
+  -->
+  <PropertyGroup>
+    <EmDashAnalyzerSeverity Condition="'$(EmDashAnalyzerSeverity)' == ''">warning</EmDashAnalyzerSeverity>
+    <SmartQuotesAnalyzerSeverity Condition="'$(SmartQuotesAnalyzerSeverity)' == ''">warning</SmartQuotesAnalyzerSeverity>
+  </PropertyGroup>
+  <ItemGroup>
+    <CompilerVisibleProperty Include="EmDashAnalyzerSeverity" />
+    <CompilerVisibleProperty Include="SmartQuotesAnalyzerSeverity" />
+  </ItemGroup>
+</Project>

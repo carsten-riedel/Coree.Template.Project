@@ -10,17 +10,16 @@ namespace ClassLibrary.DebugHost
             // Select the ClassLibrary Roslyn Component launch profile. Do not F5 this console.
             // Visual Studio needs the .NET Compiler Platform SDK component.
             // F5 on this console only runs Main; it does not attach to the analyzer.
-            Console.WriteLine(typeof(lowercase).Name);
-            Console.WriteLine(typeof(UPPER).Name);
+
+            // Change EmDashAnalyzerSeverity / SmartQuotesAnalyzerSeverity on this csproj
+            // (warning, error, message, or off).
+            // ASCII hyphen and quotes do not report.
+            Console.WriteLine("1-2");
+            Console.WriteLine("\"hello\"");
+
+            // Em dash reports EMD001; typographic quotes report TSQ001.
+            Console.WriteLine("1—2");
+            Console.WriteLine("“hello”");
         }
-    }
-
-    // lowercase reports ANL001 at compile time; UPPER does not.
-    internal class lowercase
-    {
-    }
-
-    internal class UPPER
-    {
     }
 }

@@ -3,10 +3,16 @@
     Analyzer nupkgs put the assembly under analyzers/dotnet/cs, not lib/.
     IncludeBuildOutput is false on the csproj so the SDK does not also write lib/{tfm}/.
     This target runs during pack of netstandard2.0.
+    ClassLibrary.props is the consumer MSBuild surface (severity properties).
   -->
   <PropertyGroup>
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);PackAsAnalyzer</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="$(MSBuildThisFileDirectory)ClassLibrary.props" />
+    <None Include="$(MSBuildThisFileDirectory)ClassLibrary.props" Pack="true" PackagePath="build\" Visible="false" />
+    <None Include="$(MSBuildThisFileDirectory)ClassLibrary.props" Pack="true" PackagePath="buildTransitive\" Visible="false" />
+  </ItemGroup>
   <Target Name="PackAsAnalyzer">
     <ItemGroup>
       <TfmSpecificPackageFile Include="$(TargetPath)" PackagePath="analyzers/dotnet/cs" />

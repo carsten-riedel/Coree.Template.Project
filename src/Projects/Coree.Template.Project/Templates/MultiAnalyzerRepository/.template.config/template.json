@@ -441,7 +441,7 @@
       "type": "computed",
       "value": "(ProjectEditorGlobalConfig != \"Off\")"
     },
-    // Default/Off keep unused usings on SampleAnalyzer so IDE0005 is visible.
+    // Default/Off keep unused usings on EmDashAnalyzer so IDE0005 is visible.
     // Strict omits them or the first build fails (IDE0005 is error).
     "KeepScaffoldUnusedUsings": {
       "type": "computed",

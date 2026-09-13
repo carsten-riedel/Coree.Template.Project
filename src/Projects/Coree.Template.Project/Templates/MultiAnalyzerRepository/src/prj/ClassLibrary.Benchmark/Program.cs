@@ -11,9 +11,15 @@ namespace ClassLibrary.Benchmark;
 public class Benchmarks
 {
     [Benchmark]
-    public DiagnosticAnalyzer CreateAnalyzer()
+    public DiagnosticAnalyzer CreateEmDashAnalyzer()
     {
-        return new SampleAnalyzer();
+        return new EmDashAnalyzer();
+    }
+
+    [Benchmark]
+    public DiagnosticAnalyzer CreateSmartQuotesAnalyzer()
+    {
+        return new SmartQuotesAnalyzer();
     }
 }
 

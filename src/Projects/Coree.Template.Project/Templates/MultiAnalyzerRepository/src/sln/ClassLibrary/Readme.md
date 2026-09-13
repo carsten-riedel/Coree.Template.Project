@@ -108,7 +108,7 @@ To break in the analyzer, install the **.NET Compiler Platform SDK** Visual Stud
 
 `ClassLibrary.DebugHost` is only the compile target. The em dash in `"1—2"` reports EMD001; the typographic quotes in `"“hello”"` report TSQ001. ASCII `"1-2"` and `"hello"` do not. `SampleTypography.txt` and this host csproj are additional files for the same IDs when the glob properties match. F5 / `dotnet run` on the console only runs `Main`; it does not attach to the analyzer.
 
-Severity is an MSBuild property on the compile target (`EmDashAnalyzerSeverity`, `SmartQuotesAnalyzerSeverity`): `warning` (default), `error`, `message`, or `off`. Additional-file globs are `EmDashAnalyzerAdditionalFiles` and `SmartQuotesAnalyzerAdditionalFiles` (semicolon-separated, project directory; demo default `*.txt;*.csproj`; empty skips that scan). The analyzer nupkg ships `build/` and `buildTransitive/` props so PackageReference consumers get the same knobs. DebugHost imports that props file because it uses a project analyzer reference, not the nupkg.
+Severity is an MSBuild property on the compile target (`EmDashAnalyzerSeverity`, `SmartQuotesAnalyzerSeverity`): `warning` (default), `error`, `message`, or `off`. Additional-file globs are `EmDashAnalyzerIncludes` / `EmDashAnalyzerExcludes` and the SmartQuotes pair (semicolon-separated, project directory; demo includes `*.txt;*.csproj`; empty includes skip that scan; excludes subtract from that analyzer's includes). The analyzer nupkg ships `build/` and `buildTransitive/` props so PackageReference consumers get the same knobs. DebugHost imports that props file because it uses a project analyzer reference, not the nupkg.
 
 For stepping without F5, debug `FunctionalTests` from Test Explorer.
 
@@ -120,7 +120,7 @@ For stepping without F5, debug `FunctionalTests` from Test Explorer.
 dotnet pack
 ```
 
-Creates one `.nupkg` in `src/prj/ClassLibrary/bin/Pack/` with the analyzer under `analyzers/dotnet/cs` (not `lib/`) and `ClassLibrary.props` under `build/` and `buildTransitive/` (`EmDashAnalyzerSeverity`, `SmartQuotesAnalyzerSeverity`, `EmDashAnalyzerAdditionalFiles`, `SmartQuotesAnalyzerAdditionalFiles`). Test, DebugHost, and optional benchmark projects are not packed.
+Creates one `.nupkg` in `src/prj/ClassLibrary/bin/Pack/` with the analyzer under `analyzers/dotnet/cs` (not `lib/`) and `ClassLibrary.props` under `build/` and `buildTransitive/` (`EmDashAnalyzerSeverity`, `SmartQuotesAnalyzerSeverity`, `EmDashAnalyzerIncludes`, `EmDashAnalyzerExcludes`, `SmartQuotesAnalyzerIncludes`, `SmartQuotesAnalyzerExcludes`). Test, DebugHost, and optional benchmark projects are not packed.
 <!--#if (NuGetAuditHighCriticalAsErrors) -->
 
 Restore fails this analyzer package on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that package’s packages (txt/json) and is still info-only.

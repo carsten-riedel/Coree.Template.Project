@@ -91,7 +91,7 @@ namespace ClassLibrary.Tests
                 .WithSpan("sample.txt", 1, 2, 1, 3);
 
             await VerifyWithAdditionalFileAsync<EmDashAnalyzer>(
-                EmDashAnalyzer.AdditionalFilesPropertyName,
+                EmDashAnalyzer.IncludesPropertyName,
                 "*.txt",
                 "sample.txt",
                 "a\u2014b",
@@ -106,7 +106,7 @@ namespace ClassLibrary.Tests
                 .WithSpan("sample.txt", 1, 2, 1, 3);
 
             await VerifyWithAdditionalFileAsync<SmartQuotesAnalyzer>(
-                SmartQuotesAnalyzer.AdditionalFilesPropertyName,
+                SmartQuotesAnalyzer.IncludesPropertyName,
                 "*.txt",
                 "sample.txt",
                 "x\u201Cy",
@@ -128,7 +128,7 @@ namespace ClassLibrary.Tests
         public async Task AdditionalFileNotMatchingGlobReportsNothing()
         {
             await VerifyWithAdditionalFileAsync<EmDashAnalyzer>(
-                EmDashAnalyzer.AdditionalFilesPropertyName,
+                EmDashAnalyzer.IncludesPropertyName,
                 "*.csproj",
                 "sample.txt",
                 "a\u2014b");
@@ -142,7 +142,7 @@ namespace ClassLibrary.Tests
                 .WithSpan("sample.csproj", 1, 6, 1, 7);
 
             await VerifyWithAdditionalFileAsync<EmDashAnalyzer>(
-                EmDashAnalyzer.AdditionalFilesPropertyName,
+                EmDashAnalyzer.IncludesPropertyName,
                 "*.txt|*.csproj",
                 "sample.csproj",
                 "<!-- \u2014 -->",
@@ -150,13 +150,52 @@ namespace ClassLibrary.Tests
         }
 
         [TestMethod]
-        public async Task EmptyAdditionalFilesPropertyReportsNothing()
+        public async Task EmptyIncludesPropertyReportsNothing()
         {
             await VerifyWithAdditionalFileAsync<EmDashAnalyzer>(
-                EmDashAnalyzer.AdditionalFilesPropertyName,
+                EmDashAnalyzer.IncludesPropertyName,
                 string.Empty,
                 "sample.txt",
                 "a\u2014b");
+        }
+
+        [TestMethod]
+        public async Task RecursiveIncludeMatchesNestedAdditionalFile()
+        {
+            var expected = DiagnosticResult
+                .CompilerWarning(EmDashAnalyzer.DiagnosticId)
+                .WithSpan("sub/sample.txt", 1, 2, 1, 3);
+
+            await VerifyWithAdditionalFileAsync<EmDashAnalyzer>(
+                EmDashAnalyzer.IncludesPropertyName,
+                "**/*.txt",
+                "sub/sample.txt",
+                "a\u2014b",
+                expected);
+        }
+
+        [TestMethod]
+        public async Task ExcludeRemovesNestedFileFromIncludes()
+        {
+            await VerifyWithAdditionalFileAsync<EmDashAnalyzer>(
+                EmDashAnalyzer.IncludesPropertyName,
+                "**/*.txt",
+                EmDashAnalyzer.ExcludesPropertyName,
+                "sub/*.txt",
+                "sub/sample.txt",
+                "a\u2014b");
+        }
+
+        [TestMethod]
+        public async Task SmartQuotesExcludeRemovesNestedFileFromIncludes()
+        {
+            await VerifyWithAdditionalFileAsync<SmartQuotesAnalyzer>(
+                SmartQuotesAnalyzer.IncludesPropertyName,
+                "**/*.txt",
+                SmartQuotesAnalyzer.ExcludesPropertyName,
+                "sub/*.txt",
+                "sub/sample.txt",
+                "x\u201Cy");
         }
 
         private static async Task VerifyWithSeverityAsync<TAnalyzer>(
@@ -178,8 +217,28 @@ namespace ClassLibrary.Tests
         }
 
         private static async Task VerifyWithAdditionalFileAsync<TAnalyzer>(
-            string propertyName,
-            string patterns,
+            string includesPropertyName,
+            string includes,
+            string additionalPath,
+            string additionalContent,
+            params DiagnosticResult[] expected)
+            where TAnalyzer : Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer, new()
+        {
+            await VerifyWithAdditionalFileAsync<TAnalyzer>(
+                includesPropertyName,
+                includes,
+                string.Empty,
+                string.Empty,
+                additionalPath,
+                additionalContent,
+                expected);
+        }
+
+        private static async Task VerifyWithAdditionalFileAsync<TAnalyzer>(
+            string includesPropertyName,
+            string includes,
+            string excludesPropertyName,
+            string excludes,
             string additionalPath,
             string additionalContent,
             params DiagnosticResult[] expected)
@@ -191,9 +250,13 @@ namespace ClassLibrary.Tests
             };
             test.ExpectedDiagnostics.AddRange(expected);
             test.TestState.AdditionalFiles.Add((additionalPath, additionalContent));
-            test.TestState.AnalyzerConfigFiles.Add((
-                "/.globalconfig",
-                "is_global = true\nbuild_property." + propertyName + " = " + patterns + "\n"));
+            var config = "is_global = true\nbuild_property." + includesPropertyName + " = " + includes + "\n";
+            if (!string.IsNullOrEmpty(excludesPropertyName))
+            {
+                config += "build_property." + excludesPropertyName + " = " + excludes + "\n";
+            }
+
+            test.TestState.AnalyzerConfigFiles.Add(("/.globalconfig", config));
             await test.RunAsync();
         }
     }

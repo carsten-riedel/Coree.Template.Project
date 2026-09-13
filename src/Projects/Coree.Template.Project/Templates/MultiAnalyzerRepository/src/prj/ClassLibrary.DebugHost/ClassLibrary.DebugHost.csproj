@@ -41,12 +41,14 @@
   </PropertyGroup>
 
   <!-- Sample analyzer severity: warning (default), error, message, or off. -->
-  <!-- Additional files: semicolon-separated globs relative to this project. Empty disables that scan. -->
+  <!-- Additional files: includes minus excludes, globs relative to this project. Empty includes skip that scan. -->
   <PropertyGroup>
     <EmDashAnalyzerSeverity>warning</EmDashAnalyzerSeverity>
     <SmartQuotesAnalyzerSeverity>warning</SmartQuotesAnalyzerSeverity>
-    <EmDashAnalyzerAdditionalFiles>*.txt;*.csproj</EmDashAnalyzerAdditionalFiles>
-    <SmartQuotesAnalyzerAdditionalFiles>*.txt;*.csproj</SmartQuotesAnalyzerAdditionalFiles>
+    <EmDashAnalyzerIncludes>*.txt;*.csproj</EmDashAnalyzerIncludes>
+    <EmDashAnalyzerExcludes></EmDashAnalyzerExcludes>
+    <SmartQuotesAnalyzerIncludes>*.txt;*.csproj</SmartQuotesAnalyzerIncludes>
+    <SmartQuotesAnalyzerExcludes></SmartQuotesAnalyzerExcludes>
   </PropertyGroup>
 
   <!-- Load the in-repo analyzer at compile time. Do not reference it as a library. -->

@@ -19,7 +19,9 @@ namespace ClassLibrary
 
         internal const string SeverityPropertyName = "SmartQuotesAnalyzerSeverity";
 
-        internal const string AdditionalFilesPropertyName = "SmartQuotesAnalyzerAdditionalFiles";
+        internal const string IncludesPropertyName = "SmartQuotesAnalyzerIncludes";
+
+        internal const string ExcludesPropertyName = "SmartQuotesAnalyzerExcludes";
 
         // “ ” „ ‟ « »
         private const string TypographicQuoteCharacters = "\u201C\u201D\u201E\u201F\u00AB\u00BB";
@@ -57,7 +59,8 @@ namespace ClassLibrary
                 InfoRule,
                 TypographicQuoteCharacters,
                 SeverityPropertyName,
-                AdditionalFilesPropertyName);
+                IncludesPropertyName,
+                ExcludesPropertyName);
         }
     }
 }

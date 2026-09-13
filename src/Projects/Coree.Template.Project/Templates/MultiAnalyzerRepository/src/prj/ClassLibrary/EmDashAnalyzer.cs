@@ -25,7 +25,9 @@ namespace ClassLibrary
 
         internal const string SeverityPropertyName = "EmDashAnalyzerSeverity";
 
-        internal const string AdditionalFilesPropertyName = "EmDashAnalyzerAdditionalFiles";
+        internal const string IncludesPropertyName = "EmDashAnalyzerIncludes";
+
+        internal const string ExcludesPropertyName = "EmDashAnalyzerExcludes";
 
         private const string EmDashCharacters = "\u2014";
 
@@ -62,7 +64,8 @@ namespace ClassLibrary
                 InfoRule,
                 EmDashCharacters,
                 SeverityPropertyName,
-                AdditionalFilesPropertyName);
+                IncludesPropertyName,
+                ExcludesPropertyName);
         }
     }
 }

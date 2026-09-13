@@ -15,7 +15,8 @@ namespace ClassLibrary
             DiagnosticDescriptor infoRule,
             string characters,
             string severityPropertyName,
-            string additionalFilesPropertyName)
+            string includesPropertyName,
+            string excludesPropertyName)
         {
             context.RegisterCompilationStartAction(startContext =>
             {
@@ -34,15 +35,19 @@ namespace ClassLibrary
                 startContext.RegisterSyntaxTreeAction(treeContext =>
                     ReportEachMatch(treeContext, rule, characters));
 
-                string additionalPatterns;
-                options.TryGetValue("build_property." + additionalFilesPropertyName, out additionalPatterns);
-                if (string.IsNullOrWhiteSpace(additionalPatterns))
+                string includes;
+                options.TryGetValue("build_property." + includesPropertyName, out includes);
+                if (string.IsNullOrWhiteSpace(includes))
                 {
                     return;
                 }
 
+                string excludes;
+                options.TryGetValue("build_property." + excludesPropertyName, out excludes);
+                string projectDirectory;
+                options.TryGetValue("build_property.MSBuildProjectDirectory", out projectDirectory);
                 startContext.RegisterAdditionalFileAction(fileContext =>
-                    ReportEachMatch(fileContext, rule, characters, additionalPatterns));
+                    ReportEachMatch(fileContext, rule, characters, includes, excludes, projectDirectory));
             });
         }
 
@@ -74,10 +79,12 @@ namespace ClassLibrary
             AdditionalFileAnalysisContext context,
             DiagnosticDescriptor rule,
             string characters,
-            string additionalPatterns)
+            string includes,
+            string excludes,
+            string projectDirectory)
         {
             var file = context.AdditionalFile;
-            if (!AdditionalFilePatterns.Matches(file.Path, additionalPatterns))
+            if (!AdditionalFilePatterns.IsSelected(file.Path, includes, excludes, projectDirectory))
             {
                 return;
             }

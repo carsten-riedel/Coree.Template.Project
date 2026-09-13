@@ -1,0 +1,120 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- General build settings: defines the output type and target framework -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
+  </PropertyGroup>
+
+  <!-- C# language features and debugging configuration -->
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "DisableImplicitUsings") -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!--#else -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "Nullable") -->
+    <Nullable>enable</Nullable>
+    <!--#else -->
+    <Nullable>disable</Nullable>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "DebugEmbedded") -->
+    <DebugType>embedded</DebugType>
+    <!--#else -->
+    <DebugType>none</DebugType>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "LangLatest") -->
+    <LangVersion>latest</LangVersion>
+    <!--#else -->
+    <LangVersion>default</LangVersion>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <!-- Packaging and publish configuration -->
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <PublishRelease>false</PublishRelease>
+    <IsTestProject>true</IsTestProject>
+    <PackAsTool>false</PackAsTool>
+  </PropertyGroup>
+
+  <!-- Test configuration -->
+  <PropertyGroup>
+    <!-- Multi-target tests and all generated reports are isolated per TFM. -->
+    <TestTfmsInParallel>true</TestTfmsInParallel>
+    <_MSTestResultsDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'MSTestResults'))</_MSTestResultsDir>
+    <VSTestLogger>trx%3bLogFileName=$(_MSTestResultsDir)$(MSBuildProjectName)-$(TargetFramework).trx;html%3bLogFileName=$(_MSTestResultsDir)result-$(TargetFramework).html</VSTestLogger>
+  </PropertyGroup>
+
+  <!--#if (CoverletMSBuild == true) -->
+  <!-- coverlet.msbuild: CollectCoverage is enough for `dotnet test` on SDK MSBuild. -->
+  <!-- Include is the packable analyzer only (sourceName). Threshold fails the test run when that assembly is under 100% line/branch/method total. -->
+  <PropertyGroup>
+    <CollectCoverage>true</CollectCoverage>
+    <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
+    <CoverletOutput>./CoverletOutput/</CoverletOutput>
+    <Include>[ClassLibrary]*</Include>
+    <Threshold>100</Threshold>
+    <ThresholdType>line,branch,method</ThresholdType>
+    <ThresholdStat>total</ThresholdStat>
+  </PropertyGroup>
+  <!--#endif -->
+
+  <!--#if (ReportGenerator == true) -->
+  <!-- ReportGenerator HTML/Markdown from Coverlet output, one folder per TFM. -->
+  <PropertyGroup>
+    <_ReportGeneratorOutputDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'ReportGeneratorOutput', '$(TargetFramework)'))</_ReportGeneratorOutputDir>
+  </PropertyGroup>
+  <Target Name="GenerateHtmlCoverageReport" AfterTargets="GenerateCoverageResultAfterTest">
+    <ReportGenerator ReportFiles="@(CoverletReport)" TargetDirectory="$(_ReportGeneratorOutputDir)" ReportTypes="Html;MarkdownSummaryGithub;MarkdownSummary;CsvSummary;Clover;Badges" />
+  </Target>
+  <!--#endif -->
+
+  <!-- Package inventory of the packable analyzer, not this test project. -->
+  <PropertyGroup>
+    <NugetReportDir Condition=" '$(NugetReportDir)' == '' ">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'NugetReport'))</NugetReportDir>
+    <NugetReportProject Condition=" '$(NugetReportProject)' == '' ">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', 'ClassLibrary', 'ClassLibrary.csproj'))</NugetReportProject>
+  </PropertyGroup>
+  <Target Name="WriteNugetReport" AfterTargets="PostBuildEvent">
+    <PropertyGroup>
+      <_NugetReportPrefix>$(NugetReportDir)$([System.IO.Path]::GetFileNameWithoutExtension('$(NugetReportProject)'))</_NugetReportPrefix>
+    </PropertyGroup>
+    <MakeDir Directories="$(NugetReportDir)" />
+    <Exec Command="dotnet list &quot;$(NugetReportProject)&quot; package %3E &quot;$(_NugetReportPrefix)-packages.txt&quot;" IgnoreExitCode="true" />
+    <Exec Command="dotnet list &quot;$(NugetReportProject)&quot; package --format json %3E &quot;$(_NugetReportPrefix)-packages.json&quot;" IgnoreExitCode="true" />
+    <Exec Command="dotnet list &quot;$(NugetReportProject)&quot; package --include-transitive --vulnerable %3E &quot;$(_NugetReportPrefix)-vulnerable.txt&quot;" IgnoreExitCode="true" />
+    <Exec Command="dotnet list &quot;$(NugetReportProject)&quot; package --include-transitive --vulnerable --format json %3E &quot;$(_NugetReportPrefix)-vulnerable.json&quot;" IgnoreExitCode="true" />
+  </Target>
+
+
+
+  <!-- Keep Git configuration on disk without showing it as a project item -->
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+  <!-- Analyzer is netstandard2.0. Do not SetTargetFramework to the test TFM. -->
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
+  </ItemGroup>
+
+  <!-- External dependencies -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.4.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.4.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="1.1.3" />
+    <!--#if (CoverletMSBuild == true) -->
+    <PackageReference Include="coverlet.msbuild" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <!--#endif -->
+    <!--#if (ReportGenerator == true) -->
+    <PackageReference Include="ReportGenerator" Version="5.2.0" />
+    <!--#endif -->
+  </ItemGroup>
+
+</Project>

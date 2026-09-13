@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Startable console and compile target for the analyzer DebugRoslynComponent profile. Not packed. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>__TargetFramework__</TargetFramework>
+  </PropertyGroup>
+
+  <!-- C# language features and debugging configuration -->
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "DisableImplicitUsings") -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!--#else -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "Nullable") -->
+    <Nullable>enable</Nullable>
+    <!--#else -->
+    <Nullable>disable</Nullable>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "DebugEmbedded") -->
+    <DebugType>embedded</DebugType>
+    <!--#else -->
+    <DebugType>none</DebugType>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "LangLatest") -->
+    <LangVersion>latest</LangVersion>
+    <!--#else -->
+    <LangVersion>default</LangVersion>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <IsTestProject>false</IsTestProject>
+    <PackAsTool>false</PackAsTool>
+  </PropertyGroup>
+
+  <!-- Load the in-repo analyzer at compile time. Do not reference it as a library. -->
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <!-- Keep Git configuration on disk without showing it as a project item -->
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+</Project>

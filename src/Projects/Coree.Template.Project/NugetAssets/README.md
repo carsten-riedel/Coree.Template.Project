@@ -81,9 +81,10 @@ The package contains the following templates:
   1. [.NET MSBuild Task library](#Net-MSBuild-Task-library)
   2. [.NET Class library](#Net-class-library)
   3. [.NET Multi-library repository](#Net-Multi-library-repository)
-  4. [.NET Tool](#Net-Tool)
-  5. [.NET Wpf](#Net-Wpf-Windows-only)
-  6. [.NET Project Template](#Net-Project-Template)
+  4. [.NET analyzer package repository](#Net-analyzer-package-repository)
+  5. [.NET Tool](#Net-Tool)
+  6. [.NET Wpf](#Net-Wpf-Windows-only)
+  7. [.NET Project Template](#Net-Project-Template)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -252,6 +253,21 @@ MyCompany.Core/
 The top-level directory is shared. Each additional `dotnet new` call contributes another library-specific project, test project, and solution area. Each library remains its own independently buildable and packable unit while sharing the same repository-like structure.
 
 You do not need a different template for a single-library layout and a multi-library layout. Start with one, add another when you need it, or generate the complete set from a script.
+
+## .NET analyzer package repository
+
+Same combo and init system as the multi-library repository, for independently packable Roslyn analyzer packages. Each package targets `netstandard2.0` and packs the assembly under `analyzers/dotnet/cs` (`DevelopmentDependency`). Tests use Microsoft.CodeAnalysis.CSharp.Analyzer.Testing. Each create adds a DebugHost console so Visual Studio can F5 the analyzer via `DebugRoslynComponent`. This is not `sourcegenerator-coree` (source generators).
+
+Initialize the shared repository layout once, then add additional analyzer packages whenever you need them.
+
+```powershell
+dotnet new analyzerrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Naming" --InitAllRepoItems
+dotnet new analyzerrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Performance"
+```
+
+The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
+
+Each analyzer keeps its `.slnx` in its own `src/sln/{name}/` folder. Tests and the optional benchmark still multi-target `net8.0`/`net10.0` by default; the packable analyzer itself is always `netstandard2.0`.
 
 ## .NET Tool
 This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.

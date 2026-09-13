@@ -1,0 +1,5 @@
+//#if (PackageCopyrightHolderIsSet)
+Copyright (c) 1975 MyCopyrightHolder
+//#else
+Copyright (c) 1975 MyAuthor
+//#endif

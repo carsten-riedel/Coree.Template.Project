@@ -1,0 +1,16 @@
+<Project>
+  <!--
+    Analyzer nupkgs put the assembly under analyzers/dotnet/cs, not lib/.
+    IncludeBuildOutput is false on the csproj so the SDK does not also write lib/{tfm}/.
+    This target runs during pack of netstandard2.0.
+  -->
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);PackAsAnalyzer</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+  <Target Name="PackAsAnalyzer">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="$(TargetPath)" PackagePath="analyzers/dotnet/cs" />
+      <TfmSpecificPackageFile Include="$(TargetDir)$(TargetName).xml" PackagePath="analyzers/dotnet/cs" Condition="Exists('$(TargetDir)$(TargetName).xml')" />
+    </ItemGroup>
+  </Target>
+</Project>

@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace ClassLibrary
 {
     /// <summary>
-    /// Sample analyzer: warns when source text contains typographic quotation marks
+    /// Sample analyzer: warns when C# source or matching additional files contain typographic quotation marks
     /// (curly quotes and guillemets), not ASCII <c>"</c> or <c>'</c>.
     /// Replace this type with your own diagnostic analyzer.
     /// </summary>
@@ -18,6 +18,8 @@ namespace ClassLibrary
         public const string DiagnosticId = "TSQ001";
 
         internal const string SeverityPropertyName = "SmartQuotesAnalyzerSeverity";
+
+        internal const string AdditionalFilesPropertyName = "SmartQuotesAnalyzerAdditionalFiles";
 
         // “ ” „ ‟ « »
         private const string TypographicQuoteCharacters = "\u201C\u201D\u201E\u201F\u00AB\u00BB";
@@ -54,7 +56,8 @@ namespace ClassLibrary
                 ErrorRule,
                 InfoRule,
                 TypographicQuoteCharacters,
-                SeverityPropertyName);
+                SeverityPropertyName,
+                AdditionalFilesPropertyName);
         }
     }
 }

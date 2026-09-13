@@ -13,6 +13,8 @@ namespace ClassLibrary.DebugHost
 
             // Change EmDashAnalyzerSeverity / SmartQuotesAnalyzerSeverity on this csproj
             // (warning, error, message, or off).
+            // Change EmDashAnalyzerAdditionalFiles / SmartQuotesAnalyzerAdditionalFiles
+            // (semicolon-separated globs; empty skips additional files).
             // ASCII hyphen and quotes do not report.
             Console.WriteLine("1-2");
             Console.WriteLine("\"hello\"");

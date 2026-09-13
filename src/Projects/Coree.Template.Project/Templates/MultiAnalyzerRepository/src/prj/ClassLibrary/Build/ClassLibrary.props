@@ -2,14 +2,38 @@
   <!--
     Consuming projects set EmDashAnalyzerSeverity and SmartQuotesAnalyzerSeverity.
     Values: warning (default), error, message, or off.
+    Additional file globs: EmDashAnalyzerAdditionalFiles and SmartQuotesAnalyzerAdditionalFiles.
+    Semicolon-separated, relative to the consuming project directory. Demo default is *.txt;*.csproj.
+    Empty disables additional-file scanning. The analyzer also skips additional files when the property is unset.
     CompilerVisibleProperty is required or the compiler does not pass the values to the analyzer.
+    EditorConfig treats ';' as a comment, so a target rewrites the compiler-visible copies with '|'.
   -->
   <PropertyGroup>
     <EmDashAnalyzerSeverity Condition="'$(EmDashAnalyzerSeverity)' == ''">warning</EmDashAnalyzerSeverity>
     <SmartQuotesAnalyzerSeverity Condition="'$(SmartQuotesAnalyzerSeverity)' == ''">warning</SmartQuotesAnalyzerSeverity>
+    <EmDashAnalyzerAdditionalFiles Condition="'$(EmDashAnalyzerAdditionalFiles)' == ''">*.txt;*.csproj</EmDashAnalyzerAdditionalFiles>
+    <SmartQuotesAnalyzerAdditionalFiles Condition="'$(SmartQuotesAnalyzerAdditionalFiles)' == ''">*.txt;*.csproj</SmartQuotesAnalyzerAdditionalFiles>
   </PropertyGroup>
   <ItemGroup>
     <CompilerVisibleProperty Include="EmDashAnalyzerSeverity" />
     <CompilerVisibleProperty Include="SmartQuotesAnalyzerSeverity" />
+    <CompilerVisibleProperty Include="EmDashAnalyzerAdditionalFiles" />
+    <CompilerVisibleProperty Include="SmartQuotesAnalyzerAdditionalFiles" />
   </ItemGroup>
+  <Target Name="AddTypographyAdditionalFiles"
+          BeforeTargets="GenerateMSBuildEditorConfigFileCore;CoreCompile">
+    <PropertyGroup>
+      <_TypographyAdditionalFilePatterns>$(EmDashAnalyzerAdditionalFiles);$(SmartQuotesAnalyzerAdditionalFiles)</_TypographyAdditionalFilePatterns>
+    </PropertyGroup>
+    <ItemGroup>
+      <_TypographyAdditionalFileGlob Include="$(_TypographyAdditionalFilePatterns)" Condition="'$(_TypographyAdditionalFilePatterns)' != ';'" />
+      <AdditionalFiles Include="@(_TypographyAdditionalFileGlob->'$(MSBuildProjectDirectory)\%(Identity)')"
+                       Exclude="$(MSBuildProjectDirectory)\bin\**;$(MSBuildProjectDirectory)\obj\**" />
+      <_TypographyAdditionalFileGlob Remove="@(_TypographyAdditionalFileGlob)" />
+    </ItemGroup>
+    <PropertyGroup>
+      <EmDashAnalyzerAdditionalFiles Condition="'$(EmDashAnalyzerAdditionalFiles)' != ''">$([System.String]::Copy('$(EmDashAnalyzerAdditionalFiles)').Replace(';','|'))</EmDashAnalyzerAdditionalFiles>
+      <SmartQuotesAnalyzerAdditionalFiles Condition="'$(SmartQuotesAnalyzerAdditionalFiles)' != ''">$([System.String]::Copy('$(SmartQuotesAnalyzerAdditionalFiles)').Replace(';','|'))</SmartQuotesAnalyzerAdditionalFiles>
+    </PropertyGroup>
+  </Target>
 </Project>

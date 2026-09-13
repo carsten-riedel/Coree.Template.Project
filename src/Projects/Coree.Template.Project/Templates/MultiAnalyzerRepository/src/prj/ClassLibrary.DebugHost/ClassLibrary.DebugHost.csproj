@@ -41,9 +41,12 @@
   </PropertyGroup>
 
   <!-- Sample analyzer severity: warning (default), error, message, or off. -->
+  <!-- Additional files: semicolon-separated globs relative to this project. Empty disables that scan. -->
   <PropertyGroup>
     <EmDashAnalyzerSeverity>warning</EmDashAnalyzerSeverity>
     <SmartQuotesAnalyzerSeverity>warning</SmartQuotesAnalyzerSeverity>
+    <EmDashAnalyzerAdditionalFiles>*.txt;*.csproj</EmDashAnalyzerAdditionalFiles>
+    <SmartQuotesAnalyzerAdditionalFiles>*.txt;*.csproj</SmartQuotesAnalyzerAdditionalFiles>
   </PropertyGroup>
 
   <!-- Load the in-repo analyzer at compile time. Do not reference it as a library. -->
@@ -51,6 +54,11 @@
     <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj"
                       OutputItemType="Analyzer"
                       ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <!-- Additional-file sample: 1—2 and “hello”. -->
+  <ItemGroup>
+    <None Include="SampleTypography.txt" />
   </ItemGroup>
 
   <!-- Keep Git configuration on disk without showing it as a project item -->

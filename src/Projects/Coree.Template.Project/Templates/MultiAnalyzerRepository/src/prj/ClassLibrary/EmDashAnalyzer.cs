@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace ClassLibrary
 {
     /// <summary>
-    /// Sample analyzer: warns when source text contains an em dash (U+2014).
+    /// Sample analyzer: warns when C# source or matching additional files contain an em dash (U+2014).
     /// Replace this type with your own diagnostic analyzer.
     /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
@@ -24,6 +24,8 @@ namespace ClassLibrary
         public const string DiagnosticId = "EMD001";
 
         internal const string SeverityPropertyName = "EmDashAnalyzerSeverity";
+
+        internal const string AdditionalFilesPropertyName = "EmDashAnalyzerAdditionalFiles";
 
         private const string EmDashCharacters = "\u2014";
 
@@ -59,7 +61,8 @@ namespace ClassLibrary
                 ErrorRule,
                 InfoRule,
                 EmDashCharacters,
-                SeverityPropertyName);
+                SeverityPropertyName,
+                AdditionalFilesPropertyName);
         }
     }
 }

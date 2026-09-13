@@ -1,3 +1,5 @@
+#nullable disable
+using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
@@ -12,13 +14,13 @@ namespace ClassLibrary
             DiagnosticDescriptor errorRule,
             DiagnosticDescriptor infoRule,
             string characters,
-            string severityPropertyName)
+            string severityPropertyName,
+            string additionalFilesPropertyName)
         {
             context.RegisterCompilationStartAction(startContext =>
             {
-                var severity = AnalyzerSeverity.Read(
-                    startContext.Options.AnalyzerConfigOptionsProvider.GlobalOptions,
-                    severityPropertyName);
+                var options = startContext.Options.AnalyzerConfigOptionsProvider.GlobalOptions;
+                var severity = AnalyzerSeverity.Read(options, severityPropertyName);
                 if (!severity.HasValue)
                 {
                     return;
@@ -31,7 +33,27 @@ namespace ClassLibrary
                     severity.Value);
                 startContext.RegisterSyntaxTreeAction(treeContext =>
                     ReportEachMatch(treeContext, rule, characters));
+
+                string additionalPatterns;
+                options.TryGetValue("build_property." + additionalFilesPropertyName, out additionalPatterns);
+                if (string.IsNullOrWhiteSpace(additionalPatterns))
+                {
+                    return;
+                }
+
+                startContext.RegisterAdditionalFileAction(fileContext =>
+                    ReportEachMatch(fileContext, rule, characters, additionalPatterns));
             });
+        }
+
+        internal static SourceText OrEmpty(SourceText text)
+        {
+            if (text == null)
+            {
+                return SourceText.From(string.Empty);
+            }
+
+            return text;
         }
 
         internal static void ReportEachMatch(
@@ -40,7 +62,42 @@ namespace ClassLibrary
             string characters)
         {
             var tree = context.Tree;
-            var text = tree.GetText(context.CancellationToken);
+            ReportEachMatch(
+                tree.GetText(context.CancellationToken),
+                span => Location.Create(tree, span),
+                rule,
+                characters,
+                diagnostic => context.ReportDiagnostic(diagnostic));
+        }
+
+        internal static void ReportEachMatch(
+            AdditionalFileAnalysisContext context,
+            DiagnosticDescriptor rule,
+            string characters,
+            string additionalPatterns)
+        {
+            var file = context.AdditionalFile;
+            if (!AdditionalFilePatterns.Matches(file.Path, additionalPatterns))
+            {
+                return;
+            }
+
+            var text = OrEmpty(file.GetText(context.CancellationToken));
+            ReportEachMatch(
+                text,
+                span => Location.Create(file.Path, span, text.Lines.GetLinePositionSpan(span)),
+                rule,
+                characters,
+                diagnostic => context.ReportDiagnostic(diagnostic));
+        }
+
+        internal static void ReportEachMatch(
+            SourceText text,
+            Func<TextSpan, Location> createLocation,
+            DiagnosticDescriptor rule,
+            string characters,
+            Action<Diagnostic> report)
+        {
             var length = text.Length;
             for (var i = 0; i < length; i++)
             {
@@ -49,8 +106,8 @@ namespace ClassLibrary
                     continue;
                 }
 
-                context.ReportDiagnostic(
-                    Diagnostic.Create(rule, Location.Create(tree, TextSpan.FromBounds(i, i + 1))));
+                var span = TextSpan.FromBounds(i, i + 1);
+                report(Diagnostic.Create(rule, createLocation(span)));
             }
         }
     }

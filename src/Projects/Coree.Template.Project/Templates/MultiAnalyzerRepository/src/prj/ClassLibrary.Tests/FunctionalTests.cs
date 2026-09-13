@@ -83,6 +83,82 @@ namespace ClassLibrary.Tests
                 expected);
         }
 
+        [TestMethod]
+        public async Task EmDashInMatchingAdditionalFileReportsDiagnostic()
+        {
+            var expected = DiagnosticResult
+                .CompilerWarning(EmDashAnalyzer.DiagnosticId)
+                .WithSpan("sample.txt", 1, 2, 1, 3);
+
+            await VerifyWithAdditionalFileAsync<EmDashAnalyzer>(
+                EmDashAnalyzer.AdditionalFilesPropertyName,
+                "*.txt",
+                "sample.txt",
+                "a\u2014b",
+                expected);
+        }
+
+        [TestMethod]
+        public async Task SmartQuotesInMatchingAdditionalFileReportsDiagnostic()
+        {
+            var expected = DiagnosticResult
+                .CompilerWarning(SmartQuotesAnalyzer.DiagnosticId)
+                .WithSpan("sample.txt", 1, 2, 1, 3);
+
+            await VerifyWithAdditionalFileAsync<SmartQuotesAnalyzer>(
+                SmartQuotesAnalyzer.AdditionalFilesPropertyName,
+                "*.txt",
+                "sample.txt",
+                "x\u201Cy",
+                expected);
+        }
+
+        [TestMethod]
+        public async Task AdditionalFileWithoutPropertyReportsNothing()
+        {
+            var test = new CSharpAnalyzerTest<EmDashAnalyzer, DefaultVerifier>
+            {
+                TestCode = "class C { }",
+            };
+            test.TestState.AdditionalFiles.Add(("sample.txt", "a\u2014b"));
+            await test.RunAsync();
+        }
+
+        [TestMethod]
+        public async Task AdditionalFileNotMatchingGlobReportsNothing()
+        {
+            await VerifyWithAdditionalFileAsync<EmDashAnalyzer>(
+                EmDashAnalyzer.AdditionalFilesPropertyName,
+                "*.csproj",
+                "sample.txt",
+                "a\u2014b");
+        }
+
+        [TestMethod]
+        public async Task EmDashInMatchingCsprojAdditionalFileReportsDiagnostic()
+        {
+            var expected = DiagnosticResult
+                .CompilerWarning(EmDashAnalyzer.DiagnosticId)
+                .WithSpan("sample.csproj", 1, 6, 1, 7);
+
+            await VerifyWithAdditionalFileAsync<EmDashAnalyzer>(
+                EmDashAnalyzer.AdditionalFilesPropertyName,
+                "*.txt|*.csproj",
+                "sample.csproj",
+                "<!-- \u2014 -->",
+                expected);
+        }
+
+        [TestMethod]
+        public async Task EmptyAdditionalFilesPropertyReportsNothing()
+        {
+            await VerifyWithAdditionalFileAsync<EmDashAnalyzer>(
+                EmDashAnalyzer.AdditionalFilesPropertyName,
+                string.Empty,
+                "sample.txt",
+                "a\u2014b");
+        }
+
         private static async Task VerifyWithSeverityAsync<TAnalyzer>(
             string source,
             string propertyName,
@@ -98,6 +174,26 @@ namespace ClassLibrary.Tests
             test.TestState.AnalyzerConfigFiles.Add((
                 "/.globalconfig",
                 "is_global = true\nbuild_property." + propertyName + " = " + severity + "\n"));
+            await test.RunAsync();
+        }
+
+        private static async Task VerifyWithAdditionalFileAsync<TAnalyzer>(
+            string propertyName,
+            string patterns,
+            string additionalPath,
+            string additionalContent,
+            params DiagnosticResult[] expected)
+            where TAnalyzer : Microsoft.CodeAnalysis.Diagnostics.DiagnosticAnalyzer, new()
+        {
+            var test = new CSharpAnalyzerTest<TAnalyzer, DefaultVerifier>
+            {
+                TestCode = "class C { }",
+            };
+            test.ExpectedDiagnostics.AddRange(expected);
+            test.TestState.AdditionalFiles.Add((additionalPath, additionalContent));
+            test.TestState.AnalyzerConfigFiles.Add((
+                "/.globalconfig",
+                "is_global = true\nbuild_property." + propertyName + " = " + patterns + "\n"));
             await test.RunAsync();
         }
     }

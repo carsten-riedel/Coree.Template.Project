@@ -267,7 +267,7 @@ dotnet new analyzerrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCom
 
 The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
 
-Each analyzer keeps its `.slnx` in its own `src/sln/{name}/` folder. Tests and the optional benchmark still multi-target `net8.0`/`net10.0` by default; the packable analyzer itself is always `netstandard2.0`.
+Each analyzer keeps its `.slnx` in its own `src/sln/{name}/` folder. DebugHost, tests, and the optional benchmark share one selected TFM (`.NET 10` by default); the packable analyzer itself is always `netstandard2.0`.
 
 ## .NET Tool
 This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.

@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- General build settings: defines the output type and target framework -->
+  <!-- DebugHost / test host TFM from the wizard. The analyzer under test is netstandard2.0. -->
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
+    <TargetFramework>__TargetFramework__</TargetFramework>
   </PropertyGroup>
 
   <!-- C# language features and debugging configuration -->
@@ -41,8 +41,6 @@
 
   <!-- Test configuration -->
   <PropertyGroup>
-    <!-- Multi-target tests and all generated reports are isolated per TFM. -->
-    <TestTfmsInParallel>true</TestTfmsInParallel>
     <_MSTestResultsDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'MSTestResults'))</_MSTestResultsDir>
     <VSTestLogger>trx%3bLogFileName=$(_MSTestResultsDir)$(MSBuildProjectName)-$(TargetFramework).trx;html%3bLogFileName=$(_MSTestResultsDir)result-$(TargetFramework).html</VSTestLogger>
   </PropertyGroup>
@@ -62,7 +60,7 @@
   <!--#endif -->
 
   <!--#if (ReportGenerator == true) -->
-  <!-- ReportGenerator HTML/Markdown from Coverlet output, one folder per TFM. -->
+  <!-- ReportGenerator HTML/Markdown from Coverlet output. -->
   <PropertyGroup>
     <_ReportGeneratorOutputDir>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'ReportGeneratorOutput', '$(TargetFramework)'))</_ReportGeneratorOutputDir>
   </PropertyGroup>

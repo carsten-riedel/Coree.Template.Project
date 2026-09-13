@@ -2,6 +2,18 @@
   "$schema": "https://json.schemastore.org/ide.host",
   "symbolInfo": [
     {
+      "id": "TargetFrameworks",
+      "isVisible": true,
+      "defaultValue": "net10.0",
+      "persistenceScope": "none",
+      "name": {
+        "text": "DebugHost target framework"
+      },
+      "description": {
+        "text": "One framework for DebugHost: .NET 8, 9, or 10. Tests and the optional benchmark use the same TFM. The analyzer package always targets netstandard2.0."
+      }
+    },
+    {
       "id": "InitRepoItems",
       "isVisible": true,
       "defaultValue": "Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense",
@@ -26,17 +38,6 @@
       },
       "description": {
         "text": "Puts each .slnx next to that package's notes under src/sln/{name}/ so multiple analyzer packages do not share one directory. Visual Studio also creates a root .slnx; close Visual Studio, open the src/sln solution, and delete the extra root .slnx."
-      }
-    },
-    {
-      "id": "TargetFrameworks",
-      "isVisible": true,
-      "persistenceScope": "none",
-      "name": {
-        "text": "Test target frameworks"
-      },
-      "description": {
-        "text": "Frameworks for tests, DebugHost, and the optional benchmark. The analyzer package always targets netstandard2.0."
       }
     },
     {

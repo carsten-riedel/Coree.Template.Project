@@ -64,38 +64,36 @@ dotnet build
 
 ## Test
 
-The test project explicitly allows target frameworks to run in parallel. Test results and other per-target-framework reports next to the test project are isolated. No parallelism switch is needed on the command line:
+The test project explicitly configures MSTest for method-level parallel execution within one test assembly. Tests must therefore not share mutable global state.
 
 ```bash
 dotnet test
 ```
 
-MSTest is explicitly configured for method-level parallel execution within one test assembly. Tests must therefore not share mutable global state.
-
-After a test run, the links below point to generated reports. Each selected target framework writes its own files (`net8.0`, `net10.0`, …).
+After a test run, the links below point to generated reports for the test host TFM.
 <!--#if (PlaceSolutionInSolutionFolder) -->
 
 [Test results (trx)](../../prj/ClassLibrary.Tests/MSTestResults/ClassLibrary.Tests-__TargetFramework__.trx)
 [Test results (html)](../../prj/ClassLibrary.Tests/MSTestResults/result-__TargetFramework__.html)
 <!--#if (CoverletMSBuild == true) -->
-[Coverlet output](../../prj/ClassLibrary.Tests/CoverletOutput/coverage.__TargetFramework__.opencover.xml)
+[Coverlet output](../../prj/ClassLibrary.Tests/CoverletOutput/coverage.opencover.xml)
 
 Coverlet measures only the analyzer assembly (`[ClassLibrary]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
-ReportGenerator writes one summary per target framework under `../../prj/ClassLibrary.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
+ReportGenerator writes a summary under `../../prj/ClassLibrary.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
 <!--#endif -->
 <!--#else -->
 
 [Test results (trx)](src/prj/ClassLibrary.Tests/MSTestResults/ClassLibrary.Tests-__TargetFramework__.trx)
 [Test results (html)](src/prj/ClassLibrary.Tests/MSTestResults/result-__TargetFramework__.html)
 <!--#if (CoverletMSBuild == true) -->
-[Coverlet output](src/prj/ClassLibrary.Tests/CoverletOutput/coverage.__TargetFramework__.opencover.xml)
+[Coverlet output](src/prj/ClassLibrary.Tests/CoverletOutput/coverage.opencover.xml)
 
 Coverlet measures only the analyzer assembly (`[ClassLibrary]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
-ReportGenerator writes one summary per target framework under `src/prj/ClassLibrary.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
+ReportGenerator writes a summary under `src/prj/ClassLibrary.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
 <!--#endif -->
 <!--#endif -->
 
@@ -164,7 +162,7 @@ dotnet pack
 
 ## Benchmarks
 
-The benchmark is a local executable targeting the highest selected framework. It is neither packed nor published; start it with the command below.
+The benchmark is a local executable targeting the selected test host framework. It is neither packed nor published; start it with the command below.
 
 ```bash
 <!--#if (PlaceSolutionInSolutionFolder) -->

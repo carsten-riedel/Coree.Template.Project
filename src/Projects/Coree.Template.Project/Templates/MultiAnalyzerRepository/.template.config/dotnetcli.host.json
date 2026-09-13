@@ -9,6 +9,10 @@
       "longName": "InitAllRepoItems",
       "shortName": ""
     },
+    "TargetFrameworks": {
+      "longName": "DebugHostTargetFramework",
+      "shortName": ""
+    },
     "CSharpProjectOptions": {
       "longName": "CSharpProjectOptions",
       "shortName": ""

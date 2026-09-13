@@ -34,7 +34,75 @@
       "binding": "host:HostIdentifier",
       "defaultValue": "dotnetcli"
     },
-    // One multi-choice instead of N root bools (VS stays one group, like TFMs).
+    // Single-select DebugHost TFM (net8.0 / net9.0 / net10.0). Tests and the
+    // optional benchmark use the same value. The analyzer is always netstandard2.0.
+    // First parameter after HostIdentifier so Visual Studio lists it at the top.
+    "TargetFrameworks": {
+      "type": "parameter",
+      "description": "DebugHost target framework (.NET 8, 9, or 10). Tests and the optional benchmark use the same TFM. The analyzer package always targets netstandard2.0.",
+      "datatype": "choice",
+      "allowMultipleValues": false,
+      "enableQuotelessLiterals": true,
+      "displayName": "DebugHost target framework",
+      "choices": [
+        {
+          "choice": "net8.0",
+          "description": "DebugHost, tests, and benchmark on .NET 8",
+          "displayName": ".NET 8"
+        },
+        {
+          "choice": "net9.0",
+          "description": "DebugHost, tests, and benchmark on .NET 9",
+          "displayName": ".NET 9"
+        },
+        {
+          "choice": "net10.0",
+          "description": "DebugHost, tests, and benchmark on .NET 10",
+          "displayName": ".NET 10"
+        }
+      ],
+      "defaultValue": "net10.0"
+    },
+    // Converts the selected framework values to the semicolon-separated MSBuild list.
+    "TargetFrameworksValue": {
+      "type": "generated",
+      "generator": "join",
+      "replaces": "__TargetFrameworks__",
+      "parameters": {
+        "symbols": [
+          {
+            "type": "ref",
+            "value": "TargetFrameworks"
+          }
+        ],
+        "separator": ";",
+        "removeEmptyValues": true
+      }
+    },
+    // Resolves the selected framework to one value for paths and filenames.
+    "TargetFrameworkValue": {
+      "type": "generated",
+      "generator": "switch",
+      "replaces": "__TargetFramework__",
+      "parameters": {
+        "datatype": "string",
+        "cases": [
+          {
+            "condition": "(TargetFrameworks == \"net10.0\")",
+            "value": "net10.0"
+          },
+          {
+            "condition": "(TargetFrameworks == \"net9.0\")",
+            "value": "net9.0"
+          },
+          {
+            "condition": "(TargetFrameworks == \"net8.0\")",
+            "value": "net8.0"
+          }
+        ]
+      }
+    },
+    // One multi-choice instead of N root bools (VS stays one group, like InitRepoItems).
     // CLI default is empty: later libraries omit both switches, no root collisions.
     // Visual Studio does not allow an empty multi-choice (at least one value).
     // None is the explicit empty set; it is first so a host that snaps to the
@@ -120,35 +188,8 @@
       "type": "computed",
       "value": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")"
     },
-    // User-selectable target frameworks for tests, DebugHost, and the optional benchmark.
-    // The packable analyzer is always netstandard2.0 (VS / `dotnet` host).
-    "TargetFrameworks": {
-      "type": "parameter",
-      "description": "Target frameworks for tests, DebugHost, and the optional benchmark. The analyzer package always targets netstandard2.0.",
-      "datatype": "choice",
-      "allowMultipleValues": true,
-      "enableQuotelessLiterals": true,
-      "choices": [
-        {
-          "choice": "net8.0",
-          "description": "Target net8.0",
-          "displayName": ".NET 8.0"
-        },
-        {
-          "choice": "net9.0",
-          "description": "Target net9.0",
-          "displayName": ".NET 9.0"
-        },
-        {
-          "choice": "net10.0",
-          "description": "Target net10.0",
-          "displayName": ".NET 10.0"
-        }
-      ],
-      "defaultValue": "net8.0|net10.0"
-    },
     // One multi-choice for C# / debug / documentation in the analyzer, tests, DebugHost, and
-    // benchmark (VS combobox, like TFMs and InitRepoItems). Checked =
+    // benchmark (VS combobox, like InitRepoItems). Checked =
     // current product default. Unchecked = the other explicit value.
     // Properties are always written. GenerateDocumentationFile is in this
     // choice list; only the analyzer project writes it (own PropertyGroup).
@@ -191,45 +232,6 @@
           "displayName": "XML documentation file"
         }
       ]
-    },
-    // Converts the selected framework values to the semicolon-separated MSBuild list.
-    "TargetFrameworksValue": {
-      "type": "generated",
-      "generator": "join",
-      "replaces": "__TargetFrameworks__",
-      "parameters": {
-        "symbols": [
-          {
-            "type": "ref",
-            "value": "TargetFrameworks"
-          }
-        ],
-        "separator": ";",
-        "removeEmptyValues": true
-      }
-    },
-    // Resolves the highest selected framework to one value for single-framework paths and filenames.
-    "TargetFrameworkValue": {
-      "type": "generated",
-      "generator": "switch",
-      "replaces": "__TargetFramework__",
-      "parameters": {
-        "datatype": "string",
-        "cases": [
-          {
-            "condition": "(TargetFrameworks == \"net10.0\")",
-            "value": "net10.0"
-          },
-          {
-            "condition": "(TargetFrameworks == \"net9.0\")",
-            "value": "net9.0"
-          },
-          {
-            "condition": "(TargetFrameworks == \"net8.0\")",
-            "value": "net8.0"
-          }
-        ]
-      }
     },
     // Package metadata parameters replace their matching placeholders in the project and package assets.
     "PackageAuthor": {

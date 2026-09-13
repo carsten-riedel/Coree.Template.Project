@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- General build settings: run benchmarks on the highest selected target framework -->
+  <!-- General build settings: run benchmarks on the selected test host framework -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>__TargetFramework__</TargetFramework>

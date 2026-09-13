@@ -96,9 +96,10 @@ The package contains the following templates:
   1. [.NET MSBuild Task library](#Net-MSBuild-Task-library)
   2. [.NET Class library](#Net-class-library)
   3. [.NET Multi-library repository](#Net-Multi-library-repository)
-  4. [.NET Tool](#Net-Tool)
-  5. [.NET Wpf](#Net-Wpf-Windows-only)
-  6. [.NET Project Template](#Net-Project-Template)
+  4. [.NET analyzer package repository](#Net-analyzer-package-repository)
+  5. [.NET Tool](#Net-Tool)
+  6. [.NET Wpf](#Net-Wpf-Windows-only)
+  7. [.NET Project Template](#Net-Project-Template)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -267,6 +268,91 @@ MyCompany.Core/
 The top-level directory is shared. Each additional `dotnet new` call contributes another library-specific project, test project, and solution area. Each library remains its own independently buildable and packable unit while sharing the same repository-like structure.
 
 You do not need a different template for a single-library layout and a multi-library layout. Start with one, add another when you need it, or generate the complete set from a script.
+
+## .NET analyzer package repository
+
+Create and grow a repository-like structure containing one or more independently packable Roslyn analyzer NuGet packages using repeatable `dotnet new` calls. This is not `sourcegenerator-coree` (source generators).
+
+Initialize the shared repository layout once, then add additional analyzer packages whenever you need them.
+
+Each package targets `netstandard2.0` and packs the assembly under `analyzers/dotnet/cs` (`DevelopmentDependency`). Tests use Microsoft.CodeAnalysis.CSharp.Analyzer.Testing. Each create adds a DebugHost console so Visual Studio can F5 the analyzer via `DebugRoslynComponent`.
+
+The scaffold ships two sample diagnostics you replace with your own rules. **EMD001** reports an em dash (U+2014); **TSQ001** reports typographic quotation marks. Both scan C# syntax trees and, when include globs are set, additional files. Consumers set `EmDashAnalyzerSeverity` / `SmartQuotesAnalyzerSeverity` (`warning`, `error`, `message`, or `off`) and `EmDashAnalyzerIncludes` / `EmDashAnalyzerExcludes` (and the SmartQuotes pair): semicolon-separated globs relative to the consuming project (`*.txt;*.csproj` by default; empty includes skip additional files; `**/*.txt` is recursive). DebugHost is the compile target: ASCII `"1-2"` / `"hello"` stay clean; `"1—2"` and `"“hello”"` plus `SampleTypography.txt` and the host `.csproj` demonstrate the hits.
+
+Each analyzer keeps its `.slnx` in its own `src/sln/{name}/` folder so CI can `dotnet test` / `dotnet pack` against that solution. DebugHost, tests, and the optional benchmark share one TFM (`.NET 10` by default, `--DebugHostTargetFramework`); the packable analyzer itself is always `netstandard2.0`. Visual Studio F5 needs the **.NET Compiler Platform SDK** component: set the analyzer project as startup, choose the Roslyn Component profile, then F5 (not the DebugHost console).
+
+**Initialize the layout once. Compose as many analyzer packages as you need.**
+
+General use:
+
+```powershell
+dotnet new analyzerrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Naming" --InitAllRepoItems
+dotnet new analyzerrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Performance"
+```
+
+`--PackageAuthor` is required. The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Nerdbank defaults to **Project**: `version.json` under each analyzer's `Properties/` folder. Later calls use the same `--output` and omit `--InitAllRepoItems`.
+
+One shared repository-root `version.json` instead: `--NerdbankGitVersioning Repo` on each call (the root file is written on the first create only). `--NerdbankGitVersioning Off` keeps `VersionPrefix` in the analyzer project.
+
+Public API tracking is a separate opt-in on each package (`--PublicApiAnalyzers`). It is not part of `--InitAllRepoItems`. The first build writes `Properties/PublicAPI` baseline files if they are missing.
+
+Offline documentation is a separate opt-in (`--DocumentationTemplate`). `Package` seeds `NugetAssets/docs/DocShell.html` on each package. `Repository` seeds repo-root `docs/` on a first create only.
+
+Because the output location and package name are separate arguments, the same composition model works from a script:
+
+```powershell
+$repo = "./MyCompany.Analyzers"
+$names = @("MyCompany.Analyzers.Naming", "MyCompany.Analyzers.Performance")
+
+for ($i = 0; $i -lt $names.Count; $i++) {
+    $arguments = @("new", "analyzerrepo-coree", "--PackageAuthor", "Carsten Riedel", "--output", $repo, "--name", $names[$i])
+    if ($i -eq 0) { $arguments += "--InitAllRepoItems" }
+    dotnet @arguments
+}
+```
+
+After creating `MyCompany.Analyzers.Naming` and `MyCompany.Analyzers.Performance`, the directory tree looks roughly like this:
+
+```text
+MyCompany.Analyzers/
+├── README.md
+├── LICENSE
+├── .gitattributes
+├── .gitignore
+├── TEMPLATE-AI-RELEASE-CHECKPOINT.md
+└── src/
+    ├── prj/
+    │   ├── MyCompany.Analyzers.Naming/
+    │   │   ├── Build/
+    │   │   ├── NugetAssets/
+    │   │   ├── Properties/
+    │   │   ├── EmDashAnalyzer.cs
+    │   │   ├── SmartQuotesAnalyzer.cs
+    │   │   └── MyCompany.Analyzers.Naming.csproj
+    │   ├── MyCompany.Analyzers.Naming.Tests/
+    │   │   └── MyCompany.Analyzers.Naming.Tests.csproj
+    │   ├── MyCompany.Analyzers.Naming.DebugHost/
+    │   │   ├── Program.cs
+    │   │   ├── SampleTypography.txt
+    │   │   └── MyCompany.Analyzers.Naming.DebugHost.csproj
+    │   ├── MyCompany.Analyzers.Performance/
+    │   │   └── MyCompany.Analyzers.Performance.csproj
+    │   ├── MyCompany.Analyzers.Performance.Tests/
+    │   │   └── MyCompany.Analyzers.Performance.Tests.csproj
+    │   └── MyCompany.Analyzers.Performance.DebugHost/
+    │       └── MyCompany.Analyzers.Performance.DebugHost.csproj
+    └── sln/
+        ├── MyCompany.Analyzers.Naming/
+        │   ├── MyCompany.Analyzers.Naming.slnx
+        │   └── Readme.md
+        └── MyCompany.Analyzers.Performance/
+            ├── MyCompany.Analyzers.Performance.slnx
+            └── Readme.md
+```
+
+The top-level directory is shared. Each additional `dotnet new` call contributes another analyzer project, tests, DebugHost, and solution area. Each package remains independently buildable and packable.
+
+You do not need a different template for a single-analyzer layout and a multi-analyzer layout. Start with one, add another when you need it, or generate the complete set from a script.
 
 ## .NET Tool
 This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.

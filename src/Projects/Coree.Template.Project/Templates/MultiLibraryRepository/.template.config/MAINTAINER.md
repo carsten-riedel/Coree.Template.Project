@@ -162,7 +162,7 @@ Other host-only switch behavior (not root files, same class of reason):
 
 `None` is first in the choice list. `sources` exclude each root file unless `InitAllRepoItems` is on or that choice is selected; `None` excludes all of them, including when `InitAllRepoItems` is on. `==` in conditions means the value is among the selected choices. `GitIgnore` is the same shape as `GitAttributes`: seed is the output name at the template root (`.gitignore`), same exclude condition, no rename. Nested `src/prj` / `src/sln` `.gitignore` files use those full paths (see Benchmark exclude); they are not this switch and stay on every create.
 
-`PackageBoundaries` is `ChoosingPackageBoundaries.md` at the repository root. Same exclude pattern as `GitIgnore` / `Readme` (`InitAllRepoItems` or this choice). Seed lives at the template root next to `README.md` (not under `TemplateAssets/`, or version.json/DocShell extra sources would copy it). Standing decision guide (H1 **Choosing package boundaries**), not `TEMPLATE-` delete-me. Later library with this box or `--InitAllRepoItems` selected is Exit 73.
+`PackageBoundaries` is `ChoosingPackageBoundaries.md` at the repository root. Same exclude pattern as `GitIgnore` / `Readme` (`InitAllRepoItems` or this choice). Seed lives at the template root next to `README.md` (not under `TemplateAssets/`, or DocShell extra sources would copy it). Standing decision guide (H1 **Choosing package boundaries**), not `TEMPLATE-` delete-me. Later library with this box or `--InitAllRepoItems` selected is Exit 73.
 
 ## AI-supported release checkpoint
 
@@ -211,7 +211,7 @@ Single choice (dropdown, not a checkbox group). Project + NuGet only. Repository
 
 Do not set `PackageLicenseFile` together with an expression (NU5033). The glob excludes `License.txt` except for `Custom`.
 
-Seeds live under `TemplateAssets/Licenses/` (`MIT.txt`, `BSD3Clause.txt`, `Apache2.txt`, `Custom.txt`). Extra sources copy the chosen seed to `src/prj/{Name}/NugetAssets/License.txt` on every create, and to repository-root `LICENSE` only when `WriteRepoLicense` is true. Do not leave a mega-file under `src/prj/ClassLibrary/NugetAssets/`. `TemplateAssets/` extra sources for `version.json` and DocShell must `exclude` `Licenses/**` (same as `CodeStyle/**`). Each seed may use a shallow `//#if (PackageCopyrightHolderIsSet)` / `//#else` / `//#endif`. Do not put `ProjectLicense` `#if` in the seed: extra sources pick the file.
+Seeds live under `TemplateAssets/Licenses/` (`MIT.txt`, `BSD3Clause.txt`, `Apache2.txt`, `Custom.txt`). Extra sources copy the chosen seed to `src/prj/{Name}/NugetAssets/License.txt` on every create, and to repository-root `LICENSE` only when `WriteRepoLicense` is true. Do not leave a mega-file under `src/prj/ClassLibrary/NugetAssets/`. DocShell extra sources must `exclude` `Licenses/**` (same as `CodeStyle/**` and `Versioning/**`). Each seed may use a shallow `//#if (PackageCopyrightHolderIsSet)` / `//#else` / `//#endif`. Do not put `ProjectLicense` `#if` in the seed: extra sources pick the file.
 
 `RepoLicense` is off on CLI unless listed in `--InitRepoItems` or `--InitAllRepoItems` is on. Visual Studio includes it in the first-create default. `WriteRepoLicense` is `(InitRepoItems != None) && (InitAllRepoItems || InitRepoItems == RepoLicense)`. First create only; a later library with `RepoLicense` or `InitAllRepoItems` selected collides (Exit 73), same as root README. `None` excludes it even if leftover checks remain.
 
@@ -259,7 +259,7 @@ WriteRepoVersionJson      =
 
 There is no `version.json` checkbox in `InitRepoItems`. Generate-time root file is `WriteRepoVersionJson` (`Repo` plus first-create Init). If that file is still missing, the Repo library writes it once at build (`if not exists`). Later VS library: **None** plus **This repository (root version.json)**.
 
-Canonical JSON is `TemplateAssets/version.json` (`0.1.0`, `pathFilters` `["."]`). Extra sources copy that file only (`exclude` of `DocShell.html`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`). `Project` is first in the choice list because it is the default.
+Seeds live under `TemplateAssets/Versioning/`. `Project/version.json` uses `pathFilters` `[".."]` (height is the packable project folder next to `Properties/`; tests and benchmark are siblings and do not bump). `Repo/version.json` uses `pathFilters` `["."]` (height is the whole repository). Extra sources copy `Versioning/Project/` to `Properties/` and `Versioning/Repo/` to the repository root. `Build/Nerdbank.version.json` is the same payload as `Versioning/Repo/version.json` (late first-build copy). `Project` is first in the choice list because it is the default.
 
 ### What each symbol stamps
 
@@ -363,7 +363,7 @@ Do not rename `Default` to Minimal: both seeds are the same full VS style dump. 
 
 `Strict` needs the product C# defaults (`GenerateDocumentationFile`, `Nullable`, `DisableImplicitUsings`) or those errors fire on every build for the wrong reason. The scaffold `Class1` already has XML docs so a first Strict build can pass. Unused usings stay on `Class1` only for **`Default`** and **`Off`** (`KeepScaffoldUnusedUsings`: `ProjectEditorGlobalConfig != "Strict"`): suggestion vs no style file, without failing the first build. Strict omits them because IDE0005 is error. Do not keep unused usings on Strict to “show” the gate.
 
-Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that folder to the library project, **excludes** the other seed, and **renames** the chosen file to `.project.editor.globalconfig`. Do not leave a seed under `src/prj/ClassLibrary/`: `TemplateAssets/` extra sources for `version.json` and DocShell must `exclude` `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`.
+Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that folder to the library project, **excludes** the other seed, and **renames** the chosen file to `.project.editor.globalconfig`. Do not leave a seed under `src/prj/ClassLibrary/`: DocShell extra sources must `exclude` `Versioning/**`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`.
 
 `UseProjectEditorGlobalConfig` is `(ProjectEditorGlobalConfig != "Off")`; the csproj `#if` does not need a new branch per dump.
 
@@ -407,7 +407,7 @@ dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --
 
 ## `DocumentationTemplate`
 
-Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, two destinations. Extra sources copy that file only (`exclude` of `version.json`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
+Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, two destinations. Extra sources copy that file only (`exclude` of `Versioning/**`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
 
 | Choice | Path | When | Combo later library |
 | --- | --- | --- | --- |
@@ -449,7 +449,7 @@ With `PlaceSolution` `SlnFolder` (default), each `src/sln/{Name}/` gets its own 
 
 Library + this library's `.slnx` only. Bool, default **false**. UI label **Empty Directory.Build and Directory.Solution files**. CLI long name **`--DirectoryMsBuildFiles`**. Omit the switch → nothing. Combo-safe on `SlnFolder` and `BesideLibrary` (paths include the library name). `RepoRoot` stacks `Directory.Solution.*` at the repository root like stacking `.slnx` files. Not an Init* item and not `Directory.Packages.props` (CPM would not cover sibling tests). Tests and benchmark are not in this switch.
 
-Seeds live under `TemplateAssets/DirectoryMsBuild/`. Extra sources copy `Directory.Build.props` / `.targets` next to the library csproj, and `Directory.Solution.props` / `.targets` next to this library's `.slnx` (`src/sln/{Name}/` for `SlnFolder`, `src/prj/{Name}/` for `BesideLibrary`, repo root for `RepoRoot` — later library then collides, same as stacking `.slnx` files). `TemplateAssets/` extra sources for `version.json` and DocShell must `exclude` `DirectoryMsBuild/**`.
+Seeds live under `TemplateAssets/DirectoryMsBuild/`. Extra sources copy `Directory.Build.props` / `.targets` next to the library csproj, and `Directory.Solution.props` / `.targets` next to this library's `.slnx` (`src/sln/{Name}/` for `SlnFolder`, `src/prj/{Name}/` for `BesideLibrary`, repo root for `RepoRoot` — later library then collides, same as stacking `.slnx` files). DocShell extra sources must `exclude` `Versioning/**` and `DirectoryMsBuild/**`.
 
 The files are almost empty `<Project>` stubs with comments. MSBuild auto-imports them from those directories. Do not move `ImportSdkTargets` / analyzer config / pack validation into them. The template does not `#if` properties into these files vs the csproj (possible, ugly). The library csproj `None Include`s the two `Directory.Build.*` files with `Link` under `Properties\` (Solution Explorer only). Do **not** move the files into `Properties/` on disk: auto-import follows the directory of the file, same as `.project.editor.globalconfig`. `Directory.Solution.*` stay beside the `.slnx`. When `PlaceSolution` is `BesideLibrary`, the library csproj also `Link`s those two solution files (same folder as the csproj) so they do not look like stray project items.
 

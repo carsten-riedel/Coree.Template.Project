@@ -774,34 +774,14 @@
       ]
     },
     {
-      "source": "./TemplateAssets/",
+      "source": "./TemplateAssets/Versioning/Repo/",
       "target": "./",
-      "condition": "WriteRepoVersionJson",
-      "modifiers": [
-        {
-          "exclude": [
-            "DocShell.html",
-            "CodeStyle/**",
-            "Licenses/**",
-            "DirectoryMsBuild/**"
-          ]
-        }
-      ]
+      "condition": "WriteRepoVersionJson"
     },
     {
-      "source": "./TemplateAssets/",
+      "source": "./TemplateAssets/Versioning/Project/",
       "target": "./src/prj/ClassLibrary/Properties/",
-      "condition": "(NerdbankGitVersioning == \"Project\")",
-      "modifiers": [
-        {
-          "exclude": [
-            "DocShell.html",
-            "CodeStyle/**",
-            "Licenses/**",
-            "DirectoryMsBuild/**"
-          ]
-        }
-      ]
+      "condition": "(NerdbankGitVersioning == \"Project\")"
     },
     {
       "source": "./TemplateAssets/",
@@ -810,7 +790,7 @@
       "modifiers": [
         {
           "exclude": [
-            "version.json",
+            "Versioning/**",
             "CodeStyle/**",
             "Licenses/**",
             "DirectoryMsBuild/**"
@@ -825,7 +805,7 @@
       "modifiers": [
         {
           "exclude": [
-            "version.json",
+            "Versioning/**",
             "CodeStyle/**",
             "Licenses/**",
             "DirectoryMsBuild/**"

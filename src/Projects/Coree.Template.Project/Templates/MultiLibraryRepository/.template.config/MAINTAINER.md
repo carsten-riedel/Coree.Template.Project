@@ -471,7 +471,7 @@ dotnet new multilibraryrepo-coree --PackageAuthor "abcd" --name "...Library2" --
 - **`PlaceSolutionInSolutionFolder`**: default true → `src/sln/ClassLibrary/ClassLibrary.slnx` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). False on CLI renames to a root `.slnx`; false in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS’s conventional root `.slnx`. False also stacks every library’s `.slnx` in one directory.
 - **`HostIdentifier` / `IsCliHost`**: bind + computed; used for that rename and for VS-only post-actions.
 - **`PackageAuthor`**: required.
-- **`<Description>`**: not a template parameter. Generate leaves the csproj element empty; the checkpoint fills the NuGet gallery blurb (assistant-supported).
+- **`<Description>`**: not a template parameter. Generate leaves an empty CDATA block for multiline gallery text; the checkpoint fills it (assistant-supported).
 - **`EnablePackageValidation`**: not a symbol. Always `true` on the packable library (before `ImportSdkTargets`). No `PackageValidationBaselineVersion` at generate.
 - **`TestCoverage`**: single choice, default `Coverlet`. Replaces the two independent Coverlet/ReportGenerator bools. Coverage stats on `dotnet test` are opt-out; ReportGenerator is opt-in (`CoverletAndReport`). There is no Report-without-Coverlet. `--TestCoverage None` drops Coverlet too. Computed `CoverletMSBuild` / `ReportGenerator` drive the test csproj and sln-readme `#if`s.
 - **`DirectoryMsBuildFiles`**: see section above. Default `false`. Empty `Directory.Build.*` beside the library and `Directory.Solution.*` beside this `.slnx`. No `Directory.Packages.props`.

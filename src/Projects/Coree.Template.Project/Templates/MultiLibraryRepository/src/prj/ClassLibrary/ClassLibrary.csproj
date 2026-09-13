@@ -84,6 +84,12 @@
     <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
 
+  <!-- SDK defaults stay. CheckEol: true for exe, skipped for Library. InvariantGlobalization unset = cultures on. -->
+  <PropertyGroup>
+    <CheckEolTargetFramework>$(CheckEolTargetFramework)</CheckEolTargetFramework>
+    <InvariantGlobalization>$(InvariantGlobalization)</InvariantGlobalization>
+  </PropertyGroup>
+
   <!--#if (UseNerdbankGitVersioning) -->
   <!-- Versioning: Nerdbank -->
   <!--#if (NerdbankGitVersioning == "Project") -->
@@ -140,7 +146,8 @@
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
     <RepositoryType></RepositoryType>
-    <Description></Description>
+    <!-- NuGet gallery blurb. CDATA is optional and keeps multiline text. -->
+    <Description><![CDATA[]]></Description>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
     <!--#if (ProjectLicense == "MIT") -->
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

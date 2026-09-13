@@ -381,14 +381,18 @@ Paths inside the solution depend on where the file will sit. Nested hash-if is p
 
 ```xml
 <Folder Name="/prj/">
-<!--#if (PlaceSolutionInSolutionFolder) -->
+<!--#if (PlaceSolution == "SlnFolder") -->
     <Project Path="../../prj/MyLibrary/MyLibrary.csproj" />
+<!--#elseif (PlaceSolution == "BesideLibrary") -->
+    <Project Path="MyLibrary.csproj" />
 <!--#else -->
     <Project Path="src/prj/MyLibrary/MyLibrary.csproj" />
 <!--#endif -->
 <!--#if (Benchmark) -->
-<!--#if (PlaceSolutionInSolutionFolder) -->
+<!--#if (PlaceSolution == "SlnFolder") -->
     <Project Path="../../prj/MyLibrary.Benchmark/MyLibrary.Benchmark.csproj" />
+<!--#elseif (PlaceSolution == "BesideLibrary") -->
+    <Project Path="../MyLibrary.Benchmark/MyLibrary.Benchmark.csproj" />
 <!--#else -->
     <Project Path="src/prj/MyLibrary.Benchmark/MyLibrary.Benchmark.csproj" />
 <!--#endif -->
@@ -419,7 +423,7 @@ HTML comments are invisible in rendered markdown and valid tokens for the proces
 
 ```markdown
 # MyLibrary
-<!--#if ((HostIdentifier == "vs") && PlaceSolutionInSolutionFolder) -->
+<!--#if ((HostIdentifier == "vs") && (PlaceSolution == "SlnFolder")) -->
 
 Visual Studio also wrote a `.slnx` at the repository root. Open the `.slnx` in this folder and delete the extra root file if you do not need it.
 <!--#endif -->

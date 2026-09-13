@@ -211,6 +211,11 @@
   <ItemGroup>
     <None Remove=".gitignore" />
   </ItemGroup>
+<!--#if (PlaceSolution == "BesideLibrary") -->
+  <ItemGroup>
+    <None Remove="ClassLibrary.slnx" />
+  </ItemGroup>
+<!--#endif -->
 
   <!--#if (DirectoryMsBuildFiles) -->
   <!-- Auto-imported from this directory. Link is Solution Explorer only (under Properties\). -->
@@ -221,6 +226,13 @@
     <None Include="Directory.Build.targets" Link="Properties\Directory.Build.targets" />
   </ItemGroup>
   <!--#endif -->
+<!--#if ((DirectoryMsBuildFiles) && (PlaceSolution == "BesideLibrary")) -->
+  <ItemGroup>
+    <None Remove="Directory.Solution.props;Directory.Solution.targets" />
+    <None Include="Directory.Solution.props" Link="Properties\Directory.Solution.props" />
+    <None Include="Directory.Solution.targets" Link="Properties\Directory.Solution.targets" />
+  </ItemGroup>
+<!--#endif -->
 
   <!-- Source Link git state as properties (SDK 8+). Target hooks GenerateAssemblyInfo. -->
   <Import Project="Build/SourceControlState.targets" />

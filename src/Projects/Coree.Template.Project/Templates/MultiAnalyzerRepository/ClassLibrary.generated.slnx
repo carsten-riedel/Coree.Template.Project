@@ -1,11 +1,13 @@
 <Solution>
   <!-- Paths are relative to this file's final location.
-       PlaceSolutionInSolutionFolder true  → src/sln/ClassLibrary/ClassLibrary.slnx
-         (Readme.md beside this file; projects are ../../prj/).
-       PlaceSolutionInSolutionFolder false → repo root, so src/prj/ and src/sln/. -->
+       PlaceSolution SlnFolder      → src/sln/ClassLibrary/ClassLibrary.slnx
+       PlaceSolution BesideLibrary  → src/prj/ClassLibrary/ClassLibrary.slnx
+       PlaceSolution RepoRoot       → repo root, so src/prj/ and src/sln/. -->
   <Folder Name="/sln/ClassLibrary/">
-<!--#if (PlaceSolutionInSolutionFolder) -->
+<!--#if (PlaceSolution == "SlnFolder") -->
     <File Path="Readme.md" />
+<!--#elseif (PlaceSolution == "BesideLibrary") -->
+    <File Path="../../sln/ClassLibrary/Readme.md" />
 <!--#else -->
     <File Path="src/sln/ClassLibrary/Readme.md" />
 <!--#endif -->
@@ -15,18 +17,24 @@
 <!--#endif -->
   </Folder>
   <Folder Name="/prj/">
-<!--#if (PlaceSolutionInSolutionFolder) -->
+<!--#if (PlaceSolution == "SlnFolder") -->
     <Project Path="../../prj/ClassLibrary.Tests/ClassLibrary.Tests.csproj" />
     <Project Path="../../prj/ClassLibrary/ClassLibrary.csproj" />
     <Project Path="../../prj/ClassLibrary.DebugHost/ClassLibrary.DebugHost.csproj" />
+<!--#elseif (PlaceSolution == "BesideLibrary") -->
+    <Project Path="../ClassLibrary.Tests/ClassLibrary.Tests.csproj" />
+    <Project Path="ClassLibrary.csproj" />
+    <Project Path="../ClassLibrary.DebugHost/ClassLibrary.DebugHost.csproj" />
 <!--#else -->
     <Project Path="src/prj/ClassLibrary.Tests/ClassLibrary.Tests.csproj" />
     <Project Path="src/prj/ClassLibrary/ClassLibrary.csproj" />
     <Project Path="src/prj/ClassLibrary.DebugHost/ClassLibrary.DebugHost.csproj" />
 <!--#endif -->
 <!--#if (BenchmarkProject == true) -->
-<!--#if (PlaceSolutionInSolutionFolder) -->
+<!--#if (PlaceSolution == "SlnFolder") -->
     <Project Path="../../prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj" />
+<!--#elseif (PlaceSolution == "BesideLibrary") -->
+    <Project Path="../ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj" />
 <!--#else -->
     <Project Path="src/prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj" />
 <!--#endif -->

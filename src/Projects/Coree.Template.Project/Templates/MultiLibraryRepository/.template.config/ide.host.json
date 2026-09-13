@@ -18,14 +18,15 @@
       "isVisible": false
     },
     {
-      "id": "PlaceSolutionInSolutionFolder",
+      "id": "PlaceSolution",
       "isVisible": true,
+      "defaultValue": "SlnFolder",
       "persistenceScope": "none",
       "name": {
-        "text": "Place solution in src/sln folder"
+        "text": "Solution file location"
       },
       "description": {
-        "text": "Puts each .slnx next to that library's notes under src/sln/{name}/ so multiple libraries do not share one directory. Visual Studio also creates a root .slnx; close Visual Studio, open the src/sln solution, and delete the extra root .slnx."
+        "text": "Where this library's .slnx is written. Default src/sln/{name}/. Other locations: repository root, or src/prj/{name}/ next to the library csproj. Several .slnx files in the same folder make `dotnet` require an explicit path (MSB1011). src/sln/{name}/ is always created for solution-level or cross-project files. Visual Studio also creates a root .slnx; close Visual Studio, open the template solution, and delete the extra root .slnx."
       }
     },
     {

@@ -1,14 +1,32 @@
 # ClassLibrary
-<!--#if ((HostIdentifier == "vs") && PlaceSolutionInSolutionFolder) -->
+
+This folder is the per-library area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
+<!--#if (PlaceSolution == "SlnFolder") -->
+The `.slnx` lives here; keep the folder while that is true. You can still add extra solution items here.
+<!--#else -->
+The `.slnx` is written elsewhere (`PlaceSolution`). Use this folder for shared notes or extra solution items, or delete it if you do not need it.
+<!--#endif -->
+<!--#if ((HostIdentifier == "vs") && (PlaceSolution == "SlnFolder")) -->
 
 Visual Studio created an extra `.slnx` in the repository root. Close this solution, open the `.slnx` in this folder (`src/sln/ClassLibrary/`), and delete the extra `.slnx` in the repository root.
 <!--#endif -->
-<!--#if ((HostIdentifier == "vs") && (PlaceSolutionInSolutionFolder == false)) -->
+<!--#if ((HostIdentifier == "vs") && (PlaceSolution == "BesideLibrary")) -->
+
+Visual Studio created an extra `.slnx` in the repository root. Close this solution, open `src/prj/ClassLibrary/ClassLibrary.slnx`, and delete the extra `.slnx` in the repository root.
+<!--#endif -->
+<!--#if ((HostIdentifier == "vs") && (PlaceSolution == "RepoRoot")) -->
 
 Visual Studio created a conventional root `.slnx`. Open `ClassLibrary.generated.slnx` in the repository root for the template layout (includes `sln`). Delete the extra conventional `.slnx` if you do not need it.
 <!--#endif -->
+<!--#if (PlaceSolution != "SlnFolder") -->
 
-<!--#if (PlaceSolutionInSolutionFolder) -->
+<!--#if (PlaceSolution == "BesideLibrary") -->
+The solution file is `src/prj/ClassLibrary/ClassLibrary.slnx` (next to the packable library, not tests or benchmark). Open a terminal in that folder for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet pack`.
+<!--#else -->
+The solution file lives at the repository root. Open a terminal there for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet pack`. If more than one `.slnx` sits in that directory, pass the solution path to `dotnet`.
+<!--#endif -->
+<!--#else -->
+
 The `.slnx` and this readme live in this folder. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other libraries keep their own `.slnx` under `src/sln/<name>/`, so `dotnet` does not ask you to specify a solution.
 
 ```text
@@ -27,27 +45,6 @@ The `.slnx` and this readme live in this folder. Open a terminal here for the co
 ../../prj/ClassLibrary.Benchmark/  optional BenchmarkDotNet console app
 <!--#endif -->
 ```
-<!--#else -->
-The solution file lives at the repository root. Open a terminal there for the commands below. If more than one `.slnx` sits in that directory, pass the solution path to `dotnet`.
-
-```text
-./                         repository root
-src/sln/ClassLibrary/      this readme
-<!--#if (DirectoryMsBuildFiles) -->
-./Directory.Solution.props  optional empty solution MSBuild landing file (beside the root .slnx)
-./Directory.Solution.targets
-<!--#endif -->
-src/prj/ClassLibrary/      packable class library
-<!--#if (DirectoryMsBuildFiles) -->
-src/prj/ClassLibrary/Directory.Build.props  optional empty library MSBuild landing file
-src/prj/ClassLibrary/Directory.Build.targets
-<!--#endif -->
-src/prj/ClassLibrary.Tests/  tests (not packed)
-<!--#if (BenchmarkProject == true) -->
-src/prj/ClassLibrary.Benchmark/  optional BenchmarkDotNet console app
-<!--#endif -->
-```
-<!--#endif -->
 
 Package metadata, license, icon, and release notes live in `src/prj/ClassLibrary/NugetAssets/`.
 
@@ -71,7 +68,6 @@ dotnet test
 MSTest is explicitly configured for method-level parallel execution within one test assembly. Tests must therefore not share mutable global state.
 
 After a test run, the links below point to generated reports. Each selected target framework writes its own files (`net8.0`, `net10.0`, …).
-<!--#if (PlaceSolutionInSolutionFolder) -->
 
 [Test results (trx)](../../prj/ClassLibrary.Tests/MSTestResults/ClassLibrary.Tests-__TargetFramework__.trx)
 [Test results (html)](../../prj/ClassLibrary.Tests/MSTestResults/result-__TargetFramework__.html)
@@ -82,19 +78,6 @@ Coverlet measures only the class library (`[ClassLibrary]*`) and fails `dotnet t
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
 ReportGenerator writes one summary per target framework under `../../prj/ClassLibrary.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
-<!--#endif -->
-<!--#else -->
-
-[Test results (trx)](src/prj/ClassLibrary.Tests/MSTestResults/ClassLibrary.Tests-__TargetFramework__.trx)
-[Test results (html)](src/prj/ClassLibrary.Tests/MSTestResults/result-__TargetFramework__.html)
-<!--#if (CoverletMSBuild == true) -->
-[Coverlet output](src/prj/ClassLibrary.Tests/CoverletOutput/coverage.__TargetFramework__.opencover.xml)
-
-Coverlet measures only the class library (`[ClassLibrary]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
-<!--#endif -->
-<!--#if (ReportGenerator == true) -->
-ReportGenerator writes one summary per target framework under `src/prj/ClassLibrary.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
-<!--#endif -->
 <!--#endif -->
 
 ## Pack
@@ -148,10 +131,7 @@ dotnet pack
 The benchmark is a local executable targeting the highest selected framework. It is neither packed nor published; start it with the command below.
 
 ```bash
-<!--#if (PlaceSolutionInSolutionFolder) -->
 dotnet run --project ../../prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj -c Release
-<!--#else -->
-dotnet run --project src/prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj -c Release
-<!--#endif -->
 ```
+<!--#endif -->
 <!--#endif -->

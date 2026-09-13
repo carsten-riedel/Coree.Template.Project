@@ -192,7 +192,7 @@ Instead of deciding the complete structure up front, `multilibraryrepo-coree` le
 - package each library independently;
 - use the same workflow interactively, from PowerShell, or from automation.
 
-Each library keeps its `.slnx` in its own `src/sln/{name}/` folder so CI can `dotnet pack` / `dotnet publish` against that solution without seeing sibling `.slnx` files in one directory. One solution may still contain several projects (library, tests, optional benchmark); how much you put in one `.slnx` depends on the pipeline. Splitting by library removes the usual “which solution?” limits.
+Each library keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`) so CI can `dotnet pack` / `dotnet publish` against that solution without seeing sibling `.slnx` files in one directory. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideLibrary` writes it next to the packable project under `src/prj/{name}/` (not tests or benchmark). One solution may still contain several projects (library, tests, optional benchmark); how much you put in one `.slnx` depends on the pipeline. Splitting by library removes the usual “which solution?” limits.
 
 **Initialize the layout once. Compose as many libraries as you need.**
 
@@ -279,7 +279,7 @@ Each package targets `netstandard2.0` and packs the assembly under `analyzers/do
 
 The scaffold ships two sample diagnostics you replace with your own rules. **EMD001** reports an em dash (U+2014); **TSQ001** reports typographic quotation marks. Both scan C# syntax trees and, when include globs are set, additional files. Consumers set `EmDashAnalyzerSeverity` / `SmartQuotesAnalyzerSeverity` (`warning`, `error`, `message`, or `off`) and `EmDashAnalyzerIncludes` / `EmDashAnalyzerExcludes` (and the SmartQuotes pair): semicolon-separated globs relative to the consuming project (`*.txt;*.csproj` by default; empty includes skip additional files; `**/*.txt` is recursive). DebugHost is the compile target: ASCII `"1-2"` / `"hello"` stay clean; `"1—2"` and `"“hello”"` plus `SampleTypography.txt` and the host `.csproj` demonstrate the hits.
 
-Each analyzer keeps its `.slnx` in its own `src/sln/{name}/` folder so CI can `dotnet test` / `dotnet pack` against that solution. DebugHost, tests, and the optional benchmark share one TFM (`.NET 10` by default, `--DebugHostTargetFramework`); the packable analyzer itself is always `netstandard2.0`. Visual Studio F5 needs the **.NET Compiler Platform SDK** component: set the analyzer project as startup, choose the Roslyn Component profile, then F5 (not the DebugHost console).
+Each analyzer keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`) so CI can `dotnet test` / `dotnet pack` against that solution. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideLibrary` writes it next to the packable analyzer under `src/prj/{name}/` (not tests, DebugHost, or benchmark). DebugHost, tests, and the optional benchmark share one TFM (`.NET 10` by default, `--DebugHostTargetFramework`); the packable analyzer itself is always `netstandard2.0`. Visual Studio F5 needs the **.NET Compiler Platform SDK** component: set the analyzer project as startup, choose the Roslyn Component profile, then F5 (not the DebugHost console).
 
 **Initialize the layout once. Compose as many analyzer packages as you need.**
 

@@ -1,6 +1,6 @@
 # __SourceName__
 
-.NET multi-console-app repository. The GitHub landing page is this file.
+.NET multi-console repository. The GitHub landing page is this file.
 <!--#if (PlaceSolution == "SlnFolder") -->
 Each app's `.slnx` and notes live under `src/sln/__SourceName__/`. CLI commands for this app start in that folder.
 <!--#elseif (PlaceSolution == "BesideCsproj") -->

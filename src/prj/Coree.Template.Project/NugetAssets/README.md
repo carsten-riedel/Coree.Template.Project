@@ -11,16 +11,16 @@ Welcome to the Coree.Template.Project repository! This project offers a comprehe
 Normal install and download procedure.
   1. [Download/Install dotnet SDK](https://dotnet.microsoft.com/en-us/download)
   2. [Download/Install Visual Studio Code](https://code.visualstudio.com/)
-  3. [Download/Install Powershell](https://learn.microsoft.com/en-US/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.3)
+  3. [Download/Install Powershell](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows)
   4. [Download/Install git](https://git-scm.com/download/win)
 
 #### User-Space Installation of .NET and PowerShell Core on Windows.
 
 To install dotnet and powershell core from cmd in Windows:
   1. Open the Command Prompt.
-  2. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 6.0"` to install the .NET 6.0 SDK.
-  3. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 7.0"` to install the .NET 7.0 SDK.
-  4. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 8.0"` to install the .NET 8.0 SDK.
+  2. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 8.0"` to install the .NET 8.0 SDK.
+  3. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 9.0"` to install the .NET 9.0 SDK.
+  4. Execute: `powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1'))) -channel 10.0"` to install the .NET 10.0 SDK.
   5. Execute: `powershell -NoProfile -ExecutionPolicy Unrestricted -Command "& {[Environment]::SetEnvironmentVariable('DOTNET_ROOT', \"$env:localappdata\Microsoft\dotnet\", 'User')}"` to set the environment variables.
   6. Execute: `powershell -NoProfile -ExecutionPolicy Unrestricted -Command "& {[Environment]::SetEnvironmentVariable('PATH', \"$($env:path);$env:localappdata\Microsoft\dotnet\", 'User')}"`  to set the environment variables.
   7. Execute: `SET "DOTNET_ROOT=%localappdata%\Microsoft\dotnet" & SET "PATH=%PATH%;%localappdata%\Microsoft\dotnet"`  to set the current session environment variables.
@@ -40,7 +40,7 @@ To install a wsl image e.g Ubuntu on Windows:
   2. Execute: `wsl --update` to update your wsl to the latest version.
   3. Execute: `wsl --set-default-version 2` to set the WSL version to WSL2.
   4. Execute: `wsl --list --online` to list all online availible wsl image versions.
-  5. Execute: `wsl --install Ubuntu-22.04 --web-download` to install a online version as webdownload in the case the store is blocked.
+  5. Execute: `wsl --install Ubuntu-24.04 --web-download` to install a online version as webdownload in the case the store is blocked.
   6. Enter your username. If you get an error use lowercase and numbers only.
   7. Enter your password.
   8. Confirm your password.
@@ -48,16 +48,16 @@ To install a wsl image e.g Ubuntu on Windows:
 To uninstall a wsl image e.g Ubuntu on Windows:
   1. Open the Command Prompt or PowerShell.
   2. Execute: `wsl --list` to see a list of your local installed wsl images.
-  3. Execute: `wsl --unregister Ubuntu-22.04` to remove a installed wsl image.
+  3. Execute: `wsl --unregister Ubuntu-24.04` to remove a installed wsl image.
 
 ### Setting up .NET, PowerShell, and Visual Studio Code on Ubuntu
 
 To install dotnet powershell and vscode:
   1. Open the wsl app in windows or type `wsl` inside a command prompt.
   2. Execute:  `sudo apt-get update && sudo apt-get -y upgrade ` to upgrade the linux distrobution to the latest state.
-  3. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 6.0` to install the .NET 6.0 SDK.
-  4. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 7.0` to install the .NET 7.0 SDK.
-  5. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 8.0` to install the .NET 8.0 SDK.
+  3. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 8.0` to install the .NET 8.0 SDK.
+  4. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 9.0` to install the .NET 9.0 SDK.
+  5. Execute:  `curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin -channel 10.0` to install the .NET 10.0 SDK.
   6. Execute:  `export DOTNET_ROOT=$HOME/.dotnet ; export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools ; echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $HOME/.bashrc && echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $HOME/.bashrc` to add the dotnet root and path to the environment and shell startup.
   7. Execute:  `dotnet tool install --global PowerShell` if you want to use Powershell Core.
   8. Execute:  `sudo wget --content-disposition -O code.deb https://go.microsoft.com/fwlink/?LinkID=760868 && sudo apt install -y ./code.deb && rm -f ./code.deb` to install Visual Studio code.
@@ -72,7 +72,7 @@ To uninstall dotnet powershell and vscode:
   4. Manual:  Remove entries $HOME/.bashrc and delete the .dotnet folder.
 
 # Install/Uninstall the templates
-The commands below demonstrate how to install or uninstall the templates, primarily designed for .NET with Visual Studio 2022 compatibility in mind. Remember, template definitions might include specific limitations like conditional settings (true/false).
+The commands below demonstrate how to install or uninstall the templates, primarily designed for .NET with Visual Studio 2022 or later in mind. Remember, template definitions might include specific limitations like conditional settings (true/false).
 ```
 dotnet new install Coree.Template.Project
 dotnet new uninstall Coree.Template.Project
@@ -80,9 +80,9 @@ dotnet new uninstall Coree.Template.Project
 The package contains the following templates:
   1. [.NET MSBuild Task library](#Net-MSBuild-Task-library)
   2. [.NET Class library](#Net-class-library)
-  3. [.NET Multi-library repository](#Net-Multi-library-repository)
-  4. [.NET analyzer package repository](#Net-analyzer-package-repository)
-  5. [.NET multi-console-app repository](#Net-multi-console-app-repository)
+  3. [.NET multi-library repository](#net-multi-library-repository)
+  4. [.NET multi-analyzer repository](#net-multi-analyzer-repository)
+  5. [.NET multi-console repository](#net-multi-console-repository)
   6. [.NET Tool](#Net-Tool)
   7. [.NET Wpf](#Net-Wpf-Windows-only)
   8. [.NET Project Template](#Net-Project-Template)
@@ -164,7 +164,7 @@ Windows cmd (Sample useage):
 dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\repos\MyClassLib" & cd "source\repos\MyClassLib" & dotnet new classlib-coree --PackageAuthor Me --name "MyClassLib" --output "src" --force & git init & cd "src" & dotnet test & dotnet pack & cd.. & code -n . & cd /D %userprofile%
 ```
 
-## .NET Multi-library repository
+## .NET multi-library repository
 
 Create and grow a repository-like structure containing one or more independently packable .NET class libraries using repeatable `dotnet new` calls.
 
@@ -255,30 +255,30 @@ The top-level directory is shared. Each additional `dotnet new` call contributes
 
 You do not need a different template for a single-library layout and a multi-library layout. Start with one, add another when you need it, or generate the complete set from a script.
 
-## .NET analyzer package repository
+## .NET multi-analyzer repository
 
 Same combo and init system as the multi-library repository, for independently packable Roslyn analyzer packages. Each package targets `netstandard2.0` and packs the assembly under `analyzers/dotnet/cs` (`DevelopmentDependency`). Tests use Microsoft.CodeAnalysis.CSharp.Analyzer.Testing. Each create adds a DebugHost console so Visual Studio can F5 the analyzer via `DebugRoslynComponent`. This is not `sourcegenerator-coree` (source generators).
 
 Initialize the shared repository layout once, then add additional analyzer packages whenever you need them.
 
 ```powershell
-dotnet new analyzerrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Naming" --InitAllRepoItems
-dotnet new analyzerrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Performance"
+dotnet new multianalyzerrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Naming" --InitAllRepoItems
+dotnet new multianalyzerrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Performance"
 ```
 
 The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
 
 Each analyzer keeps its `.slnx` in its own `src/sln/{name}/` folder. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the packable analyzer under `src/prj/{name}/`. DebugHost, tests, and the optional benchmark share one selected TFM (`.NET 10` by default); the packable analyzer itself is always `netstandard2.0`.
 
-## .NET multi-console-app repository
+## .NET multi-console repository
 
 Same combo and init system as the multi-library repository, for independently publishable C# console apps that also pack as a NuGet tool by default (`--PackAsNuGetTool false` is publish-only). Default publish is Windows x64, framework-included single-file with compression and ReadyToRun. This is not `nettool-coree` (a dedicated .NET tool template) and not `console-coree`.
 
 Initialize the shared repository layout once, then add additional apps whenever you need them.
 
 ```powershell
-dotnet new multiconsoleapprepo-coree --Author "Carsten Riedel" --output "./MyCompany.Cli" --name "MyCompany.Cli" --InitAllRepoItems
-dotnet new multiconsoleapprepo-coree --Author "Carsten Riedel" --output "./MyCompany.Cli" --name "MyCompany.Cli.Sync"
+dotnet new multiconsolerepo-coree --Author "Carsten Riedel" --output "./MyCompany.Cli" --name "MyCompany.Cli" --InitAllRepoItems
+dotnet new multiconsolerepo-coree --Author "Carsten Riedel" --output "./MyCompany.Cli" --name "MyCompany.Cli.Sync"
 ```
 
 `--Author` is required. The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.

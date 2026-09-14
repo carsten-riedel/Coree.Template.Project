@@ -28,5 +28,5 @@ Walk the whole repository, including console apps added after the first `dotnet 
 <!--#endif -->
 10. If `DocShell.html` is present, bootstrap that documentation root and then write a short real site. Infer the kind of documentation from the location; do not mix them. If none of these files exist, skip this item.
     - `src/prj/<name>/Properties/NugetAssets/docs/DocShell.html` is **package** documentation for that app (install, public surface, pack/consume). Follow the template's initial bootstrap, then replace the minimal `index.html` with a short package guide from the actual code. Keep later apps' package docs in their own `Properties/NugetAssets/docs` tree.
-    - `docs/DocShell.html` at the repository root is **repository** documentation (how this multi-console-app repo is composed, how to add another app, layout). Bootstrap that tree independently. Do not copy one app's API into the repository site.
+    - `docs/DocShell.html` at the repository root is **repository** documentation (how this multi-console repo is composed, how to add another app, layout). Bootstrap that tree independently. Do not copy one app's API into the repository site.
 11. This file is deleted. Later chats should read the apps and the real docs, not this checkpoint.

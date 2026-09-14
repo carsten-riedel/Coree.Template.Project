@@ -121,7 +121,7 @@
         "text": "Code style rules for analyzer project"
       },
       "description": {
-        "text": "Single choice. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected."
+        "text": "Single choice. Default is Strict: naming, XML docs, nullable, unused usings, and reserved identifiers (CA1716) fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected."
       }
     },
     {

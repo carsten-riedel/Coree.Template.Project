@@ -1,6 +1,6 @@
 # __SourceName__
 
-.NET analyzer package repository. The GitHub landing page is this file.
+.NET multi-analyzer repository. The GitHub landing page is this file.
 <!--#if (PlaceSolution == "SlnFolder") -->
 Each package's `.slnx` and notes live under `src/sln/__SourceName__/`. CLI commands for this package start in that folder.
 <!--#elseif (PlaceSolution == "BesideCsproj") -->

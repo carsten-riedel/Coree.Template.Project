@@ -365,7 +365,7 @@ Do not rename `Default` to Minimal: both seeds are the same full VS style dump. 
 | Choice | Seed | What differs |
 | --- | --- | --- |
 | `Default` | `.project.editor.globalconfig.default` | Style dump. Naming stays **suggestion**. No CS1591 / nullable / IDE0005 overrides. |
-| `Strict` | `.project.editor.globalconfig.strict` | Same dump. Naming **error**. Public-release compiler gates: XML docs (CS1591 family), nullable (CS86xx), unused usings (IDE0005). |
+| `Strict` | `.project.editor.globalconfig.strict` | Same dump. Naming **error**. Public-release compiler gates: XML docs (CS1591 family), nullable (CS86xx), unused usings (IDE0005), reserved identifiers (CA1716). |
 | `Off` | none | No file, no `EnforceCodeStyleInBuild`, no `OptimizeImplicitlyTriggeredBuild`. |
 
 `Strict` needs the product C# defaults (`GenerateDocumentationFile`, `Nullable`, `DisableImplicitUsings`) or those errors fire on every build for the wrong reason. The scaffold `Class1` already has XML docs so a first Strict build can pass. Unused usings stay on `Class1` only for **`Default`** and **`Off`** (`KeepScaffoldUnusedUsings`: `ProjectEditorGlobalConfig != "Strict"`): suggestion vs no style file, without failing the first build. Strict omits them because IDE0005 is error. Do not keep unused usings on Strict to “show” the gate.

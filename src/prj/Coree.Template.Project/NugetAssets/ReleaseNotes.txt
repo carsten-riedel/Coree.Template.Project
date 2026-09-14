@@ -1,4 +1,14 @@
-﻿0.3.*.* (2024-05-20)
+﻿0.4.2 (2026-09-14)
+
+ - Multi-library, multi-analyzer, and multi-console repository templates (`src/prj` + `src/sln`, `--PlaceSolution BesideCsproj`)
+ - Repeatable `dotnet new` into one repo: `--Author`, root items, licenses, Directory.Build, docs under `Properties/`
+ - Optional Nerdbank.GitVersioning (Project default, Repo, or Off / VersionPrefix)
+ - Optional Public API analyzers, NuGet vulnerability gate, and `src/global.json` pin
+ - Analyzer DebugHost, typography rules, additional-file include/exclude globs
+ - Console apps as packable exes with `--PackAsNuGetTool` and publish profiles
+ - This pack versions with Nerdbank like the multi templates (`Properties/version.json`)
+
+0.3.*.* (2024-05-20)
 
  - CICD Setup
 
@@ -6,6 +16,6 @@
 
  - Working templates and descriptions
 
- 0.1.*.* (2023-10-01)
+0.1.*.* (2023-10-01)
 
  - Basic project creation and templates

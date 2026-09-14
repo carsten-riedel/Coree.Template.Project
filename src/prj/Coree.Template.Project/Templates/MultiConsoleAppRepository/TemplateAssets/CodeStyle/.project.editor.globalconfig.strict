@@ -269,3 +269,6 @@ dotnet_diagnostic.CS8604.severity = error
 dotnet_diagnostic.CS8618.severity = error
 dotnet_diagnostic.CS8622.severity = error
 dotnet_diagnostic.CS8625.severity = error
+
+# Namespace/type names must not be reserved keywords in other languages (e.g. Lib in VB).
+dotnet_diagnostic.CA1716.severity = error

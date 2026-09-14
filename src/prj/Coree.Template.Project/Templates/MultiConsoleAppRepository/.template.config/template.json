@@ -5,9 +5,9 @@
   "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "Console", "ConsoleApp", "NuGet", "Test", "Solution", "Repository", "Multi-project", "Coree" ],
   "identity": "CoreeTemplatesProjectMultiConsoleAppRepository",
   // Displayname is used in the New Project dialog and in the dotnet new list output.
-  "name": ".NET multi-console-app repository",
+  "name": ".NET multi-console repository",
   "description": "Repository of one or more independently publishable C# console apps. Tests and Coverlet coverage included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, and documentation template.",
-  "shortName": "multiconsoleapprepo-coree",
+  "shortName": "multiconsolerepo-coree",
   // Host metadata: libraries this template uses that the author does not own.
   // After create, CLI prints this URL. The markdown lives next to this file;
   // .template.config *.md is not packed and is not generated into the repo.

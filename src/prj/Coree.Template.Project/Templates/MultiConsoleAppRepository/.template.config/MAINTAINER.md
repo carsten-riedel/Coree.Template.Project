@@ -1,6 +1,6 @@
 # `.template.config` (MultiConsoleAppRepository)
 
-Product surface: **`.NET multi-console-app repository`**. `identity` is `CoreeTemplatesProjectMultiConsoleAppRepository`; CLI short name is `multiconsoleapprepo-coree`. No `ChoosingPackageBoundaries.md`.
+Product surface: **`.NET multi-console repository`**. `identity` is `CoreeTemplatesProjectMultiConsoleAppRepository`; CLI short name is `multiconsolerepo-coree`. No `ChoosingPackageBoundaries.md`.
 
 Maintainer notes for this template host folder (`MAINTAINER.md`). Markdown here is **not** packed into `Coree.Template.Project` (`Templates\**\.template.config\**\*.md` is excluded). It is also **not** copied into a generated repository; only `template.json` / host JSON drive `dotnet new` and Visual Studio.
 
@@ -45,9 +45,9 @@ Folder install is the local loop. Verify by generating into `%TEMP%`. Do not `do
 Combo repo, three apps, root files only once:
 
 ```powershell
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp1" --output "C:\Users\Valgrind\source\repos\MultiConsoleAppRepository-multisolution-optin" --InitAllRepoItems
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp2" --output "C:\Users\Valgrind\source\repos\MultiConsoleAppRepository-multisolution-optin"
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp3" --output "C:\Users\Valgrind\source\repos\MultiConsoleAppRepository-multisolution-optin"
+dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp1" --output "C:\Users\Valgrind\source\repos\MultiConsoleAppRepository-multisolution-optin" --InitAllRepoItems
+dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp2" --output "C:\Users\Valgrind\source\repos\MultiConsoleAppRepository-multisolution-optin"
+dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp3" --output "C:\Users\Valgrind\source\repos\MultiConsoleAppRepository-multisolution-optin"
 ```
 
 ### CLI use cases
@@ -57,7 +57,7 @@ dotnet new multiconsoleapprepo-coree --Author "abcd" --name "Organization.Domain
 **Default, one app**
 
 ```powershell
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp1" --output $out --InitAllRepoItems
+dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp1" --output $out --InitAllRepoItems
 ```
 
 Root: `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.gitignore`, `LICENSE`. App: Nerdbank **Project**, `Properties/version.json`.
@@ -66,12 +66,12 @@ Root: `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.giti
 
 ```powershell
 # combo gut
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md again)
-# dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-# dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems
+# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems
 ```
 
 Call 1 writes the five root files. Call 2 only adds `src/prj` / `src/sln`. Both apps get `Properties/version.json`.
@@ -80,27 +80,27 @@ Call 1 writes the five root files. Call 2 only adds `src/prj` / `src/sln`. Both 
 
 ```powershell
 # combo gut — Call 2 only wires the app; generate does not stamp version.json again
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --NerdbankGitVersioning Repo
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --NerdbankGitVersioning Repo
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json)
-# dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-# dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
 
 **Nerdbank project folder, multi-app** (this is the omit-the-switch default)
 
 ```powershell
 # combo gut — same as the default combo; `--NerdbankGitVersioning Project` is optional
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
 ```
 
 **Two separate repos (not a combo)**
 
 ```powershell
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "Organization.Domain.AppA" --output $outA --InitAllRepoItems
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "Organization.Domain.AppB" --output $outB --InitAllRepoItems
+dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.AppA" --output $outA --InitAllRepoItems
+dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.AppB" --output $outB --InitAllRepoItems
 ```
 
 Each `--output` is its own first create.
@@ -112,7 +112,7 @@ After the first call in the default combo the repo root has `README.md`, `TEMPLA
 Subset on the first create (checkpoint only, no landing README):
 
 ```powershell
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp1" --output "<repo>" --InitRepoItems AIReleaseCheckpoint
+dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp1" --output "<repo>" --InitRepoItems AIReleaseCheckpoint
 ```
 
 **Visual Studio:** first create uses the `ide.host.json` default (same five root files as `--InitAllRepoItems`; `src/global.json` unchecked). A second app in the IDE cannot omit the group: choose **None**. Later apps in the same folder are otherwise the CLI path above. Why the two hosts differ is in **CLI ↔ Visual Studio** below.
@@ -228,12 +228,12 @@ Single choice (dropdown), same shape as `ProjectLicense`. CLI long name is **`--
 
 ```powershell
 # combo gut
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --NerdbankGitVersioning Repo
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --NerdbankGitVersioning Repo
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json again)
-# dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-# dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
 
 Call 1: five root files plus root `version.json`, app wire is Nerdbank repo. Call 2: `--NerdbankGitVersioning Repo`, **no** Init, **no** second root stamp (Exit 0). Omit `--NerdbankGitVersioning` for **Project** (`Properties/version.json`). `--NerdbankGitVersioning Off` for the VersionPrefix group.
@@ -304,12 +304,12 @@ Seeds live under `TemplateAssets/Versioning/`. `Project/version.json` uses `path
 
 ```powershell
 # combo gut
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md again)
-# dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-# dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems
+# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems
 ```
 
 | Call | InitAll | `NerdbankGitVersioning` | Root `version.json` | VersionPrefix |
@@ -321,12 +321,12 @@ dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $
 
 ```powershell
 # combo gut
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --NerdbankGitVersioning Repo
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --NerdbankGitVersioning Repo
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json again)
-# dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-# dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
 
 | Call | InitAll | `NerdbankGitVersioning` | Root `version.json` | VersionPrefix |
@@ -338,8 +338,8 @@ dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $
 
 ```powershell
 # combo gut — same as the default combo; `--NerdbankGitVersioning Project` is optional
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
 ```
 
 ### Combos that look successful but are incomplete or mixed
@@ -367,7 +367,7 @@ Do not rename `Default` to Minimal: both seeds are the same full VS style dump. 
 | Choice | Seed | What differs |
 | --- | --- | --- |
 | `Default` | `.project.editor.globalconfig.default` | Style dump. Naming stays **suggestion**. No CS1591 / nullable / IDE0005 overrides. |
-| `Strict` | `.project.editor.globalconfig.strict` | Same dump. Naming **error**. Nullable (CS86xx) as **error**. No CS1591 family and no IDE0005 (XML docs off; a later pack is a tool nupkg; IDE0005 needs `GenerateDocumentationFile` or every build warns `EnableGenerateDocumentationFile`). |
+| `Strict` | `.project.editor.globalconfig.strict` | Same dump. Naming **error**. Nullable (CS86xx) as **error**. Reserved identifiers (CA1716) as **error**. No CS1591 family and no IDE0005 (XML docs off; a later pack is a tool nupkg; IDE0005 needs `GenerateDocumentationFile` or every build warns `EnableGenerateDocumentationFile`). |
 | `Off` | none | No file, no `EnforceCodeStyleInBuild`, no `OptimizeImplicitlyTriggeredBuild`. |
 
 `Strict` needs the product C# default `Nullable`. Unused usings stay on `Program` only for **`Default`** and **`Off`** (`KeepScaffoldUnusedUsings`: `ProjectEditorGlobalConfig != "Strict"`): suggestion vs no style file. Strict omits them for a clean scaffold, not because IDE0005 is error.
@@ -399,8 +399,8 @@ SDK restore already runs NuGetAudit (NU1901–NU1904 warnings). This switch only
 Turn the switch off for an EOL or backport graph (for example net8 after support ends) that cannot be cleaned without dropping a TFM. Do not put this on tests: MSTest/Coverlet CVEs must not fail the nupkg restore.
 
 ```powershell
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --NuGetAuditHighCriticalAsErrors false
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --NuGetAuditHighCriticalAsErrors false
 ```
 
 ## `DocumentationTemplate`
@@ -415,12 +415,12 @@ Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Doc
 
 ```powershell
 # combo gut
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --DocumentationTemplate Package Repository
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --DocumentationTemplate Package
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --DocumentationTemplate Package Repository
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --DocumentationTemplate Package
 
 # combo error (Exit 73) — Call 2 stamps docs/DocShell.html again
-# dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --DocumentationTemplate Repository
-# dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --DocumentationTemplate Repository
+# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --DocumentationTemplate Repository
+# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --DocumentationTemplate Repository
 ```
 
 `Properties/NugetAssets/docs` is packed with the nupkg (`PackagePath` empty, so `docs/` inside the package, not `Properties/`). Repo-root `docs/` is not packed. `WritePackageDocTemplate` is `(PackAsNuGetTool) && Package && not None`. The checkpoint infers package vs repository documentation from `Properties/NugetAssets/docs` vs repo-root `docs/`; it does not name this switch.
@@ -452,8 +452,8 @@ Seeds live under `TemplateAssets/DirectoryMsBuild/`. Extra sources copy `Directo
 The files are almost empty `<Project>` stubs with comments. MSBuild auto-imports them from those directories. Do not move `ImportSdkTargets` / analyzer config / pack validation into them. The template does not `#if` properties into these files vs the csproj (possible, ugly). The console app csproj `None Include`s the two `Directory.Build.*` files with `Link` under `Properties\` (Solution Explorer only). Do **not** move the files into `Properties/` on disk: auto-import follows the directory of the file, same as `.project.editor.globalconfig`. `Directory.Solution.*` stay beside the `.slnx`. When `PlaceSolution` is `BesideCsproj`, the console app csproj also `Link`s those two solution files (same folder as the csproj) so they do not look like stray project items.
 
 ```powershell
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --DirectoryMsBuildFiles
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --DirectoryMsBuildFiles
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --DirectoryMsBuildFiles
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --DirectoryMsBuildFiles
 ```
 
 ## `DotNetToolManifest`
@@ -463,8 +463,8 @@ App project only. Bool, default **true**. UI label **Empty local dotnet-tools.js
 The console app csproj `None Include`s the file with `Link` under `Properties\` (Solution Explorer only). Disk path stays `.config/`.
 
 ```powershell
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiconsoleapprepo-coree --Author "abcd" --name "...App2" --output $out --DotNetToolManifest false
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --DotNetToolManifest false
 ```
 
 ## Other symbols worth not breaking

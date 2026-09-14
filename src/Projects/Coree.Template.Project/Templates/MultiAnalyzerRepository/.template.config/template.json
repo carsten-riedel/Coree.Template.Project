@@ -15,7 +15,7 @@
     "editorTreatAs": "solution"
   },
   "defaultName": "Organization.Domain.Analyzer", // Organization.Domain.Functionality
-  "sourceName": "ClassLibrary", // Same placeholder as MultiLibraryRepository so extra-source paths stay shared.
+  "sourceName": "ClassLibrary", // Folders, csproj, namespace. Replaced by --name.
   // Visual Studio creates the outer solution directory; true would add another name directory.
   "preferNameDirectory": false,
   // Active SDK only (`dotnet --version`). [8.0,) is 8 and later, any feature band — not 8.0.100.

@@ -50,7 +50,7 @@
 
   <!-- Library under measurement -->
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
+    <ProjectReference Include="..\__SourceName__\__SourceName__.csproj" />
   </ItemGroup>
 
 </Project>

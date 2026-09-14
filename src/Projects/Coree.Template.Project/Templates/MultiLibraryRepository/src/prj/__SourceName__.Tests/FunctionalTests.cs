@@ -1,7 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 
-namespace ClassLibrary.Tests
+namespace __SourceName__.Tests
 {
     [TestClass]
     public class FunctionalTests
@@ -16,7 +16,7 @@ namespace ClassLibrary.Tests
         [TestMethod]
         public void TestFooMethod()
         {
-            var result = ClassLibrary.Class1.Foo();
+            var result = __SourceName__.Class1.Foo();
 
             Assert.IsNotNull(result);
             Assert.AreEqual("123", result);

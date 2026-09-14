@@ -54,7 +54,7 @@
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
     <CoverletOutput>./CoverletOutput/</CoverletOutput>
-    <Include>[ClassLibrary]*</Include>
+    <Include>[__SourceName__]*</Include>
     <Threshold>100</Threshold>
     <ThresholdType>line,branch,method</ThresholdType>
     <ThresholdStat>total</ThresholdStat>
@@ -74,7 +74,7 @@
   <!-- Package inventory of the packable library, not this test project. -->
   <PropertyGroup>
     <NugetReportDir Condition=" '$(NugetReportDir)' == '' ">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'NugetReport'))</NugetReportDir>
-    <NugetReportProject Condition=" '$(NugetReportProject)' == '' ">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', 'ClassLibrary', 'ClassLibrary.csproj'))</NugetReportProject>
+    <NugetReportProject Condition=" '$(NugetReportProject)' == '' ">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', '__SourceName__', '__SourceName__.csproj'))</NugetReportProject>
   </PropertyGroup>
   <Target Name="WriteNugetReport" AfterTargets="PostBuildEvent">
     <PropertyGroup>
@@ -94,9 +94,9 @@
     <None Remove=".gitignore" />
   </ItemGroup>
 
-  <!-- Keep both test TFMs and reference the matching ClassLibrary TFM for each test build. -->
+  <!-- Keep both test TFMs and reference the matching __SourceName__ TFM for each test build. -->
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj">
+    <ProjectReference Include="..\__SourceName__\__SourceName__.csproj">
       <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
     </ProjectReference>
   </ItemGroup>

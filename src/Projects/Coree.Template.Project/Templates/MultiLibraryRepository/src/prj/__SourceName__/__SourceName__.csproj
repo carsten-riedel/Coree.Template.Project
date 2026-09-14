@@ -141,7 +141,7 @@
     <!--#else -->
     <Copyright>Copyright © 1975 MyAuthor</Copyright>
     <!--#endif -->
-    <PackageId>ClassLibrary</PackageId>
+    <PackageId>__SourceName__</PackageId>
     <PackageTags>dotnet;class;library</PackageTags>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
@@ -218,7 +218,7 @@
   </ItemGroup>
 <!--#if (PlaceSolution == "BesideLibrary") -->
   <ItemGroup>
-    <None Remove="ClassLibrary.slnx" />
+    <None Remove="__SourceName__.slnx" />
   </ItemGroup>
 <!--#endif -->
 

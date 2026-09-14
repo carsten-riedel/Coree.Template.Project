@@ -15,7 +15,7 @@
     "editorTreatAs": "solution"
   },
   "defaultName": "Organization.Domain.ClassLibrary", // Organization.Domain.Functionality
-  "sourceName": "ClassLibrary", // Matching nameingscheme csproj and namespace
+  "sourceName": "__SourceName__", // Folders, csproj, namespace. Replaced by --name.
   // Visual Studio creates the outer solution directory; true would add another name directory.
   "preferNameDirectory": false,
   // Active SDK only (`dotnet --version`). [8.0,) is 8 and later, any feature band — not 8.0.100.
@@ -105,12 +105,12 @@
     },
     // Where the TEMPLATE .slnx is written. src/sln/{name}/ is always created
     // (notes / cross-project files); this choice only moves the solution file.
-    // SlnFolder (default): src/sln/ClassLibrary/ClassLibrary.slnx — one folder
+    // SlnFolder (default): src/sln/__SourceName__/__SourceName__.slnx — one folder
     // per library so `dotnet` there does not see sibling .slnx files.
-    // BesideLibrary: src/prj/ClassLibrary/ next to the packable csproj (tests
+    // BesideLibrary: src/prj/__SourceName__/ next to the packable csproj (tests
     // and benchmark stay sibling projects under src/prj/).
-    // RepoRoot: repository root. CLI renames to ClassLibrary.slnx; Visual
-    // Studio keeps ClassLibrary.generated.slnx so it does not overwrite the
+    // RepoRoot: repository root. CLI renames to __SourceName__.slnx; Visual
+    // Studio keeps __SourceName__.generated.slnx so it does not overwrite the
     // IDE's conventional {Name}.slnx. RepoRoot stacks every library's .slnx
     // in one directory; CLI/CI must pass a solution path if more than one exists.
     "PlaceSolution": {
@@ -140,7 +140,7 @@
       ]
     },
     // True for dotnet new / preview CLI. Used so only CLI renames
-    // .generated.slnx → ClassLibrary.slnx at repo root when PlaceSolution is
+    // .generated.slnx → __SourceName__.slnx at repo root when PlaceSolution is
     // RepoRoot. Visual Studio keeps the .generated name and therefore does
     // not overwrite its own root .slnx.
     "IsCliHost": {
@@ -678,15 +678,15 @@
     }
   },
   // Sources: optional files plus solution placement.
-  // The template always starts from ClassLibrary.generated.slnx at the
+  // The template always starts from __SourceName__.generated.slnx at the
   // template root. Paths inside that file follow PlaceSolution
-  // (SlnFolder / RepoRoot / BesideLibrary). src/sln/ClassLibrary/Readme.md
+  // (SlnFolder / RepoRoot / BesideLibrary). src/sln/__SourceName__/Readme.md
   // is always copied; the nested .gitignore is only when the .slnx lives there.
   //
-  // SlnFolder → src/sln/ClassLibrary/ClassLibrary.slnx (CLI and VS).
-  // BesideLibrary → src/prj/ClassLibrary/ClassLibrary.slnx (CLI and VS).
-  // RepoRoot + CLI → ClassLibrary.slnx at repo root.
-  // RepoRoot + VS → no rename; file stays ClassLibrary.generated.slnx so it
+  // SlnFolder → src/sln/__SourceName__/__SourceName__.slnx (CLI and VS).
+  // BesideLibrary → src/prj/__SourceName__/__SourceName__.slnx (CLI and VS).
+  // RepoRoot + CLI → __SourceName__.slnx at repo root.
+  // RepoRoot + VS → no rename; file stays __SourceName__.generated.slnx so it
   //   does not collide with Visual Studio's {Name}.slnx at the same folder.
   "sources": [
     {
@@ -724,22 +724,22 @@
         {
           "condition": "(BenchmarkProject == false)",
           "exclude": [
-            "src/prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj",
-            "src/prj/ClassLibrary.Benchmark/Program.cs",
-            "src/prj/ClassLibrary.Benchmark/.gitignore"
+            "src/prj/__SourceName__.Benchmark/__SourceName__.Benchmark.csproj",
+            "src/prj/__SourceName__.Benchmark/Program.cs",
+            "src/prj/__SourceName__.Benchmark/.gitignore"
           ]
         },
         {
           "condition": "(NerdbankGitVersioning != \"Repo\")",
           "exclude": [
-            "src/prj/ClassLibrary/Build/NerdbankRepositoryVersion.targets",
-            "src/prj/ClassLibrary/Build/Nerdbank.version.json"
+            "src/prj/__SourceName__/Build/NerdbankRepositoryVersion.targets",
+            "src/prj/__SourceName__/Build/Nerdbank.version.json"
           ]
         },
         {
           "condition": "(PublicApiAnalyzers == false)",
           "exclude": [
-            "src/prj/ClassLibrary/Build/InitializePublicApi.targets"
+            "src/prj/__SourceName__/Build/InitializePublicApi.targets"
           ]
         },
         {
@@ -750,25 +750,25 @@
         {
           "condition": "(PlaceSolution == \"SlnFolder\")",
           "rename": {
-            "ClassLibrary.generated.slnx": "src/sln/ClassLibrary/ClassLibrary.slnx"
+            "__SourceName__.generated.slnx": "src/sln/__SourceName__/__SourceName__.slnx"
           }
         },
         {
           "condition": "(PlaceSolution == \"BesideLibrary\")",
           "rename": {
-            "ClassLibrary.generated.slnx": "src/prj/ClassLibrary/ClassLibrary.slnx"
+            "__SourceName__.generated.slnx": "src/prj/__SourceName__/__SourceName__.slnx"
           }
         },
         {
           "condition": "(PlaceSolution != \"SlnFolder\")",
           "exclude": [
-            "src/sln/ClassLibrary/.gitignore"
+            "src/sln/__SourceName__/.gitignore"
           ]
         },
         {
           "condition": "((PlaceSolution == \"RepoRoot\") && IsCliHost)",
           "rename": {
-            "ClassLibrary.generated.slnx": "ClassLibrary.slnx"
+            "__SourceName__.generated.slnx": "__SourceName__.slnx"
           }
         }
       ]
@@ -780,12 +780,12 @@
     },
     {
       "source": "./TemplateAssets/Versioning/Project/",
-      "target": "./src/prj/ClassLibrary/Properties/",
+      "target": "./src/prj/__SourceName__/Properties/",
       "condition": "(NerdbankGitVersioning == \"Project\")"
     },
     {
       "source": "./TemplateAssets/",
-      "target": "./src/prj/ClassLibrary/NugetAssets/docs/",
+      "target": "./src/prj/__SourceName__/NugetAssets/docs/",
       "condition": "WritePackageDocTemplate",
       "modifiers": [
         {
@@ -815,7 +815,7 @@
     },
     {
       "source": "./TemplateAssets/CodeStyle/",
-      "target": "./src/prj/ClassLibrary/",
+      "target": "./src/prj/__SourceName__/",
       "condition": "(ProjectEditorGlobalConfig == \"Default\")",
       "modifiers": [
         {
@@ -832,7 +832,7 @@
     },
     {
       "source": "./TemplateAssets/CodeStyle/",
-      "target": "./src/prj/ClassLibrary/",
+      "target": "./src/prj/__SourceName__/",
       "condition": "(ProjectEditorGlobalConfig == \"Strict\")",
       "modifiers": [
         {
@@ -849,7 +849,7 @@
     },
     {
       "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/ClassLibrary/NugetAssets/",
+      "target": "./src/prj/__SourceName__/NugetAssets/",
       "condition": "(ProjectLicense == \"MIT\")",
       "modifiers": [
         {
@@ -868,7 +868,7 @@
     },
     {
       "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/ClassLibrary/NugetAssets/",
+      "target": "./src/prj/__SourceName__/NugetAssets/",
       "condition": "(ProjectLicense == \"BSD3Clause\")",
       "modifiers": [
         {
@@ -887,7 +887,7 @@
     },
     {
       "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/ClassLibrary/NugetAssets/",
+      "target": "./src/prj/__SourceName__/NugetAssets/",
       "condition": "(ProjectLicense == \"Apache2\")",
       "modifiers": [
         {
@@ -906,7 +906,7 @@
     },
     {
       "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/ClassLibrary/NugetAssets/",
+      "target": "./src/prj/__SourceName__/NugetAssets/",
       "condition": "(ProjectLicense == \"Custom\")",
       "modifiers": [
         {
@@ -1001,7 +1001,7 @@
     },
     {
       "source": "./TemplateAssets/DirectoryMsBuild/",
-      "target": "./src/prj/ClassLibrary/",
+      "target": "./src/prj/__SourceName__/",
       "condition": "DirectoryMsBuildFiles",
       "modifiers": [
         {
@@ -1014,7 +1014,7 @@
     },
     {
       "source": "./TemplateAssets/DirectoryMsBuild/",
-      "target": "./src/sln/ClassLibrary/",
+      "target": "./src/sln/__SourceName__/",
       "condition": "(DirectoryMsBuildFiles && (PlaceSolution == \"SlnFolder\"))",
       "modifiers": [
         {
@@ -1040,7 +1040,7 @@
     },
     {
       "source": "./TemplateAssets/DirectoryMsBuild/",
-      "target": "./src/prj/ClassLibrary/",
+      "target": "./src/prj/__SourceName__/",
       "condition": "(DirectoryMsBuildFiles && (PlaceSolution == \"BesideLibrary\"))",
       "modifiers": [
         {
@@ -1054,23 +1054,23 @@
   ],
   // Host bookkeeping only. Readme is index 0 for the VS open-file post action.
   // Solution paths are the names AFTER source rename, BEFORE sourceName replace.
-  // RepoRoot+CLI actual file is ClassLibrary.slnx; primaryOutputs still names
+  // RepoRoot+CLI actual file is __SourceName__.slnx; primaryOutputs still names
   // the pre-CLI-rename .generated path.
   "primaryOutputs": [
     {
-      "path": "src/sln/ClassLibrary/Readme.md"
+      "path": "src/sln/__SourceName__/Readme.md"
     },
     {
       "condition": "(PlaceSolution == \"SlnFolder\")",
-      "path": "src/sln/ClassLibrary/ClassLibrary.slnx"
+      "path": "src/sln/__SourceName__/__SourceName__.slnx"
     },
     {
       "condition": "(PlaceSolution == \"BesideLibrary\")",
-      "path": "src/prj/ClassLibrary/ClassLibrary.slnx"
+      "path": "src/prj/__SourceName__/__SourceName__.slnx"
     },
     {
       "condition": "(PlaceSolution == \"RepoRoot\")",
-      "path": "ClassLibrary.generated.slnx"
+      "path": "__SourceName__.generated.slnx"
     }
   ],
   // Visual Studio only. CLI ignores open-file and we skip display actions there.

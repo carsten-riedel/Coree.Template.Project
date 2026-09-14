@@ -1,4 +1,4 @@
-# ClassLibrary
+# __SourceName__
 
 This folder is the per-library area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 <!--#if (PlaceSolution == "SlnFolder") -->
@@ -8,20 +8,20 @@ The `.slnx` is written elsewhere (`PlaceSolution`). Use this folder for shared n
 <!--#endif -->
 <!--#if ((HostIdentifier == "vs") && (PlaceSolution == "SlnFolder")) -->
 
-Visual Studio created an extra `.slnx` in the repository root. Close this solution, open the `.slnx` in this folder (`src/sln/ClassLibrary/`), and delete the extra `.slnx` in the repository root.
+Visual Studio created an extra `.slnx` in the repository root. Close this solution, open the `.slnx` in this folder (`src/sln/__SourceName__/`), and delete the extra `.slnx` in the repository root.
 <!--#endif -->
 <!--#if ((HostIdentifier == "vs") && (PlaceSolution == "BesideLibrary")) -->
 
-Visual Studio created an extra `.slnx` in the repository root. Close this solution, open `src/prj/ClassLibrary/ClassLibrary.slnx`, and delete the extra `.slnx` in the repository root.
+Visual Studio created an extra `.slnx` in the repository root. Close this solution, open `src/prj/__SourceName__/__SourceName__.slnx`, and delete the extra `.slnx` in the repository root.
 <!--#endif -->
 <!--#if ((HostIdentifier == "vs") && (PlaceSolution == "RepoRoot")) -->
 
-Visual Studio created a conventional root `.slnx`. Open `ClassLibrary.generated.slnx` in the repository root for the template layout (includes `sln`). Delete the extra conventional `.slnx` if you do not need it.
+Visual Studio created a conventional root `.slnx`. Open `__SourceName__.generated.slnx` in the repository root for the template layout (includes `sln`). Delete the extra conventional `.slnx` if you do not need it.
 <!--#endif -->
 <!--#if (PlaceSolution != "SlnFolder") -->
 
 <!--#if (PlaceSolution == "BesideLibrary") -->
-The solution file is `src/prj/ClassLibrary/ClassLibrary.slnx` (next to the packable library, not tests or benchmark). Open a terminal in that folder for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet pack`.
+The solution file is `src/prj/__SourceName__/__SourceName__.slnx` (next to the packable library, not tests or benchmark). Open a terminal in that folder for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet pack`.
 <!--#else -->
 The solution file lives at the repository root. Open a terminal there for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet pack`. If more than one `.slnx` sits in that directory, pass the solution path to `dotnet`.
 <!--#endif -->
@@ -30,23 +30,23 @@ The solution file lives at the repository root. Open a terminal there for `dotne
 The `.slnx` and this readme live in this folder. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other libraries keep their own `.slnx` under `src/sln/<name>/`, so `dotnet` does not ask you to specify a solution.
 
 ```text
-./                         you are here (this readme + ClassLibrary.slnx)
+./                         you are here (this readme + __SourceName__.slnx)
 <!--#if (DirectoryMsBuildFiles) -->
 ./Directory.Solution.props  optional empty solution MSBuild landing file
 ./Directory.Solution.targets
 <!--#endif -->
-../../prj/ClassLibrary/    packable class library
+../../prj/__SourceName__/    packable class library
 <!--#if (DirectoryMsBuildFiles) -->
-../../prj/ClassLibrary/Directory.Build.props  optional empty library MSBuild landing file
-../../prj/ClassLibrary/Directory.Build.targets
+../../prj/__SourceName__/Directory.Build.props  optional empty library MSBuild landing file
+../../prj/__SourceName__/Directory.Build.targets
 <!--#endif -->
-../../prj/ClassLibrary.Tests/  tests (not packed)
+../../prj/__SourceName__.Tests/  tests (not packed)
 <!--#if (BenchmarkProject == true) -->
-../../prj/ClassLibrary.Benchmark/  optional BenchmarkDotNet console app
+../../prj/__SourceName__.Benchmark/  optional BenchmarkDotNet console app
 <!--#endif -->
 ```
 
-Package metadata, license, icon, and release notes live in `src/prj/ClassLibrary/NugetAssets/`.
+Package metadata, license, icon, and release notes live in `src/prj/__SourceName__/NugetAssets/`.
 
 `--tl:off` is optional. Without it the CLI shows the compact terminal logger. Add `--tl:off` for the classic per-project log. The commands work either way.
 
@@ -69,15 +69,15 @@ MSTest is explicitly configured for method-level parallel execution within one t
 
 After a test run, the links below point to generated reports. Each selected target framework writes its own files (`net8.0`, `net10.0`, …).
 
-[Test results (trx)](../../prj/ClassLibrary.Tests/MSTestResults/ClassLibrary.Tests-__TargetFramework__.trx)
-[Test results (html)](../../prj/ClassLibrary.Tests/MSTestResults/result-__TargetFramework__.html)
+[Test results (trx)](../../prj/__SourceName__.Tests/MSTestResults/__SourceName__.Tests-__TargetFramework__.trx)
+[Test results (html)](../../prj/__SourceName__.Tests/MSTestResults/result-__TargetFramework__.html)
 <!--#if (CoverletMSBuild == true) -->
-[Coverlet output](../../prj/ClassLibrary.Tests/CoverletOutput/coverage.__TargetFramework__.opencover.xml)
+[Coverlet output](../../prj/__SourceName__.Tests/CoverletOutput/coverage.__TargetFramework__.opencover.xml)
 
-Coverlet measures only the class library (`[ClassLibrary]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
+Coverlet measures only the class library (`[__SourceName__]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
-ReportGenerator writes one summary per target framework under `../../prj/ClassLibrary.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
+ReportGenerator writes one summary per target framework under `../../prj/__SourceName__.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
 <!--#endif -->
 
 ## Pack
@@ -86,7 +86,7 @@ ReportGenerator writes one summary per target framework under `../../prj/ClassLi
 dotnet pack
 ```
 
-Creates one `.nupkg` in `src/prj/ClassLibrary/bin/Pack/` containing the library for all selected target frameworks. Test and optional benchmark projects are not packed.
+Creates one `.nupkg` in `src/prj/__SourceName__/bin/Pack/` containing the library for all selected target frameworks. Test and optional benchmark projects are not packed.
 <!--#if (NuGetAuditHighCriticalAsErrors) -->
 
 Restore fails this class library on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that library’s packages (txt/json) and is still info-only.
@@ -95,18 +95,18 @@ Restore fails this class library on high (`NU1903`) and critical (`NU1904`) vuln
 
 ## Public API baseline
 
-The class library uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first real `dotnet build` writes `src/prj/ClassLibrary/Properties/PublicAPI/PublicAPI.Shipped.txt` and `PublicAPI.Unshipped.txt` if they are missing, then records the current public surface. Commit those files. Later public additions belong in `PublicAPI.Unshipped.txt` (analyzer RS0016 / `dotnet format analyzers` with `--diagnostics RS0016`).
+The class library uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first real `dotnet build` writes `src/prj/__SourceName__/Properties/PublicAPI/PublicAPI.Shipped.txt` and `PublicAPI.Unshipped.txt` if they are missing, then records the current public surface. Commit those files. Later public additions belong in `PublicAPI.Unshipped.txt` (analyzer RS0016 / `dotnet format analyzers` with `--diagnostics RS0016`).
 <!--#endif -->
 <!--#if (WritePackageDocTemplate) -->
 
 ## Package documentation template
 
-`src/prj/ClassLibrary/NugetAssets/docs/DocShell.html` is the offline documentation seed. It packs with the nupkg (`docs/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this library. Repository-root `docs/` is a separate site if present.
+`src/prj/__SourceName__/NugetAssets/docs/DocShell.html` is the offline documentation seed. It packs with the nupkg (`docs/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this library. Repository-root `docs/` is a separate site if present.
 <!--#endif -->
 
 ## Publish
 
-The class library sets `IsPublishable` to `false`. Distribution is `dotnet pack`. To write output to `src/prj/ClassLibrary/bin/Publish/` for the highest selected target framework, set `IsPublishable` to `true` and run:
+The class library sets `IsPublishable` to `false`. Distribution is `dotnet pack`. To write output to `src/prj/__SourceName__/bin/Publish/` for the highest selected target framework, set `IsPublishable` to `true` and run:
 
 ```bash
 dotnet publish
@@ -131,7 +131,7 @@ dotnet pack
 The benchmark is a local executable targeting the highest selected framework. It is neither packed nor published; start it with the command below.
 
 ```bash
-dotnet run --project ../../prj/ClassLibrary.Benchmark/ClassLibrary.Benchmark.csproj -c Release
+dotnet run --project ../../prj/__SourceName__.Benchmark/__SourceName__.Benchmark.csproj -c Release
 ```
 <!--#endif -->
 <!--#endif -->

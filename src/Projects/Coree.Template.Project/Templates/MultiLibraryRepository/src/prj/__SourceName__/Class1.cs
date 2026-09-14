@@ -1,11 +1,11 @@
-﻿#if( KeepScaffoldUnusedUsings )
+#if( KeepScaffoldUnusedUsings )
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
 #endif
-namespace ClassLibrary
+namespace __SourceName__
 {
     /// <summary>
     /// The 'Class1' provides foundational functionalities for the library.

@@ -1,0 +1,40 @@
+<Solution>
+  <!-- Paths are relative to this file's final location.
+       PlaceSolution SlnFolder      → src/sln/__SourceName__/__SourceName__.slnx
+       PlaceSolution BesideLibrary  → src/prj/__SourceName__/__SourceName__.slnx
+       PlaceSolution RepoRoot       → repo root, so src/prj/ and src/sln/. -->
+  <Folder Name="/sln/__SourceName__/">
+<!--#if (PlaceSolution == "SlnFolder") -->
+    <File Path="Readme.md" />
+<!--#elseif (PlaceSolution == "BesideLibrary") -->
+    <File Path="../../sln/__SourceName__/Readme.md" />
+<!--#else -->
+    <File Path="src/sln/__SourceName__/Readme.md" />
+<!--#endif -->
+<!--#if (DirectoryMsBuildFiles) -->
+    <File Path="Directory.Solution.props" />
+    <File Path="Directory.Solution.targets" />
+<!--#endif -->
+  </Folder>
+  <Folder Name="/prj/">
+<!--#if (PlaceSolution == "SlnFolder") -->
+    <Project Path="../../prj/__SourceName__.Tests/__SourceName__.Tests.csproj" />
+    <Project Path="../../prj/__SourceName__/__SourceName__.csproj" />
+<!--#elseif (PlaceSolution == "BesideLibrary") -->
+    <Project Path="../__SourceName__.Tests/__SourceName__.Tests.csproj" />
+    <Project Path="__SourceName__.csproj" />
+<!--#else -->
+    <Project Path="src/prj/__SourceName__.Tests/__SourceName__.Tests.csproj" />
+    <Project Path="src/prj/__SourceName__/__SourceName__.csproj" />
+<!--#endif -->
+<!--#if (BenchmarkProject == true) -->
+<!--#if (PlaceSolution == "SlnFolder") -->
+    <Project Path="../../prj/__SourceName__.Benchmark/__SourceName__.Benchmark.csproj" />
+<!--#elseif (PlaceSolution == "BesideLibrary") -->
+    <Project Path="../__SourceName__.Benchmark/__SourceName__.Benchmark.csproj" />
+<!--#else -->
+    <Project Path="src/prj/__SourceName__.Benchmark/__SourceName__.Benchmark.csproj" />
+<!--#endif -->
+<!--#endif -->
+  </Folder>
+</Solution>

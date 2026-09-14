@@ -301,6 +301,33 @@
         }
       ]
     },
+    // Exclusive seeds under TemplateAssets/ProgramSamples/{choice}/
+    // App|Tests|Benchmark/. Extra sources copy each folder onto the stub
+    // project path (no per-file rename). Default matches an explicit
+    // Main(string[] args) console sample, not top-level statements (tests
+    // call Program.Main). Program.cs adds using System (and
+    // System.Threading.Tasks for async) only when DisableImplicitUsings.
+    "ProgramSample": {
+      "type": "parameter",
+      "datatype": "choice",
+      "isRequired": false,
+      "defaultValue": "MinimalClassic",
+      "enableQuotelessLiterals": true,
+      "description": "Which console Program.cs sample to copy. Default is a classic int Main(string[] args). Minimal async is async Task<int> Main(string[] args). Tests and the optional benchmark method are copied with the same choice.",
+      "displayName": "Program sample",
+      "choices": [
+        {
+          "choice": "MinimalClassic",
+          "description": "Classic int Main(string[] args) that writes Hello, World! and returns 0.",
+          "displayName": "Minimal classic"
+        },
+        {
+          "choice": "MinimalAsync",
+          "description": "async Task<int> Main(string[] args) that writes Hello, World! and returns 0.",
+          "displayName": "Minimal async"
+        }
+      ]
+    },
     // Converts the selected framework values to the semicolon-separated MSBuild list.
     "TargetFrameworksValue": {
       "type": "generated",
@@ -569,12 +596,6 @@
     "UseProjectEditorGlobalConfig": {
       "type": "computed",
       "value": "(ProjectEditorGlobalConfig != \"Off\")"
-    },
-    // Default/Off keep unused usings on Program so the style dump can show them.
-    // Strict omits them for a clean scaffold (IDE0005 is not a console build error).
-    "KeepScaffoldUnusedUsings": {
-      "type": "computed",
-      "value": "(ProjectEditorGlobalConfig != \"Strict\")"
     },
     // SDK CA rule set (AnalysisMode). Not style/CS (that is
     // ProjectEditorGlobalConfig). Recommended
@@ -894,6 +915,36 @@
       "condition": "(NerdbankGitVersioning == \"Project\")"
     },
     {
+      "source": "./TemplateAssets/ProgramSamples/MinimalClassic/App/",
+      "target": "./src/prj/__SourceName__/",
+      "condition": "(ProgramSample == \"MinimalClassic\")"
+    },
+    {
+      "source": "./TemplateAssets/ProgramSamples/MinimalClassic/Tests/",
+      "target": "./src/prj/__SourceName__.Tests/",
+      "condition": "(ProgramSample == \"MinimalClassic\")"
+    },
+    {
+      "source": "./TemplateAssets/ProgramSamples/MinimalClassic/Benchmark/",
+      "target": "./src/prj/__SourceName__.Benchmark/",
+      "condition": "((ProgramSample == \"MinimalClassic\") && BenchmarkProject)"
+    },
+    {
+      "source": "./TemplateAssets/ProgramSamples/MinimalAsync/App/",
+      "target": "./src/prj/__SourceName__/",
+      "condition": "(ProgramSample == \"MinimalAsync\")"
+    },
+    {
+      "source": "./TemplateAssets/ProgramSamples/MinimalAsync/Tests/",
+      "target": "./src/prj/__SourceName__.Tests/",
+      "condition": "(ProgramSample == \"MinimalAsync\")"
+    },
+    {
+      "source": "./TemplateAssets/ProgramSamples/MinimalAsync/Benchmark/",
+      "target": "./src/prj/__SourceName__.Benchmark/",
+      "condition": "((ProgramSample == \"MinimalAsync\") && BenchmarkProject)"
+    },
+    {
       "source": "./TemplateAssets/",
       "target": "./src/prj/__SourceName__/Properties/NugetAssets/docs/",
       "condition": "WritePackageDocTemplate",
@@ -903,7 +954,8 @@
             "Versioning/**",
             "CodeStyle/**",
             "Licenses/**",
-            "DirectoryMsBuild/**"
+            "DirectoryMsBuild/**",
+            "ProgramSamples/**"
           ]
         }
       ]
@@ -918,7 +970,8 @@
             "Versioning/**",
             "CodeStyle/**",
             "Licenses/**",
-            "DirectoryMsBuild/**"
+            "DirectoryMsBuild/**",
+            "ProgramSamples/**"
           ]
         }
       ]

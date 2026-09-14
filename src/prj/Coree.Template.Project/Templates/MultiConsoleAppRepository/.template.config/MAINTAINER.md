@@ -12,7 +12,7 @@ The generated root `README.md` lives beside this folder, one level up. That file
 | --- | --- |
 | `template.json` | Identity, symbols, sources, post-actions. |
 | `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**. `persistenceScope: none` so the New Project dialog does not reuse the last create. Host mapping: **CLI ↔ Visual Studio**. No `icon` property: see **Visual Studio template icon**. |
-| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `Author`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `NuGetAuditHighCriticalAsErrors`, `TestCoverage`, `DirectoryMsBuildFiles`, `DotNetToolManifest`, `RuntimeIdentifier`, `Publish`, and `PackAsNuGetTool` so they do not steal single-letter aliases. |
+| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `Author`, `CSharpProjectOptions`, `ProgramSample`, `ProjectLicense`, `NerdbankGitVersioning`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `NuGetAuditHighCriticalAsErrors`, `TestCoverage`, `DirectoryMsBuildFiles`, `DotNetToolManifest`, `RuntimeIdentifier`, `Publish`, and `PackAsNuGetTool` so they do not steal single-letter aliases. |
 | `icon.png` | **Intentionally absent.** Visual Studio then uses the template **package** icon. |
 | `MAINTAINER.md` | This file. |
 
@@ -199,7 +199,22 @@ Language/debug values are **always written** (no omitted PropertyGroup) into the
 
 No `None`. CLI and VS default is the four language/debug values. Visual Studio cannot leave a multi-choice empty; at least one box stays checked. CLI: omit the switch, or pass values with **spaces** (`--CSharpProjectOptions Nullable LangLatest DebugEmbedded`). `|` is only the host default separator.
 
-Benchmark previously hardcoded `ImplicitUsings` enable. It now follows the switch. `Program.cs` has explicit `System` / `System.IO` / `System.Linq` usings so the default (`disable`) still compiles.
+Benchmark previously hardcoded `ImplicitUsings` enable. It now follows the switch. The benchmark runner `Program.cs` has explicit `System` / `System.IO` / `System.Linq` usings so the default (`disable`) still compiles. The `Benchmarks` class is extra-sourced with `ProgramSample`.
+
+## `ProgramSample`
+
+Single choice, default **`MinimalClassic`**. UI label **Program sample**. CLI long name **`--ProgramSample`**. Empty CLI `shortName`. Combo-safe (each app has its own `Program.cs`).
+
+Seeds live under `TemplateAssets/ProgramSamples/{choice}/App|Tests|Benchmark/`. Extra sources copy each folder onto the matching stub project (`App/` → `src/prj/{Name}/`, `Tests/` → tests, `Benchmark/` → benchmark). Later sample files drop into those folders without a per-file rename. `Benchmark/` is copied only when `BenchmarkProject` is on. DocShell extra sources must `exclude` `ProgramSamples/**` as well as `Versioning/**`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`. Do not leave a `Program.cs` under `src/prj/__SourceName__/`. The stub csproj stays one file; sample-specific package references can be `#if` there.
+
+Each `Program.cs` seed writes `Console.WriteLine` (async also `Task`). Generate-time `#if (CSharpProjectOptions == "DisableImplicitUsings")` adds the usings those names need (`System`, and `System.Threading.Tasks` for async). When implicit usings are on, those lines are omitted. No `KeepScaffoldUnusedUsings` here: unused BCL usings were a library/analyzer IDE0005 demo, not console sample code.
+
+| Choice | Entry point | Tests |
+| --- | --- | --- |
+| `MinimalClassic` | `public static int Main(string[] args)` | `Program.Main(Array.Empty<string>())` |
+| `MinimalAsync` | `public static async Task<int> Main(string[] args)` | `await Program.Main(Array.Empty<string>())` |
+
+Analog of `dotnet new console --use-program-main` (explicit `Program` + `args`), not top-level statements: tests and the optional benchmark call `Program.Main`. Return `int` / `Task<int>` so the test can assert `0`.
 
 ## `ProjectLicense`
 
@@ -370,9 +385,9 @@ Do not rename `Default` to Minimal: both seeds are the same full VS style dump. 
 | `Strict` | `.project.editor.globalconfig.strict` | Same dump. Naming **error**. Nullable (CS86xx) as **error**. Reserved identifiers (CA1716) as **error**. No CS1591 family and no IDE0005 (XML docs off; a later pack is a tool nupkg; IDE0005 needs `GenerateDocumentationFile` or every build warns `EnableGenerateDocumentationFile`). |
 | `Off` | none | No file, no `EnforceCodeStyleInBuild`, no `OptimizeImplicitlyTriggeredBuild`. |
 
-`Strict` needs the product C# default `Nullable`. Unused usings stay on `Program` only for **`Default`** and **`Off`** (`KeepScaffoldUnusedUsings`: `ProjectEditorGlobalConfig != "Strict"`): suggestion vs no style file. Strict omits them for a clean scaffold, not because IDE0005 is error.
+`Strict` needs the product C# default `Nullable`. Console `Program.cs` does not keep unused usings for the style dump (`KeepScaffoldUnusedUsings` is library/analyzer only). Needed `using` lines follow `DisableImplicitUsings`.
 
-Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that folder to the console app project, **excludes** the other seed, and **renames** the chosen file to `.project.editor.globalconfig`. Do not leave a seed under `src/prj/__SourceName__/`: DocShell extra sources must `exclude` `Versioning/**`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`.
+Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that folder to the console app project, **excludes** the other seed, and **renames** the chosen file to `.project.editor.globalconfig`. Do not leave a seed under `src/prj/__SourceName__/`: DocShell extra sources must `exclude` `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, and `ProgramSamples/**`.
 
 `UseProjectEditorGlobalConfig` is `(ProjectEditorGlobalConfig != "Off")`; the csproj `#if` does not need a new branch per dump.
 
@@ -405,7 +420,7 @@ dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
 
 ## `DocumentationTemplate`
 
-Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, two destinations. Extra sources copy that file only (`exclude` of `Versioning/**`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
+Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, two destinations. Extra sources copy that file only (`exclude` of `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, and `ProgramSamples/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
 
 | Choice | Path | When | Combo later app |
 | --- | --- | --- | --- |

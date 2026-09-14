@@ -82,6 +82,18 @@
       }
     },
     {
+      "id": "ProgramSample",
+      "isVisible": true,
+      "defaultValue": "MinimalClassic",
+      "persistenceScope": "none",
+      "name": {
+        "text": "Program sample"
+      },
+      "description": {
+        "text": "Which Program.cs to copy. Default is classic int Main(string[] args). Minimal async is async Task<int> Main(string[] args). Matching tests (and the optional benchmark method) come with the same choice."
+      }
+    },
+    {
       "id": "Author",
       "isVisible": true
     },

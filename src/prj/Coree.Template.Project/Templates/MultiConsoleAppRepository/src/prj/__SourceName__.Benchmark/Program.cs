@@ -1,19 +1,9 @@
 using System;
 using System.IO;
 using System.Linq;
-using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 
 namespace __SourceName__.Benchmark;
-
-public class Benchmarks
-{
-    [Benchmark]
-    public int Main()
-    {
-        return __SourceName__.Program.Main();
-    }
-}
 
 public static class Program
 {

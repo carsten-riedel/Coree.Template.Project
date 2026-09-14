@@ -1,6 +1,6 @@
 <Project>
   <!--
-    Landing file for extra targets on this class library only.
+    Landing file for extra targets on this console app only.
     MSBuild imports it automatically from this directory, after the common targets.
     Test and benchmark projects do not see it.
 

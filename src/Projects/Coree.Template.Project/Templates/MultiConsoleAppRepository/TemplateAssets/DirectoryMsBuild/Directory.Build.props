@@ -1,6 +1,6 @@
 <Project>
   <!--
-    Landing file for extra properties on this class library only.
+    Landing file for extra properties on this console app only.
     MSBuild imports it automatically from this directory (search stops here).
     Test and benchmark projects do not see it.
 

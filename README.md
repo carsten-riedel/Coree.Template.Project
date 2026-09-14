@@ -193,7 +193,7 @@ Instead of deciding the complete structure up front, `multilibraryrepo-coree` le
 - package each library independently;
 - use the same workflow interactively, from PowerShell, or from automation.
 
-Each library keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`) so CI can `dotnet pack` / `dotnet publish` against that solution without seeing sibling `.slnx` files in one directory. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideLibrary` writes it next to the packable project under `src/prj/{name}/` (not tests or benchmark). One solution may still contain several projects (library, tests, optional benchmark); how much you put in one `.slnx` depends on the pipeline. Splitting by library removes the usual “which solution?” limits.
+Each library keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`) so CI can `dotnet pack` / `dotnet publish` against that solution without seeing sibling `.slnx` files in one directory. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the packable project under `src/prj/{name}/` (not tests or benchmark). One solution may still contain several projects (library, tests, optional benchmark); how much you put in one `.slnx` depends on the pipeline. Splitting by library removes the usual “which solution?” limits.
 
 **Initialize the layout once. Compose as many libraries as you need.**
 
@@ -280,7 +280,7 @@ Each package targets `netstandard2.0` and packs the assembly under `analyzers/do
 
 The scaffold ships two sample diagnostics you replace with your own rules. **EMD001** reports an em dash (U+2014); **TSQ001** reports typographic quotation marks. Both scan C# syntax trees and, when include globs are set, additional files. Consumers set `EmDashAnalyzerSeverity` / `SmartQuotesAnalyzerSeverity` (`warning`, `error`, `message`, or `off`) and `EmDashAnalyzerIncludes` / `EmDashAnalyzerExcludes` (and the SmartQuotes pair): semicolon-separated globs relative to the consuming project (`*.txt;*.csproj` by default; empty includes skip additional files; `**/*.txt` is recursive). DebugHost is the compile target: ASCII `"1-2"` / `"hello"` stay clean; `"1—2"` and `"“hello”"` plus `SampleTypography.txt` and the host `.csproj` demonstrate the hits.
 
-Each analyzer keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`) so CI can `dotnet test` / `dotnet pack` against that solution. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideLibrary` writes it next to the packable analyzer under `src/prj/{name}/` (not tests, DebugHost, or benchmark). DebugHost, tests, and the optional benchmark share one TFM (`.NET 10` by default, `--DebugHostTargetFramework`); the packable analyzer itself is always `netstandard2.0`. Visual Studio F5 needs the **.NET Compiler Platform SDK** component: set the analyzer project as startup, choose the Roslyn Component profile, then F5 (not the DebugHost console).
+Each analyzer keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`) so CI can `dotnet test` / `dotnet pack` against that solution. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the packable analyzer under `src/prj/{name}/` (not tests, DebugHost, or benchmark). DebugHost, tests, and the optional benchmark share one TFM (`.NET 10` by default, `--DebugHostTargetFramework`); the packable analyzer itself is always `netstandard2.0`. Visual Studio F5 needs the **.NET Compiler Platform SDK** component: set the analyzer project as startup, choose the Roslyn Component profile, then F5 (not the DebugHost console).
 
 **Initialize the layout once. Compose as many analyzer packages as you need.**
 
@@ -366,10 +366,10 @@ Instead of deciding the complete structure up front, `multiconsoleapprepo-coree`
 - create the shared repository layout with the first app;
 - add more apps later using the same template;
 - keep every app in a predictable `src/prj` / `src/sln` structure;
-- publish each app independently; packing as a .NET tool is on by default;
+- publish each app independently; additional pack as a NuGet tool is on by default;
 - use the same workflow interactively, from PowerShell, or from automation.
 
-Each app keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`) so CI can `dotnet publish` against that solution without seeing sibling `.slnx` files in one directory. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideLibrary` writes it next to the console project under `src/prj/{name}/` (not tests or benchmark). One solution may still contain several projects (console app, tests, optional benchmark); how much you put in one `.slnx` depends on the pipeline. Splitting by app removes the usual “which solution?” limits.
+Each app keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`) so CI can `dotnet publish` against that solution without seeing sibling `.slnx` files in one directory. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the console project under `src/prj/{name}/` (not tests or benchmark). One solution may still contain several projects (console app, tests, optional benchmark); how much you put in one `.slnx` depends on the pipeline. Splitting by app removes the usual “which solution?” limits.
 
 **Initialize the layout once. Compose as many console apps as you need.**
 
@@ -385,11 +385,11 @@ dotnet new multiconsoleapprepo-coree --Author "Carsten Riedel" --output "./MyCom
 
 Default publish is **Windows x64** (`win-x64`) with **Framework-included, single-file, compressed, ReadyToRun**. That RID and profile apply only while publishing; restore and build stay framework-dependent. Other RIDs: `linux-arm64` (Raspberry Pi 64-bit OS), `linux-x64` (Debian/Ubuntu/CentOS/Fedora), `linux-musl-arm64` (Alpine/Docker ARM64). Other profiles: `FrameworkRequired`, `FrameworkRequiredSingle`, `FrameworkIncluded`, `FrameworkIncludedSingle`.
 
-`--PackAsDotNetTool` is on by default: `IsPackable` / `PackAsTool`, `ToolCommandName` (project name, overridable in the csproj), and NuGet assets under `Properties/NugetAssets/`. `--PackAsDotNetTool false` is publish-only. This is not `--DotNetToolManifest` (empty local `dotnet-tools.json`).
+`--PackAsNuGetTool` is on by default: in addition to publish, `IsPackable` / `PackAsTool`, `ToolCommandName` (project name, overridable in the csproj), and NuGet assets under `Properties/NugetAssets/`. `--PackAsNuGetTool false` is publish-only. This is not `--DotNetToolManifest` (empty local `dotnet-tools.json`).
 
 One shared repository-root `version.json` instead: `--NerdbankGitVersioning Repo` on each call (the root file is written on the first create only). `--NerdbankGitVersioning Off` keeps `VersionPrefix` in the console project.
 
-Offline documentation is a separate opt-in (`--DocumentationTemplate`). `Package` seeds `Properties/NugetAssets/docs/DocShell.html` only when `--PackAsDotNetTool` is on. `Repository` seeds repo-root `docs/` on a first create only.
+Offline documentation is a separate opt-in (`--DocumentationTemplate`). `Package` seeds `Properties/NugetAssets/docs/DocShell.html` only when `--PackAsNuGetTool` is on. `Repository` seeds repo-root `docs/` on a first create only.
 
 Because the output location and app name are separate arguments, the same composition model works from a script:
 

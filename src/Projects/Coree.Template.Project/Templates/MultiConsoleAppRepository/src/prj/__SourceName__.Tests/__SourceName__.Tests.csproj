@@ -48,7 +48,7 @@
 
   <!--#if (CoverletMSBuild == true) -->
   <!-- coverlet.msbuild: CollectCoverage is enough for `dotnet test` on SDK MSBuild. -->
-  <!-- Include is the packable library only (sourceName). Threshold fails the test run when that assembly is under 100% line/branch/method total. -->
+  <!-- Include is the console app only (sourceName). Threshold fails the test run when that assembly is under 100% line/branch/method total. -->
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
@@ -70,7 +70,7 @@
   </Target>
   <!--#endif -->
 
-  <!-- Package inventory of the packable library, not this test project. -->
+  <!-- Package inventory of the console app, not this test project. -->
   <PropertyGroup>
     <NugetReportDir Condition=" '$(NugetReportDir)' == '' ">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'NugetReport'))</NugetReportDir>
     <NugetReportProject Condition=" '$(NugetReportProject)' == '' ">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', '__SourceName__', '__SourceName__.csproj'))</NugetReportProject>

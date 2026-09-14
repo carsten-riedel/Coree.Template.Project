@@ -3,7 +3,7 @@
 <!--#if (PlaceSolution == "SlnFolder") -->
 This folder is the per-app area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` lives here; keep the folder while that is true. You can still add extra solution items here.
-<!--#elseif (PlaceSolution == "BesideLibrary") -->
+<!--#elseif (PlaceSolution == "BesideCsproj") -->
 This folder is the console app. The `.slnx` and this readme sit next to the `.csproj`. Tests and the optional benchmark stay sibling projects under `src/prj/`. There is no `src/sln/` tree for this app.
 <!--#else -->
 This folder is the per-app area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
@@ -13,7 +13,7 @@ The `.slnx` is written elsewhere (`PlaceSolution`). Use this folder for shared n
 
 Visual Studio created an extra `.slnx` in the repository root. Close this solution, open the `.slnx` in this folder (`src/sln/__SourceName__/`), and delete the extra `.slnx` in the repository root.
 <!--#endif -->
-<!--#if ((HostIdentifier == "vs") && (PlaceSolution == "BesideLibrary")) -->
+<!--#if ((HostIdentifier == "vs") && (PlaceSolution == "BesideCsproj")) -->
 
 Visual Studio created an extra `.slnx` in the repository root. Close this solution, open `src/prj/__SourceName__/__SourceName__.slnx`, and delete the extra `.slnx` in the repository root.
 <!--#endif -->
@@ -77,7 +77,7 @@ The `.slnx` and this readme live in this folder next to the console app. Open a 
 <!--#endif -->
 <!--#endif -->
 ```
-<!--#if (PackAsDotNetTool) -->
+<!--#if (PackAsNuGetTool) -->
 
 Package metadata, license, icon, and release notes live in `src/prj/__SourceName__/Properties/NugetAssets/`.
 <!--#endif -->
@@ -145,9 +145,9 @@ Restore fails this console app on high (`NU1903`) and critical (`NU1904`) vulner
 
 `src/prj/__SourceName__/Properties/NugetAssets/docs/DocShell.html` is the offline documentation seed. It packs with the nupkg (`docs/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this app. Repository-root `docs/` is a separate site if present.
 <!--#endif -->
-<!--#if (PackAsDotNetTool) -->
+<!--#if (PackAsNuGetTool) -->
 
-## Pack as .NET tool
+## Additional pack as NuGet tool
 
 `dotnet pack` writes a tool nupkg to `src/prj/__SourceName__/bin/Pack/`. Install from that folder (or nuget.org after publish). The command after install is `ToolCommandName` in the console app csproj (the project name). Change that property, or pass `-p:ToolCommandName=...` on pack. Publish remains available; it is a different output than the tool nupkg.
 

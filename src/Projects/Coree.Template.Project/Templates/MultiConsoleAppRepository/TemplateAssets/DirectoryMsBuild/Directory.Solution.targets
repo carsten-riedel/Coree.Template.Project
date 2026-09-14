@@ -1,6 +1,6 @@
 <Project>
   <!--
-    Landing file for extra targets when this library's .slnx is built.
+    Landing file for extra targets when this app's .slnx is built.
     MSBuild imports it from the directory that contains the solution file.
 
     Add Target elements here after create if you want them out of the solution.

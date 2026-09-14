@@ -383,7 +383,7 @@ Paths inside the solution depend on where the file will sit. Nested hash-if is p
 <Folder Name="/prj/">
 <!--#if (PlaceSolution == "SlnFolder") -->
     <Project Path="../../prj/MyLibrary/MyLibrary.csproj" />
-<!--#elseif (PlaceSolution == "BesideLibrary") -->
+<!--#elseif (PlaceSolution == "BesideCsproj") -->
     <Project Path="MyLibrary.csproj" />
 <!--#else -->
     <Project Path="src/prj/MyLibrary/MyLibrary.csproj" />
@@ -391,7 +391,7 @@ Paths inside the solution depend on where the file will sit. Nested hash-if is p
 <!--#if (Benchmark) -->
 <!--#if (PlaceSolution == "SlnFolder") -->
     <Project Path="../../prj/MyLibrary.Benchmark/MyLibrary.Benchmark.csproj" />
-<!--#elseif (PlaceSolution == "BesideLibrary") -->
+<!--#elseif (PlaceSolution == "BesideCsproj") -->
     <Project Path="../MyLibrary.Benchmark/MyLibrary.Benchmark.csproj" />
 <!--#else -->
     <Project Path="src/prj/MyLibrary.Benchmark/MyLibrary.Benchmark.csproj" />

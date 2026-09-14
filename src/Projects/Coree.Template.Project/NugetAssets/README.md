@@ -178,7 +178,7 @@ Instead of deciding the complete structure up front, `multilibraryrepo-coree` le
 - package each library independently;
 - use the same workflow interactively, from PowerShell, or from automation.
 
-Each library keeps its `.slnx` in its own `src/sln/{name}/` folder so CI can `dotnet pack` / `dotnet publish` against that solution without seeing sibling `.slnx` files in one directory. One solution may still contain several projects (library, tests, optional benchmark); how much you put in one `.slnx` depends on the pipeline. Splitting by library removes the usual “which solution?” limits.
+Each library keeps its `.slnx` in its own `src/sln/{name}/` folder so CI can `dotnet pack` / `dotnet publish` against that solution without seeing sibling `.slnx` files in one directory. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the packable project under `src/prj/{name}/`. One solution may still contain several projects (library, tests, optional benchmark); how much you put in one `.slnx` depends on the pipeline. Splitting by library removes the usual “which solution?” limits.
 
 **Initialize the layout once. Compose as many libraries as you need.**
 
@@ -268,11 +268,11 @@ dotnet new analyzerrepo-coree --Author "Carsten Riedel" --output "./MyCompany.An
 
 The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
 
-Each analyzer keeps its `.slnx` in its own `src/sln/{name}/` folder. DebugHost, tests, and the optional benchmark share one selected TFM (`.NET 10` by default); the packable analyzer itself is always `netstandard2.0`.
+Each analyzer keeps its `.slnx` in its own `src/sln/{name}/` folder. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the packable analyzer under `src/prj/{name}/`. DebugHost, tests, and the optional benchmark share one selected TFM (`.NET 10` by default); the packable analyzer itself is always `netstandard2.0`.
 
 ## .NET multi-console-app repository
 
-Same combo and init system as the multi-library repository, for independently publishable C# console apps that also pack as a .NET tool by default (`--PackAsDotNetTool false` is publish-only). Default publish is Windows x64, framework-included single-file with compression and ReadyToRun. This is not `nettool-coree` (a dedicated .NET tool template) and not `console-coree`.
+Same combo and init system as the multi-library repository, for independently publishable C# console apps that also pack as a NuGet tool by default (`--PackAsNuGetTool false` is publish-only). Default publish is Windows x64, framework-included single-file with compression and ReadyToRun. This is not `nettool-coree` (a dedicated .NET tool template) and not `console-coree`.
 
 Initialize the shared repository layout once, then add additional apps whenever you need them.
 
@@ -283,7 +283,7 @@ dotnet new multiconsoleapprepo-coree --Author "Carsten Riedel" --output "./MyCom
 
 `--Author` is required. The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
 
-Each app keeps its `.slnx` in its own `src/sln/{name}/` folder. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideLibrary` writes it next to the console project under `src/prj/{name}/`.
+Each app keeps its `.slnx` in its own `src/sln/{name}/` folder. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the console project under `src/prj/{name}/`.
 
 ## .NET Tool
 This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.

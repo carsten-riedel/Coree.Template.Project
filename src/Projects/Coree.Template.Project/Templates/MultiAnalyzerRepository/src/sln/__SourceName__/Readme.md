@@ -3,7 +3,7 @@
 <!--#if (PlaceSolution == "SlnFolder") -->
 This folder is the per-package area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` lives here; keep the folder while that is true. You can still add extra solution items here.
-<!--#elseif (PlaceSolution == "BesideLibrary") -->
+<!--#elseif (PlaceSolution == "BesideCsproj") -->
 This folder is the packable analyzer package. The `.slnx` and this readme sit next to the `.csproj`. Tests, DebugHost, and the optional benchmark stay sibling projects under `src/prj/`. There is no `src/sln/` tree for this package.
 <!--#else -->
 This folder is the per-package area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
@@ -13,7 +13,7 @@ The `.slnx` is written elsewhere (`PlaceSolution`). Use this folder for shared n
 
 Visual Studio created an extra `.slnx` in the repository root. Close this solution, open the `.slnx` in this folder (`src/sln/__SourceName__/`), and delete the extra `.slnx` in the repository root.
 <!--#endif -->
-<!--#if ((HostIdentifier == "vs") && (PlaceSolution == "BesideLibrary")) -->
+<!--#if ((HostIdentifier == "vs") && (PlaceSolution == "BesideCsproj")) -->
 
 Visual Studio created an extra `.slnx` in the repository root. Close this solution, open `src/prj/__SourceName__/__SourceName__.slnx`, and delete the extra `.slnx` in the repository root.
 <!--#endif -->

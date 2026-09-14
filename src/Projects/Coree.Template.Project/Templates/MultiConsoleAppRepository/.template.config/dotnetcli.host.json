@@ -61,8 +61,8 @@
       "longName": "Publish",
       "shortName": ""
     },
-    "PackAsDotNetTool": {
-      "longName": "PackAsDotNetTool",
+    "PackAsNuGetTool": {
+      "longName": "PackAsNuGetTool",
       "shortName": ""
     }
   }

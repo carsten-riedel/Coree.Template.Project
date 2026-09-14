@@ -71,7 +71,7 @@
 
   <!-- Packaging and publish configuration -->
   <PropertyGroup>
-    <!--#if (PackAsDotNetTool) -->
+    <!--#if (PackAsNuGetTool) -->
     <IsPackable>true</IsPackable>
     <PackAsTool>true</PackAsTool>
     <!-- Command after install. Empty Condition: override in Directory.Build.props or -p:ToolCommandName. -->
@@ -141,7 +141,7 @@
     <Description><![CDATA[]]></Description>
   </PropertyGroup>
 
-  <!--#if (PackAsDotNetTool) -->
+  <!--#if (PackAsNuGetTool) -->
   <!-- NuGet package metadata. Files live in Properties/NugetAssets/. -->
   <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
   <PropertyGroup>
@@ -241,7 +241,7 @@
   <ItemGroup>
     <None Remove=".gitignore" />
   </ItemGroup>
-<!--#if (PlaceSolution == "BesideLibrary") -->
+<!--#if (PlaceSolution == "BesideCsproj") -->
   <ItemGroup>
     <None Remove="__SourceName__.slnx;Readme.md" />
   </ItemGroup>
@@ -263,7 +263,7 @@
     <None Include=".config\dotnet-tools.json" Link="Properties\dotnet-tools.json" />
   </ItemGroup>
   <!--#endif -->
-<!--#if ((DirectoryMsBuildFiles) && (PlaceSolution == "BesideLibrary")) -->
+<!--#if ((DirectoryMsBuildFiles) && (PlaceSolution == "BesideCsproj")) -->
   <ItemGroup>
     <None Remove="Directory.Solution.props;Directory.Solution.targets" />
     <None Include="Directory.Solution.props" Link="Properties\Directory.Solution.props" />

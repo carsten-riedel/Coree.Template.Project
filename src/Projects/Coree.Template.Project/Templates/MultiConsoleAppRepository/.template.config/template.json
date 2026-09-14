@@ -39,7 +39,7 @@
       "defaultValue": "dotnetcli"
     },
     // One multi-choice instead of N root bools (VS stays one group, like TFMs).
-    // CLI default is empty: later libraries omit both switches, no root collisions.
+    // CLI default is empty: later apps omit both switches, no root collisions.
     // Visual Studio does not allow an empty multi-choice (at least one value).
     // None is the explicit empty set; it is first so a host that snaps to the
     // first choice still writes no root files. None also overrides other
@@ -54,7 +54,7 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "",
-      "description": "Pick individual first-create files. Omit on later libraries in the same folder. For the full first-create set on CLI, use --InitAllRepoItems. src/global.json is optional and off by default (not in that set). Visual Studio cannot leave this empty: choose None.",
+      "description": "Pick individual first-create files. Omit on later apps in the same folder. For the full first-create set on CLI, use --InitAllRepoItems. src/global.json is optional and off by default (not in that set). Visual Studio cannot leave this empty: choose None.",
       "displayName": "Repository root items",
       "choices": [
         {
@@ -110,15 +110,15 @@
     },
     // Where the TEMPLATE .slnx is written.
     // SlnFolder (default): src/sln/__SourceName__/__SourceName__.slnx plus
-    // handbook Readme.md — one folder per library so `dotnet` there does not
+    // handbook Readme.md — one folder per app so `dotnet` there does not
     // see sibling .slnx files.
-    // BesideLibrary: src/prj/__SourceName__/ next to the packable csproj
+    // BesideCsproj: src/prj/__SourceName__/ next to the packable csproj
     // (slnx + handbook; tests and benchmark stay sibling projects under
     // src/prj/). Does not create src/sln/{name}/.
     // RepoRoot: repository root. CLI renames to __SourceName__.slnx; Visual
     // Studio keeps __SourceName__.generated.slnx so it does not overwrite the
     // IDE's conventional {Name}.slnx. src/sln/{name}/Readme.md is still notes.
-    // RepoRoot stacks every library's .slnx in one directory; CLI/CI must pass
+    // RepoRoot stacks every app's .slnx in one directory; CLI/CI must pass
     // a solution path if more than one exists.
     "PlaceSolution": {
       "type": "parameter",
@@ -126,21 +126,21 @@
       "isRequired": false,
       "defaultValue": "SlnFolder",
       "enableQuotelessLiterals": true,
-      "description": "Where this app's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideLibrary writes the .slnx and handbook next to the console app csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
+      "description": "Where this app's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideCsproj writes the .slnx and handbook next to the console app csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
       "displayName": "Solution file location",
       "choices": [
         {
           "choice": "SlnFolder",
-          "description": "Default. One .slnx per library folder so `dotnet` does not ask which file to use.",
+          "description": "Default. One .slnx per app folder so `dotnet` does not ask which file to use.",
           "displayName": "src/sln/{name}/"
         },
         {
           "choice": "RepoRoot",
-          "description": "Repository root. Later libraries share that directory, so `dotnet` needs the .slnx path (MSB1011).",
+          "description": "Repository root. Later apps share that directory, so `dotnet` needs the .slnx path (MSB1011).",
           "displayName": "Repository root"
         },
         {
-          "choice": "BesideLibrary",
+          "choice": "BesideCsproj",
           "description": "Next to this app's csproj (slnx and handbook). Does not create src/sln/{name}/. Tests and benchmark stay sibling projects under src/prj/.",
           "displayName": "src/prj/{name}/"
         }
@@ -253,15 +253,15 @@
     },
     // Default on: IsPackable + PackAsTool; ToolCommandName is the project name
     // with an empty Condition so the csproj line is the override point.
-    // Off (--PackAsDotNetTool false): publish stays the only distribution path.
+    // Off (--PackAsNuGetTool false): publish stays the only distribution path.
     // Assembly identity (Authors/Company/Copyright/Description) always.
     // NuGet-only properties and Properties/NugetAssets/ only when on.
-    "PackAsDotNetTool": {
+    "PackAsNuGetTool": {
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "description": "Allow packing this console app as a .NET tool (IsPackable and PackAsTool). Default on. The command name is ToolCommandName in the csproj (project name, overridable). Writes Properties/NugetAssets and NuGet-only csproj properties. Authors, company, copyright, and description stay either way. Turn off for publish-only (no nupkg assets). Test and benchmark projects are not affected.",
-      "displayName": "Allow pack as .NET tool"
+      "description": "Additionally pack this console app as a NuGet tool (IsPackable and PackAsTool). Default on. Publish stays available. The command name is ToolCommandName in the csproj (project name, overridable). Writes Properties/NugetAssets and NuGet-only csproj properties. Authors, company, copyright, and description stay either way. Turn off for publish-only (no nupkg assets). Test and benchmark projects are not affected.",
+      "displayName": "Additional pack as NuGet tool"
     },
     // One multi-choice for C# / debug in the console app, tests, and
     // benchmark (VS combobox, like TFMs and InitRepoItems). Checked =
@@ -410,7 +410,7 @@
       }
     },
     // Single choice (dropdown). Default Project = version.json under
-    // Properties/. Combo-safe: later libraries do not collide. Off keeps
+    // Properties/. Combo-safe: later apps do not collide. Off keeps
     // the VersionPrefix group. Repo uses one root version.json (first
     // create only via WriteRepoVersionJson), not the choice by itself.
     "NerdbankGitVersioning": {
@@ -429,7 +429,7 @@
         },
         {
           "choice": "Repo",
-          "description": "Add Nerdbank.GitVersioning using a repository-root version.json. The file is written only on a first create (--InitAllRepoItems or Visual Studio root items). Later libraries pass --NerdbankGitVersioning Repo without Init*.",
+          "description": "Add Nerdbank.GitVersioning using a repository-root version.json. The file is written only on a first create (--InitAllRepoItems or Visual Studio root items). Later apps pass --NerdbankGitVersioning Repo without Init*.",
           "displayName": "This repository (root version.json)"
         },
         {
@@ -456,8 +456,8 @@
       "value": "(InitRepoItems != \"None\") && (InitRepoItems == \"SrcGlobalJson\")"
     },
     // Multi-choice. Default empty/None. Same DocShell.html seed, two
-    // destinations. Package is per library (no combo collision). Repository
-    // is repo-root docs/ and collides on a later library (Exit 73).
+    // destinations. Package is per app (no combo collision). Repository
+    // is repo-root docs/ and collides on a later app (Exit 73).
     // Not part of InitAllRepoItems. Do not vendor the 25-file site here:
     // bootstrap follows DocShell.html and takes the versions it pins then.
     "DocumentationTemplate": {
@@ -467,7 +467,7 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "",
-      "description": "Optional offline documentation template (DocShell.html). Package writes it under this app's Properties/NugetAssets/docs (packed with the nupkg; requires Allow pack as .NET tool). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
+      "description": "Optional offline documentation template (DocShell.html). Package writes it under this app's Properties/NugetAssets/docs (packed with the nupkg; requires Additional pack as NuGet tool). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
       "displayName": "Documentation template",
       "choices": [
         {
@@ -477,19 +477,19 @@
         },
         {
           "choice": "Package",
-          "description": "Add DocShell.html under this app's Properties/NugetAssets/docs. Requires Allow pack as .NET tool. Every create; paths do not collide. Packed with the nupkg.",
+          "description": "Add DocShell.html under this app's Properties/NugetAssets/docs. Requires Additional pack as NuGet tool. Every create; paths do not collide. Packed with the nupkg.",
           "displayName": "NuGet package docs (Properties/NugetAssets/docs)"
         },
         {
           "choice": "Repository",
-          "description": "Add DocShell.html under docs/ at the repository root. First create only; a later library in the same folder that selects this again is Exit 73.",
+          "description": "Add DocShell.html under docs/ at the repository root. First create only; a later app in the same folder that selects this again is Exit 73.",
           "displayName": "Repository docs (docs/)"
         }
       ]
     },
     "WritePackageDocTemplate": {
       "type": "computed",
-      "value": "(PackAsDotNetTool) && (DocumentationTemplate == \"Package\") && (DocumentationTemplate != \"None\")"
+      "value": "(PackAsNuGetTool) && (DocumentationTemplate == \"Package\") && (DocumentationTemplate != \"None\")"
     },
     "WriteRepoDocTemplate": {
       "type": "computed",
@@ -505,7 +505,7 @@
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "MIT",
-      "description": "License for the console app. Default MIT. When packing as a tool, standards set PackageLicenseExpression and Custom packs License.txt. The LICENSE file at repository root copies this license either way.",
+      "description": "License for the console app. Default MIT. When packing as a NuGet tool, standards set PackageLicenseExpression and Custom packs License.txt. The LICENSE file at repository root copies this license either way.",
       "displayName": "Project license",
       "choices": [
         {
@@ -602,12 +602,12 @@
         },
         {
           "choice": "All",
-          "description": "Almost every CA rule as a build warning. Noisier on a new library.",
+          "description": "Almost every CA rule as a build warning. Noisier on a new app.",
           "displayName": "All"
         }
       ]
     },
-    // Library-only. Default on. Restore NuGetAudit is already on; this promotes
+    // App-only. Default on. Restore NuGetAudit is already on; this promotes
     // high (NU1903) and critical (NU1904) to errors. Low/moderate stay warnings.
     // Off is for EOL/backport graphs that cannot be cleaned. Tests and
     // benchmark are not in this switch. Combo-safe.
@@ -665,8 +665,8 @@
       "description": "Add an optional BenchmarkDotNet console project.",
       "displayName": "Add optional BenchmarkDotNet console project"
     },
-    // Opt-in empty Directory.Build.props/.targets next to this library csproj
-    // and Directory.Solution.props/.targets next to this library's .slnx
+    // Opt-in empty Directory.Build.props/.targets next to this app csproj
+    // and Directory.Solution.props/.targets next to this app's .slnx
     // (src/sln/{name}/, repo root, or src/prj/{name}/ — follows PlaceSolution).
     // Combo-safe when the .slnx is not stacked in one shared directory.
     // Not Init. No Directory.Packages.props (CPM would not cover sibling tests).
@@ -678,8 +678,8 @@
       "description": "Add empty Directory.Build.props and Directory.Build.targets beside this console app project, and Directory.Solution.props and Directory.Solution.targets beside this app's .slnx (follows PlaceSolution). Landing files for extra MSBuild you do not want in the csproj. Test and benchmark projects are not affected. Default off.",
       "displayName": "Empty Directory.Build and Directory.Solution MSBuild files"
     },
-    // Empty local tool manifest beside this library csproj. Default on.
-    // Combo-safe: path includes the library name. Not Init. No tools pinned
+    // Empty local tool manifest beside this app csproj. Default on.
+    // Combo-safe: path includes the app name. Not Init. No tools pinned
     // and no tool restore on build. Tests and benchmark are not in this switch.
     "DotNetToolManifest": {
       "type": "parameter",
@@ -781,13 +781,13 @@
   // Sources: optional files plus solution placement.
   // The template always starts from __SourceName__.generated.slnx at the
   // template root. Paths inside that file follow PlaceSolution
-  // (SlnFolder / RepoRoot / BesideLibrary).
+  // (SlnFolder / RepoRoot / BesideCsproj).
   // Handbook seed is src/sln/__SourceName__/Readme.md. SlnFolder and RepoRoot
-  // keep it there. BesideLibrary renames it next to the csproj and does not
+  // keep it there. BesideCsproj renames it next to the csproj and does not
   // create src/sln/{name}/ (the nested .gitignore is already excluded).
   //
   // SlnFolder → src/sln/__SourceName__/__SourceName__.slnx (CLI and VS).
-  // BesideLibrary → src/prj/__SourceName__/__SourceName__.slnx (CLI and VS).
+  // BesideCsproj → src/prj/__SourceName__/__SourceName__.slnx (CLI and VS).
   // RepoRoot + CLI → __SourceName__.slnx at repo root.
   // RepoRoot + VS → no rename; file stays __SourceName__.generated.slnx so it
   //   does not collide with Visual Studio's {Name}.slnx at the same folder.
@@ -846,7 +846,7 @@
           ]
         },
         {
-          "condition": "(PackAsDotNetTool == false)",
+          "condition": "(PackAsNuGetTool == false)",
           "exclude": [
             "src/prj/__SourceName__/Properties/NugetAssets/**"
           ]
@@ -863,7 +863,7 @@
           }
         },
         {
-          "condition": "(PlaceSolution == \"BesideLibrary\")",
+          "condition": "(PlaceSolution == \"BesideCsproj\")",
           "rename": {
             "__SourceName__.generated.slnx": "src/prj/__SourceName__/__SourceName__.slnx",
             "src/sln/__SourceName__/Readme.md": "src/prj/__SourceName__/Readme.md"
@@ -960,7 +960,7 @@
     {
       "source": "./TemplateAssets/Licenses/",
       "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(PackAsDotNetTool && (ProjectLicense == \"MIT\"))",
+      "condition": "(PackAsNuGetTool && (ProjectLicense == \"MIT\"))",
       "modifiers": [
         {
           "exclude": [
@@ -979,7 +979,7 @@
     {
       "source": "./TemplateAssets/Licenses/",
       "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(PackAsDotNetTool && (ProjectLicense == \"BSD3Clause\"))",
+      "condition": "(PackAsNuGetTool && (ProjectLicense == \"BSD3Clause\"))",
       "modifiers": [
         {
           "exclude": [
@@ -998,7 +998,7 @@
     {
       "source": "./TemplateAssets/Licenses/",
       "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(PackAsDotNetTool && (ProjectLicense == \"Apache2\"))",
+      "condition": "(PackAsNuGetTool && (ProjectLicense == \"Apache2\"))",
       "modifiers": [
         {
           "exclude": [
@@ -1017,7 +1017,7 @@
     {
       "source": "./TemplateAssets/Licenses/",
       "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(PackAsDotNetTool && (ProjectLicense == \"Custom\"))",
+      "condition": "(PackAsNuGetTool && (ProjectLicense == \"Custom\"))",
       "modifiers": [
         {
           "exclude": [
@@ -1151,7 +1151,7 @@
     {
       "source": "./TemplateAssets/DirectoryMsBuild/",
       "target": "./src/prj/__SourceName__/",
-      "condition": "(DirectoryMsBuildFiles && (PlaceSolution == \"BesideLibrary\"))",
+      "condition": "(DirectoryMsBuildFiles && (PlaceSolution == \"BesideCsproj\"))",
       "modifiers": [
         {
           "exclude": [
@@ -1169,11 +1169,11 @@
   // the pre-CLI-rename .generated path.
   "primaryOutputs": [
     {
-      "condition": "(PlaceSolution != \"BesideLibrary\")",
+      "condition": "(PlaceSolution != \"BesideCsproj\")",
       "path": "src/sln/__SourceName__/Readme.md"
     },
     {
-      "condition": "(PlaceSolution == \"BesideLibrary\")",
+      "condition": "(PlaceSolution == \"BesideCsproj\")",
       "path": "src/prj/__SourceName__/Readme.md"
     },
     {
@@ -1181,7 +1181,7 @@
       "path": "src/sln/__SourceName__/__SourceName__.slnx"
     },
     {
-      "condition": "(PlaceSolution == \"BesideLibrary\")",
+      "condition": "(PlaceSolution == \"BesideCsproj\")",
       "path": "src/prj/__SourceName__/__SourceName__.slnx"
     },
     {
@@ -1215,7 +1215,7 @@
         "continueOnError": true
       },
       {
-        "condition": "(HostIdentifier == \"vs\" && (PlaceSolution == \"BesideLibrary\"))",
+        "condition": "(HostIdentifier == \"vs\" && (PlaceSolution == \"BesideCsproj\"))",
         "description": "Finish the repository layout",
         "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
         "manualInstructions": [

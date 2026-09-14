@@ -216,7 +216,7 @@
   <ItemGroup>
     <None Remove=".gitignore" />
   </ItemGroup>
-<!--#if (PlaceSolution == "BesideLibrary") -->
+<!--#if (PlaceSolution == "BesideCsproj") -->
   <ItemGroup>
     <None Remove="__SourceName__.slnx;Readme.md" />
   </ItemGroup>
@@ -238,7 +238,7 @@
     <None Include=".config\dotnet-tools.json" Link="Properties\dotnet-tools.json" />
   </ItemGroup>
   <!--#endif -->
-<!--#if ((DirectoryMsBuildFiles) && (PlaceSolution == "BesideLibrary")) -->
+<!--#if ((DirectoryMsBuildFiles) && (PlaceSolution == "BesideCsproj")) -->
   <ItemGroup>
     <None Remove="Directory.Solution.props;Directory.Solution.targets" />
     <None Include="Directory.Solution.props" Link="Properties\Directory.Solution.props" />

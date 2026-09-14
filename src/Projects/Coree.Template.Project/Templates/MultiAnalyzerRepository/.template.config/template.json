@@ -204,7 +204,7 @@
     // SlnFolder (default): src/sln/__SourceName__/__SourceName__.slnx plus
     // handbook Readme.md — one folder per package so `dotnet` there does not
     // see sibling .slnx files.
-    // BesideLibrary: src/prj/__SourceName__/ next to the packable analyzer
+    // BesideCsproj: src/prj/__SourceName__/ next to the packable analyzer
     // csproj (slnx + handbook; tests, DebugHost, and benchmark stay sibling
     // projects under src/prj/). Does not create src/sln/{name}/.
     // RepoRoot: repository root. CLI renames to __SourceName__.slnx; Visual
@@ -218,7 +218,7 @@
       "isRequired": false,
       "defaultValue": "SlnFolder",
       "enableQuotelessLiterals": true,
-      "description": "Where this analyzer's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideLibrary writes the .slnx and handbook next to the analyzer csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
+      "description": "Where this analyzer's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideCsproj writes the .slnx and handbook next to the analyzer csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
       "displayName": "Solution file location",
       "choices": [
         {
@@ -232,7 +232,7 @@
           "displayName": "Repository root"
         },
         {
-          "choice": "BesideLibrary",
+          "choice": "BesideCsproj",
           "description": "Next to this analyzer's csproj (slnx and handbook). Does not create src/sln/{name}/. Tests, DebugHost, and benchmark stay sibling projects under src/prj/.",
           "displayName": "src/prj/{name}/"
         }
@@ -717,13 +717,13 @@
   // Sources: optional files plus solution placement.
   // The template always starts from __SourceName__.generated.slnx at the
   // template root. Paths inside that file follow PlaceSolution
-  // (SlnFolder / RepoRoot / BesideLibrary).
+  // (SlnFolder / RepoRoot / BesideCsproj).
   // Handbook seed is src/sln/__SourceName__/Readme.md. SlnFolder and RepoRoot
-  // keep it there. BesideLibrary renames it next to the csproj and does not
+  // keep it there. BesideCsproj renames it next to the csproj and does not
   // create src/sln/{name}/ (the nested .gitignore is already excluded).
   //
   // SlnFolder → src/sln/__SourceName__/__SourceName__.slnx (CLI and VS).
-  // BesideLibrary → src/prj/__SourceName__/__SourceName__.slnx (CLI and VS).
+  // BesideCsproj → src/prj/__SourceName__/__SourceName__.slnx (CLI and VS).
   // RepoRoot + CLI → __SourceName__.slnx at repo root.
   // RepoRoot + VS → no rename; file stays __SourceName__.generated.slnx so it
   //   does not collide with Visual Studio's {Name}.slnx at the same folder.
@@ -799,7 +799,7 @@
           }
         },
         {
-          "condition": "(PlaceSolution == \"BesideLibrary\")",
+          "condition": "(PlaceSolution == \"BesideCsproj\")",
           "rename": {
             "__SourceName__.generated.slnx": "src/prj/__SourceName__/__SourceName__.slnx",
             "src/sln/__SourceName__/Readme.md": "src/prj/__SourceName__/Readme.md"
@@ -1087,7 +1087,7 @@
     {
       "source": "./TemplateAssets/DirectoryMsBuild/",
       "target": "./src/prj/__SourceName__/",
-      "condition": "(DirectoryMsBuildFiles && (PlaceSolution == \"BesideLibrary\"))",
+      "condition": "(DirectoryMsBuildFiles && (PlaceSolution == \"BesideCsproj\"))",
       "modifiers": [
         {
           "exclude": [
@@ -1105,11 +1105,11 @@
   // the pre-CLI-rename .generated path.
   "primaryOutputs": [
     {
-      "condition": "(PlaceSolution != \"BesideLibrary\")",
+      "condition": "(PlaceSolution != \"BesideCsproj\")",
       "path": "src/sln/__SourceName__/Readme.md"
     },
     {
-      "condition": "(PlaceSolution == \"BesideLibrary\")",
+      "condition": "(PlaceSolution == \"BesideCsproj\")",
       "path": "src/prj/__SourceName__/Readme.md"
     },
     {
@@ -1117,7 +1117,7 @@
       "path": "src/sln/__SourceName__/__SourceName__.slnx"
     },
     {
-      "condition": "(PlaceSolution == \"BesideLibrary\")",
+      "condition": "(PlaceSolution == \"BesideCsproj\")",
       "path": "src/prj/__SourceName__/__SourceName__.slnx"
     },
     {
@@ -1151,7 +1151,7 @@
         "continueOnError": true
       },
       {
-        "condition": "(HostIdentifier == \"vs\" && (PlaceSolution == \"BesideLibrary\"))",
+        "condition": "(HostIdentifier == \"vs\" && (PlaceSolution == \"BesideCsproj\"))",
         "description": "Finish the repository layout",
         "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
         "manualInstructions": [

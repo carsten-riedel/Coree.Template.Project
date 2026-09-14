@@ -5,7 +5,7 @@ Once, before the first publish. Work through this list yourself or with an assis
 Walk the whole repository, including console apps added after the first `dotnet new`. When every item below is true, delete this file.
 
 1. The root `README.md` describes this repository as it actually is (capabilities, not leftover template layout). If the root README was never added, skip this item.
-<!--#if (PackAsDotNetTool) -->
+<!--#if (PackAsNuGetTool) -->
 2. Every `src/prj/*/Properties/NugetAssets/Readme.md` describes that app's public surface. Empty or placeholder NuGet readmes are not done.
 3. Every `src/prj/*/Properties/NugetAssets/ReleaseNotes.txt` matches the first release, not scaffold text.
 4. Each console app `.csproj` `<Description>` is an empty CDATA block at generate (not a template parameter). Fill it before first pack from that app's public surface; CDATA keeps multiline gallery text. An assistant can draft the blurb from the code. Tags, project URL, and repository URL: match the product, or leave empty only when that emptiness is intentional.
@@ -16,12 +16,12 @@ Walk the whole repository, including console apps added after the first `dotnet 
 <!--#endif -->
 6. Public surface has no leftover template samples (`Program`, tests that do not assert the product, copyright lines that still lie).
 7. Version is a conscious first publish (including whether `0.1` and a prerelease suffix are still correct).
-<!--#if (PlaceSolution == "BesideLibrary") -->
-8. Solution notes in `src/prj/*/Readme.md` match the beside-library layout (`.slnx` next to the console app csproj, no `src/sln/` tree) and any host-specific leftover instructions.
+<!--#if (PlaceSolution == "BesideCsproj") -->
+8. Solution notes in `src/prj/*/Readme.md` match the beside-csproj layout (`.slnx` next to the console app csproj, no `src/sln/` tree) and any host-specific leftover instructions.
 <!--#else -->
 8. Solution notes under `src/sln/*/Readme.md` match where each `.slnx` actually is (`SlnFolder` or `RepoRoot`) and any host-specific leftover instructions. That folder is for solution-level or cross-project files; delete it only when the `.slnx` is not there and you do not need the notes.
 <!--#endif -->
-<!--#if (PackAsDotNetTool) -->
+<!--#if (PackAsNuGetTool) -->
 9. `dotnet publish` of each console app succeeds. `dotnet pack` of each tool-enabled app succeeds. `ToolCommandName` in that csproj is the command after install (the project name unless you changed it).
 <!--#else -->
 9. `dotnet publish` of each console app succeeds.

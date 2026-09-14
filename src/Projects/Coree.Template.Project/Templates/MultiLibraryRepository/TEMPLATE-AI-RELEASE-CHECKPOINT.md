@@ -11,8 +11,8 @@ Walk the whole repository, including libraries added after the first `dotnet new
 5. NuGet license metadata matches what you ship: SPDX `PackageLicenseExpression` for MIT / BSD 3-Clause / Apache 2.0, or the packed `Properties/NugetAssets/License.txt` when the license is custom (copyright-only until you add grant terms). If a repository-root `LICENSE` is present, it matches that same license. Replace the icon only if the default asset must not ship.
 6. Public surface has no leftover template samples (`Class1`, tests that do not assert the product, copyright lines that still lie).
 7. Package version is a conscious first publish (including whether `0.1` and a prerelease suffix are still correct).
-<!--#if (PlaceSolution == "BesideLibrary") -->
-8. Solution notes in `src/prj/*/Readme.md` match the beside-library layout (`.slnx` next to the packable csproj, no `src/sln/` tree) and any host-specific leftover instructions.
+<!--#if (PlaceSolution == "BesideCsproj") -->
+8. Solution notes in `src/prj/*/Readme.md` match the beside-csproj layout (`.slnx` next to the packable csproj, no `src/sln/` tree) and any host-specific leftover instructions.
 <!--#else -->
 8. Solution notes under `src/sln/*/Readme.md` match where each `.slnx` actually is (`SlnFolder` or `RepoRoot`) and any host-specific leftover instructions. That folder is for solution-level or cross-project files; delete it only when the `.slnx` is not there and you do not need the notes.
 <!--#endif -->

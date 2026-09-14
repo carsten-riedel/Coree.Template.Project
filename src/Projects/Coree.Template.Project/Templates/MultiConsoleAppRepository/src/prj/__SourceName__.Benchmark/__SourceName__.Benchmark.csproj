@@ -48,7 +48,7 @@
     <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
   </ItemGroup>
 
-  <!-- Library under measurement -->
+  <!-- App under measurement -->
   <ItemGroup>
     <ProjectReference Include="..\__SourceName__\__SourceName__.csproj" />
   </ItemGroup>

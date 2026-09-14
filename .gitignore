@@ -1,13 +1,18 @@
-.vs/**
-src/*/.vs/**
-src/*/bin/**/*
-src/*/obj/**/*
+# Editor
+.vs/
+*.user
+*.suo
+.DS_Store
+Thumbs.db
 
-src/*/bin/**/*
-src/*/obj/**/*
+# Build artifacts at any depth. VS also writes these next to template stubs
+# when a template .sln/.csproj is opened; they are not template content.
+[Bb]in/
+[Oo]bj/
+artifacts/
 
-src/prj/Coree.Template.Project/bin/*
-src/prj/Coree.Template.Project/bin/** */
+# Template source under src/prj/Coree.Template.Project/Templates/ stays tracked,
+# including nested .gitignore files (they ship in the nupkg via NoDefaultExcludes).
 
 # Sensitive PowerShell and JSON file name patterns
 *[Ss][Ee][Cc][Rr][Ee][Tt]*.[Pp][Ss]1
@@ -17,11 +22,3 @@ src/prj/Coree.Template.Project/bin/** */
 AGENTS.md
 AGENTS/
 .agents/**/*
-
-# Local build and publish artifacts
-[Bb]in/
-[Oo]bj/
-.vs/
-[Dd]ebug/
-[Rr]elease/
-artifacts/

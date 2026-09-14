@@ -46,13 +46,12 @@ if ($branchNameSegment -ieq "feature") {
 ######################################################################################
 Log-Block -Stage "Post Deploy" -Section "Tag and Push" -Task ""
 
-if ($branchNameSegment -eq "main" -OR $branchNameSegment -eq "release" -OR $branchNameSegment -eq "hostfix")
-{
-    $tag = "v$fullVersion"
+$packProject = "$topLevelPath/src/prj/Coree.Template.Project/Coree.Template.Project.csproj"
+$fullVersion = (& dotnet msbuild $packProject -nologo -v:q "-getProperty:PackageVersion" "-p:ContinuousIntegrationBuild=true").Trim()
+if ([string]::IsNullOrWhiteSpace($fullVersion)) {
+    throw "Nerdbank PackageVersion was empty."
 }
-else {
-    $tag = "v$fullVersion-$branchNameSegment"
-}
+$tag = "v$fullVersion"
 
 $gitUserLocal = git config user.name
 $gitMailLocal = git config user.email

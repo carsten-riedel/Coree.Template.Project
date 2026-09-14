@@ -102,6 +102,31 @@
         ]
       }
     },
+    // Same order as TargetFrameworkValue. Pins src/global.json sdk.version
+    // to the DebugHost TFM (8.0.0 / 9.0.0 / 10.0.0), not netstandard2.0.
+    // Placeholder must not appear elsewhere.
+    "SdkPinVersion": {
+      "type": "generated",
+      "generator": "switch",
+      "replaces": "0.0.0-sdk-pin",
+      "parameters": {
+        "datatype": "string",
+        "cases": [
+          {
+            "condition": "(TargetFrameworks == \"net10.0\")",
+            "value": "10.0.0"
+          },
+          {
+            "condition": "(TargetFrameworks == \"net9.0\")",
+            "value": "9.0.0"
+          },
+          {
+            "condition": "(TargetFrameworks == \"net8.0\")",
+            "value": "8.0.0"
+          }
+        ]
+      }
+    },
     // One multi-choice instead of N root bools (VS stays one group, like InitRepoItems).
     // CLI default is empty: later libraries omit both switches, no root collisions.
     // Visual Studio does not allow an empty multi-choice (at least one value).
@@ -118,12 +143,12 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "",
-      "description": "Pick individual repository-root files. Omit on later libraries in the same folder. For the full first-create set on CLI, use --InitAllRepoItems. Visual Studio cannot leave this empty: choose None.",
+      "description": "Pick individual first-create files. Omit on later packages in the same folder. For the full first-create set on CLI, use --InitAllRepoItems. src/global.json is optional and off by default (not in that set). Visual Studio cannot leave this empty: choose None.",
       "displayName": "Repository root items",
       "choices": [
         {
           "choice": "None",
-          "description": "Do not add repository-root files. Use this in Visual Studio when adding another analyzer package to an existing repository.",
+          "description": "Do not add first-create files. Use this in Visual Studio when adding another analyzer package to an existing repository.",
           "displayName": "None"
         },
         {
@@ -150,11 +175,17 @@
           "choice": "RepoLicense",
           "description": "Copy the selected project license into a LICENSE file at the repository root (GitHub convention). First repository create only.",
           "displayName": "LICENSE file at repository root"
+        },
+        {
+          "choice": "SrcGlobalJson",
+          "description": "Add src/global.json pinning the .NET SDK to this create's DebugHost target framework (8.0.0, 9.0.0, or 10.0.0; rollForward latestFeature). Optional; off by default; not part of --InitAllRepoItems. First create only. Walk-up from folders under src/. Does not pin commands run at the repository root. The analyzer package stays netstandard2.0.",
+          "displayName": "src/global.json"
         }
       ]
     },
     // CLI-only first-create set: README, checkpoint, .gitattributes, .gitignore,
     // LICENSE. Same five files as the Visual Studio ide.host default. Hidden in VS.
+    // src/global.json is not in this set (SrcGlobalJson, default off).
     // None on InitRepoItems still writes nothing. Root version.json is not
     // in this set; it is --NerdbankGitVersioning Repo plus first-create Init
     // (WriteRepoVersionJson).
@@ -162,7 +193,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, .gitignore, LICENSE). Same set as a Visual Studio first create. Does not add version.json. First create only.",
+      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, .gitignore, LICENSE). Same set as a Visual Studio first create. Does not add version.json or src/global.json. First create only.",
       "displayName": "All repository root items"
     },
     // Where the TEMPLATE .slnx is written. src/sln/{name}/ is always created
@@ -335,11 +366,15 @@
     },
     "WriteRepoVersionJson": {
       "type": "computed",
-      "value": "(NerdbankGitVersioning == \"Repo\") && (InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"Readme\") || (InitRepoItems == \"AIReleaseCheckpoint\") || (InitRepoItems == \"GitAttributes\") || (InitRepoItems == \"GitIgnore\") || (InitRepoItems == \"RepoLicense\"))"
+      "value": "(NerdbankGitVersioning == \"Repo\") && (InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"Readme\") || (InitRepoItems == \"AIReleaseCheckpoint\") || (InitRepoItems == \"GitAttributes\") || (InitRepoItems == \"GitIgnore\") || (InitRepoItems == \"RepoLicense\") || (InitRepoItems == \"SrcGlobalJson\"))"
     },
     "WriteRepoLicense": {
       "type": "computed",
       "value": "(InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"RepoLicense\"))"
+    },
+    "WriteSrcGlobalJson": {
+      "type": "computed",
+      "value": "(InitRepoItems != \"None\") && (InitRepoItems == \"SrcGlobalJson\")"
     },
     // Analyzer-only. Default off. First real build writes Properties/PublicAPI
     // baseline files if they are missing. Not a repository-root Init* item.
@@ -571,6 +606,17 @@
       "defaultValue": "false",
       "description": "Add empty Directory.Build.props and Directory.Build.targets beside this analyzer project, and Directory.Solution.props and Directory.Solution.targets beside this package's .slnx (follows PlaceSolution). Landing files for extra MSBuild you do not want in the csproj. Test and benchmark projects are not affected. Default off.",
       "displayName": "Empty Directory.Build and Directory.Solution MSBuild files"
+    },
+    // Empty local tool manifest beside this analyzer csproj. Default on.
+    // Combo-safe: path includes the package name. Not Init. No tools pinned
+    // and no tool restore on build. Tests, DebugHost, and benchmark are not
+    // in this switch.
+    "DotNetToolManifest": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true",
+      "description": "Add an empty .config/dotnet-tools.json beside this analyzer project (no tools). Landing file for dotnet tool install --local. Default on. Every create; paths do not collide. Test, DebugHost, and benchmark projects are not affected. Does not restore tools on build.",
+      "displayName": "Empty local dotnet-tools.json"
     }
   },
   // Registers XML-style conditionals for extensions that hosts do not always
@@ -698,6 +744,18 @@
           "condition": "((InitRepoItems == \"None\") || ((InitAllRepoItems == false) && (InitRepoItems != \"GitIgnore\")))",
           "exclude": [
             ".gitignore"
+          ]
+        },
+        {
+          "condition": "((InitRepoItems == \"None\") || (InitRepoItems != \"SrcGlobalJson\"))",
+          "exclude": [
+            "src/global.json"
+          ]
+        },
+        {
+          "condition": "(DotNetToolManifest == false)",
+          "exclude": [
+            "src/prj/__SourceName__/.config/dotnet-tools.json"
           ]
         },
         {

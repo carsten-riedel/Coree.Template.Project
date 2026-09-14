@@ -24,6 +24,9 @@ Visual Studio created a conventional root `.slnx`. Open `__SourceName__.generate
 The solution file is `src/prj/__SourceName__/__SourceName__.slnx` (next to the packable analyzer, not tests, DebugHost, or benchmark). Open a terminal in that folder for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet pack`.
 <!--#else -->
 The solution file lives at the repository root. Open a terminal there for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet pack`. If more than one `.slnx` sits in that directory, pass the solution path to `dotnet`.
+<!--#if (WriteSrcGlobalJson) -->
+`src/global.json` does not apply to those commands: the SDK muxer starts at the repository root and does not walk into `src/`.
+<!--#endif -->
 <!--#endif -->
 <!--#else -->
 
@@ -35,10 +38,16 @@ The `.slnx` and this readme live in this folder. Open a terminal here for the co
 ./Directory.Solution.props  optional empty solution MSBuild landing file
 ./Directory.Solution.targets
 <!--#endif -->
+<!--#if (WriteSrcGlobalJson) -->
+../../global.json            .NET SDK pin (DebugHost TFM)
+<!--#endif -->
 ../../prj/__SourceName__/    packable analyzer package (netstandard2.0)
 <!--#if (DirectoryMsBuildFiles) -->
 ../../prj/__SourceName__/Directory.Build.props  optional empty analyzer MSBuild landing file
 ../../prj/__SourceName__/Directory.Build.targets
+<!--#endif -->
+<!--#if (DotNetToolManifest) -->
+../../prj/__SourceName__/.config/dotnet-tools.json  empty local tool manifest
 <!--#endif -->
 ../../prj/__SourceName__.Tests/  tests (not packed)
 ../../prj/__SourceName__.DebugHost/  Visual Studio F5 compile target (not packed)

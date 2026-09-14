@@ -48,6 +48,10 @@
     "DirectoryMsBuildFiles": {
       "longName": "DirectoryMsBuildFiles",
       "shortName": ""
+    },
+    "DotNetToolManifest": {
+      "longName": "DotNetToolManifest",
+      "shortName": ""
     }
   }
 }

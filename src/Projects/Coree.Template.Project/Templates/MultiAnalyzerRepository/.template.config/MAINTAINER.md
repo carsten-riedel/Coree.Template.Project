@@ -14,7 +14,7 @@ The generated root `README.md` lives beside this folder, one level up. That file
 | --- | --- |
 | `template.json` | Identity, symbols, sources, post-actions. |
 | `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**, and **wizard order** (`symbolInfo` array; DebugHost target framework is first). `persistenceScope: none` so the New Project dialog does not reuse the last create. Host mapping: **CLI ↔ Visual Studio**. No `icon` property: see **Visual Studio template icon**. |
-| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `DebugHostTargetFramework`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, `PublicApiAnalyzers`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `NuGetAuditHighCriticalAsErrors`, `TestCoverage`, and `DirectoryMsBuildFiles` so they do not steal single-letter aliases. |
+| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `DebugHostTargetFramework`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, `PublicApiAnalyzers`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `NuGetAuditHighCriticalAsErrors`, `TestCoverage`, `DirectoryMsBuildFiles`, and `DotNetToolManifest` so they do not steal single-letter aliases. |
 | `icon.png` | **Intentionally absent.** Visual Studio then uses the template **package** icon. |
 | `MAINTAINER.md` | This file. |
 
@@ -105,9 +105,9 @@ dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "Organization.Domain
 
 Each `--output` is its own first create.
 
-After the first call in the default combo the repo root has `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.gitignore`, and `LICENSE`. Each package gets `Properties/version.json`. Calls 2 and 3 add `src/prj` / `src/sln` trees only. Passing `--InitAllRepoItems` or `--InitRepoItems Readme` again into the same folder is Exit 73 (collision); `--force` would overwrite.
+After the first call in the default combo the repo root has `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.gitignore`, and `LICENSE`. Each package gets `Properties/version.json`. Calls 2 and 3 add `src/prj` / `src/sln` trees only. Passing `--InitAllRepoItems` or `--InitRepoItems Readme` again into the same folder is Exit 73 (collision); `--force` would overwrite. `--InitRepoItems SrcGlobalJson` is a separate first-create opt-in (`src/global.json`, default off).
 
-`--InitAllRepoItems` is the CLI first-create set (same five files as Visual Studio). It does **not** add `version.json`. `--InitRepoItems` picks individual files. Values are separated by **spaces**. Repeating `--InitRepoItems` per value also works. A quoted `Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense` string is **not** valid CLI input on current `dotnet new`; `|` is only the host default separator in `ide.host.json`.
+`--InitAllRepoItems` is the CLI first-create set (same five files as Visual Studio). It does **not** add `version.json` or `src/global.json`. `--InitRepoItems` picks individual files. Values are separated by **spaces**. Repeating `--InitRepoItems` per value also works. A quoted `Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense` string is **not** valid CLI input on current `dotnet new`; `|` is only the host default separator in `ide.host.json`.
 
 Subset on the first create (checkpoint only, no landing README):
 
@@ -115,7 +115,7 @@ Subset on the first create (checkpoint only, no landing README):
 dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.Analyzer1" --output "<repo>" --InitRepoItems AIReleaseCheckpoint
 ```
 
-**Visual Studio:** first create uses the `ide.host.json` default (same five root files as `--InitAllRepoItems`). A second package in the IDE cannot omit the group: choose **None**. Folgelibraries in the same folder are otherwise the CLI path above. Why the two hosts differ is in **CLI ↔ Visual Studio** below.
+**Visual Studio:** first create uses the `ide.host.json` default (same five root files as `--InitAllRepoItems`; `src/global.json` unchecked). A second package in the IDE cannot omit the group: choose **None**. Folgelibraries in the same folder are otherwise the CLI path above. Why the two hosts differ is in **CLI ↔ Visual Studio** below.
 
 ## CLI ↔ Visual Studio
 
@@ -129,7 +129,7 @@ A combo repository is two or more `dotnet new` calls into the **same** `--output
 
 | CLI | Visual Studio equivalent | Why |
 | --- | --- | --- |
-| `--InitAllRepoItems` | Leave **Repository root items** at the ide.host default (all five files checked) | Bool flag with no value list. The engine cannot treat a bare `--InitRepoItems` as “all”; that is Exit 127. The set is the VS first-create default, not another checkbox in that group. `version.json` is not in this set. |
+| `--InitAllRepoItems` | Leave **Repository root items** at the ide.host default (all five files checked) | Bool flag with no value list. The engine cannot treat a bare `--InitRepoItems` as “all”; that is Exit 127. The set is the VS first-create default, not another checkbox in that group. `version.json` and `src/global.json` are not in this set. |
 | `--InitRepoItems Readme …` (spaces) | Uncheck the files you do not want | Individual files. `|` is only legal in `ide.host.json` `defaultValue`, not on current `dotnet new`. |
 | omit both switches | **None** | CLI may leave a multi-choice empty. Visual Studio may not. |
 | `--InitRepoItems None` | **None** | Explicit empty set. Also wins over `--InitAllRepoItems` if both are passed. Everyday CLI later-libraries omit the switches instead. |
@@ -149,7 +149,7 @@ A combo repository is two or more `dotnet new` calls into the **same** `--output
 Other host-only switch behavior (not root files, same class of reason):
 
 - **`PlaceSolution` `RepoRoot`:** CLI renames to `{Name}.slnx` at repo root. Visual Studio keeps `{Name}.generated.slnx` so it does not overwrite the `{Name}.slnx` the IDE always writes. `SlnFolder` and `BesideLibrary` rename on both hosts (paths are not the VS root file). Post-actions that open the sln readme and tell you to close/reopen are `HostIdentifier == "vs"` only.
-- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `PublicApiAnalyzers` / `DocumentationTemplate` / `TestCoverage` / `AnalysisMode` / `NuGetAuditHighCriticalAsErrors` / `DirectoryMsBuildFiles`:** same defaults on both hosts (`NerdbankGitVersioning` `Project`, `PublicApiAnalyzers` `false`, `DocumentationTemplate` empty/`None`, `TestCoverage` `Coverlet`, `AnalysisMode` `Recommended`, `ProjectEditorGlobalConfig` `Strict`, `NuGetAuditHighCriticalAsErrors` `true`, `DirectoryMsBuildFiles` `false`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again. `--DocumentationTemplate Package` is safe on later libraries; `--DocumentationTemplate Repository` on a later library is Exit 73.
+- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `PublicApiAnalyzers` / `DocumentationTemplate` / `TestCoverage` / `AnalysisMode` / `NuGetAuditHighCriticalAsErrors` / `DirectoryMsBuildFiles` / `DotNetToolManifest`:** same defaults on both hosts (`NerdbankGitVersioning` `Project`, `PublicApiAnalyzers` `false`, `DocumentationTemplate` empty/`None`, `TestCoverage` `Coverlet`, `AnalysisMode` `Recommended`, `ProjectEditorGlobalConfig` `Strict`, `NuGetAuditHighCriticalAsErrors` `true`, `DirectoryMsBuildFiles` `false`, `DotNetToolManifest` `true`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again. `--DocumentationTemplate Package` is safe on later libraries; `--DocumentationTemplate Repository` on a later library is Exit 73.
 - **`PackageAuthor`:** required on both.
 
 ## `InitRepoItems` / `InitAllRepoItems`
@@ -165,6 +165,8 @@ Other host-only switch behavior (not root files, same class of reason):
 `None` is first in the choice list. `sources` exclude each root file unless `InitAllRepoItems` is on or that choice is selected; `None` excludes all of them, including when `InitAllRepoItems` is on. `==` in conditions means the value is among the selected choices. `GitIgnore` is the same shape as `GitAttributes`: seed is the output name at the template root (`.gitignore`), same exclude condition, no rename. Nested `src/prj` / `src/sln` `.gitignore` files use those full paths (see Benchmark exclude); they are not this switch and stay on every create.
 
 This template does not stamp `ChoosingPackageBoundaries.md` (library-repo decision guide only).
+
+`SrcGlobalJson` is `src/global.json`. Opt-in, **default off**, not part of `--InitAllRepoItems` or the Visual Studio first-create checks. Exclude unless this choice is selected (`None` still wins). Seed lives at that output path (not under `TemplateAssets/`). `SdkPinVersion` follows the selected **DebugHost** TFM (`8.0.0` / `9.0.0` / `10.0.0`), not netstandard2.0; `rollForward` is `latestFeature`. Later package with this box selected is Exit 73. Commands started at the repository root do not see this file.
 
 ## AI-supported release checkpoint
 
@@ -219,7 +221,7 @@ Seeds live under `TemplateAssets/Licenses/` (`MIT.txt`, `BSD3Clause.txt`, `Apach
 
 ## `NerdbankGitVersioning`
 
-Single choice (dropdown), same shape as `ProjectLicense`. CLI long name is **`--NerdbankGitVersioning`** so the extra NuGet dependency is visible. Default **`Project`**: `version.json` under this library's `Properties/` folder. `Repo` uses one root `version.json`. `Off` is the VersionPrefix group, no package. `--InitAllRepoItems` is the five root files only; it does **not** copy root `version.json`. Tests and benchmark are not in this switch.
+Single choice (dropdown), same shape as `ProjectLicense`. CLI long name is **`--NerdbankGitVersioning`** so the extra NuGet dependency is visible. Default **`Project`**: `version.json` under this library's `Properties/` folder. `Repo` uses one root `version.json`. `Off` is the VersionPrefix group, no package. `--InitAllRepoItems` is the five root files only; it does **not** copy root `version.json` or `src/global.json`. Tests and benchmark are not in this switch.
 
 ```powershell
 # combo gut
@@ -251,7 +253,8 @@ WriteRepoVersionJson      =
       || InitRepoItems == AIReleaseCheckpoint
       || InitRepoItems == GitAttributes
       || InitRepoItems == GitIgnore
-      || InitRepoItems == RepoLicense)
+      || InitRepoItems == RepoLicense
+      || InitRepoItems == SrcGlobalJson)
 ```
 
 `UseNerdbankGitVersioning` is generate-time `<!--#if` in `__SourceName__.csproj`. The VersionPrefix group is the `#else` (`Off`). Both branches stay in the **template source**; `dotnet new` keeps one.
@@ -277,7 +280,7 @@ Seeds live under `TemplateAssets/Versioning/`. `Project/version.json` uses `path
 | --- | --- | --- | --- |
 | `Repo` | true | not `None` | write |
 | `Repo` | false | omit | skip |
-| `Repo` | false | `Readme` / checkpoint / `.gitattributes` / `.gitignore` / `RepoLicense` (not `None`) | write |
+| `Repo` | false | `Readme` / checkpoint / `.gitattributes` / `.gitignore` / `RepoLicense` / `SrcGlobalJson` (not `None`) | write |
 | `Repo` | true or false | `None` | skip |
 | `Project` | true or false | any | skip |
 | `Off` | true or false | any | skip |
@@ -455,9 +458,20 @@ dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --outp
 dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --DirectoryMsBuildFiles
 ```
 
+## `DotNetToolManifest`
+
+Analyzer project only. Bool, default **true**. UI label **Empty local dotnet-tools.json**. CLI long name **`--DotNetToolManifest`**. Omit the switch → empty `src/prj/{Name}/.config/dotnet-tools.json`. `--DotNetToolManifest false` skips it. Combo-safe: path includes the package name. Not Init. `tools` is `{}`; no `dotnet tool restore` on build. Tests, DebugHost, and benchmark are not in this switch. `isRoot` is true so a later parent manifest does not merge in. `dotnet tool install --local` from the analyzer folder fills the file. The default handbook CWD (`src/sln/{Name}/`) does not see this manifest.
+
+The analyzer csproj `None Include`s the file with `Link` under `Properties\` (Solution Explorer only). Disk path stays `.config/`.
+
+```powershell
+dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems
+dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --DotNetToolManifest false
+```
+
 ## Other symbols worth not breaking
 
-- **`ProjectLicense` / `RepoLicense` / `InitAllRepoItems` / `GitIgnore`**: see section above. Default MIT. SPDX expression for standards; `PackageLicenseFile` only for `Custom`. Root `LICENSE` is the `RepoLicense` item or the CLI all-set. Root `.gitignore` is `GitIgnore` in that same first-create set.
+- **`ProjectLicense` / `RepoLicense` / `InitAllRepoItems` / `GitIgnore` / `SrcGlobalJson`**: see section above. Default MIT. SPDX expression for standards; `PackageLicenseFile` only for `Custom`. Root `LICENSE` is the `RepoLicense` item or the CLI all-set. Root `.gitignore` is `GitIgnore` in that same first-create set. `src/global.json` is `SrcGlobalJson`: opt-in, default off, not in `--InitAllRepoItems`; pin follows DebugHost TFM, not netstandard2.0.
 - **`NerdbankGitVersioning` / `WriteRepoVersionJson`**: see section above. Default `Project`. Root `version.json` is first-create only (`Repo` plus Init).
 - **`CSharpProjectOptions`**: see section above. Do not split back into per-property dropdowns.
 - **`ProjectEditorGlobalConfig`**: see section above. Default `Strict`. `Default` is suggestions-only. Seeds in `TemplateAssets/CodeStyle/`; generated disk name stays `.project.editor.globalconfig`. Csproj wire-up on the analyzer only.
@@ -472,4 +486,5 @@ dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --outp
 - **`EnablePackageValidation`**: not a symbol. Always `false` on the analyzer (no `lib/` TFMs).
 - **`TestCoverage`**: single choice, default `Coverlet`. Replaces the two independent Coverlet/ReportGenerator bools. Coverage stats on `dotnet test` are opt-out; ReportGenerator is opt-in (`CoverletAndReport`). There is no Report-without-Coverlet. `--TestCoverage None` drops Coverlet too. Computed `CoverletMSBuild` / `ReportGenerator` drive the test csproj and sln-readme `#if`s.
 - **`DirectoryMsBuildFiles`**: see section above. Default `false`. Empty `Directory.Build.*` beside the library and `Directory.Solution.*` beside this `.slnx`. No `Directory.Packages.props`.
+- **`DotNetToolManifest`**: see section above. Default `true`. Empty `src/prj/{Name}/.config/dotnet-tools.json`. `--DotNetToolManifest false` skips it.
 - Conditionals in `.md` / `.slnx` / `.targets` use `<!--#if` on their own lines (`specialCustomOperations`, `wholeLine`). `.txt` and the renamed root `LICENSE` use `//#if`. License seeds under `TemplateAssets/Licenses/` may use a shallow copyright `//#if` / `//#else`; extra sources pick the file so there is no `ProjectLicense` `#if` in the text. .targets stays registered so later generate-time hash-if in `Build/*.targets` still evaluate.

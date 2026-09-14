@@ -226,6 +226,13 @@
     <None Include="Directory.Build.targets" Link="Properties\Directory.Build.targets" />
   </ItemGroup>
   <!--#endif -->
+  <!--#if (DotNetToolManifest) -->
+  <!-- Disk path stays .config/: that is where `dotnet tool` looks. Link is Solution Explorer only. -->
+  <ItemGroup>
+    <None Remove=".config\dotnet-tools.json" />
+    <None Include=".config\dotnet-tools.json" Link="Properties\dotnet-tools.json" />
+  </ItemGroup>
+  <!--#endif -->
 <!--#if ((DirectoryMsBuildFiles) && (PlaceSolution == "BesideLibrary")) -->
   <ItemGroup>
     <None Remove="Directory.Solution.props;Directory.Solution.targets" />

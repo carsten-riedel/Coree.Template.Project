@@ -47,11 +47,13 @@ if ($branchNameSegment -ieq "feature") {
 Log-Block -Stage "Post Deploy" -Section "Tag and Push" -Task ""
 
 $packProject = "$topLevelPath/src/prj/Coree.Template.Project/Coree.Template.Project.csproj"
-$fullVersion = (& dotnet msbuild $packProject -nologo -v:q "-getProperty:PackageVersion" "-p:ContinuousIntegrationBuild=true").Trim()
-if ([string]::IsNullOrWhiteSpace($fullVersion)) {
-    throw "Nerdbank PackageVersion was empty."
+# Same stamp as the templates: Nerdbank GetBuildVersion. Bare -getProperty skips the target (SDK 1.0.0).
+$fullVersion = (& dotnet msbuild $packProject -nologo -v:q -t:GetBuildVersion "-getProperty:PackageVersion" "-p:ContinuousIntegrationBuild=true" | Select-Object -Last 1).Trim()
+if ([string]::IsNullOrWhiteSpace($fullVersion) -or $fullVersion -eq "1.0.0") {
+    throw "Nerdbank PackageVersion was empty or still the SDK default."
 }
 $tag = "v$fullVersion"
+Write-Host "tag is                : $tag"
 
 $gitUserLocal = git config user.name
 $gitMailLocal = git config user.email

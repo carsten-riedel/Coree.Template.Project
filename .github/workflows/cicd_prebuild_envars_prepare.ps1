@@ -15,11 +15,6 @@ Log-Block -Stage "Prebuild envars" -Section "Prepare" -Task "Set fixed values"
 
 $sourceCodeFolder = "src"
 $solutionFolder = "src/sln/Coree.Template.Project"
-$versionMajor = "0"
-$versionMinor = "3"
-$versionBuild = Get-BaseVersionBuild
-$versionRevision = Get-BaseVersionRevision
-$fullVersion = "$versionMajor.$versionMinor.$versionBuild.$versionRevision"
 
 ######################################################################################
 Log-Block -Stage "Prebuild envars" -Section "Prepare" -Task "Resolving branchnames and paths."
@@ -41,7 +36,6 @@ Write-Host "topLevelDirectory is  : $topLevelDirectory"
 Write-Host "gitRemoteOriginUrl is : $gitRemoteOriginUrl"
 Write-Host "gitOwner is           : $gitOwner"
 Write-Host "gitRepo is            : $gitRepo"
-Write-Host "fullVersion is        : $fullVersion"
 
 
 

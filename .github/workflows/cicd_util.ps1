@@ -41,27 +41,6 @@ function Get-NormalizedPathSegments {
 }
 
 
-function Set-BaseVersion {
-    
-    [void]([Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUserDeclaredVarsMoreThanAssignments','')] $global:BaseVersionTicks = [DateTime]::UtcNow.Ticks - [DateTime]::new(2000, 1, 1, 0, 0, 0, [DateTimeKind]::Utc).Ticks)
-    [void]([Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUserDeclaredVarsMoreThanAssignments','')] $global:BaseVersionTicksPerDay = [TimeSpan]::TicksPerDay)
-}
-
-Set-BaseVersion
-
-function Get-BaseVersionBuild {
-    $assemblyVersionBuild = [Math]::Truncate($global:BaseVersionTicks / $global:BaseVersionTicksPerDay)
-    return $assemblyVersionBuild
-}
-
-function Get-BaseVersionRevision {
-
-    $assemblyVersionTotalSeconds = [Math]::Truncate($global:BaseVersionTicks / [TimeSpan]::TicksPerSecond)
-    $assemblyVersionRemainingSeconds = [Math]::Truncate($assemblyVersionTotalSeconds % 86400)
-    $assemblyVersionRevision = [Math]::Truncate($assemblyVersionRemainingSeconds / 2)
-    return $assemblyVersionRevision
-}
-
 function Test-CommandAvailability {
     param (
         [Parameter(Mandatory = $true)]

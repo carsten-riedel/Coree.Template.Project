@@ -4,7 +4,7 @@
 <!--#if (PlaceSolution == "SlnFolder") -->
 Each library's `.slnx` and notes live under `src/sln/__SourceName__/`. CLI commands for this library start in that folder.
 <!--#elseif (PlaceSolution == "BesideLibrary") -->
-This library's `.slnx` sits next to the packable project under `src/prj/__SourceName__/`. `src/sln/__SourceName__/` still exists for solution-level or cross-project files; delete that notes folder if you do not need it. CLI commands start in `src/prj/__SourceName__/`.
+This library's `.slnx` and notes sit next to the packable project under `src/prj/__SourceName__/`. There is no `src/sln/` tree for this library. CLI commands start in `src/prj/__SourceName__/`.
 <!--#else -->
 The solution lives at the repository root; projects live under `src/`. `src/sln/__SourceName__/` still exists for solution-level or cross-project files; delete that notes folder if you do not need it. If this repository has more than one `.slnx` in the root directory, pass the solution path to `dotnet`.
 <!--#endif -->
@@ -26,8 +26,7 @@ src/global.json            .NET SDK pin (highest selected TFM)
 <!--#if (PlaceSolution == "SlnFolder") -->
 src/sln/__SourceName__/      this library's .slnx and notes
 <!--#elseif (PlaceSolution == "BesideLibrary") -->
-src/prj/__SourceName__/__SourceName__.slnx  solution (beside the library project)
-src/sln/__SourceName__/      optional notes / cross-project files
+src/prj/__SourceName__/      packable class library, .slnx, and notes
 <!--#else -->
 <!--#if (HostIdentifier == "vs") -->
 __SourceName__.generated.slnx  solution
@@ -36,7 +35,9 @@ __SourceName__.slnx          solution
 <!--#endif -->
 src/sln/__SourceName__/      optional notes / cross-project files
 <!--#endif -->
+<!--#if (PlaceSolution != "BesideLibrary") -->
 src/prj/__SourceName__/      packable class library
+<!--#endif -->
 src/prj/__SourceName__/Properties/Build/  MSBuild targets (not source)
 src/prj/__SourceName__/Properties/NugetAssets/  nupkg assets (readme, icon, notes)
 <!--#if (DotNetToolManifest) -->
@@ -63,6 +64,13 @@ Open a terminal in the repository root and run `dotnet restore`, `dotnet build`,
 `src/global.json` pins the .NET SDK to the highest selected target framework (`rollForward: latestFeature`). `dotnet` finds it when the working directory is under `src/`.
 <!--#endif -->
 <!--#if (DotNetToolManifest) -->
-`src/prj/__SourceName__/.config/dotnet-tools.json` is an empty local tool manifest. Run `dotnet tool install --local` from that project folder. The default solution-folder working directory does not see this file.
+`src/prj/__SourceName__/.config/dotnet-tools.json` is an empty local tool manifest. Run `dotnet tool install --local` from that project folder.
+<!--#if (PlaceSolution == "SlnFolder") -->
+The default solution-folder working directory does not see this file.
 <!--#endif -->
+<!--#endif -->
+<!--#if (PlaceSolution == "BesideLibrary") -->
+Command details and layout notes: [src/prj/__SourceName__/Readme.md](src/prj/__SourceName__/Readme.md).
+<!--#else -->
 Command details and layout notes: [src/sln/__SourceName__/Readme.md](src/sln/__SourceName__/Readme.md).
+<!--#endif -->

@@ -38,7 +38,7 @@
         "text": "Solution file location"
       },
       "description": {
-        "text": "Where this analyzer's .slnx is written. Default src/sln/{name}/. Other locations: repository root, or src/prj/{name}/ next to the analyzer csproj. Several .slnx files in the same folder make `dotnet` require an explicit path (MSB1011). src/sln/{name}/ is always created for solution-level or cross-project files. Visual Studio also creates a root .slnx; close Visual Studio, open the template solution, and delete the extra root .slnx."
+        "text": "Where this analyzer's .slnx is written. Default src/sln/{name}/ with the handbook beside that file. Other locations: repository root (src/sln/{name}/ stays as notes), or src/prj/{name}/ next to the analyzer csproj (slnx and handbook; no src/sln/{name}/). Several .slnx files in the same folder make `dotnet` require an explicit path (MSB1011). Visual Studio also creates a root .slnx; close Visual Studio, open the template solution, and delete the extra root .slnx."
       }
     },
     {

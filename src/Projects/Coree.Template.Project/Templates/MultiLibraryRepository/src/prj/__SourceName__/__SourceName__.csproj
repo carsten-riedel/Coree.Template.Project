@@ -218,7 +218,7 @@
   </ItemGroup>
 <!--#if (PlaceSolution == "BesideLibrary") -->
   <ItemGroup>
-    <None Remove="__SourceName__.slnx" />
+    <None Remove="__SourceName__.slnx;Readme.md" />
   </ItemGroup>
 <!--#endif -->
 

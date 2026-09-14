@@ -1,9 +1,12 @@
 # __SourceName__
 
-This folder is the per-package area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 <!--#if (PlaceSolution == "SlnFolder") -->
+This folder is the per-package area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` lives here; keep the folder while that is true. You can still add extra solution items here.
+<!--#elseif (PlaceSolution == "BesideLibrary") -->
+This folder is the packable analyzer package. The `.slnx` and this readme sit next to the `.csproj`. Tests, DebugHost, and the optional benchmark stay sibling projects under `src/prj/`. There is no `src/sln/` tree for this package.
 <!--#else -->
+This folder is the per-package area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` is written elsewhere (`PlaceSolution`). Use this folder for shared notes or extra solution items, or delete it if you do not need it.
 <!--#endif -->
 <!--#if ((HostIdentifier == "vs") && (PlaceSolution == "SlnFolder")) -->
@@ -18,21 +21,22 @@ Visual Studio created an extra `.slnx` in the repository root. Close this soluti
 
 Visual Studio created a conventional root `.slnx`. Open `__SourceName__.generated.slnx` in the repository root for the template layout (includes `sln`). Delete the extra conventional `.slnx` if you do not need it.
 <!--#endif -->
-<!--#if (PlaceSolution != "SlnFolder") -->
+<!--#if (PlaceSolution == "RepoRoot") -->
 
-<!--#if (PlaceSolution == "BesideLibrary") -->
-The solution file is `src/prj/__SourceName__/__SourceName__.slnx` (next to the packable analyzer, not tests, DebugHost, or benchmark). Open a terminal in that folder for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet pack`.
-<!--#else -->
 The solution file lives at the repository root. Open a terminal there for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet pack`. If more than one `.slnx` sits in that directory, pass the solution path to `dotnet`.
 <!--#if (WriteSrcGlobalJson) -->
 `src/global.json` does not apply to those commands: the SDK muxer starts at the repository root and does not walk into `src/`.
 <!--#endif -->
-<!--#endif -->
 <!--#else -->
 
+<!--#if (PlaceSolution == "SlnFolder") -->
 The `.slnx` and this readme live in this folder. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other packages keep their own `.slnx` under `src/sln/<name>/`, so `dotnet` does not ask you to specify a solution.
+<!--#else -->
+The `.slnx` and this readme live in this folder next to the packable analyzer. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other packages keep their own `.slnx` under `src/prj/<name>/`, so `dotnet` does not ask you to specify a solution.
+<!--#endif -->
 
 ```text
+<!--#if (PlaceSolution == "SlnFolder") -->
 ./                         you are here (this readme + __SourceName__.slnx)
 <!--#if (DirectoryMsBuildFiles) -->
 ./Directory.Solution.props  optional empty solution MSBuild landing file
@@ -53,6 +57,26 @@ The `.slnx` and this readme live in this folder. Open a terminal here for the co
 ../../prj/__SourceName__.DebugHost/  Visual Studio F5 compile target (not packed)
 <!--#if (BenchmarkProject == true) -->
 ../../prj/__SourceName__.Benchmark/  optional BenchmarkDotNet console app
+<!--#endif -->
+<!--#else -->
+./                         you are here (this readme + __SourceName__.slnx + __SourceName__.csproj)
+<!--#if (DirectoryMsBuildFiles) -->
+./Directory.Solution.props  optional empty solution MSBuild landing file
+./Directory.Solution.targets
+./Directory.Build.props     optional empty analyzer MSBuild landing file
+./Directory.Build.targets
+<!--#endif -->
+<!--#if (WriteSrcGlobalJson) -->
+../global.json               .NET SDK pin (DebugHost TFM)
+<!--#endif -->
+<!--#if (DotNetToolManifest) -->
+./.config/dotnet-tools.json  empty local tool manifest
+<!--#endif -->
+../__SourceName__.Tests/     tests (not packed)
+../__SourceName__.DebugHost/ Visual Studio F5 compile target (not packed)
+<!--#if (BenchmarkProject == true) -->
+../__SourceName__.Benchmark/  optional BenchmarkDotNet console app
+<!--#endif -->
 <!--#endif -->
 ```
 
@@ -77,15 +101,29 @@ dotnet test
 
 After a test run, the links below point to generated reports for the test host TFM.
 
+<!--#if (PlaceSolution == "SlnFolder") -->
 [Test results (trx)](../../prj/__SourceName__.Tests/MSTestResults/__SourceName__.Tests-__TargetFramework__.trx)
 [Test results (html)](../../prj/__SourceName__.Tests/MSTestResults/result-__TargetFramework__.html)
 <!--#if (CoverletMSBuild == true) -->
 [Coverlet output](../../prj/__SourceName__.Tests/CoverletOutput/coverage.opencover.xml)
+<!--#endif -->
+<!--#else -->
+[Test results (trx)](../__SourceName__.Tests/MSTestResults/__SourceName__.Tests-__TargetFramework__.trx)
+[Test results (html)](../__SourceName__.Tests/MSTestResults/result-__TargetFramework__.html)
+<!--#if (CoverletMSBuild == true) -->
+[Coverlet output](../__SourceName__.Tests/CoverletOutput/coverage.opencover.xml)
+<!--#endif -->
+<!--#endif -->
 
+<!--#if (CoverletMSBuild == true) -->
 Coverlet measures only the analyzer assembly (`[__SourceName__]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
+<!--#if (PlaceSolution == "SlnFolder") -->
 ReportGenerator writes a summary under `../../prj/__SourceName__.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
+<!--#else -->
+ReportGenerator writes a summary under `../__SourceName__.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
+<!--#endif -->
 <!--#endif -->
 
 ## Pack
@@ -139,7 +177,11 @@ dotnet pack
 The benchmark is a local executable targeting the selected test host framework. It is neither packed nor published; start it with the command below.
 
 ```bash
+<!--#if (PlaceSolution == "SlnFolder") -->
 dotnet run --project ../../prj/__SourceName__.Benchmark/__SourceName__.Benchmark.csproj -c Release
+<!--#else -->
+dotnet run --project ../__SourceName__.Benchmark/__SourceName__.Benchmark.csproj -c Release
+<!--#endif -->
 ```
 <!--#endif -->
 <!--#endif -->

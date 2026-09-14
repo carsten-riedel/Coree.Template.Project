@@ -109,23 +109,25 @@
       "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, .gitignore, LICENSE, ChoosingPackageBoundaries.md). Same set as a Visual Studio first create. Does not add version.json or src/global.json. First create only.",
       "displayName": "All repository root items"
     },
-    // Where the TEMPLATE .slnx is written. src/sln/{name}/ is always created
-    // (notes / cross-project files); this choice only moves the solution file.
-    // SlnFolder (default): src/sln/__SourceName__/__SourceName__.slnx — one folder
-    // per library so `dotnet` there does not see sibling .slnx files.
-    // BesideLibrary: src/prj/__SourceName__/ next to the packable csproj (tests
-    // and benchmark stay sibling projects under src/prj/).
+    // Where the TEMPLATE .slnx is written.
+    // SlnFolder (default): src/sln/__SourceName__/__SourceName__.slnx plus
+    // handbook Readme.md — one folder per library so `dotnet` there does not
+    // see sibling .slnx files.
+    // BesideLibrary: src/prj/__SourceName__/ next to the packable csproj
+    // (slnx + handbook; tests and benchmark stay sibling projects under
+    // src/prj/). Does not create src/sln/{name}/.
     // RepoRoot: repository root. CLI renames to __SourceName__.slnx; Visual
     // Studio keeps __SourceName__.generated.slnx so it does not overwrite the
-    // IDE's conventional {Name}.slnx. RepoRoot stacks every library's .slnx
-    // in one directory; CLI/CI must pass a solution path if more than one exists.
+    // IDE's conventional {Name}.slnx. src/sln/{name}/Readme.md is still notes.
+    // RepoRoot stacks every library's .slnx in one directory; CLI/CI must pass
+    // a solution path if more than one exists.
     "PlaceSolution": {
       "type": "parameter",
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "SlnFolder",
       "enableQuotelessLiterals": true,
-      "description": "Where this library's .slnx is written. Default src/sln/{name}/. src/sln/{name}/ is always created for solution-level or cross-project files. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
+      "description": "Where this library's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideLibrary writes the .slnx and handbook next to the library csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
       "displayName": "Solution file location",
       "choices": [
         {
@@ -140,7 +142,7 @@
         },
         {
           "choice": "BesideLibrary",
-          "description": "Next to this library's csproj. Tests and benchmark stay sibling projects under src/prj/.",
+          "description": "Next to this library's csproj (slnx and handbook). Does not create src/sln/{name}/. Tests and benchmark stay sibling projects under src/prj/.",
           "displayName": "src/prj/{name}/"
         }
       ]
@@ -724,8 +726,10 @@
   // Sources: optional files plus solution placement.
   // The template always starts from __SourceName__.generated.slnx at the
   // template root. Paths inside that file follow PlaceSolution
-  // (SlnFolder / RepoRoot / BesideLibrary). src/sln/__SourceName__/Readme.md
-  // is always copied; the nested .gitignore is only when the .slnx lives there.
+  // (SlnFolder / RepoRoot / BesideLibrary).
+  // Handbook seed is src/sln/__SourceName__/Readme.md. SlnFolder and RepoRoot
+  // keep it there. BesideLibrary renames it next to the csproj and does not
+  // create src/sln/{name}/ (the nested .gitignore is already excluded).
   //
   // SlnFolder → src/sln/__SourceName__/__SourceName__.slnx (CLI and VS).
   // BesideLibrary → src/prj/__SourceName__/__SourceName__.slnx (CLI and VS).
@@ -812,7 +816,8 @@
         {
           "condition": "(PlaceSolution == \"BesideLibrary\")",
           "rename": {
-            "__SourceName__.generated.slnx": "src/prj/__SourceName__/__SourceName__.slnx"
+            "__SourceName__.generated.slnx": "src/prj/__SourceName__/__SourceName__.slnx",
+            "src/sln/__SourceName__/Readme.md": "src/prj/__SourceName__/Readme.md"
           }
         },
         {
@@ -1108,13 +1113,19 @@
       ]
     }
   ],
-  // Host bookkeeping only. Readme is index 0 for the VS open-file post action.
+  // Host bookkeeping only. Exactly one handbook Readme survives; it is index 0
+  // for the VS open-file post action (filtered list, not declared holes).
   // Solution paths are the names AFTER source rename, BEFORE sourceName replace.
   // RepoRoot+CLI actual file is __SourceName__.slnx; primaryOutputs still names
   // the pre-CLI-rename .generated path.
   "primaryOutputs": [
     {
+      "condition": "(PlaceSolution != \"BesideLibrary\")",
       "path": "src/sln/__SourceName__/Readme.md"
+    },
+    {
+      "condition": "(PlaceSolution == \"BesideLibrary\")",
+      "path": "src/prj/__SourceName__/Readme.md"
     },
     {
       "condition": "(PlaceSolution == \"SlnFolder\")",
@@ -1130,8 +1141,8 @@
     }
   ],
   // Visual Studio only. CLI ignores open-file and we skip display actions there.
-  // 84C0DA21 opens the sln readme. AC1156F7 is a message box after create
-  // (not run-script; that dialog appeared before create).
+  // 84C0DA21 opens the surviving handbook Readme (index 0). AC1156F7 is a
+  // message box after create (not run-script; that dialog appeared before create).
   "postActions": [
       {
         "condition": "(HostIdentifier == \"vs\")",

@@ -22,6 +22,7 @@ Ensure-VariableSet -VariableName "`$gitRemoteOriginUrl" -VariableValue "$gitRemo
 Ensure-VariableSet -VariableName "`$gitOwner" -VariableValue "$gitOwner"
 Ensure-VariableSet -VariableName "`$gitRepo" -VariableValue "$gitRepo"
 Ensure-VariableSet -VariableName "`$sourceCodeFolder" -VariableValue "$sourceCodeFolder"
+Ensure-VariableSet -VariableName "`$solutionFolder" -VariableValue "$solutionFolder"
 Ensure-VariableSet -VariableName "`$versionMajor" -VariableValue "$versionMajor"
 Ensure-VariableSet -VariableName "`$versionMinor" -VariableValue "$versionMinor"
 Ensure-VariableSet -VariableName "`$versionBuild" -VariableValue "$versionBuild"

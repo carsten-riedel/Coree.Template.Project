@@ -22,7 +22,7 @@ Create a new project shows one icon per template. Two files can supply it; they 
 
 | Source | Path | What uses it |
 | --- | --- | --- |
-| Template package | `src/Projects/Coree.Template.Project/NugetAssets/Icon.png` (`PackageIcon` on `Coree.Template.Project.csproj`) | NuGet listing **and** the VS picker when this template does not declare its own icon. |
+| Template package | `src/prj/Coree.Template.Project/NugetAssets/Icon.png` (`PackageIcon` on `Coree.Template.Project.csproj`) | NuGet listing **and** the VS picker when this template does not declare its own icon. |
 | This template | `.template.config/icon.png`, optional `ide.host.json` `"icon": "icon.png"` | VS picker for **this** template only. Overrides the package icon. |
 | Generated app | `src/prj/{Name}/Properties/NugetAssets/Icon-128x128.png` | The **consumer** nupkg after `dotnet pack`. Not the template picker. |
 
@@ -37,7 +37,7 @@ The template bootstraps a **repository layout** for one or more publishable cons
 Install from this folder (or from the packed `Coree.Template.Project` nupkg):
 
 ```powershell
-dotnet new install "C:\dev\github.com\carsten-riedel\Coree.Template.Project\src\Projects\Coree.Template.Project\Templates\MultiConsoleAppRepository" --force
+dotnet new install "C:\dev\github.com\carsten-riedel\Coree.Template.Project\src\prj\Coree.Template.Project\Templates\MultiConsoleAppRepository" --force
 ```
 
 Folder install is the local loop. Verify by generating into `%TEMP%`. Do not `dotnet build` `src/prj/__SourceName__/__SourceName__.csproj` in this tree: it is template source (every `<!--#if` branch still present). A C# design-time build of that stub is enough to run `GenerateAssemblyInfo`.

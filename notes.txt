@@ -372,4 +372,4 @@ coverlet.collector
 
 in src:
 dotnet pack -c Debug
-dotnet new install Projects\Coree.Template.Project\bin\Package\Coree.Template.Project.0.2.8934.6807-local.nupkg
+dotnet new install prj\Coree.Template.Project\bin\Package\Coree.Template.Project.0.2.8934.6807-local.nupkg

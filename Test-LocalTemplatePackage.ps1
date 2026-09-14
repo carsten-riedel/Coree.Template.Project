@@ -13,7 +13,7 @@ $ErrorActionPreference = 'Stop'
 
 $packageId = 'Coree.Template.Project'
 $sourceRoot = Join-Path -Path $PSScriptRoot -ChildPath 'src'
-$packageOutputDirectory = Join-Path -Path $sourceRoot -ChildPath 'Projects\Coree.Template.Project\bin\Package'
+$packageOutputDirectory = Join-Path -Path $sourceRoot -ChildPath 'prj\Coree.Template.Project\bin\Package'
 $localPackagePattern = "$packageId.*-local.nupkg"
 
 function Invoke-DotNet {
@@ -83,7 +83,12 @@ if (-not (Test-Path -LiteralPath $sourceRoot -PathType Container)) {
     throw "Source directory not found: $sourceRoot"
 }
 
-Push-Location -LiteralPath $sourceRoot
+$solutionFolder = Join-Path -Path $sourceRoot -ChildPath 'sln\Coree.Template.Project'
+if (-not (Test-Path -LiteralPath $solutionFolder -PathType Container)) {
+    throw "Solution directory not found: $solutionFolder"
+}
+
+Push-Location -LiteralPath $solutionFolder
 try {
     Invoke-DotNet -Arguments @('pack', '-c', 'Debug')
 }

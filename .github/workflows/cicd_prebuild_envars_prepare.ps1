@@ -14,6 +14,7 @@ if (Test-Path $secretsPath) {
 Log-Block -Stage "Prebuild envars" -Section "Prepare" -Task "Set fixed values"
 
 $sourceCodeFolder = "src"
+$solutionFolder = "src/sln/Coree.Template.Project"
 $versionMajor = "0"
 $versionMinor = "3"
 $versionBuild = Get-BaseVersionBuild

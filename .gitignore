@@ -6,8 +6,8 @@ src/*/obj/**/*
 src/*/bin/**/*
 src/*/obj/**/*
 
-src/Projects/Coree.Template.Project/bin/*
-src/Projects/Coree.Template.Project/bin/** */
+src/prj/Coree.Template.Project/bin/*
+src/prj/Coree.Template.Project/bin/** */
 
 # Sensitive PowerShell and JSON file name patterns
 *[Ss][Ee][Cc][Rr][Ee][Tt]*.[Pp][Ss]1

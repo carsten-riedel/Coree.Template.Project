@@ -42,7 +42,7 @@ Install from this folder (or from the packed `Coree.Template.Project` nupkg):
 dotnet new install "C:\dev\github.com\carsten-riedel\Coree.Template.Project\src\Projects\Coree.Template.Project\Templates\MultiAnalyzerRepository" --force
 ```
 
-Folder install is the local loop. Verify by generating into `%TEMP%`. Do not `dotnet build` `src/prj/__SourceName__/__SourceName__.csproj` in this tree: it is template source (every `<!--#if` branch still present). A C# design-time build of that stub is enough to run `GenerateAssemblyInfo`.
+Folder install is the local loop. Verify by generating into `%TEMP%`. Do not `dotnet build` `src/prj/__SourceName__/__SourceName__.csproj` in this tree: it is template source (every `<!--#if` branch still present). A C# design-time build of that stub is enough to run `GenerateAssemblyInfo`. A real stub build also runs `InitializePublicApi` and can write empty `Properties/PublicAPI/*.txt` here.
 
 Combo repo, three analyzer packages, root files only once:
 
@@ -406,7 +406,9 @@ dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --outp
 
 Library-only bool, default **false**. UI label **Public API analyzers**. CLI long name **`--PublicApiAnalyzers`**. Separate from repository-root Init* and from versioning. Tests and benchmark are not in this switch.
 
-When on, the analyzer project references `Microsoft.CodeAnalysis.PublicApiAnalyzers` 5.6.0 and sets `PublicApiDirectory` to `Properties/PublicAPI`. `dotnet new` does **not** stamp `PublicAPI.Shipped.txt` / `PublicAPI.Unshipped.txt`. `Build/InitializePublicApi.targets` (imported only when this switch is on) writes those files on the first real build if they are missing, then runs `dotnet format analyzers --diagnostics RS0016`. AdditionalFiles are always listed so a first solution compile can see the paths. Nested format sets `PublicApiInitializing` and skips the target. Combo later packages pass `--PublicApiAnalyzers` again; paths are per package (`src/prj/{Name}/Properties/PublicAPI/`). There are no `AnalyzerReleases.Shipped.md` / `Unshipped.md` files; diagnostic-ID release tracking is not used (RS2008 suppressed).
+When on, the analyzer project references `Microsoft.CodeAnalysis.PublicApiAnalyzers` 5.6.0 and sets `PublicApiDirectory` to `Properties/PublicAPI`. `dotnet new` does **not** stamp `PublicAPI.Shipped.txt` / `PublicAPI.Unshipped.txt`. `Build/InitializePublicApi.targets` (imported only when this switch is on **after generate**) writes those files on the first real build if they are missing, then runs `dotnet format analyzers --diagnostics RS0016`. AdditionalFiles are always listed so a first solution compile can see the paths. Nested format sets `PublicApiInitializing` and skips the target. Combo later packages pass `--PublicApiAnalyzers` again; paths are per package (`src/prj/{Name}/Properties/PublicAPI/`). There are no `AnalyzerReleases.Shipped.md` / `Unshipped.md` files; diagnostic-ID release tracking is not used (RS2008 suppressed).
+
+In **template source** the `<!--#if (PublicApiAnalyzers) -->` markers are XML comments, so MSBuild always imports the targets (default after generate is still off). Design-time skips the target; a real stub `dotnet build` does not. The target no-ops when `../../../.template.config` exists. `src/prj/__SourceName__/Properties/PublicAPI/` in this host is a failed stamp — delete it, do not commit.
 
 ```powershell
 dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --PublicApiAnalyzers

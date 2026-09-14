@@ -45,8 +45,13 @@
     First real build writes the baseline and runs format so VS does not need a
     separate command. Nested format sets PublicApiInitializing=1 and skips.
     Sibling inner TFMs wait until Unshipped has API lines.
+    In template source the #if around the Import is an XML comment, so this
+    file always loads. Skip when ../../../.template.config exists (host tree).
   -->
-  <Target Name="InitializePublicApi" BeforeTargets="DispatchToInnerBuilds;PrepareForBuild;CoreCompile" Condition="'$(DesignTimeBuild)' != 'true' and '$(PublicApiInitializing)' != '1'">
+  <PropertyGroup>
+    <_PublicApiTemplateHostConfig>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)\..\..\..\.template.config'))</_PublicApiTemplateHostConfig>
+  </PropertyGroup>
+  <Target Name="InitializePublicApi" BeforeTargets="DispatchToInnerBuilds;PrepareForBuild;CoreCompile" Condition="'$(DesignTimeBuild)' != 'true' and '$(PublicApiInitializing)' != '1' and !Exists('$(_PublicApiTemplateHostConfig)')">
     <PropertyGroup>
       <_PublicApiShippedFile>$(PublicApiDirectory)\PublicAPI.Shipped.txt</_PublicApiShippedFile>
       <_PublicApiUnshippedFile>$(PublicApiDirectory)\PublicAPI.Unshipped.txt</_PublicApiUnshippedFile>

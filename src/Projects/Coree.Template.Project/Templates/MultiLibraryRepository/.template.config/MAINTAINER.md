@@ -40,6 +40,8 @@ Install from this folder (or from the packed `Coree.Template.Project` nupkg):
 dotnet new install "C:\dev\github.com\carsten-riedel\Coree.Template.Project\src\Projects\Coree.Template.Project\Templates\MultiLibraryRepository" --force
 ```
 
+Folder install is the local loop. Verify by generating into `%TEMP%`. Do not `dotnet build` `src/prj/__SourceName__/__SourceName__.csproj` in this tree: it is template source (every `<!--#if` branch still present). A C# design-time build of that stub is enough to run `GenerateAssemblyInfo`.
+
 Combo repo, three libraries, root files only once:
 
 ```powershell
@@ -258,7 +260,9 @@ WriteRepoVersionJson      =
 
 `UseNerdbankGitVersioning` is generate-time `<!--#if` in `__SourceName__.csproj`. The VersionPrefix group is the `#else` (`Off`). Both branches stay in the **template source**; `dotnet new` keeps one.
 
-`None` wins over InitAll. A second **generate-time** write of root `version.json` is Exit 73. `--NerdbankGitVersioning Repo` without Init does not stamp the file at `dotnet new`. `Build/NerdbankRepositoryVersion.targets` (imported only for Repo) copies `Build/Nerdbank.version.json` to the repository root **if it does not exist**, before Nerdbank reads it. A later library in the same folder therefore does not collide.
+`None` wins over InitAll. A second **generate-time** write of root `version.json` is Exit 73. `--NerdbankGitVersioning Repo` without Init does not stamp the file at `dotnet new`. `Build/NerdbankRepositoryVersion.targets` (imported only for Repo **after generate**) copies `Build/Nerdbank.version.json` to the repository root **if it does not exist**, before Nerdbank reads it. A later library in the same folder therefore does not collide.
+
+In **template source** those `<!--#if (NerdbankGitVersioning == "Repo") -->` markers are XML comments, so MSBuild always imports the targets. From `src/prj/__SourceName__`, `../../../version.json` is this template folder. The copy no-ops when `../../../.template.config` exists. A `version.json` beside this `MAINTAINER.md` is a failed host stamp — delete it, do not commit.
 
 There is no `version.json` checkbox in `InitRepoItems`. Generate-time root file is `WriteRepoVersionJson` (`Repo` plus first-create Init). If that file is still missing, the Repo library writes it once at build (`if not exists`). Later VS library: **None** plus **This repository (root version.json)**.
 

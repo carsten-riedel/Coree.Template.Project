@@ -1,12 +1,12 @@
 # __SourceName__
 
 <!--#if (PlaceSolution == "SlnFolder") -->
-This folder is the per-library area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
+This folder is the per-app area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` lives here; keep the folder while that is true. You can still add extra solution items here.
 <!--#elseif (PlaceSolution == "BesideLibrary") -->
-This folder is the packable class library. The `.slnx` and this readme sit next to the `.csproj`. Tests and the optional benchmark stay sibling projects under `src/prj/`. There is no `src/sln/` tree for this library.
+This folder is the console app. The `.slnx` and this readme sit next to the `.csproj`. Tests and the optional benchmark stay sibling projects under `src/prj/`. There is no `src/sln/` tree for this app.
 <!--#else -->
-This folder is the per-library area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
+This folder is the per-app area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` is written elsewhere (`PlaceSolution`). Use this folder for shared notes or extra solution items, or delete it if you do not need it.
 <!--#endif -->
 <!--#if ((HostIdentifier == "vs") && (PlaceSolution == "SlnFolder")) -->
@@ -23,16 +23,16 @@ Visual Studio created a conventional root `.slnx`. Open `__SourceName__.generate
 <!--#endif -->
 <!--#if (PlaceSolution == "RepoRoot") -->
 
-The solution file lives at the repository root. Open a terminal there for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet pack`. If more than one `.slnx` sits in that directory, pass the solution path to `dotnet`.
+The solution file lives at the repository root. Open a terminal there for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet publish`. If more than one `.slnx` sits in that directory, pass the solution path to `dotnet`.
 <!--#if (WriteSrcGlobalJson) -->
 `src/global.json` does not apply to those commands: the SDK muxer starts at the repository root and does not walk into `src/`.
 <!--#endif -->
 <!--#else -->
 
 <!--#if (PlaceSolution == "SlnFolder") -->
-The `.slnx` and this readme live in this folder. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other libraries keep their own `.slnx` under `src/sln/<name>/`, so `dotnet` does not ask you to specify a solution.
+The `.slnx` and this readme live in this folder. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other apps keep their own `.slnx` under `src/sln/<name>/`, so `dotnet` does not ask you to specify a solution.
 <!--#else -->
-The `.slnx` and this readme live in this folder next to the packable library. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other libraries keep their own `.slnx` under `src/prj/<name>/`, so `dotnet` does not ask you to specify a solution.
+The `.slnx` and this readme live in this folder next to the console app. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other apps keep their own `.slnx` under `src/prj/<name>/`, so `dotnet` does not ask you to specify a solution.
 <!--#endif -->
 
 ```text
@@ -45,9 +45,9 @@ The `.slnx` and this readme live in this folder next to the packable library. Op
 <!--#if (WriteSrcGlobalJson) -->
 ../../global.json            .NET SDK pin (highest selected TFM)
 <!--#endif -->
-../../prj/__SourceName__/    packable class library
+../../prj/__SourceName__/    console app
 <!--#if (DirectoryMsBuildFiles) -->
-../../prj/__SourceName__/Directory.Build.props  optional empty library MSBuild landing file
+../../prj/__SourceName__/Directory.Build.props  optional empty console app MSBuild landing file
 ../../prj/__SourceName__/Directory.Build.targets
 <!--#endif -->
 <!--#if (DotNetToolManifest) -->
@@ -62,7 +62,7 @@ The `.slnx` and this readme live in this folder next to the packable library. Op
 <!--#if (DirectoryMsBuildFiles) -->
 ./Directory.Solution.props  optional empty solution MSBuild landing file
 ./Directory.Solution.targets
-./Directory.Build.props     optional empty library MSBuild landing file
+./Directory.Build.props     optional empty console app MSBuild landing file
 ./Directory.Build.targets
 <!--#endif -->
 <!--#if (WriteSrcGlobalJson) -->
@@ -116,7 +116,7 @@ After a test run, the links below point to generated reports. Each selected targ
 <!--#endif -->
 
 <!--#if (CoverletMSBuild == true) -->
-Coverlet measures only the class library (`[__SourceName__]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
+Coverlet measures only the console app (`[__SourceName__]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
 <!--#if (PlaceSolution == "SlnFolder") -->
@@ -126,49 +126,49 @@ ReportGenerator writes one summary per target framework under `../__SourceName__
 <!--#endif -->
 <!--#endif -->
 
-## Pack
-
-```bash
-dotnet pack
-```
-
-Creates one `.nupkg` in `src/prj/__SourceName__/bin/Pack/` containing the library for all selected target frameworks. Test and optional benchmark projects are not packed.
-<!--#if (NuGetAuditHighCriticalAsErrors) -->
-
-Restore fails this class library on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that library’s packages (txt/json) and is still info-only.
-<!--#endif -->
-<!--#if (PublicApiAnalyzers) -->
-
-## Public API baseline
-
-The class library uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first real `dotnet build` writes `src/prj/__SourceName__/Properties/PublicAPI/PublicAPI.Shipped.txt` and `PublicAPI.Unshipped.txt` if they are missing, then records the current public surface. Commit those files. Later public additions belong in `PublicAPI.Unshipped.txt` (analyzer RS0016 / `dotnet format analyzers` with `--diagnostics RS0016`).
-<!--#endif -->
-<!--#if (WritePackageDocTemplate) -->
-
-## Package documentation template
-
-`src/prj/__SourceName__/Properties/NugetAssets/docs/DocShell.html` is the offline documentation seed. It packs with the nupkg (`docs/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this library. Repository-root `docs/` is a separate site if present.
-<!--#endif -->
-
 ## Publish
-
-The class library sets `IsPublishable` to `false`. Distribution is `dotnet pack`. To write output to `src/prj/__SourceName__/bin/Publish/` for the highest selected target framework, set `IsPublishable` to `true` and run:
 
 ```bash
 dotnet publish
 ```
 
-This is a class library, not an executable.
+`dotnet publish` with no `--framework` publishes the default TFM from `src/prj/__SourceName__/Properties/Build/PublishDefaultFramework.targets` to `src/prj/__SourceName__/bin/Publish/`. Override with `dotnet publish --framework net8.0` (or another selected TFM). Edit that targets file to change the default. To try a newer TFM (net11, …) before shipping it, append it to `TargetFrameworks` so build/test catch incompatibilities; leave the targets file until bare publish should follow. Test and optional benchmark projects are not published.
+<!--#if (NuGetAuditHighCriticalAsErrors) -->
+
+Restore fails this console app on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that app’s packages (txt/json) and is still info-only.
+<!--#endif -->
+<!--#if (PublicApiAnalyzers) -->
+
+## Public API baseline
+
+The console app uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first real `dotnet build` writes `src/prj/__SourceName__/Properties/PublicAPI/PublicAPI.Shipped.txt` and `PublicAPI.Unshipped.txt` if they are missing, then records the current public surface. Commit those files. Later public additions belong in `PublicAPI.Unshipped.txt` (analyzer RS0016 / `dotnet format analyzers` with `--diagnostics RS0016`).
+<!--#endif -->
+<!--#if (WritePackageDocTemplate) -->
+
+## Package documentation template
+
+`src/prj/__SourceName__/Properties/NugetAssets/docs/DocShell.html` is the offline documentation seed. It packs with the nupkg (`docs/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this app. Repository-root `docs/` is a separate site if present.
+<!--#endif -->
+
+## Pack
+
+`IsPackable` is `false`. Distribution is `dotnet publish`. To write a `.nupkg` to `src/prj/__SourceName__/bin/Pack/` for all selected target frameworks, set `IsPackable` to `true` and run:
+
+```bash
+dotnet pack
+```
+
+Test and optional benchmark projects are not packed.
 
 ## CI
 
-Use `-m:1` for the build so a pipeline does not depend on machine load. It avoids occasional file locks when the library is built as a solution project and as a test `ProjectReference` at the same time. Multi-target test execution is already configured as parallel in the test project. Run these commands from this folder so each library has exactly one `.slnx` in the working directory.
+Use `-m:1` for the build so a pipeline does not depend on machine load. It avoids occasional file locks when the app is built as a solution project and as a test `ProjectReference` at the same time. Multi-target test execution is already configured as parallel in the test project. Run these commands from this folder so each app has exactly one `.slnx` in the working directory.
 
 ```bash
 dotnet restore
 dotnet build --no-restore -m:1
 dotnet test --no-build
-dotnet pack
+dotnet publish --no-build
 ```
 <!--#if (BenchmarkProject == true) -->
 

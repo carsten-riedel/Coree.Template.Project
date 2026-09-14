@@ -8,7 +8,17 @@
 
   <!-- General build settings: defines the output type and target framework -->
   <PropertyGroup>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
+    <!--
+      Keep TargetFrameworks only. Do not add TargetFramework.
+      `dotnet publish` with no --framework uses the default TFM from
+      Properties/Build/PublishDefaultFramework.targets. Override with
+      `dotnet publish --framework net8.0` (or net10.0, any selected TFM).
+      Edit that file to change the default.
+      To try a newer TFM (net11, …) before shipping it: append it to
+      TargetFrameworks so build/test fail on incompatibilities, leave the
+      targets file as-is until you want bare publish to follow.
+    -->
     <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
   </PropertyGroup>
 
@@ -76,8 +86,8 @@
   <!-- Packaging and publish configuration -->
   <!-- EnablePackageValidation: TFM/runtime holes on pack. No baseline at generate; set PackageValidationBaselineVersion after the first nuget.org publish. -->
   <PropertyGroup>
-    <IsPackable>true</IsPackable>
-    <IsPublishable>false</IsPublishable>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>true</IsPublishable>
     <PublishRelease>true</PublishRelease>
     <IsTestProject>false</IsTestProject>
     <PackAsTool>false</PackAsTool>
@@ -142,7 +152,7 @@
     <Copyright>Copyright © 1975 MyAuthor</Copyright>
     <!--#endif -->
     <PackageId>__SourceName__</PackageId>
-    <PackageTags>dotnet;class;library</PackageTags>
+    <PackageTags>dotnet;console</PackageTags>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
     <RepositoryType></RepositoryType>

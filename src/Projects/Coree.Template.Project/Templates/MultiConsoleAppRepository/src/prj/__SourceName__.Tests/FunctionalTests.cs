@@ -14,12 +14,11 @@ namespace __SourceName__.Tests
         }
 
         [TestMethod]
-        public void TestFooMethod()
+        public void TestMainMethod()
         {
-            var result = __SourceName__.Class1.Foo();
+            var result = __SourceName__.Class1.Main();
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual("123", result);
+            Assert.AreEqual(0, result);
         }
     }
 }

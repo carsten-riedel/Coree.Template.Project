@@ -2,11 +2,11 @@
   "$schema": "http://json.schemastore.org/template",
   "author": "Carsten Riedel",
   // Opts Visual Studio into category display in the New Project dialog
-  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "ClassLibrary", "Library", "NuGet", "Test", "Solution", "Repository", "Multi-project", "Coree" ],
+  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "Console", "ConsoleApp", "NuGet", "Test", "Solution", "Repository", "Multi-project", "Coree" ],
   "identity": "CoreeTemplatesProjectMultiConsoleAppRepository",
   // Displayname is used in the New Project dialog and in the dotnet new list output.
-  "name": ".NET multi-library repository",
-  "description": "Repository of one or more independently packable C# class libraries (NuGet). Tests and Coverlet coverage included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, ASP.NET Web SDK, and documentation template.",
+  "name": ".NET multi-console-app repository",
+  "description": "Repository of one or more independently publishable C# console apps. Tests and Coverlet coverage included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, ASP.NET Web SDK, and documentation template.",
   "shortName": "multiconsoleapprepo-coree",
   // Host metadata: libraries this template uses that the author does not own.
   // After create, CLI prints this URL. The markdown lives next to this file;
@@ -18,7 +18,7 @@
     // Opts Visual Studio into its solution-template UI instead of the project-template UI.
     "editorTreatAs": "solution"
   },
-  "defaultName": "Organization.Domain.ClassLibrary", // Organization.Domain.Functionality
+  "defaultName": "Organization.Domain.ConsoleApp", // Organization.Domain.Functionality
   "sourceName": "__SourceName__", // Folders, csproj, namespace. Replaced by --name.
   // Visual Studio creates the outer solution directory; true would add another name directory.
   "preferNameDirectory": false,
@@ -59,7 +59,7 @@
       "choices": [
         {
           "choice": "None",
-          "description": "Do not add first-create files. Use this in Visual Studio when adding another library to an existing repository.",
+          "description": "Do not add first-create files. Use this in Visual Studio when adding another console app to an existing repository.",
           "displayName": "None"
         },
         {
@@ -131,7 +131,7 @@
       "isRequired": false,
       "defaultValue": "SlnFolder",
       "enableQuotelessLiterals": true,
-      "description": "Where this library's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideLibrary writes the .slnx and handbook next to the library csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
+      "description": "Where this app's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideLibrary writes the .slnx and handbook next to the console app csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
       "displayName": "Solution file location",
       "choices": [
         {
@@ -146,7 +146,7 @@
         },
         {
           "choice": "BesideLibrary",
-          "description": "Next to this library's csproj (slnx and handbook). Does not create src/sln/{name}/. Tests and benchmark stay sibling projects under src/prj/.",
+          "description": "Next to this app's csproj (slnx and handbook). Does not create src/sln/{name}/. Tests and benchmark stay sibling projects under src/prj/.",
           "displayName": "src/prj/{name}/"
         }
       ]
@@ -190,25 +190,25 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Use Microsoft.NET.Sdk.Web instead of Microsoft.NET.Sdk for the class library project.",
+      "description": "Use Microsoft.NET.Sdk.Web instead of Microsoft.NET.Sdk for the console app project.",
       "displayName": "Use the ASP.NET Core Web SDK"
     },
     // One multi-choice for C# / debug / documentation in library, tests, and
     // benchmark (VS combobox, like TFMs and InitRepoItems). Checked =
     // current product default. Unchecked = the other explicit value.
     // Properties are always written. GenerateDocumentationFile is in this
-    // choice list; only the class library writes it (own PropertyGroup).
-    // Tests/Benchmark have no XML docs surface. No None: CLI/VS default is
-    // the five product values; Visual Studio keeps at least one checked.
-    // Omit the switch on CLI.
+    // choice list; only the console app writes it (own PropertyGroup).
+    // Tests/Benchmark have no XML docs surface. Default omits it (no .xml).
+    // No None: CLI/VS default is the four language/debug values; Visual
+    // Studio keeps at least one checked. Omit the switch on CLI.
     "CSharpProjectOptions": {
       "type": "parameter",
       "datatype": "choice",
       "allowMultipleValues": true,
       "enableQuotelessLiterals": true,
       "isRequired": false,
-      "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded|GenerateDocumentationFile",
-      "description": "C# and debug settings for the class library, tests, and benchmark. Uncheck an item to write the alternative value.",
+      "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded",
+      "description": "C# and debug settings for the console app, tests, and benchmark. Uncheck an item to write the alternative value.",
       "displayName": "C# project options",
       "choices": [
         {
@@ -233,7 +233,7 @@
         },
         {
           "choice": "GenerateDocumentationFile",
-          "description": "Emit an XML documentation file. Uncheck to skip it.",
+          "description": "Emit an XML documentation file. Off by default for console apps. Check to write it.",
           "displayName": "XML documentation file"
         }
       ]
@@ -356,13 +356,13 @@
       "isRequired": false,
       "defaultValue": "Project",
       "enableQuotelessLiterals": true,
-      "description": "Nerdbank.GitVersioning. Default is this library (version.json under Properties/). This repository uses one version.json at the repo root (first create only). Off keeps VersionPrefix in the library project (no extra package).",
+      "description": "Nerdbank.GitVersioning. Default is this app (version.json under Properties/). This repository uses one version.json at the repo root (first create only). Off keeps VersionPrefix in the console app project (no extra package).",
       "displayName": "Nerdbank.GitVersioning",
       "choices": [
         {
           "choice": "Project",
-          "description": "Add Nerdbank.GitVersioning with version.json in this library's Properties folder. Default. Every create; paths do not collide.",
-          "displayName": "This library (Properties/version.json)"
+          "description": "Add Nerdbank.GitVersioning with version.json in this app's Properties folder. Default. Every create; paths do not collide.",
+          "displayName": "This app (Properties/version.json)"
         },
         {
           "choice": "Repo",
@@ -371,8 +371,8 @@
         },
         {
           "choice": "Off",
-          "description": "VersionMajor / VersionPrefix / PackageVersion in the class library csproj. No Nerdbank.GitVersioning package.",
-          "displayName": "Off (VersionPrefix in the library project)"
+          "description": "VersionMajor / VersionPrefix / PackageVersion in the console app csproj. No Nerdbank.GitVersioning package.",
+          "displayName": "Off (VersionPrefix in the console app project)"
         }
       ]
     },
@@ -402,7 +402,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add Microsoft.CodeAnalysis.PublicApiAnalyzers to the class library. The first real build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected.",
+      "description": "Add Microsoft.CodeAnalysis.PublicApiAnalyzers to the console app. The first real build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected.",
       "displayName": "Public API analyzers"
     },
     // Multi-choice. Default empty/None. Same DocShell.html seed, two
@@ -417,7 +417,7 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "",
-      "description": "Optional offline documentation template (DocShell.html). Package writes it under this library's Properties/NugetAssets/docs (packed with the nupkg). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
+      "description": "Optional offline documentation template (DocShell.html). Package writes it under this app's Properties/NugetAssets/docs (packed with the nupkg). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
       "displayName": "Documentation template",
       "choices": [
         {
@@ -427,7 +427,7 @@
         },
         {
           "choice": "Package",
-          "description": "Add DocShell.html under this library's Properties/NugetAssets/docs. Every create; paths do not collide. Packed with the nupkg.",
+          "description": "Add DocShell.html under this app's Properties/NugetAssets/docs. Every create; paths do not collide. Packed with the nupkg.",
           "displayName": "NuGet package docs (Properties/NugetAssets/docs)"
         },
         {
@@ -455,7 +455,7 @@
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "MIT",
-      "description": "License for the class library. Default MIT. Standards set PackageLicenseExpression. Custom packs License.txt. The LICENSE file at repository root copies this license.",
+      "description": "License for the console app. Default MIT. Standards set PackageLicenseExpression. Custom packs License.txt. The LICENSE file at repository root copies this license.",
       "displayName": "Project license",
       "choices": [
         {
@@ -495,12 +495,12 @@
       "isRequired": false,
       "defaultValue": "Strict",
       "enableQuotelessLiterals": true,
-      "description": "Editor and analyzer rules beside the library project, applied in the IDE and on build. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected.",
-      "displayName": "Code style rules for library project",
+      "description": "Editor and analyzer rules beside the console app project, applied in the IDE and on build. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected.",
+      "displayName": "Code style rules for console app project",
       "choices": [
         {
           "choice": "Strict",
-          "description": "Same style dump as Default, plus naming/XML-doc/nullable/unused-using errors for a packable library. Default. Needs XML docs and nullable on in C# project options.",
+          "description": "Same style dump as Default, plus naming/XML-doc/nullable/unused-using errors for a console app. Default. Needs XML docs and nullable on in C# project options.",
           "displayName": "Strict (public release errors)"
         },
         {
@@ -536,7 +536,7 @@
       "defaultValue": "Recommended",
       "enableQuotelessLiterals": true,
       "replaces": "__AnalysisMode__",
-      "description": "SDK code-analysis mode for the class library (CA rules). Default Recommended. Minimum is fewer warnings. All is almost every CA rule as a warning. Test and benchmark projects are not affected.",
+      "description": "SDK code-analysis mode for the console app (CA rules). Default Recommended. Minimum is fewer warnings. All is almost every CA rule as a warning. Test and benchmark projects are not affected.",
       "displayName": "Code analysis mode",
       "choices": [
         {
@@ -564,7 +564,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "description": "Treat high and critical NuGet vulnerability warnings (NU1903, NU1904) as restore errors on the class library. Default on. Low and moderate stay warnings. Turn off for an EOL or backport graph that cannot be cleaned. Test and benchmark projects are not affected. Does not change NuGetAudit (already on) or the test-project vulnerable report.",
+      "description": "Treat high and critical NuGet vulnerability warnings (NU1903, NU1904) as restore errors on the console app. Default on. Low and moderate stay warnings. Turn off for an EOL or backport graph that cannot be cleaned. Test and benchmark projects are not affected. Does not change NuGetAudit (already on) or the test-project vulnerable report.",
       "displayName": "Treat high/critical NuGet vulnerabilities as errors"
     },
     // Test-project coverage. Single choice because ReportGenerator consumes
@@ -578,12 +578,12 @@
       "isRequired": false,
       "defaultValue": "Coverlet",
       "enableQuotelessLiterals": true,
-      "description": "Test coverage on the test project. Default is Coverlet: dotnet test fails if the library is under 100% line/branch/method coverage. Lower Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. The class library is not affected.",
+      "description": "Test coverage on the test project. Default is Coverlet: dotnet test fails if the console app is under 100% line/branch/method coverage. Lower Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. The console app is not affected.",
       "displayName": "Test coverage",
       "choices": [
         {
           "choice": "Coverlet",
-          "description": "Add coverlet.msbuild and collect coverage on dotnet test. Default. Fails the test run below 100% line/branch/method on the library assembly. Lower Threshold in the test csproj to allow less. Raw Coverlet output only.",
+          "description": "Add coverlet.msbuild and collect coverage on dotnet test. Default. Fails the test run below 100% line/branch/method on the console app assembly. Lower Threshold in the test csproj to allow less. Raw Coverlet output only.",
           "displayName": "Coverlet only (100% gate)"
         },
         {
@@ -624,7 +624,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add empty Directory.Build.props and Directory.Build.targets beside this library project, and Directory.Solution.props and Directory.Solution.targets beside this library's .slnx (follows PlaceSolution). Landing files for extra MSBuild you do not want in the csproj. Test and benchmark projects are not affected. Default off.",
+      "description": "Add empty Directory.Build.props and Directory.Build.targets beside this console app project, and Directory.Solution.props and Directory.Solution.targets beside this app's .slnx (follows PlaceSolution). Landing files for extra MSBuild you do not want in the csproj. Test and benchmark projects are not affected. Default off.",
       "displayName": "Empty Directory.Build and Directory.Solution MSBuild files"
     },
     // Empty local tool manifest beside this library csproj. Default on.
@@ -634,7 +634,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "description": "Add an empty .config/dotnet-tools.json beside this library project (no tools). Landing file for dotnet tool install --local. Default on. Every create; paths do not collide. Test and benchmark projects are not affected. Does not restore tools on build.",
+      "description": "Add an empty .config/dotnet-tools.json beside this console app project (no tools). Landing file for dotnet tool install --local. Default on. Every create; paths do not collide. Test and benchmark projects are not affected. Does not restore tools on build.",
       "displayName": "Empty local dotnet-tools.json"
     }
   },
@@ -1175,7 +1175,7 @@
         "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
         "manualInstructions": [
           {
-            "text": "Close Visual Studio, open the .slnx next to the library project under src/prj/, and delete the extra .slnx Visual Studio created in the repository root."
+            "text": "Close Visual Studio, open the .slnx next to the console app project under src/prj/, and delete the extra .slnx Visual Studio created in the repository root."
           }
         ],
         "continueOnError": true

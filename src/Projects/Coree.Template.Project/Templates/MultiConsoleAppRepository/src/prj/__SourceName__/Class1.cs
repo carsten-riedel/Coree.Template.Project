@@ -8,20 +8,18 @@ using System.IO;
 namespace __SourceName__
 {
     /// <summary>
-    /// The 'Class1' provides foundational functionalities for the library.
-    /// It is a static class, meaning it cannot be instantiated and its members are accessed at the class level.
+    /// Console entry point. Tests call <see cref="Main"/> as a method.
     /// </summary>
     public static class Class1
     {
         /// <summary>
-        /// 'Foo' is a simple method that returns a fixed string value. 
-        /// This method can be used to demonstrate basic class functionality or for testing purposes.
+        /// Writes a greeting and exits successfully so <c>dotnet run</c> does something visible.
         /// </summary>
-        /// <returns>Returns a string "123".</returns>
-        public static string Foo()
+        /// <returns>0 (success).</returns>
+        public static int Main()
         {
-            return "123";
+            System.Console.WriteLine("Hello, World!");
+            return 0;
         }
     }
 }
-

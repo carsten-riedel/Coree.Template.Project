@@ -9,9 +9,9 @@ namespace __SourceName__.Benchmark;
 public class Benchmarks
 {
     [Benchmark]
-    public string Foo()
+    public int Main()
     {
-        return __SourceName__.Class1.Foo();
+        return __SourceName__.Class1.Main();
     }
 }
 

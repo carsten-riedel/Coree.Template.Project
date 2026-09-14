@@ -1,10 +1,10 @@
 # __SourceName__
 
-.NET multi-library repository. The GitHub landing page is this file.
+.NET multi-console-app repository. The GitHub landing page is this file.
 <!--#if (PlaceSolution == "SlnFolder") -->
-Each library's `.slnx` and notes live under `src/sln/__SourceName__/`. CLI commands for this library start in that folder.
+Each app's `.slnx` and notes live under `src/sln/__SourceName__/`. CLI commands for this app start in that folder.
 <!--#elseif (PlaceSolution == "BesideLibrary") -->
-This library's `.slnx` and notes sit next to the packable project under `src/prj/__SourceName__/`. There is no `src/sln/` tree for this library. CLI commands start in `src/prj/__SourceName__/`.
+This app's `.slnx` and notes sit next to the console project under `src/prj/__SourceName__/`. There is no `src/sln/` tree for this app. CLI commands start in `src/prj/__SourceName__/`.
 <!--#else -->
 The solution lives at the repository root; projects live under `src/`. `src/sln/__SourceName__/` still exists for solution-level or cross-project files; delete that notes folder if you do not need it. If this repository has more than one `.slnx` in the root directory, pass the solution path to `dotnet`.
 <!--#endif -->
@@ -24,9 +24,9 @@ docs/                      offline documentation template (this repository)
 src/global.json            .NET SDK pin (highest selected TFM)
 <!--#endif -->
 <!--#if (PlaceSolution == "SlnFolder") -->
-src/sln/__SourceName__/      this library's .slnx and notes
+src/sln/__SourceName__/      this app's .slnx and notes
 <!--#elseif (PlaceSolution == "BesideLibrary") -->
-src/prj/__SourceName__/      packable class library, .slnx, and notes
+src/prj/__SourceName__/      console app, .slnx, and notes
 <!--#else -->
 <!--#if (HostIdentifier == "vs") -->
 __SourceName__.generated.slnx  solution
@@ -36,7 +36,7 @@ __SourceName__.slnx          solution
 src/sln/__SourceName__/      optional notes / cross-project files
 <!--#endif -->
 <!--#if (PlaceSolution != "BesideLibrary") -->
-src/prj/__SourceName__/      packable class library
+src/prj/__SourceName__/      console app
 <!--#endif -->
 src/prj/__SourceName__/Properties/Build/  MSBuild targets (not source)
 src/prj/__SourceName__/Properties/NugetAssets/  nupkg assets (readme, icon, notes)
@@ -50,11 +50,11 @@ src/prj/__SourceName__.Benchmark/  optional BenchmarkDotNet console app
 ```
 
 <!--#if (PlaceSolution == "SlnFolder") -->
-Open a terminal in `src/sln/__SourceName__/` and run `dotnet restore`, `dotnet build`, `dotnet test`, or `dotnet pack`. The CLI finds the one solution in that folder; you do not pass a `.slnx` or `.csproj` path.
+Open a terminal in `src/sln/__SourceName__/` and run `dotnet restore`, `dotnet build`, `dotnet test`, or `dotnet publish`. The CLI finds the one solution in that folder; you do not pass a `.slnx` or `.csproj` path.
 <!--#elseif (PlaceSolution == "BesideLibrary") -->
-Open a terminal in `src/prj/__SourceName__/` and run `dotnet restore`, `dotnet build`, `dotnet test`, or `dotnet pack`. The CLI finds the one solution next to the library project; you do not pass a `.slnx` or `.csproj` path.
+Open a terminal in `src/prj/__SourceName__/` and run `dotnet restore`, `dotnet build`, `dotnet test`, or `dotnet publish`. The CLI finds the one solution next to the console app project; you do not pass a `.slnx` or `.csproj` path.
 <!--#else -->
-Open a terminal in the repository root and run `dotnet restore`, `dotnet build`, `dotnet test`, or `dotnet pack`. The CLI finds the solution only if this directory contains exactly one `.slnx`.
+Open a terminal in the repository root and run `dotnet restore`, `dotnet build`, `dotnet test`, or `dotnet publish`. The CLI finds the solution only if this directory contains exactly one `.slnx`.
 <!--#if (WriteSrcGlobalJson) -->
 `src/global.json` does not apply to those commands: the SDK muxer starts at the repository root and does not walk into `src/`.
 <!--#endif -->

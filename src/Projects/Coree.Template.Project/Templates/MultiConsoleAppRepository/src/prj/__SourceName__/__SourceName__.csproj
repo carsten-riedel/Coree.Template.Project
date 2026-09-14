@@ -1,21 +1,16 @@
-<!--#if (UseWebSdk) -->
-<Project>
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk.Web" />
-<!--#else -->
 <Project>
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
-<!--#endif -->
 
   <!-- General build settings: defines the output type and target framework -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <!--
       Keep TargetFrameworks only. Do not add TargetFramework.
-      `dotnet publish` with no --framework uses the default TFM from
+      `dotnet publish` with no -f uses the default TFM from
       Properties/Build/PublishDefaultFramework.targets. Override with
-      `dotnet publish --framework net8.0` (or net10.0, any selected TFM).
+      `dotnet publish -f net8.0` (or net10.0, any selected TFM).
       Edit that file to change the default.
-      To try a newer TFM (net11, …) before shipping it: append it to
+      To try a newer TFM (net11, ...) before shipping it: append it to
       TargetFrameworks so build/test fail on incompatibilities, leave the
       targets file as-is until you want bare publish to follow.
     -->
@@ -43,15 +38,6 @@
     <LangVersion>latest</LangVersion>
     <!--#else -->
     <LangVersion>default</LangVersion>
-    <!--#endif -->
-  </PropertyGroup>
-
-  <!-- XML documentation file -->
-  <PropertyGroup>
-    <!--#if (CSharpProjectOptions == "GenerateDocumentationFile") -->
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <!--#else -->
-    <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <!--#endif -->
   </PropertyGroup>
 
@@ -84,14 +70,21 @@
   <!--#endif -->
 
   <!-- Packaging and publish configuration -->
-  <!-- EnablePackageValidation: TFM/runtime holes on pack. No baseline at generate; set PackageValidationBaselineVersion after the first nuget.org publish. -->
   <PropertyGroup>
+    <!--#if (PackAsDotNetTool) -->
+    <IsPackable>true</IsPackable>
+    <PackAsTool>true</PackAsTool>
+    <!-- Command after install. Empty Condition: override in Directory.Build.props or -p:ToolCommandName. -->
+    <ToolCommandName Condition="'$(ToolCommandName)' == ''">__SourceName__</ToolCommandName>
+    <!-- EnablePackageValidation: TFM/runtime holes on pack. No baseline at generate; set PackageValidationBaselineVersion after the first nuget.org publish. -->
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <!--#else -->
     <IsPackable>false</IsPackable>
+    <PackAsTool>false</PackAsTool>
+    <!--#endif -->
     <IsPublishable>true</IsPublishable>
     <PublishRelease>true</PublishRelease>
     <IsTestProject>false</IsTestProject>
-    <PackAsTool>false</PackAsTool>
-    <EnablePackageValidation>true</EnablePackageValidation>
   </PropertyGroup>
 
   <!-- SDK defaults stay. CheckEol: true for exe, skipped for Library. InvariantGlobalization unset = cultures on. -->
@@ -128,15 +121,9 @@
   </PropertyGroup>
   <!--#endif -->
 
-  <!-- Package metadata -->
-  <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
+  <!-- Assembly identity (also NuGet Authors/Company/Copyright/Description when packing). -->
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
-    <!--#if (PackageCopyrightHolderIsSet) -->
-    <Owners>MyCopyrightHolder</Owners>
-    <!--#else -->
-    <Owners>MyAuthor</Owners>
-    <!--#endif -->
     <!--#if (PackageCopyrightHolderIsOrganization == true) -->
     <!--#if (PackageCopyrightHolderIsSet) -->
     <Company>MyCopyrightHolder</Company>
@@ -151,13 +138,23 @@
     <!--#else -->
     <Copyright>Copyright © 1975 MyAuthor</Copyright>
     <!--#endif -->
+    <Description><![CDATA[]]></Description>
+  </PropertyGroup>
+
+  <!--#if (PackAsDotNetTool) -->
+  <!-- NuGet package metadata. Files live in Properties/NugetAssets/. -->
+  <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
+  <PropertyGroup>
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Owners>MyCopyrightHolder</Owners>
+    <!--#else -->
+    <Owners>MyAuthor</Owners>
+    <!--#endif -->
     <PackageId>__SourceName__</PackageId>
     <PackageTags>dotnet;console</PackageTags>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
     <RepositoryType></RepositoryType>
-    <!-- NuGet gallery blurb. CDATA is optional and keeps multiline text. -->
-    <Description><![CDATA[]]></Description>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
     <!--#if (ProjectLicense == "MIT") -->
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -188,8 +185,9 @@
   <PropertyGroup>
     <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Pack</PackageOutputPath>
   </PropertyGroup>
+  <!--#endif -->
 
-  <!-- Publish behavior keep slim for library specs -->
+  <!-- Publish output. Recipes apply only while _IsPublishing. -->
 	<PropertyGroup Condition="'$(_IsPublishing)' == 'true'">
 		<!-- Flat publish output -->
 		<PublishDir Condition="'$(PublishDir)' == ''">$(MSBuildProjectDirectory)\bin\Publish\</PublishDir>
@@ -197,30 +195,47 @@
 		<PublishTrimmed>false</PublishTrimmed>
 	</PropertyGroup>
 
-  <!-- Publish behavior for executable future useage program main etc -->
-	<PropertyGroup Condition="'$(_IsPublishing)' == 'true' and '$(OutputType)' != 'Library'">
+  <!-- Publish profile and RID. Generate-time choices; MSBuild reads them only when publishing. -->
+	<PropertyGroup Condition="'$(_IsPublishing)' == 'true'">
+		<!--#if (RuntimeIdentifier == win-x64) -->
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
-		<PublishSelfContained>true</PublishSelfContained>
+		<!--#endif -->
+		<!--#if (RuntimeIdentifier == linux-arm64) -->
+		<RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
+		<!--#endif -->
+		<!--#if (RuntimeIdentifier == linux-x64) -->
+		<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+		<!--#endif -->
+		<!--#if (RuntimeIdentifier == linux-musl-arm64) -->
+		<RuntimeIdentifier>linux-musl-arm64</RuntimeIdentifier>
+		<!--#endif -->
+		<!--#if (Publish == FrameworkIncludedSingleCompressed) -->
+		<SelfContained>true</SelfContained>
 		<PublishSingleFile>true</PublishSingleFile>
+		<PublishReadyToRun>true</PublishReadyToRun>
 		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+		<!--#endif -->
+		<!--#if (Publish == FrameworkRequired) -->
+		<SelfContained>false</SelfContained>
+		<!--#endif -->
+		<!--#if (Publish == FrameworkRequiredSingle) -->
+		<SelfContained>false</SelfContained>
+		<PublishSingleFile>true</PublishSingleFile>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+		<!--#endif -->
+		<!--#if (Publish == FrameworkIncluded) -->
+		<SelfContained>true</SelfContained>
+		<PublishSingleFile>false</PublishSingleFile>
+		<IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract>
+		<!--#endif -->
+		<!--#if (Publish == FrameworkIncludedSingle) -->
+		<SelfContained>true</SelfContained>
+		<PublishSingleFile>true</PublishSingleFile>
+		<PublishReadyToRun>true</PublishReadyToRun>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+		<!--#endif -->
 	</PropertyGroup>
-
-  <!--#if (PublicApiAnalyzers) -->
-  <PropertyGroup>
-    <PublicApiDirectory>$(MSBuildProjectDirectory)\Properties\PublicAPI</PublicApiDirectory>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="5.6.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="$(PublicApiDirectory)\PublicAPI.Shipped.txt" />
-    <AdditionalFiles Include="$(PublicApiDirectory)\PublicAPI.Unshipped.txt" />
-  </ItemGroup>
-  <!--#endif -->
 
   <!-- Keep Git configuration on disk without showing it as a project item -->
   <ItemGroup>
@@ -260,9 +275,6 @@
   <Import Project="Properties/Build/SourceControlState.targets" />
   <!--#if (NerdbankGitVersioning == "Repo") -->
   <Import Project="Properties/Build/NerdbankRepositoryVersion.targets" />
-  <!--#endif -->
-  <!--#if (PublicApiAnalyzers) -->
-  <Import Project="Properties/Build/InitializePublicApi.targets" />
   <!--#endif -->
   <!--
     Must stay last. This import is Sdk.targets plus the outer Publish dispatch.

@@ -6,7 +6,7 @@
   "identity": "CoreeTemplatesProjectMultiConsoleAppRepository",
   // Displayname is used in the New Project dialog and in the dotnet new list output.
   "name": ".NET multi-console-app repository",
-  "description": "Repository of one or more independently publishable C# console apps. Tests and Coverlet coverage included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, ASP.NET Web SDK, and documentation template.",
+  "description": "Repository of one or more independently publishable C# console apps. Tests and Coverlet coverage included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, and documentation template.",
   "shortName": "multiconsoleapprepo-coree",
   // Host metadata: libraries this template uses that the author does not own.
   // After create, CLI prints this URL. The markdown lives next to this file;
@@ -88,11 +88,6 @@
           "displayName": "LICENSE file at repository root"
         },
         {
-          "choice": "PackageBoundaries",
-          "description": "Add ChoosingPackageBoundaries.md at the repository root. Decision guide for NuGet package, project, and compatibility boundaries. First create only.",
-          "displayName": "Choosing package boundaries"
-        },
-        {
           "choice": "SrcGlobalJson",
           "description": "Add src/global.json pinning the .NET SDK to this create's highest selected target framework (8.0.0, 9.0.0, or 10.0.0; rollForward latestFeature). Optional; off by default; not part of --InitAllRepoItems. First create only. Walk-up from folders under src/. Does not pin commands run at the repository root.",
           "displayName": "src/global.json"
@@ -100,7 +95,7 @@
       ]
     },
     // CLI-only first-create set: README, checkpoint, .gitattributes, .gitignore,
-    // LICENSE, ChoosingPackageBoundaries.md. Same six files as the Visual Studio
+    // LICENSE. Same five files as the Visual Studio ide.host default. Hidden in VS.
     // ide.host default. Hidden in VS. src/global.json is not in this set
     // (SrcGlobalJson, default off).
     // None on InitRepoItems still writes nothing. Root version.json is not
@@ -110,7 +105,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, .gitignore, LICENSE, ChoosingPackageBoundaries.md). Same set as a Visual Studio first create. Does not add version.json or src/global.json. First create only.",
+      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, .gitignore, LICENSE). Same set as a Visual Studio first create. Does not add version.json or src/global.json. First create only.",
       "displayName": "All repository root items"
     },
     // Where the TEMPLATE .slnx is written.
@@ -185,20 +180,93 @@
       ],
       "defaultValue": "net8.0|net10.0"
     },
-    // Uses the ASP.NET Core Web SDK for the library while test and benchmark projects keep their existing project roles.
-    "UseWebSdk": {
+    // Publish-time only (_IsPublishing). Portable RIDs: Windows x64 default,
+    // linux-arm64 = Raspberry Pi 64-bit (preferred; linux-arm is 32-bit Pi),
+    // linux-x64 = glibc desktop/server, linux-musl-arm64 = Alpine/Docker ARM64.
+    "RuntimeIdentifier": {
+      "type": "parameter",
+      "description": "Runtime identifier used when publishing. Does not affect restore or build. Default Windows x64.",
+      "datatype": "choice",
+      "allowMultipleValues": false,
+      "enableQuotelessLiterals": true,
+      "displayName": "Publish runtime",
+      "choices": [
+        {
+          "choice": "win-x64",
+          "description": "Windows x64.",
+          "displayName": "Windows x64"
+        },
+        {
+          "choice": "linux-arm64",
+          "description": "Raspberry Pi 3+ with a 64-bit OS (preferred). 32-bit Raspberry Pi OS is linux-arm, not listed.",
+          "displayName": "Raspberry Pi (linux-arm64)"
+        },
+        {
+          "choice": "linux-x64",
+          "description": "Linux x64 glibc: Debian, Ubuntu, CentOS Stream, Fedora, and derivatives.",
+          "displayName": "Linux x64 (Debian, Ubuntu, CentOS, Fedora)"
+        },
+        {
+          "choice": "linux-musl-arm64",
+          "description": "Alpine Linux and musl-based Docker images on 64-bit Arm. Still a current portable RID.",
+          "displayName": "Linux arm64 musl (Alpine / Docker)"
+        }
+      ],
+      "defaultValue": "win-x64"
+    },
+    // Publish-time only. Same named recipes as wpfapp-coree.
+    "Publish": {
+      "type": "parameter",
+      "description": "Publish recipe written into the console app csproj. Applies when _IsPublishing is true.",
+      "datatype": "choice",
+      "allowMultipleValues": false,
+      "enableQuotelessLiterals": true,
+      "displayName": "Publish profile",
+      "choices": [
+        {
+          "choice": "FrameworkIncludedSingleCompressed",
+          "description": "Self-contained single-file with ReadyToRun and compression. Default.",
+          "displayName": "Framework-included, single-file, compressed, ReadyToRun (default)"
+        },
+        {
+          "choice": "FrameworkRequired",
+          "description": "Framework-dependent. For an installer that has the runtime.",
+          "displayName": "Framework-required (installer)"
+        },
+        {
+          "choice": "FrameworkRequiredSingle",
+          "description": "Framework-dependent single-file. Smallest copy.",
+          "displayName": "Framework-required, single-file (copy smallest)"
+        },
+        {
+          "choice": "FrameworkIncluded",
+          "description": "Self-contained, not single-file. For an installer.",
+          "displayName": "Framework-included (installer)"
+        },
+        {
+          "choice": "FrameworkIncludedSingle",
+          "description": "Self-contained single-file with ReadyToRun. Large copy.",
+          "displayName": "Framework-included, single-file, ReadyToRun (copy large)"
+        }
+      ],
+      "defaultValue": "FrameworkIncludedSingleCompressed"
+    },
+    // Default on: IsPackable + PackAsTool; ToolCommandName is the project name
+    // with an empty Condition so the csproj line is the override point.
+    // Off (--PackAsDotNetTool false): publish stays the only distribution path.
+    // Assembly identity (Authors/Company/Copyright/Description) always.
+    // NuGet-only properties and Properties/NugetAssets/ only when on.
+    "PackAsDotNetTool": {
       "type": "parameter",
       "dataType": "bool",
-      "defaultValue": "false",
-      "description": "Use Microsoft.NET.Sdk.Web instead of Microsoft.NET.Sdk for the console app project.",
-      "displayName": "Use the ASP.NET Core Web SDK"
+      "defaultValue": "true",
+      "description": "Allow packing this console app as a .NET tool (IsPackable and PackAsTool). Default on. The command name is ToolCommandName in the csproj (project name, overridable). Writes Properties/NugetAssets and NuGet-only csproj properties. Authors, company, copyright, and description stay either way. Turn off for publish-only (no nupkg assets). Test and benchmark projects are not affected.",
+      "displayName": "Allow pack as .NET tool"
     },
-    // One multi-choice for C# / debug / documentation in library, tests, and
+    // One multi-choice for C# / debug in the console app, tests, and
     // benchmark (VS combobox, like TFMs and InitRepoItems). Checked =
     // current product default. Unchecked = the other explicit value.
-    // Properties are always written. GenerateDocumentationFile is in this
-    // choice list; only the console app writes it (own PropertyGroup).
-    // Tests/Benchmark have no XML docs surface. Default omits it (no .xml).
+    // Properties are always written. No XML documentation file switch.
     // No None: CLI/VS default is the four language/debug values; Visual
     // Studio keeps at least one checked. Omit the switch on CLI.
     "CSharpProjectOptions": {
@@ -230,11 +298,6 @@
           "choice": "DebugEmbedded",
           "description": "Embed portable PDBs in the assembly. Uncheck for no debug symbols.",
           "displayName": "Embedded debug symbols"
-        },
-        {
-          "choice": "GenerateDocumentationFile",
-          "description": "Emit an XML documentation file. Off by default for console apps. Check to write it.",
-          "displayName": "XML documentation file"
         }
       ]
     },
@@ -301,13 +364,13 @@
         ]
       }
     },
-    // Package metadata parameters replace their matching placeholders in the project and package assets.
-    "PackageAuthor": {
+    // Author / copyright placeholders (assembly; also NuGet when packing).
+    "Author": {
       "type": "parameter",
       "dataType": "string",
       "replaces": "MyAuthor",
-      "description": "The nuget package author of your project.",
-      "displayName": "Package author",
+      "description": "The author of the project. Writes Authors and, when empty, the copyright holder fallback.",
+      "displayName": "Author",
       "isRequired": "true"
     },
     "PackageCopyrightHolder": {
@@ -315,7 +378,7 @@
       "dataType": "string",
       "defaultValue": "",
       "replaces": "MyCopyrightHolder",
-      "description": "Copyright holder for the package and license. Defaults to the package author when empty.",
+      "description": "Copyright holder for the assembly, license, and package. Defaults to the author when empty.",
       "displayName": "Copyright holder"
     },
     "PackageCopyrightHolderIsSet": {
@@ -326,7 +389,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Set when the copyright holder is an organization. Controls NuGet Company metadata only.",
+      "description": "Set when the copyright holder is an organization. Controls the Company property.",
       "displayName": "Copyright holder is an organization"
     },
     // Date generators replace fixed template placeholders in project metadata and package assets.
@@ -382,28 +445,15 @@
     },
     "WriteRepoVersionJson": {
       "type": "computed",
-      "value": "(NerdbankGitVersioning == \"Repo\") && (InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"Readme\") || (InitRepoItems == \"AIReleaseCheckpoint\") || (InitRepoItems == \"GitAttributes\") || (InitRepoItems == \"GitIgnore\") || (InitRepoItems == \"RepoLicense\") || (InitRepoItems == \"PackageBoundaries\") || (InitRepoItems == \"SrcGlobalJson\"))"
+      "value": "(NerdbankGitVersioning == \"Repo\") && (InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"Readme\") || (InitRepoItems == \"AIReleaseCheckpoint\") || (InitRepoItems == \"GitAttributes\") || (InitRepoItems == \"GitIgnore\") || (InitRepoItems == \"RepoLicense\") || (InitRepoItems == \"SrcGlobalJson\"))"
     },
     "WriteRepoLicense": {
       "type": "computed",
       "value": "(InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"RepoLicense\"))"
     },
-    "WriteChoosingPackageBoundaries": {
-      "type": "computed",
-      "value": "(InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"PackageBoundaries\"))"
-    },
     "WriteSrcGlobalJson": {
       "type": "computed",
       "value": "(InitRepoItems != \"None\") && (InitRepoItems == \"SrcGlobalJson\")"
-    },
-    // Library-only. Default off. First real build writes Properties/PublicAPI
-    // baseline files if they are missing. Not a repository-root Init* item.
-    "PublicApiAnalyzers": {
-      "type": "parameter",
-      "dataType": "bool",
-      "defaultValue": "false",
-      "description": "Add Microsoft.CodeAnalysis.PublicApiAnalyzers to the console app. The first real build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected.",
-      "displayName": "Public API analyzers"
     },
     // Multi-choice. Default empty/None. Same DocShell.html seed, two
     // destinations. Package is per library (no combo collision). Repository
@@ -417,7 +467,7 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "",
-      "description": "Optional offline documentation template (DocShell.html). Package writes it under this app's Properties/NugetAssets/docs (packed with the nupkg). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
+      "description": "Optional offline documentation template (DocShell.html). Package writes it under this app's Properties/NugetAssets/docs (packed with the nupkg; requires Allow pack as .NET tool). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
       "displayName": "Documentation template",
       "choices": [
         {
@@ -427,7 +477,7 @@
         },
         {
           "choice": "Package",
-          "description": "Add DocShell.html under this app's Properties/NugetAssets/docs. Every create; paths do not collide. Packed with the nupkg.",
+          "description": "Add DocShell.html under this app's Properties/NugetAssets/docs. Requires Allow pack as .NET tool. Every create; paths do not collide. Packed with the nupkg.",
           "displayName": "NuGet package docs (Properties/NugetAssets/docs)"
         },
         {
@@ -439,7 +489,7 @@
     },
     "WritePackageDocTemplate": {
       "type": "computed",
-      "value": "(DocumentationTemplate == \"Package\") && (DocumentationTemplate != \"None\")"
+      "value": "(PackAsDotNetTool) && (DocumentationTemplate == \"Package\") && (DocumentationTemplate != \"None\")"
     },
     "WriteRepoDocTemplate": {
       "type": "computed",
@@ -455,7 +505,7 @@
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "MIT",
-      "description": "License for the console app. Default MIT. Standards set PackageLicenseExpression. Custom packs License.txt. The LICENSE file at repository root copies this license.",
+      "description": "License for the console app. Default MIT. When packing as a tool, standards set PackageLicenseExpression and Custom packs License.txt. The LICENSE file at repository root copies this license either way.",
       "displayName": "Project license",
       "choices": [
         {
@@ -480,9 +530,10 @@
         }
       ]
     },
-    // Library-only .project.editor.globalconfig via GlobalAnalyzerConfigFiles.
-    // Strict (default) is the VS style dump plus public-release build gates
-    // (naming/XML/nullable/unused usings as error). Default is the same dump
+    // Console-app .project.editor.globalconfig via GlobalAnalyzerConfigFiles.
+    // Strict (default) is the VS style dump plus naming/nullable as error.
+    // No CS1591 / IDE0005 (XML docs off; tool nupkg has no IntelliSense
+    // contract; IDE0005 needs GenerateDocumentationFile). Default is the same dump
     // with suggestions only. Off writes nothing. Generated disk name is always
     // .project.editor.globalconfig; seeds live under TemplateAssets/CodeStyle/
     // as .project.editor.globalconfig.{choice}. Wire it before
@@ -495,12 +546,12 @@
       "isRequired": false,
       "defaultValue": "Strict",
       "enableQuotelessLiterals": true,
-      "description": "Editor and analyzer rules beside the console app project, applied in the IDE and on build. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected.",
+      "description": "Editor and analyzer rules beside the console app project, applied in the IDE and on build. Default is Strict: naming and nullable fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected.",
       "displayName": "Code style rules for console app project",
       "choices": [
         {
           "choice": "Strict",
-          "description": "Same style dump as Default, plus naming/XML-doc/nullable/unused-using errors for a console app. Default. Needs XML docs and nullable on in C# project options.",
+          "description": "Same style dump as Default, plus naming and nullable errors. Default. Needs nullable on in C# project options. No XML-doc or unused-using build errors.",
           "displayName": "Strict (public release errors)"
         },
         {
@@ -519,14 +570,14 @@
       "type": "computed",
       "value": "(ProjectEditorGlobalConfig != \"Off\")"
     },
-    // Default/Off keep unused usings on Class1 so IDE0005 is visible.
-    // Strict omits them or the first build fails (IDE0005 is error).
+    // Default/Off keep unused usings on Program so the style dump can show them.
+    // Strict omits them for a clean scaffold (IDE0005 is not a console build error).
     "KeepScaffoldUnusedUsings": {
       "type": "computed",
       "value": "(ProjectEditorGlobalConfig != \"Strict\")"
     },
-    // Library-only SDK CA rule set (AnalysisMode). Not style/CS (that is
-    // ProjectEditorGlobalConfig) and not Public API analyzers. Recommended
+    // SDK CA rule set (AnalysisMode). Not style/CS (that is
+    // ProjectEditorGlobalConfig). Recommended
     // is the omit-the-switch default. Always written so the generated csproj
     // does not follow a later SDK Default shift. Tests and benchmark omit it.
     "AnalysisMode": {
@@ -640,8 +691,8 @@
   },
   // Registers XML-style conditionals for extensions that hosts do not always
   // treat the same as the built-in XML/.md processor. Tokens must sit on their
-  // own lines because wholeLine is true. .targets is required so UseWebSdk can
-  // pick Sdk.targets inside Properties/Build/ImportSdkTargets.targets at generate time.
+  // own lines because wholeLine is true. .targets stays registered for
+  // generate-time conditionals in Properties/Build if any are added later.
   // .txt / LICENSE: each TemplateAssets/Licenses seed uses a shallow
   // //#if (PackageCopyrightHolderIsSet) / //#else / //#endif. Do not put
   // ProjectLicense #if in those files; extra sources pick the seed.
@@ -768,12 +819,6 @@
           ]
         },
         {
-          "condition": "((InitRepoItems == \"None\") || ((InitAllRepoItems == false) && (InitRepoItems != \"PackageBoundaries\")))",
-          "exclude": [
-            "ChoosingPackageBoundaries.md"
-          ]
-        },
-        {
           "condition": "((InitRepoItems == \"None\") || (InitRepoItems != \"SrcGlobalJson\"))",
           "exclude": [
             "src/global.json"
@@ -801,9 +846,9 @@
           ]
         },
         {
-          "condition": "(PublicApiAnalyzers == false)",
+          "condition": "(PackAsDotNetTool == false)",
           "exclude": [
-            "src/prj/__SourceName__/Properties/Build/InitializePublicApi.targets"
+            "src/prj/__SourceName__/Properties/NugetAssets/**"
           ]
         },
         {
@@ -915,7 +960,7 @@
     {
       "source": "./TemplateAssets/Licenses/",
       "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(ProjectLicense == \"MIT\")",
+      "condition": "(PackAsDotNetTool && (ProjectLicense == \"MIT\"))",
       "modifiers": [
         {
           "exclude": [
@@ -934,7 +979,7 @@
     {
       "source": "./TemplateAssets/Licenses/",
       "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(ProjectLicense == \"BSD3Clause\")",
+      "condition": "(PackAsDotNetTool && (ProjectLicense == \"BSD3Clause\"))",
       "modifiers": [
         {
           "exclude": [
@@ -953,7 +998,7 @@
     {
       "source": "./TemplateAssets/Licenses/",
       "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(ProjectLicense == \"Apache2\")",
+      "condition": "(PackAsDotNetTool && (ProjectLicense == \"Apache2\"))",
       "modifiers": [
         {
           "exclude": [
@@ -972,7 +1017,7 @@
     {
       "source": "./TemplateAssets/Licenses/",
       "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(ProjectLicense == \"Custom\")",
+      "condition": "(PackAsDotNetTool && (ProjectLicense == \"Custom\"))",
       "modifiers": [
         {
           "exclude": [

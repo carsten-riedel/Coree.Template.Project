@@ -4,13 +4,13 @@
     {
       "id": "InitRepoItems",
       "isVisible": true,
-      "defaultValue": "Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense|PackageBoundaries",
+      "defaultValue": "Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense",
       "persistenceScope": "none",
       "name": {
         "text": "Repository root items"
       },
       "description": {
-        "text": "Root files for the first create, including LICENSE from the project license, a slim .gitignore, and ChoosingPackageBoundaries.md. src/global.json is optional and unchecked by default. version.json is not a checkbox here; choose This repository on a first create to add the root file. Visual Studio requires at least one value; choose None when adding another console app to the same repository."
+        "text": "Root files for the first create, including LICENSE from the project license and a slim .gitignore. src/global.json is optional and unchecked by default. version.json is not a checkbox here; choose This repository on a first create to add the root file. Visual Studio requires at least one value; choose None when adding another console app to the same repository."
       }
     },
     {
@@ -34,8 +34,40 @@
       "isVisible": true
     },
     {
-      "id": "UseWebSdk",
-      "isVisible": true
+      "id": "RuntimeIdentifier",
+      "isVisible": true,
+      "defaultValue": "win-x64",
+      "persistenceScope": "none",
+      "name": {
+        "text": "Publish runtime"
+      },
+      "description": {
+        "text": "Used only on publish. Default Windows x64. Raspberry Pi is linux-arm64 (64-bit OS). Linux x64 covers Debian, Ubuntu, CentOS, Fedora. Alpine/Docker ARM64 is linux-musl-arm64. Restore and build stay RID-less."
+      }
+    },
+    {
+      "id": "Publish",
+      "isVisible": true,
+      "defaultValue": "FrameworkIncludedSingleCompressed",
+      "persistenceScope": "none",
+      "name": {
+        "text": "Publish profile"
+      },
+      "description": {
+        "text": "Used only on publish. Default is self-contained single-file with ReadyToRun and compression. The other recipes match the WPF template set."
+      }
+    },
+    {
+      "id": "PackAsDotNetTool",
+      "isVisible": true,
+      "defaultValue": "true",
+      "persistenceScope": "none",
+      "name": {
+        "text": "Allow pack as .NET tool"
+      },
+      "description": {
+        "text": "Default on. Checked: IsPackable, PackAsTool, Properties/NugetAssets, and NuGet-only csproj properties. ToolCommandName in the csproj is the command after install (project name). Edit that property to override. Uncheck for publish-only (no nupkg assets). Authors, company, copyright, and description stay either way. Test and benchmark projects are not affected."
+      }
     },
     {
       "id": "CSharpProjectOptions",
@@ -46,11 +78,11 @@
         "text": "C# project options"
       },
       "description": {
-        "text": "Checked values write explicit C# and debug properties on the console app, tests, and benchmark. XML documentation is console-app-only and off by default. Uncheck one to write the alternative."
+        "text": "Checked values write explicit C# and debug properties on the console app, tests, and benchmark. Uncheck one to write the alternative."
       }
     },
     {
-      "id": "PackageAuthor",
+      "id": "Author",
       "isVisible": true
     },
     {
@@ -74,17 +106,6 @@
       }
     },
     {
-      "id": "PublicApiAnalyzers",
-      "isVisible": true,
-      "persistenceScope": "none",
-      "name": {
-        "text": "Public API analyzers"
-      },
-      "description": {
-        "text": "Adds Microsoft.CodeAnalysis.PublicApiAnalyzers to this console app. The first build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected."
-      }
-    },
-    {
       "id": "DocumentationTemplate",
       "isVisible": true,
       "defaultValue": "None",
@@ -93,7 +114,7 @@
         "text": "Documentation template"
       },
       "description": {
-        "text": "Optional DocShell.html seed. NuGet package docs go under this app's Properties/NugetAssets/docs and pack with the nupkg. Repository docs go under docs/ at the repo root (first create only). Choose None when adding another console app unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
+        "text": "Optional DocShell.html seed. NuGet package docs go under this app's Properties/NugetAssets/docs and pack with the nupkg (needs Allow pack as .NET tool). Repository docs go under docs/ at the repo root (first create only). Choose None when adding another console app unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
       }
     },
     {
@@ -105,7 +126,7 @@
         "text": "Project license"
       },
       "description": {
-        "text": "Default MIT. Standard licenses set PackageLicenseExpression and keep License.txt on disk. Custom packs License.txt as the NuGet license file. The LICENSE file at repository root copies this license."
+        "text": "Default MIT. When packing as a tool, standard licenses set PackageLicenseExpression and keep License.txt on disk; Custom packs License.txt as the NuGet license file. The LICENSE file at repository root copies this license either way."
       }
     },
     {
@@ -117,7 +138,7 @@
         "text": "Code style rules for console app project"
       },
       "description": {
-        "text": "Single choice. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected."
+        "text": "Single choice. Default is Strict: naming and nullable fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected."
       }
     },
     {
@@ -129,7 +150,7 @@
         "text": "Code analysis mode"
       },
       "description": {
-        "text": "SDK CA rules on the console app only. Default Recommended. Minimum is fewer warnings. All is almost every CA rule. Separate from code style Strict and from Public API analyzers."
+        "text": "SDK CA rules on the console app only. Default Recommended. Minimum is fewer warnings. All is almost every CA rule. Separate from code style Strict."
       }
     },
     {

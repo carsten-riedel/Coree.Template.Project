@@ -14,9 +14,6 @@ The solution lives at the repository root; projects live under `src/`. `src/sln/
 <!--#if (WriteRepoVersionJson) -->
 version.json               Nerdbank.GitVersioning (this repository)
 <!--#endif -->
-<!--#if (WriteChoosingPackageBoundaries) -->
-ChoosingPackageBoundaries.md  NuGet package and compatibility boundaries
-<!--#endif -->
 <!--#if (WriteRepoDocTemplate) -->
 docs/                      offline documentation template (this repository)
 <!--#endif -->
@@ -39,7 +36,9 @@ src/sln/__SourceName__/      optional notes / cross-project files
 src/prj/__SourceName__/      console app
 <!--#endif -->
 src/prj/__SourceName__/Properties/Build/  MSBuild targets (not source)
+<!--#if (PackAsDotNetTool) -->
 src/prj/__SourceName__/Properties/NugetAssets/  nupkg assets (readme, icon, notes)
+<!--#endif -->
 <!--#if (DotNetToolManifest) -->
 src/prj/__SourceName__/.config/dotnet-tools.json  empty local tool manifest
 <!--#endif -->

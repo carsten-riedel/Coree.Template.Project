@@ -27,8 +27,7 @@
 
     This file is imported only on the outer evaluation (see
     ImportSdkTargets.targets). The empty _DotNetCLIPostPublish applies
-    there only; the inner framework publish keeps the SDK post-publish
-    (needed for the Web SDK).
+    there only; the inner framework publish keeps the SDK post-publish.
   -->
   <Target Name="Publish" Condition="'$(IsPublishable)' != 'false'">
     <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="Publish" Properties="TargetFramework=__TargetFramework__" />

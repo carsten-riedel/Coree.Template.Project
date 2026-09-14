@@ -97,9 +97,10 @@ The package contains the following templates:
   2. [.NET Class library](#Net-class-library)
   3. [.NET Multi-library repository](#Net-Multi-library-repository)
   4. [.NET analyzer package repository](#Net-analyzer-package-repository)
-  5. [.NET Tool](#Net-Tool)
-  6. [.NET Wpf](#Net-Wpf-Windows-only)
-  7. [.NET Project Template](#Net-Project-Template)
+  5. [.NET multi-console-app repository](#Net-multi-console-app-repository)
+  6. [.NET Tool](#Net-Tool)
+  7. [.NET Wpf](#Net-Wpf-Windows-only)
+  8. [.NET Project Template](#Net-Project-Template)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -199,9 +200,9 @@ Each library keeps a `src/sln/{name}/` notes folder. By default the `.slnx` live
 General use:
 
 ```powershell
-dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Core" --InitAllRepoItems
-dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Payments"
-dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Inventory"
+dotnet new multilibraryrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Core" --InitAllRepoItems
+dotnet new multilibraryrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Payments"
+dotnet new multilibraryrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Inventory"
 ```
 
 The first call creates the shared directory layout and initializes the optional repository-level files. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, and `ChoosingPackageBoundaries.md`. Nerdbank defaults to **Project**: `version.json` under each library's `Properties/` folder. Later calls use the same `--output` directory and omit `--InitAllRepoItems`.
@@ -219,7 +220,7 @@ $repo = "./MyCompany.Core"
 $names = @("MyCompany.Core", "MyCompany.Payments", "MyCompany.Inventory", "MyCompany.Reporting")
 
 for ($i = 0; $i -lt $names.Count; $i++) {
-    $arguments = @("new", "multilibraryrepo-coree", "--PackageAuthor", "Carsten Riedel", "--output", $repo, "--name", $names[$i])
+    $arguments = @("new", "multilibraryrepo-coree", "--Author", "Carsten Riedel", "--output", $repo, "--name", $names[$i])
     if ($i -eq 0) { $arguments += "--InitAllRepoItems" }
     dotnet @arguments
 }
@@ -286,11 +287,11 @@ Each analyzer keeps a `src/sln/{name}/` notes folder. By default the `.slnx` liv
 General use:
 
 ```powershell
-dotnet new analyzerrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Naming" --InitAllRepoItems
-dotnet new analyzerrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Performance"
+dotnet new analyzerrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Naming" --InitAllRepoItems
+dotnet new analyzerrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Performance"
 ```
 
-`--PackageAuthor` is required. The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Nerdbank defaults to **Project**: `version.json` under each analyzer's `Properties/` folder. Later calls use the same `--output` and omit `--InitAllRepoItems`.
+`--Author` is required. The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Nerdbank defaults to **Project**: `version.json` under each analyzer's `Properties/` folder. Later calls use the same `--output` and omit `--InitAllRepoItems`.
 
 One shared repository-root `version.json` instead: `--NerdbankGitVersioning Repo` on each call (the root file is written on the first create only). `--NerdbankGitVersioning Off` keeps `VersionPrefix` in the analyzer project.
 
@@ -305,7 +306,7 @@ $repo = "./MyCompany.Analyzers"
 $names = @("MyCompany.Analyzers.Naming", "MyCompany.Analyzers.Performance")
 
 for ($i = 0; $i -lt $names.Count; $i++) {
-    $arguments = @("new", "analyzerrepo-coree", "--PackageAuthor", "Carsten Riedel", "--output", $repo, "--name", $names[$i])
+    $arguments = @("new", "analyzerrepo-coree", "--Author", "Carsten Riedel", "--output", $repo, "--name", $names[$i])
     if ($i -eq 0) { $arguments += "--InitAllRepoItems" }
     dotnet @arguments
 }
@@ -353,6 +354,97 @@ MyCompany.Analyzers/
 The top-level directory is shared. Each additional `dotnet new` call contributes another analyzer project, tests, DebugHost, and solution area. Each package remains independently buildable and packable.
 
 You do not need a different template for a single-analyzer layout and a multi-analyzer layout. Start with one, add another when you need it, or generate the complete set from a script.
+
+## .NET multi-console-app repository
+
+Create and grow a repository-like structure containing one or more independently publishable .NET console apps using repeatable `dotnet new` calls.
+
+Initialize the shared repository layout once, then add additional apps whenever you need them.
+
+Instead of deciding the complete structure up front, `multiconsoleapprepo-coree` lets you compose it incrementally:
+
+- create the shared repository layout with the first app;
+- add more apps later using the same template;
+- keep every app in a predictable `src/prj` / `src/sln` structure;
+- publish each app independently; packing as a .NET tool is on by default;
+- use the same workflow interactively, from PowerShell, or from automation.
+
+Each app keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`) so CI can `dotnet publish` against that solution without seeing sibling `.slnx` files in one directory. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideLibrary` writes it next to the console project under `src/prj/{name}/` (not tests or benchmark). One solution may still contain several projects (console app, tests, optional benchmark); how much you put in one `.slnx` depends on the pipeline. Splitting by app removes the usual “which solution?” limits.
+
+**Initialize the layout once. Compose as many console apps as you need.**
+
+General use:
+
+```powershell
+dotnet new multiconsoleapprepo-coree --Author "Carsten Riedel" --output "./MyCompany.Cli" --name "MyCompany.Cli" --InitAllRepoItems
+dotnet new multiconsoleapprepo-coree --Author "Carsten Riedel" --output "./MyCompany.Cli" --name "MyCompany.Cli.Sync"
+dotnet new multiconsoleapprepo-coree --Author "Carsten Riedel" --output "./MyCompany.Cli" --name "MyCompany.Cli.Migrate"
+```
+
+`--Author` is required. The first call creates the shared directory layout and initializes the optional repository-level files. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Nerdbank defaults to **Project**: `version.json` under each app's `Properties/` folder. Later calls use the same `--output` directory and omit `--InitAllRepoItems`.
+
+Default publish is **Windows x64** (`win-x64`) with **Framework-included, single-file, compressed, ReadyToRun**. That RID and profile apply only while publishing; restore and build stay framework-dependent. Other RIDs: `linux-arm64` (Raspberry Pi 64-bit OS), `linux-x64` (Debian/Ubuntu/CentOS/Fedora), `linux-musl-arm64` (Alpine/Docker ARM64). Other profiles: `FrameworkRequired`, `FrameworkRequiredSingle`, `FrameworkIncluded`, `FrameworkIncludedSingle`.
+
+`--PackAsDotNetTool` is on by default: `IsPackable` / `PackAsTool`, `ToolCommandName` (project name, overridable in the csproj), and NuGet assets under `Properties/NugetAssets/`. `--PackAsDotNetTool false` is publish-only. This is not `--DotNetToolManifest` (empty local `dotnet-tools.json`).
+
+One shared repository-root `version.json` instead: `--NerdbankGitVersioning Repo` on each call (the root file is written on the first create only). `--NerdbankGitVersioning Off` keeps `VersionPrefix` in the console project.
+
+Offline documentation is a separate opt-in (`--DocumentationTemplate`). `Package` seeds `Properties/NugetAssets/docs/DocShell.html` only when `--PackAsDotNetTool` is on. `Repository` seeds repo-root `docs/` on a first create only.
+
+Because the output location and app name are separate arguments, the same composition model works from a script:
+
+```powershell
+$repo = "./MyCompany.Cli"
+$names = @("MyCompany.Cli", "MyCompany.Cli.Sync", "MyCompany.Cli.Migrate")
+
+for ($i = 0; $i -lt $names.Count; $i++) {
+    $arguments = @("new", "multiconsoleapprepo-coree", "--Author", "Carsten Riedel", "--output", $repo, "--name", $names[$i])
+    if ($i -eq 0) { $arguments += "--InitAllRepoItems" }
+    dotnet @arguments
+}
+```
+
+After creating `MyCompany.Cli`, `MyCompany.Cli.Sync`, and `MyCompany.Cli.Migrate`, the directory tree looks roughly like this:
+
+```text
+MyCompany.Cli/
+├── README.md
+├── LICENSE
+├── .gitattributes
+├── .gitignore
+├── TEMPLATE-AI-RELEASE-CHECKPOINT.md
+└── src/
+    ├── prj/
+    │   ├── MyCompany.Cli/
+    │   │   ├── Properties/
+    │   │   │   └── NugetAssets/
+    │   │   ├── Program.cs
+    │   │   └── MyCompany.Cli.csproj
+    │   ├── MyCompany.Cli.Tests/
+    │   │   └── MyCompany.Cli.Tests.csproj
+    │   ├── MyCompany.Cli.Sync/
+    │   │   └── MyCompany.Cli.Sync.csproj
+    │   ├── MyCompany.Cli.Sync.Tests/
+    │   │   └── MyCompany.Cli.Sync.Tests.csproj
+    │   ├── MyCompany.Cli.Migrate/
+    │   │   └── MyCompany.Cli.Migrate.csproj
+    │   └── MyCompany.Cli.Migrate.Tests/
+    │       └── MyCompany.Cli.Migrate.Tests.csproj
+    └── sln/
+        ├── MyCompany.Cli/
+        │   ├── MyCompany.Cli.slnx
+        │   └── Readme.md
+        ├── MyCompany.Cli.Sync/
+        │   ├── MyCompany.Cli.Sync.slnx
+        │   └── Readme.md
+        └── MyCompany.Cli.Migrate/
+            ├── MyCompany.Cli.Migrate.slnx
+            └── Readme.md
+```
+
+The top-level directory is shared. Each additional `dotnet new` call contributes another app-specific project, test project, and solution area. Each app remains its own independently buildable and publishable unit while sharing the same repository-like structure.
+
+You do not need a different template for a single-app layout and a multi-app layout. Start with one, add another when you need it, or generate the complete set from a script.
 
 ## .NET Tool
 This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.

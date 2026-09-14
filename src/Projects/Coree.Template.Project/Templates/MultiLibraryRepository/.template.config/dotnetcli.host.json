@@ -9,6 +9,10 @@
       "longName": "InitAllRepoItems",
       "shortName": ""
     },
+    "Author": {
+      "longName": "Author",
+      "shortName": ""
+    },
     "CSharpProjectOptions": {
       "longName": "CSharpProjectOptions",
       "shortName": ""

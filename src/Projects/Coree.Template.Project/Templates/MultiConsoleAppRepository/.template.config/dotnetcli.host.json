@@ -9,6 +9,10 @@
       "longName": "InitAllRepoItems",
       "shortName": ""
     },
+    "Author": {
+      "longName": "Author",
+      "shortName": ""
+    },
     "CSharpProjectOptions": {
       "longName": "CSharpProjectOptions",
       "shortName": ""
@@ -19,10 +23,6 @@
     },
     "NerdbankGitVersioning": {
       "longName": "NerdbankGitVersioning",
-      "shortName": ""
-    },
-    "PublicApiAnalyzers": {
-      "longName": "PublicApiAnalyzers",
       "shortName": ""
     },
     "DocumentationTemplate": {
@@ -51,6 +51,18 @@
     },
     "DotNetToolManifest": {
       "longName": "DotNetToolManifest",
+      "shortName": ""
+    },
+    "RuntimeIdentifier": {
+      "longName": "RuntimeIdentifier",
+      "shortName": ""
+    },
+    "Publish": {
+      "longName": "Publish",
+      "shortName": ""
+    },
+    "PackAsDotNetTool": {
+      "longName": "PackAsDotNetTool",
       "shortName": ""
     }
   }

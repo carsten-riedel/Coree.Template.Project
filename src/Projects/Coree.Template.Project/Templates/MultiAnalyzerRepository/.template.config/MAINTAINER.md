@@ -14,7 +14,7 @@ The generated root `README.md` lives beside this folder, one level up. That file
 | --- | --- |
 | `template.json` | Identity, symbols, sources, post-actions. |
 | `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**, and **wizard order** (`symbolInfo` array; DebugHost target framework is first). `persistenceScope: none` so the New Project dialog does not reuse the last create. Host mapping: **CLI ↔ Visual Studio**. No `icon` property: see **Visual Studio template icon**. |
-| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `DebugHostTargetFramework`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, `PublicApiAnalyzers`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `NuGetAuditHighCriticalAsErrors`, `TestCoverage`, `DirectoryMsBuildFiles`, and `DotNetToolManifest` so they do not steal single-letter aliases. |
+| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `DebugHostTargetFramework`, `Author`, `CSharpProjectOptions`, `ProjectLicense`, `NerdbankGitVersioning`, `PublicApiAnalyzers`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `NuGetAuditHighCriticalAsErrors`, `TestCoverage`, `DirectoryMsBuildFiles`, and `DotNetToolManifest` so they do not steal single-letter aliases. |
 | `icon.png` | **Intentionally absent.** Visual Studio then uses the template **package** icon. |
 | `MAINTAINER.md` | This file. |
 
@@ -34,7 +34,7 @@ Verified in Visual Studio (Create a new project, Recent project templates): a te
 
 The template bootstraps a **repository layout** for one or more packable Roslyn analyzer packages (1:n split of a too-large analyzer). It does not `git init`. Same `--output` = combo repo; different `--output` = separate repos.
 
-`PackageAuthor` is required on every create. Everyday CLI is author, name, output; root files only on the first create into an empty folder.
+`Author` is required on every create. Everyday CLI is author, name, output; root files only on the first create into an empty folder.
 
 Install from this folder (or from the packed `Coree.Template.Project` nupkg):
 
@@ -47,9 +47,9 @@ Folder install is the local loop. Verify by generating into `%TEMP%`. Do not `do
 Combo repo, three analyzer packages, root files only once:
 
 ```powershell
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.Analyzer1" --output "C:\Users\Valgrind\source\repos\MultiAnalyzerRepository-multisolution-optin" --InitAllRepoItems
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.Analyzer2" --output "C:\Users\Valgrind\source\repos\MultiAnalyzerRepository-multisolution-optin"
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.Analyzer3" --output "C:\Users\Valgrind\source\repos\MultiAnalyzerRepository-multisolution-optin"
+dotnet new analyzerrepo-coree --Author "abcd" --name "Organization.Domain.Analyzer1" --output "C:\Users\Valgrind\source\repos\MultiAnalyzerRepository-multisolution-optin" --InitAllRepoItems
+dotnet new analyzerrepo-coree --Author "abcd" --name "Organization.Domain.Analyzer2" --output "C:\Users\Valgrind\source\repos\MultiAnalyzerRepository-multisolution-optin"
+dotnet new analyzerrepo-coree --Author "abcd" --name "Organization.Domain.Analyzer3" --output "C:\Users\Valgrind\source\repos\MultiAnalyzerRepository-multisolution-optin"
 ```
 
 ### CLI use cases
@@ -59,7 +59,7 @@ dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "Organization.Domain
 **Default, one library**
 
 ```powershell
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.Analyzer1" --output $out --InitAllRepoItems
+dotnet new analyzerrepo-coree --Author "abcd" --name "Organization.Domain.Analyzer1" --output $out --InitAllRepoItems
 ```
 
 Root: `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.gitignore`, `LICENSE`. Library: Nerdbank **Project**, `Properties/version.json`.
@@ -68,12 +68,12 @@ Root: `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.giti
 
 ```powershell
 # combo gut
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md again)
-# dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems
-# dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --InitAllRepoItems
+# dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems
+# dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --InitAllRepoItems
 ```
 
 Call 1 writes the five root files. Call 2 only adds `src/prj` / `src/sln`. Both packages get `Properties/version.json`.
@@ -82,27 +82,27 @@ Call 1 writes the five root files. Call 2 only adds `src/prj` / `src/sln`. Both 
 
 ```powershell
 # combo gut — Call 2 only wires the library; generate does not stamp version.json again
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --NerdbankGitVersioning Repo
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --NerdbankGitVersioning Repo
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json)
-# dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-# dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
 
 **Nerdbank project folder, multi-library** (this is the omit-the-switch default)
 
 ```powershell
 # combo gut — same as the default combo; `--NerdbankGitVersioning Project` is optional
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out
 ```
 
 **Two separate repos (not a combo)**
 
 ```powershell
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.LibA" --output $outA --InitAllRepoItems
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.LibB" --output $outB --InitAllRepoItems
+dotnet new analyzerrepo-coree --Author "abcd" --name "Organization.Domain.LibA" --output $outA --InitAllRepoItems
+dotnet new analyzerrepo-coree --Author "abcd" --name "Organization.Domain.LibB" --output $outB --InitAllRepoItems
 ```
 
 Each `--output` is its own first create.
@@ -114,7 +114,7 @@ After the first call in the default combo the repo root has `README.md`, `TEMPLA
 Subset on the first create (checkpoint only, no landing README):
 
 ```powershell
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "Organization.Domain.Analyzer1" --output "<repo>" --InitRepoItems AIReleaseCheckpoint
+dotnet new analyzerrepo-coree --Author "abcd" --name "Organization.Domain.Analyzer1" --output "<repo>" --InitRepoItems AIReleaseCheckpoint
 ```
 
 **Visual Studio:** first create uses the `ide.host.json` default (same five root files as `--InitAllRepoItems`; `src/global.json` unchecked). A second package in the IDE cannot omit the group: choose **None**. Folgelibraries in the same folder are otherwise the CLI path above. Why the two hosts differ is in **CLI ↔ Visual Studio** below.
@@ -152,7 +152,7 @@ Other host-only switch behavior (not root files, same class of reason):
 
 - **`PlaceSolution` `RepoRoot`:** CLI renames to `{Name}.slnx` at repo root. Visual Studio keeps `{Name}.generated.slnx` so it does not overwrite the `{Name}.slnx` the IDE always writes. `SlnFolder` and `BesideLibrary` rename on both hosts (paths are not the VS root file). Post-actions that open the handbook Readme and tell you to close/reopen are `HostIdentifier == "vs"` only. `primaryOutputs` index 0 is the surviving handbook path (`src/sln/{Name}/Readme.md` or `src/prj/{Name}/Readme.md` when `BesideLibrary`).
 - **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `PublicApiAnalyzers` / `DocumentationTemplate` / `TestCoverage` / `AnalysisMode` / `NuGetAuditHighCriticalAsErrors` / `DirectoryMsBuildFiles` / `DotNetToolManifest`:** same defaults on both hosts (`NerdbankGitVersioning` `Project`, `PublicApiAnalyzers` `false`, `DocumentationTemplate` empty/`None`, `TestCoverage` `Coverlet`, `AnalysisMode` `Recommended`, `ProjectEditorGlobalConfig` `Strict`, `NuGetAuditHighCriticalAsErrors` `true`, `DirectoryMsBuildFiles` `false`, `DotNetToolManifest` `true`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later library can pass `--NerdbankGitVersioning Repo` again. `--DocumentationTemplate Package` is safe on later libraries; `--DocumentationTemplate Repository` on a later library is Exit 73.
-- **`PackageAuthor`:** required on both.
+- **`Author`:** required on both. CLI `--Author`.
 
 ## `InitRepoItems` / `InitAllRepoItems`
 
@@ -227,12 +227,12 @@ Single choice (dropdown), same shape as `ProjectLicense`. CLI long name is **`--
 
 ```powershell
 # combo gut
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --NerdbankGitVersioning Repo
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --NerdbankGitVersioning Repo
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json again)
-# dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-# dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
 
 Call 1: five root files plus root `version.json`, package wire is Nerdbank repo. Call 2: `--NerdbankGitVersioning Repo`, **no** Init, **no** second root stamp (Exit 0). Omit `--NerdbankGitVersioning` for **Project** (`Properties/version.json`). `--NerdbankGitVersioning Off` for the VersionPrefix group.
@@ -303,12 +303,12 @@ Seeds live under `TemplateAssets/Versioning/`. `Project/version.json` uses `path
 
 ```powershell
 # combo gut
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md again)
-# dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems
-# dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --InitAllRepoItems
+# dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems
+# dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --InitAllRepoItems
 ```
 
 | Call | InitAll | `NerdbankGitVersioning` | Root `version.json` | VersionPrefix |
@@ -320,12 +320,12 @@ dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --outp
 
 ```powershell
 # combo gut
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --NerdbankGitVersioning Repo
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --NerdbankGitVersioning Repo
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json again)
-# dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-# dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
 
 | Call | InitAll | `NerdbankGitVersioning` | Root `version.json` | VersionPrefix |
@@ -337,8 +337,8 @@ dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --outp
 
 ```powershell
 # combo gut — same as the default combo; `--NerdbankGitVersioning Project` is optional
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out
 ```
 
 ### Combos that look successful but are incomplete or mixed
@@ -398,8 +398,8 @@ SDK restore already runs NuGetAudit (NU1901–NU1904 warnings). This switch only
 Turn the switch off for an EOL or backport graph (for example net8 after support ends) that cannot be cleaned without dropping a TFM. Do not put this on tests: MSTest/Coverlet CVEs must not fail the nupkg restore.
 
 ```powershell
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --NuGetAuditHighCriticalAsErrors false
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --NuGetAuditHighCriticalAsErrors false
 ```
 
 ## `PublicApiAnalyzers`
@@ -411,8 +411,8 @@ When on, the analyzer project references `Microsoft.CodeAnalysis.PublicApiAnalyz
 In **template source** the `<!--#if (PublicApiAnalyzers) -->` markers are XML comments, so MSBuild always imports the targets (default after generate is still off). Design-time skips the target; a real stub `dotnet build` does not. The target no-ops when `../../../.template.config` exists. `src/prj/__SourceName__/Properties/PublicAPI/` in this host is a failed stamp — delete it, do not commit.
 
 ```powershell
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --PublicApiAnalyzers
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --PublicApiAnalyzers
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems --PublicApiAnalyzers
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --PublicApiAnalyzers
 ```
 
 ## `DocumentationTemplate`
@@ -427,12 +427,12 @@ Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Doc
 
 ```powershell
 # combo gut
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --DocumentationTemplate Package Repository
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --DocumentationTemplate Package
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems --DocumentationTemplate Package Repository
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --DocumentationTemplate Package
 
 # combo error (Exit 73) — Call 2 stamps docs/DocShell.html again
-# dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --DocumentationTemplate Repository
-# dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --DocumentationTemplate Repository
+# dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems --DocumentationTemplate Repository
+# dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --DocumentationTemplate Repository
 ```
 
 `Properties/NugetAssets/docs` is packed with the nupkg (`PackagePath` empty, so `docs/` inside the package, not `Properties/`). Repo-root `docs/` is not packed. The checkpoint infers package vs repository documentation from `Properties/NugetAssets/docs` vs repo-root `docs/`; it does not name this switch.
@@ -460,8 +460,8 @@ Seeds live under `TemplateAssets/DirectoryMsBuild/`. Extra sources copy `Directo
 The files are almost empty `<Project>` stubs with comments. MSBuild auto-imports them from those directories. Do not move `PackAsAnalyzer` / analyzer config into them. The template does not `#if` properties into these files vs the csproj (possible, ugly). The analyzer csproj `None Include`s the two `Directory.Build.*` files with `Link` under `Properties\` (Solution Explorer only). Do **not** move the files into `Properties/` on disk: auto-import follows the directory of the file, same as `.project.editor.globalconfig`. `Directory.Solution.*` stay beside the `.slnx`. When `PlaceSolution` is `BesideLibrary`, the analyzer csproj also `Link`s those two solution files (same folder as the csproj) so they do not look like stray project items.
 
 ```powershell
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems --DirectoryMsBuildFiles
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --DirectoryMsBuildFiles
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems --DirectoryMsBuildFiles
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --DirectoryMsBuildFiles
 ```
 
 ## `DotNetToolManifest`
@@ -471,8 +471,8 @@ Analyzer project only. Bool, default **true**. UI label **Empty local dotnet-too
 The analyzer csproj `None Include`s the file with `Link` under `Properties\` (Solution Explorer only). Disk path stays `.config/`.
 
 ```powershell
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library1" --output $out --InitAllRepoItems
-dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --DotNetToolManifest false
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library1" --output $out --InitAllRepoItems
+dotnet new analyzerrepo-coree --Author "abcd" --name "...Library2" --output $out --DotNetToolManifest false
 ```
 
 ## Other symbols worth not breaking
@@ -487,7 +487,7 @@ dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --outp
 - **`DocumentationTemplate` / `WritePackageDocTemplate` / `WriteRepoDocTemplate`**: see section above. Default empty/`None`. Seed only; not the vendored site.
 - **`PlaceSolution`**: single choice, default `SlnFolder` → `src/sln/__SourceName__/__SourceName__.slnx` plus handbook `Readme.md` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). `RepoRoot` on CLI renames to a root `.slnx`; `RepoRoot` in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS’s conventional root `.slnx`. `RepoRoot` still writes `src/sln/{Name}/Readme.md` as notes and stacks every package’s `.slnx` in one directory. `BesideLibrary` writes `src/prj/{Name}/{Name}.slnx` and the handbook next to the packable analyzer csproj (not tests, DebugHost, or benchmark) and does not create `src/sln/{Name}/`. The `.slnx` virtual folder `/sln/{Name}/` is omitted for `BesideLibrary`; `Readme.md` is a solution item beside the file.
 - **`HostIdentifier` / `IsCliHost`**: bind + computed; used for that rename and for VS-only post-actions.
-- **`PackageAuthor`**: required.
+- **`Author`**: required. CLI `--Author`.
 - **`<Description>`**: not a template parameter. Generate leaves an empty CDATA block for multiline gallery text; the checkpoint fills it (assistant-supported).
 - **`EnablePackageValidation`**: not a symbol. Always `false` on the analyzer (no `lib/` TFMs).
 - **`TestCoverage`**: single choice, default `Coverlet`. Replaces the two independent Coverlet/ReportGenerator bools. Coverage stats on `dotnet test` are opt-out; ReportGenerator is opt-in (`CoverletAndReport`). There is no Report-without-Coverlet. `--TestCoverage None` drops Coverlet too. Computed `CoverletMSBuild` / `ReportGenerator` drive the test csproj and sln-readme `#if`s.

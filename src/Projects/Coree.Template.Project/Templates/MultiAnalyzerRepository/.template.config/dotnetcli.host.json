@@ -13,6 +13,10 @@
       "longName": "DebugHostTargetFramework",
       "shortName": ""
     },
+    "Author": {
+      "longName": "Author",
+      "shortName": ""
+    },
     "CSharpProjectOptions": {
       "longName": "CSharpProjectOptions",
       "shortName": ""

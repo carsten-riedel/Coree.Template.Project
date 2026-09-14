@@ -11,7 +11,7 @@ public class Benchmarks
     [Benchmark]
     public int Main()
     {
-        return __SourceName__.Class1.Main();
+        return __SourceName__.Program.Main();
     }
 }
 

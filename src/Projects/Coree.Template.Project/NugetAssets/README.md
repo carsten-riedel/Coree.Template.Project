@@ -82,9 +82,10 @@ The package contains the following templates:
   2. [.NET Class library](#Net-class-library)
   3. [.NET Multi-library repository](#Net-Multi-library-repository)
   4. [.NET analyzer package repository](#Net-analyzer-package-repository)
-  5. [.NET Tool](#Net-Tool)
-  6. [.NET Wpf](#Net-Wpf-Windows-only)
-  7. [.NET Project Template](#Net-Project-Template)
+  5. [.NET multi-console-app repository](#Net-multi-console-app-repository)
+  6. [.NET Tool](#Net-Tool)
+  7. [.NET Wpf](#Net-Wpf-Windows-only)
+  8. [.NET Project Template](#Net-Project-Template)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -184,9 +185,9 @@ Each library keeps its `.slnx` in its own `src/sln/{name}/` folder so CI can `do
 General use:
 
 ```powershell
-dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Core" --InitAllRepoItems
-dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Payments"
-dotnet new multilibraryrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Inventory"
+dotnet new multilibraryrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Core" --InitAllRepoItems
+dotnet new multilibraryrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Payments"
+dotnet new multilibraryrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Core" --name "MyCompany.Inventory"
 ```
 
 The first call creates the shared directory layout and initializes the optional repository-level files. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, and `ChoosingPackageBoundaries.md`. Nerdbank defaults to **Project**: `version.json` under each library's `Properties/` folder. Later calls use the same `--output` directory and omit `--InitAllRepoItems`.
@@ -204,7 +205,7 @@ $repo = "./MyCompany.Core"
 $names = @("MyCompany.Core", "MyCompany.Payments", "MyCompany.Inventory", "MyCompany.Reporting")
 
 for ($i = 0; $i -lt $names.Count; $i++) {
-    $arguments = @("new", "multilibraryrepo-coree", "--PackageAuthor", "Carsten Riedel", "--output", $repo, "--name", $names[$i])
+    $arguments = @("new", "multilibraryrepo-coree", "--Author", "Carsten Riedel", "--output", $repo, "--name", $names[$i])
     if ($i -eq 0) { $arguments += "--InitAllRepoItems" }
     dotnet @arguments
 }
@@ -261,13 +262,28 @@ Same combo and init system as the multi-library repository, for independently pa
 Initialize the shared repository layout once, then add additional analyzer packages whenever you need them.
 
 ```powershell
-dotnet new analyzerrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Naming" --InitAllRepoItems
-dotnet new analyzerrepo-coree --PackageAuthor "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Performance"
+dotnet new analyzerrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Naming" --InitAllRepoItems
+dotnet new analyzerrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Performance"
 ```
 
 The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
 
 Each analyzer keeps its `.slnx` in its own `src/sln/{name}/` folder. DebugHost, tests, and the optional benchmark share one selected TFM (`.NET 10` by default); the packable analyzer itself is always `netstandard2.0`.
+
+## .NET multi-console-app repository
+
+Same combo and init system as the multi-library repository, for independently publishable C# console apps that also pack as a .NET tool by default (`--PackAsDotNetTool false` is publish-only). Default publish is Windows x64, framework-included single-file with compression and ReadyToRun. This is not `nettool-coree` (a dedicated .NET tool template) and not `console-coree`.
+
+Initialize the shared repository layout once, then add additional apps whenever you need them.
+
+```powershell
+dotnet new multiconsoleapprepo-coree --Author "Carsten Riedel" --output "./MyCompany.Cli" --name "MyCompany.Cli" --InitAllRepoItems
+dotnet new multiconsoleapprepo-coree --Author "Carsten Riedel" --output "./MyCompany.Cli" --name "MyCompany.Cli.Sync"
+```
+
+`--Author` is required. The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
+
+Each app keeps its `.slnx` in its own `src/sln/{name}/` folder. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideLibrary` writes it next to the console project under `src/prj/{name}/`.
 
 ## .NET Tool
 This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.

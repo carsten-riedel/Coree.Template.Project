@@ -252,25 +252,15 @@ dotnet_naming_style.begins_with_i.required_suffix =
 dotnet_naming_style.begins_with_i.word_separator = 
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
-#### Published library diagnostics ####
+#### Console app diagnostics ####
 
-# Build gates for a packable library. Style rules above stay suggestions.
-# Needs GenerateDocumentationFile and Nullable from the csproj.
+# Build gates. Style rules above stay suggestions.
+# Needs Nullable from the csproj.
+# No CS1591 family and no IDE0005: XML docs are off, a later pack is a
+# tool nupkg (no IntelliSense contract), and IDE0005 as error emits
+# EnableGenerateDocumentationFile on every build without GenerateDocumentationFile.
 
-# Missing or mismatched public XML docs (IntelliSense in the nupkg).
-dotnet_diagnostic.CS1591.severity = error
-dotnet_diagnostic.CS1573.severity = error
-dotnet_diagnostic.CS1712.severity = error
-
-# Stale XML tags; warn only so refactors do not fail the pack.
-dotnet_diagnostic.CS1572.severity = warning
-dotnet_diagnostic.CS1574.severity = warning
-dotnet_diagnostic.CS1587.severity = warning
-dotnet_diagnostic.CS1711.severity = warning
-dotnet_diagnostic.CS1734.severity = warning
-dotnet_diagnostic.CS1735.severity = warning
-
-# Nullable annotations are part of the published contract.
+# Nullable annotations.
 dotnet_diagnostic.CS8600.severity = error
 dotnet_diagnostic.CS8601.severity = error
 dotnet_diagnostic.CS8602.severity = error
@@ -279,6 +269,3 @@ dotnet_diagnostic.CS8604.severity = error
 dotnet_diagnostic.CS8618.severity = error
 dotnet_diagnostic.CS8622.severity = error
 dotnet_diagnostic.CS8625.severity = error
-
-# Unused usings hide real dependencies (ImplicitUsings is disabled).
-dotnet_diagnostic.IDE0005.severity = error

@@ -10,7 +10,7 @@ namespace __SourceName__
     /// <summary>
     /// Console entry point. Tests call <see cref="Main"/> as a method.
     /// </summary>
-    public static class Class1
+    internal static class Program
     {
         /// <summary>
         /// Writes a greeting and exits successfully so <c>dotnet run</c> does something visible.

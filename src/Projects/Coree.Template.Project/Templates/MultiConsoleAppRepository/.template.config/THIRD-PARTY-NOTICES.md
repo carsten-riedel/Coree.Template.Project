@@ -13,7 +13,6 @@ Libraries this template uses that are not owned or provided by the template auth
 
 - [ReportGenerator](https://github.com/danielpalme/ReportGenerator) (Apache-2.0)
 - [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) (MIT)
-- [Microsoft.CodeAnalysis.PublicApiAnalyzers](https://github.com/dotnet/roslyn-analyzers) (MIT)
 
 ## Documentation template (DocShell)
 

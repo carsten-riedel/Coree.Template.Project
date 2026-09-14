@@ -291,13 +291,13 @@
         }
       ]
     },
-    // Package metadata parameters replace their matching placeholders in the project and package assets.
-    "PackageAuthor": {
+    // Author / copyright placeholders (assembly and NuGet).
+    "Author": {
       "type": "parameter",
       "dataType": "string",
       "replaces": "MyAuthor",
-      "description": "The nuget package author of your project.",
-      "displayName": "Package author",
+      "description": "The author of the project. Writes Authors and, when empty, the copyright holder fallback.",
+      "displayName": "Author",
       "isRequired": "true"
     },
     "PackageCopyrightHolder": {
@@ -305,7 +305,7 @@
       "dataType": "string",
       "defaultValue": "",
       "replaces": "MyCopyrightHolder",
-      "description": "Copyright holder for the package and license. Defaults to the package author when empty.",
+      "description": "Copyright holder for the assembly, license, and package. Defaults to the author when empty.",
       "displayName": "Copyright holder"
     },
     "PackageCopyrightHolderIsSet": {
@@ -316,7 +316,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Set when the copyright holder is an organization. Controls NuGet Company metadata only.",
+      "description": "Set when the copyright holder is an organization. Controls the Company property.",
       "displayName": "Copyright holder is an organization"
     },
     // Date generators replace fixed template placeholders in project metadata and package assets.

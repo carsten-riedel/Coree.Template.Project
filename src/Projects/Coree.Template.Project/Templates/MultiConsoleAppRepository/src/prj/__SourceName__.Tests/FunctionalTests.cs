@@ -16,7 +16,7 @@ namespace __SourceName__.Tests
         [TestMethod]
         public void TestMainMethod()
         {
-            var result = __SourceName__.Class1.Main();
+            var result = __SourceName__.Program.Main();
 
             Assert.AreEqual(0, result);
         }

@@ -34,6 +34,8 @@ __SourceName__.slnx          solution
 src/sln/__SourceName__/      optional notes / cross-project files
 <!--#endif -->
 src/prj/__SourceName__/      packable analyzer package (netstandard2.0)
+src/prj/__SourceName__/Properties/Build/  MSBuild targets (not source)
+src/prj/__SourceName__/Properties/NugetAssets/  nupkg assets (readme, icon, notes)
 <!--#if (DotNetToolManifest) -->
 src/prj/__SourceName__/.config/dotnet-tools.json  empty local tool manifest
 <!--#endif -->

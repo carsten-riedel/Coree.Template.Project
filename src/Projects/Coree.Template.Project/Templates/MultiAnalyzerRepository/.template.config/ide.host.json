@@ -97,7 +97,7 @@
         "text": "Documentation template"
       },
       "description": {
-        "text": "Optional DocShell.html seed. NuGet package docs go under this analyzer's NugetAssets/docs and pack with the nupkg. Repository docs go under docs/ at the repo root (first create only). Choose None when adding another package unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
+        "text": "Optional DocShell.html seed. NuGet package docs go under this analyzer's Properties/NugetAssets/docs and pack with the nupkg. Repository docs go under docs/ at the repo root (first create only). Choose None when adding another package unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
       }
     },
     {

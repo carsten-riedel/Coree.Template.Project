@@ -26,7 +26,7 @@ Create a new project shows one icon per template. Two files can supply it; they 
 | --- | --- | --- |
 | Template package | `src/Projects/Coree.Template.Project/NugetAssets/Icon.png` (`PackageIcon` on `Coree.Template.Project.csproj`) | NuGet listing **and** the VS picker when this template does not declare its own icon. |
 | This template | `.template.config/icon.png`, optional `ide.host.json` `"icon": "icon.png"` | VS picker for **this** template only. Overrides the package icon. |
-| Generated library | `src/prj/{Name}/NugetAssets/Icon-128x128.png` | The **consumer** nupkg after `dotnet pack`. Not the template picker. |
+| Generated library | `src/prj/{Name}/Properties/NugetAssets/Icon-128x128.png` | The **consumer** nupkg after `dotnet pack`. Not the template picker. |
 
 Verified in Visual Studio (Create a new project, Recent project templates): a template with `.template.config/icon.png` showed that image; sibling Coree templates without one showed the package icon. Leave this template’s picker icon **undefined** so the package icon is used. Ship per-template picker icons later; do not copy `Icon-128x128.png` here as a stand-in.
 
@@ -172,7 +172,7 @@ This template does not stamp `ChoosingPackageBoundaries.md` (library-repo decisi
 
 ## AI-supported release checkpoint
 
-The generated product still contains placeholders that can only become true **after implementation** — especially empty `src/prj/*/NugetAssets/Readme.md`. A human or an LLM can fill those from the code. That is a **gate before the first publish**, not a generate-time script and not standing agent rules.
+The generated product still contains placeholders that can only become true **after implementation** — especially empty `src/prj/*/Properties/NugetAssets/Readme.md`. A human or an LLM can fill those from the code. That is a **gate before the first publish**, not a generate-time script and not standing agent rules.
 
 **Not:** run-once / post-bootstrap right after `dotnet new`. The library may still be `Class1`.  
 **Not:** a forever queue in the GitHub `README.md`. That file is the customer landing page.  
@@ -208,7 +208,7 @@ Benchmark previously hardcoded `ImplicitUsings` enable. It now follows the switc
 
 Single choice (dropdown, not a checkbox group). Project + NuGet only. Repository-root `LICENSE` is `InitRepoItems` choice `RepoLicense` (UI: **LICENSE file at repository root**) or `--InitAllRepoItems`, not a second VS bool.
 
-| Choice | `NugetAssets/License.txt` | NuGet |
+| Choice | `Properties/NugetAssets/License.txt` | NuGet |
 | --- | --- | --- |
 | `MIT` (CLI/VS default) | MIT text on disk, not packed | `PackageLicenseExpression` `MIT` |
 | `BSD3Clause` | BSD 3-Clause text on disk, not packed | `PackageLicenseExpression` `BSD-3-Clause` |
@@ -217,7 +217,7 @@ Single choice (dropdown, not a checkbox group). Project + NuGet only. Repository
 
 Do not set `PackageLicenseFile` together with an expression (NU5033). The glob excludes `License.txt` except for `Custom`.
 
-Seeds live under `TemplateAssets/Licenses/` (`MIT.txt`, `BSD3Clause.txt`, `Apache2.txt`, `Custom.txt`). Extra sources copy the chosen seed to `src/prj/{Name}/NugetAssets/License.txt` on every create, and to repository-root `LICENSE` only when `WriteRepoLicense` is true. Do not leave a mega-file under `src/prj/__SourceName__/NugetAssets/`. DocShell extra sources must `exclude` `Licenses/**` (same as `CodeStyle/**` and `Versioning/**`). Each seed may use a shallow `//#if (PackageCopyrightHolderIsSet)` / `//#else` / `//#endif`. Do not put `ProjectLicense` `#if` in the seed: extra sources pick the file.
+Seeds live under `TemplateAssets/Licenses/` (`MIT.txt`, `BSD3Clause.txt`, `Apache2.txt`, `Custom.txt`). Extra sources copy the chosen seed to `src/prj/{Name}/Properties/NugetAssets/License.txt` on every create, and to repository-root `LICENSE` only when `WriteRepoLicense` is true. Do not leave a mega-file under `src/prj/__SourceName__/Properties/NugetAssets/`. DocShell extra sources must `exclude` `Licenses/**` (same as `CodeStyle/**` and `Versioning/**`). Each seed may use a shallow `//#if (PackageCopyrightHolderIsSet)` / `//#else` / `//#endif`. Do not put `ProjectLicense` `#if` in the seed: extra sources pick the file.
 
 `RepoLicense` is off on CLI unless listed in `--InitRepoItems` or `--InitAllRepoItems` is on. Visual Studio includes it in the first-create default. `WriteRepoLicense` is `(InitRepoItems != None) && (InitAllRepoItems || InitRepoItems == RepoLicense)`. First create only; a later library with `RepoLicense` or `InitAllRepoItems` selected collides (Exit 73), same as root README. `None` excludes it even if leftover checks remain.
 
@@ -261,13 +261,13 @@ WriteRepoVersionJson      =
 
 `UseNerdbankGitVersioning` is generate-time `<!--#if` in `__SourceName__.csproj`. The VersionPrefix group is the `#else` (`Off`). Both branches stay in the **template source**; `dotnet new` keeps one.
 
-`None` wins over InitAll. A second **generate-time** write of root `version.json` is Exit 73. `--NerdbankGitVersioning Repo` without Init does not stamp the file at `dotnet new`. `Build/NerdbankRepositoryVersion.targets` (imported only for Repo **after generate**) copies `Build/Nerdbank.version.json` to the repository root **if it does not exist**, before Nerdbank reads it. A later library in the same folder therefore does not collide.
+`None` wins over InitAll. A second **generate-time** write of root `version.json` is Exit 73. `--NerdbankGitVersioning Repo` without Init does not stamp the file at `dotnet new`. `Properties/Build/NerdbankRepositoryVersion.targets` (imported only for Repo **after generate**) copies `Properties/Build/Nerdbank.version.json` to the repository root **if it does not exist**, before Nerdbank reads it. A later library in the same folder therefore does not collide.
 
 In **template source** those `<!--#if (NerdbankGitVersioning == "Repo") -->` markers are XML comments, so MSBuild always imports the targets. From `src/prj/__SourceName__`, `../../../version.json` is this template folder. The copy no-ops when `../../../.template.config` exists. A `version.json` beside this `MAINTAINER.md` is a failed host stamp — delete it, do not commit.
 
 There is no `version.json` checkbox in `InitRepoItems`. Generate-time root file is `WriteRepoVersionJson` (`Repo` plus first-create Init). If that file is still missing, the Repo library writes it once at build (`if not exists`). Later VS library: **None** plus **This repository (root version.json)**.
 
-Seeds live under `TemplateAssets/Versioning/`. `Project/version.json` uses `pathFilters` `[".."]` (height is the packable project folder next to `Properties/`; tests, DebugHost, and benchmark are siblings and do not bump). `Repo/version.json` uses `pathFilters` `["."]` (height is the whole repository). Extra sources copy `Versioning/Project/` to `Properties/` and `Versioning/Repo/` to the repository root. `Build/Nerdbank.version.json` is the same payload as `Versioning/Repo/version.json` (late first-build copy). `Project` is first in the choice list because it is the default.
+Seeds live under `TemplateAssets/Versioning/`. `Project/version.json` uses `pathFilters` `[".."]` (height is the packable project folder next to `Properties/`; tests, DebugHost, and benchmark are siblings and do not bump). `Repo/version.json` uses `pathFilters` `["."]` (height is the whole repository). Extra sources copy `Versioning/Project/` to `Properties/` and `Versioning/Repo/` to the repository root. `Properties/Build/Nerdbank.version.json` is the same payload as `Versioning/Repo/version.json` (late first-build copy). `Project` is first in the choice list because it is the default.
 
 ### What each symbol stamps
 
@@ -406,7 +406,7 @@ dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --outp
 
 Library-only bool, default **false**. UI label **Public API analyzers**. CLI long name **`--PublicApiAnalyzers`**. Separate from repository-root Init* and from versioning. Tests and benchmark are not in this switch.
 
-When on, the analyzer project references `Microsoft.CodeAnalysis.PublicApiAnalyzers` 5.6.0 and sets `PublicApiDirectory` to `Properties/PublicAPI`. `dotnet new` does **not** stamp `PublicAPI.Shipped.txt` / `PublicAPI.Unshipped.txt`. `Build/InitializePublicApi.targets` (imported only when this switch is on **after generate**) writes those files on the first real build if they are missing, then runs `dotnet format analyzers --diagnostics RS0016`. AdditionalFiles are always listed so a first solution compile can see the paths. Nested format sets `PublicApiInitializing` and skips the target. Combo later packages pass `--PublicApiAnalyzers` again; paths are per package (`src/prj/{Name}/Properties/PublicAPI/`). There are no `AnalyzerReleases.Shipped.md` / `Unshipped.md` files; diagnostic-ID release tracking is not used (RS2008 suppressed).
+When on, the analyzer project references `Microsoft.CodeAnalysis.PublicApiAnalyzers` 5.6.0 and sets `PublicApiDirectory` to `Properties/PublicAPI`. `dotnet new` does **not** stamp `PublicAPI.Shipped.txt` / `PublicAPI.Unshipped.txt`. `Properties/Build/InitializePublicApi.targets` (imported only when this switch is on **after generate**) writes those files on the first real build if they are missing, then runs `dotnet format analyzers --diagnostics RS0016`. AdditionalFiles are always listed so a first solution compile can see the paths. Nested format sets `PublicApiInitializing` and skips the target. Combo later packages pass `--PublicApiAnalyzers` again; paths are per package (`src/prj/{Name}/Properties/PublicAPI/`). There are no `AnalyzerReleases.Shipped.md` / `Unshipped.md` files; diagnostic-ID release tracking is not used (RS2008 suppressed).
 
 In **template source** the `<!--#if (PublicApiAnalyzers) -->` markers are XML comments, so MSBuild always imports the targets (default after generate is still off). Design-time skips the target; a real stub `dotnet build` does not. The target no-ops when `../../../.template.config` exists. `src/prj/__SourceName__/Properties/PublicAPI/` in this host is a failed stamp — delete it, do not commit.
 
@@ -421,7 +421,7 @@ Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Doc
 
 | Choice | Path | When | Combo later library |
 | --- | --- | --- | --- |
-| `Package` | `src/prj/{Name}/NugetAssets/docs/DocShell.html` | every create | pass `Package` again |
+| `Package` | `src/prj/{Name}/Properties/NugetAssets/docs/DocShell.html` | every create | pass `Package` again |
 | `Repository` | `docs/DocShell.html` | first create | omit `Repository` (Exit 73 if stamped again) |
 | `None` | nothing | — | wins over the other choices |
 
@@ -435,11 +435,11 @@ dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --outp
 # dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --output $out --DocumentationTemplate Repository
 ```
 
-`NugetAssets/docs` is packed with the nupkg (`PackagePath` empty, so `docs/` inside the package). Repo-root `docs/` is not packed. The checkpoint infers package vs repository documentation from `NugetAssets/docs` vs repo-root `docs/`; it does not name this switch.
+`Properties/NugetAssets/docs` is packed with the nupkg (`PackagePath` empty, so `docs/` inside the package, not `Properties/`). Repo-root `docs/` is not packed. The checkpoint infers package vs repository documentation from `Properties/NugetAssets/docs` vs repo-root `docs/`; it does not name this switch.
 
 ## Project roles and Git ignores
 
-The analyzer is packable. `IsPublishable` is `false` (NuGet pack is the distribution path). Single `TargetFramework` `netstandard2.0`, stock `<Project Sdk="Microsoft.NET.Sdk">`. There is no `PublishDefaultFramework` / `ImportSdkTargets` pair. `Properties/AssemblyInfo.cs` grants `InternalsVisibleTo` the test assembly (`__SourceName__.Tests` via `sourceName`). The test project’s root `AssemblyInfo.cs` is only MSTest `Parallelize`. DebugHost is always generated: console compile target for Visual Studio `DebugRoslynComponent` (`Properties/launchSettings.json` on the analyzer, `OutputItemType` Analyzer / `ReferenceOutputAssembly` false on the host). Tests, DebugHost, and the optional BenchmarkDotNet executable explicitly set `IsPackable` and `IsPublishable` to `false`. Tests, DebugHost, and benchmark share one runnable TFM from the wizard (default `net10.0`). The analyzer itself is always `netstandard2.0` and does not multi-target. Versioning default is Nerdbank **Project** (`Properties/version.json`). Tests, DebugHost, and benchmark are not packable. **`--NerdbankGitVersioning`** `Off` is VersionPrefix; `Repo` is the shared root file.
+The analyzer is packable. `IsPublishable` is `false` (NuGet pack is the distribution path). Single `TargetFramework` `netstandard2.0`, stock `<Project Sdk="Microsoft.NET.Sdk">`. There is no `PublishDefaultFramework` / `ImportSdkTargets` pair. `Properties/Build/` is MSBuild (`PackAsAnalyzer` last; consumer `build/` props sit beside it). `Properties/NugetAssets/` is nupkg assets (readme, icon, notes, optional `docs/`). Both folders are on disk under `Properties/` so Explorer and Solution Explorer match; they are not source. Do not keep them at the project root and `Link` them. `.project.editor.globalconfig`, `.config/dotnet-tools.json`, and `Directory.Build.*` stay next to the csproj. `Properties/AssemblyInfo.cs` grants `InternalsVisibleTo` the test assembly (`__SourceName__.Tests` via `sourceName`). The test project’s root `AssemblyInfo.cs` is only MSTest `Parallelize`. DebugHost is always generated: console compile target for Visual Studio `DebugRoslynComponent` (`Properties/launchSettings.json` on the analyzer, `OutputItemType` Analyzer / `ReferenceOutputAssembly` false on the host). Tests, DebugHost, and the optional BenchmarkDotNet executable explicitly set `IsPackable` and `IsPublishable` to `false`. Tests, DebugHost, and benchmark share one runnable TFM from the wizard (default `net10.0`). The analyzer itself is always `netstandard2.0` and does not multi-target. Versioning default is Nerdbank **Project** (`Properties/version.json`). Tests, DebugHost, and benchmark are not packable. **`--NerdbankGitVersioning`** `Off` is VersionPrefix; `Repo` is the shared root file.
 
 **Test project layout.** Mini-scopes in this order: runnable TFM, language/debug (from `CSharpProjectOptions`), packaging, test configuration (MSTest logger), Coverlet `#if` block, ReportGenerator `#if` block, NugetReport + `WriteNugetReport`, `.gitignore` hide, `ProjectReference`, then **External dependencies** `PackageReference`s last. Coverage is **`--TestCoverage`**: `Coverlet` (default), `CoverletAndReport`, `None`. Do not restore independent Coverlet/ReportGenerator bools: ReportGenerator consumes `@(CoverletReport)`. Coverlet is `coverlet.msbuild` + `CollectCoverage=true`; that **does** run on `dotnet test` (VSTest path, SDK 10), including Linux/WSL (`dotnet` ships MSBuild). The Coverlet `#if` also writes `Include` `[__SourceName__]*` (sourceName → the analyzer assembly only) and `Threshold` `100` / `line,branch,method` / `total`. Those are generate-time properties, not wizard fields: Visual Studio cannot show extra inputs only when Coverlet is selected. `--TestCoverage None` omits the whole PropertyGroup. Lower the threshold in the test csproj when 100% is not yet the gate. The scaffold `EmDashAnalyzer` and `SmartQuotesAnalyzer` (C# syntax trees plus additional-file include/exclude globs) are covered so a first `dotnet test` still passes. Report/logger/NugetReport paths use `$([MSBuild]::NormalizeDirectory(...))` so Linux does not create a folder named `ReportGeneratorOutput\net10.0`.
 
@@ -493,4 +493,4 @@ dotnet new analyzerrepo-coree --PackageAuthor "abcd" --name "...Library2" --outp
 - **`TestCoverage`**: single choice, default `Coverlet`. Replaces the two independent Coverlet/ReportGenerator bools. Coverage stats on `dotnet test` are opt-out; ReportGenerator is opt-in (`CoverletAndReport`). There is no Report-without-Coverlet. `--TestCoverage None` drops Coverlet too. Computed `CoverletMSBuild` / `ReportGenerator` drive the test csproj and sln-readme `#if`s.
 - **`DirectoryMsBuildFiles`**: see section above. Default `false`. Empty `Directory.Build.*` beside the library and `Directory.Solution.*` beside this `.slnx`. No `Directory.Packages.props`.
 - **`DotNetToolManifest`**: see section above. Default `true`. Empty `src/prj/{Name}/.config/dotnet-tools.json`. `--DotNetToolManifest false` skips it.
-- Conditionals in `.md` / `.slnx` / `.targets` use `<!--#if` on their own lines (`specialCustomOperations`, `wholeLine`). `.txt` and the renamed root `LICENSE` use `//#if`. License seeds under `TemplateAssets/Licenses/` may use a shallow copyright `//#if` / `//#else`; extra sources pick the file so there is no `ProjectLicense` `#if` in the text. .targets stays registered so later generate-time hash-if in `Build/*.targets` still evaluate.
+- Conditionals in `.md` / `.slnx` / `.targets` use `<!--#if` on their own lines (`specialCustomOperations`, `wholeLine`). `.txt` and the renamed root `LICENSE` use `//#if`. License seeds under `TemplateAssets/Licenses/` may use a shallow copyright `//#if` / `//#else`; extra sources pick the file so there is no `ProjectLicense` `#if` in the text. .targets stays registered so later generate-time hash-if in `Properties/Build/*.targets` still evaluate.

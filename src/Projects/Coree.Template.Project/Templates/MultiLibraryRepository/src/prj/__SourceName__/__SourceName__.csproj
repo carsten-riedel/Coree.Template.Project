@@ -162,16 +162,16 @@
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <!--#endif -->
     <PackageIcon>Icon-128x128.png</PackageIcon>
-    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
-  <!-- Extra nupkg files from NugetAssets/ (readme, icon, release notes). -->
+  <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes). Disk matches Solution Explorer. -->
   <!-- Standard licenses: License.txt stays on disk (PackageLicenseExpression). -->
-  <!-- Custom: pack License.txt as PackageLicenseFile. -->
+  <!-- Custom: pack License.txt as PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
   <ItemGroup>
-    <None Include="$(MSBuildProjectDirectory)\NugetAssets\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\NugetAssets\License.txt" />
+    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" />
     <!--#if (ProjectLicense == "Custom") -->
-    <None Include="$(MSBuildProjectDirectory)\NugetAssets\License.txt" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" Pack="true" PackagePath="" />
     <!--#endif -->
   </ItemGroup>
 
@@ -247,12 +247,12 @@
 <!--#endif -->
 
   <!-- Source Link git state as properties (SDK 8+). Target hooks GenerateAssemblyInfo. -->
-  <Import Project="Build/SourceControlState.targets" />
+  <Import Project="Properties/Build/SourceControlState.targets" />
   <!--#if (NerdbankGitVersioning == "Repo") -->
-  <Import Project="Build/NerdbankRepositoryVersion.targets" />
+  <Import Project="Properties/Build/NerdbankRepositoryVersion.targets" />
   <!--#endif -->
   <!--#if (PublicApiAnalyzers) -->
-  <Import Project="Build/InitializePublicApi.targets" />
+  <Import Project="Properties/Build/InitializePublicApi.targets" />
   <!--#endif -->
   <!--
     Must stay last. This import is Sdk.targets plus the outer Publish dispatch.
@@ -261,6 +261,6 @@
     SDK and is ignored for that. Project Sdk="..." would append Sdk.targets
     after this file and overwrite the Publish override.
   -->
-  <Import Project="Build/ImportSdkTargets.targets" />
+  <Import Project="Properties/Build/ImportSdkTargets.targets" />
 
 </Project>

@@ -7,7 +7,7 @@
     src/prj/__SourceName__ is this template folder. Skip the copy when
     ../../../.template.config exists (host tree, not a generated repo).
     Same-build Nerdbank must see the file, so run before GetBuildVersion.
-    Seed is Build/Nerdbank.version.json (same payload as TemplateAssets/Versioning/Repo/version.json).
+    Seed is Properties/Build/Nerdbank.version.json (same payload as TemplateAssets/Versioning/Repo/version.json).
   -->
   <UsingTask
     TaskName="CopyFileIfNotExists"

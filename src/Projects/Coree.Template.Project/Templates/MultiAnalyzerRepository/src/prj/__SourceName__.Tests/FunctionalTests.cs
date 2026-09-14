@@ -1,11 +1,11 @@
-using ClassLibrary;
+using __SourceName__;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 
-namespace ClassLibrary.Tests
+namespace __SourceName__.Tests
 {
     [TestClass]
     public class FunctionalTests

@@ -1,13 +1,13 @@
 using System;
 
-namespace ClassLibrary.DebugHost
+namespace __SourceName__.DebugHost
 {
     internal static class Program
     {
         private static void Main()
         {
-            // Make ClassLibrary the Visual Studio startup project and start debugging from there (F5).
-            // Select the ClassLibrary Roslyn Component launch profile. Do not F5 this console.
+            // Make __SourceName__ the Visual Studio startup project and start debugging from there (F5).
+            // Select the __SourceName__ Roslyn Component launch profile. Do not F5 this console.
             // Visual Studio needs the .NET Compiler Platform SDK component.
             // F5 on this console only runs Main; it does not attach to the analyzer.
 

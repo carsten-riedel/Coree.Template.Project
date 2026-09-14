@@ -52,7 +52,7 @@
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
     <CoverletOutput>./CoverletOutput/</CoverletOutput>
-    <Include>[ClassLibrary]*</Include>
+    <Include>[__SourceName__]*</Include>
     <Threshold>100</Threshold>
     <ThresholdType>line,branch,method</ThresholdType>
     <ThresholdStat>total</ThresholdStat>
@@ -72,7 +72,7 @@
   <!-- Package inventory of the packable analyzer, not this test project. -->
   <PropertyGroup>
     <NugetReportDir Condition=" '$(NugetReportDir)' == '' ">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'NugetReport'))</NugetReportDir>
-    <NugetReportProject Condition=" '$(NugetReportProject)' == '' ">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', 'ClassLibrary', 'ClassLibrary.csproj'))</NugetReportProject>
+    <NugetReportProject Condition=" '$(NugetReportProject)' == '' ">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', '__SourceName__', '__SourceName__.csproj'))</NugetReportProject>
   </PropertyGroup>
   <Target Name="WriteNugetReport" AfterTargets="PostBuildEvent">
     <PropertyGroup>
@@ -94,7 +94,7 @@
 
   <!-- Analyzer is netstandard2.0. Do not SetTargetFramework to the test TFM. -->
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj" />
+    <ProjectReference Include="..\__SourceName__\__SourceName__.csproj" />
   </ItemGroup>
 
   <!-- External dependencies -->

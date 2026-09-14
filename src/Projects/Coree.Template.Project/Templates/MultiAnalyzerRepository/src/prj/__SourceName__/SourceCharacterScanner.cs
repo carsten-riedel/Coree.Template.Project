@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
-namespace ClassLibrary
+namespace __SourceName__
 {
     internal static class SourceCharacterScanner
     {

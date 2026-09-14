@@ -3,10 +3,10 @@ using System.IO;
 using System.Linq;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using ClassLibrary;
+using __SourceName__;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace ClassLibrary.Benchmark;
+namespace __SourceName__.Benchmark;
 
 public class Benchmarks
 {

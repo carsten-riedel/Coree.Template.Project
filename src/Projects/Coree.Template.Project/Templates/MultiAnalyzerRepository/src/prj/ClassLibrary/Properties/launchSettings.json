@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "ClassLibrary": {
-      "commandName": "DebugRoslynComponent",
-      "targetProject": "..\\ClassLibrary.DebugHost\\ClassLibrary.DebugHost.csproj"
-    }
-  }
-}

@@ -1,39 +1,44 @@
+#if( KeepScaffoldUnusedUsings )
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.IO;
+
+#endif
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace ClassLibrary
+namespace __SourceName__
 {
     /// <summary>
-    /// Sample analyzer: warns when C# source or matching additional files contain typographic quotation marks
-    /// (curly quotes and guillemets), not ASCII <c>"</c> or <c>'</c>.
+    /// Sample analyzer: warns when C# source or matching additional files contain an em dash (U+2014).
     /// Replace this type with your own diagnostic analyzer.
     /// </summary>
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public sealed class SmartQuotesAnalyzer : DiagnosticAnalyzer
+    public sealed class EmDashAnalyzer : DiagnosticAnalyzer
     {
         /// <summary>
-        /// Diagnostic identifier for the sample typographic quote rule.
+        /// Diagnostic identifier for the sample em dash rule.
         /// </summary>
-        public const string DiagnosticId = "TSQ001";
+        public const string DiagnosticId = "EMD001";
 
-        internal const string SeverityPropertyName = "SmartQuotesAnalyzerSeverity";
+        internal const string SeverityPropertyName = "EmDashAnalyzerSeverity";
 
-        internal const string IncludesPropertyName = "SmartQuotesAnalyzerIncludes";
+        internal const string IncludesPropertyName = "EmDashAnalyzerIncludes";
 
-        internal const string ExcludesPropertyName = "SmartQuotesAnalyzerExcludes";
+        internal const string ExcludesPropertyName = "EmDashAnalyzerExcludes";
 
-        // “ ” „ ‟ « »
-        private const string TypographicQuoteCharacters = "\u201C\u201D\u201E\u201F\u00AB\u00BB";
+        private const string EmDashCharacters = "\u2014";
 
         private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
             DiagnosticId,
-            "Source contains a typographic quote",
-            "Source contains a typographic quotation mark. Use ASCII double quote or apostrophe.",
+            "Source contains an em dash",
+            "Source contains an em dash (U+2014). Use ASCII hyphen-minus.",
             "Typography",
             DiagnosticSeverity.Warning,
             isEnabledByDefault: true,
-            description: "Copy-paste from word processors often inserts curly quotes or guillemets instead of ASCII quotes.");
+            description: "Copy-paste from word processors often inserts em dashes instead of ASCII hyphens.");
 
         private static readonly DiagnosticDescriptor ErrorRule =
             AnalyzerSeverity.WithSeverity(Rule, DiagnosticSeverity.Error);
@@ -57,7 +62,7 @@ namespace ClassLibrary
                 Rule,
                 ErrorRule,
                 InfoRule,
-                TypographicQuoteCharacters,
+                EmDashCharacters,
                 SeverityPropertyName,
                 IncludesPropertyName,
                 ExcludesPropertyName);

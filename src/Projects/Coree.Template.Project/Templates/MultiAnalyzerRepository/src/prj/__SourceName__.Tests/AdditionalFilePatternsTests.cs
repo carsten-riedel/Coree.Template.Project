@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ClassLibrary.Tests
+namespace __SourceName__.Tests
 {
     [TestClass]
     public class AdditionalFilePatternsTests

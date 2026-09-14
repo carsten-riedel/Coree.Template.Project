@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace ClassLibrary
+namespace __SourceName__
 {
     internal static class AnalyzerSeverity
     {

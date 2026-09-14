@@ -1,7 +1,7 @@
 #nullable disable
 using System;
 
-namespace ClassLibrary
+namespace __SourceName__
 {
     internal static class AdditionalFilePatterns
     {

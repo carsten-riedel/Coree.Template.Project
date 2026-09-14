@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <!-- Same props the nupkg imports for PackageReference consumers. -->
-  <Import Project="..\ClassLibrary\Build\ClassLibrary.props" />
+  <Import Project="..\__SourceName__\Build\__SourceName__.props" />
 
   <!-- Startable console and compile target for the analyzer DebugRoslynComponent profile. Not packed. -->
   <PropertyGroup>
@@ -53,7 +53,7 @@
 
   <!-- Load the in-repo analyzer at compile time. Do not reference it as a library. -->
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary\ClassLibrary.csproj"
+    <ProjectReference Include="..\__SourceName__\__SourceName__.csproj"
                       OutputItemType="Analyzer"
                       ReferenceOutputAssembly="false" />
   </ItemGroup>

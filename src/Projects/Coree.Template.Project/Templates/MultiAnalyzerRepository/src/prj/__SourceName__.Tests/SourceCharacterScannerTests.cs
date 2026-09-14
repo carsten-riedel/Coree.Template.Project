@@ -1,8 +1,8 @@
-using ClassLibrary;
+using __SourceName__;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ClassLibrary.Tests
+namespace __SourceName__.Tests
 {
     [TestClass]
     public class SourceCharacterScannerTests

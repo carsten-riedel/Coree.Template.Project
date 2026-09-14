@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json.schemastore.org/dotnetcli.host",
+  "symbolInfo": {
+    "InitRepoItems": {
+      "longName": "InitRepoItems",
+      "shortName": ""
+    },
+    "InitAllRepoItems": {
+      "longName": "InitAllRepoItems",
+      "shortName": ""
+    },
+    "CSharpProjectOptions": {
+      "longName": "CSharpProjectOptions",
+      "shortName": ""
+    },
+    "ProjectLicense": {
+      "longName": "ProjectLicense",
+      "shortName": ""
+    },
+    "NerdbankGitVersioning": {
+      "longName": "NerdbankGitVersioning",
+      "shortName": ""
+    },
+    "PublicApiAnalyzers": {
+      "longName": "PublicApiAnalyzers",
+      "shortName": ""
+    },
+    "DocumentationTemplate": {
+      "longName": "DocumentationTemplate",
+      "shortName": ""
+    },
+    "ProjectEditorGlobalConfig": {
+      "longName": "ProjectEditorGlobalConfig",
+      "shortName": ""
+    },
+    "AnalysisMode": {
+      "longName": "AnalysisMode",
+      "shortName": ""
+    },
+    "NuGetAuditHighCriticalAsErrors": {
+      "longName": "NuGetAuditHighCriticalAsErrors",
+      "shortName": ""
+    },
+    "TestCoverage": {
+      "longName": "TestCoverage",
+      "shortName": ""
+    },
+    "DirectoryMsBuildFiles": {
+      "longName": "DirectoryMsBuildFiles",
+      "shortName": ""
+    },
+    "DotNetToolManifest": {
+      "longName": "DotNetToolManifest",
+      "shortName": ""
+    }
+  }
+}

@@ -34,7 +34,6 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <IsPublishable>false</IsPublishable>
-    <PublishRelease>false</PublishRelease>
     <IsTestProject>true</IsTestProject>
     <PackAsTool>false</PackAsTool>
   </PropertyGroup>

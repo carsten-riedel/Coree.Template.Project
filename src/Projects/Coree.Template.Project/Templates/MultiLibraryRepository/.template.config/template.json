@@ -8,6 +8,10 @@
   "name": ".NET multi-library repository",
   "description": "Repository of one or more independently packable C# class libraries (NuGet). Tests and Coverlet coverage included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, ASP.NET Web SDK, and documentation template.",
   "shortName": "multilibraryrepo-coree",
+  // Host metadata: libraries this template uses that the author does not own.
+  // After create, CLI prints this URL. The markdown lives next to this file;
+  // .template.config *.md is not packed and is not generated into the repo.
+  "thirdPartyNotices": "https://github.com/carsten-riedel/Coree.Template.Project/blob/main/src/Projects/Coree.Template.Project/Templates/MultiLibraryRepository/.template.config/THIRD-PARTY-NOTICES.md",
   "tags": {
     "language": "C#",
     "type": "solution",

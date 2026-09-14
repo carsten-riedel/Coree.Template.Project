@@ -1,0 +1,266 @@
+<!--#if (UseWebSdk) -->
+<Project>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk.Web" />
+<!--#else -->
+<Project>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+<!--#endif -->
+
+  <!-- General build settings: defines the output type and target framework -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
+  </PropertyGroup>
+
+  <!-- C# language features and debugging configuration -->
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "DisableImplicitUsings") -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!--#else -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "Nullable") -->
+    <Nullable>enable</Nullable>
+    <!--#else -->
+    <Nullable>disable</Nullable>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "DebugEmbedded") -->
+    <DebugType>embedded</DebugType>
+    <!--#else -->
+    <DebugType>none</DebugType>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "LangLatest") -->
+    <LangVersion>latest</LangVersion>
+    <!--#else -->
+    <LangVersion>default</LangVersion>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <!-- XML documentation file -->
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "GenerateDocumentationFile") -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!--#else -->
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <!--#if (UseProjectEditorGlobalConfig) -->
+  <!-- GlobalAnalyzerConfigFiles is what Roslyn reads. Visible=false so VS does not show that item twice. -->
+  <!-- None+Link is Solution Explorer only. Disk path stays next to the csproj: Properties/ would change analyzer scope. -->
+  <!-- EnforceCodeStyleInBuild is required or IDE1006 stays IDE-only and `dotnet build` ignores the file. -->
+  <!-- OptimizeImplicitlyTriggeredBuild=false: VS Test Explorer / F5 must not skip analyzers (dotnet test does not). -->
+  <PropertyGroup>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <OptimizeImplicitlyTriggeredBuild>false</OptimizeImplicitlyTriggeredBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <GlobalAnalyzerConfigFiles Include="$(MSBuildProjectDirectory)\.project.editor.globalconfig" Visible="false" />
+    <None Remove=".project.editor.globalconfig" />
+    <None Include=".project.editor.globalconfig" Link="Properties\.project.editor.globalconfig" />
+  </ItemGroup>
+  <!--#endif -->
+
+  <!-- SDK CA rule set. Always written; omitted AnalysisMode switch means Recommended. -->
+  <PropertyGroup>
+    <AnalysisMode>__AnalysisMode__</AnalysisMode>
+  </PropertyGroup>
+
+  <!--#if (NuGetAuditHighCriticalAsErrors) -->
+  <!-- Restore NuGetAudit is already on. High (NU1903) and critical (NU1904) fail restore. Low/moderate stay warnings. -->
+  <PropertyGroup>
+    <WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>
+  </PropertyGroup>
+  <!--#endif -->
+
+  <!-- Packaging and publish configuration -->
+  <!-- EnablePackageValidation: TFM/runtime holes on pack. No baseline at generate; set PackageValidationBaselineVersion after the first nuget.org publish. -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <PublishRelease>true</PublishRelease>
+    <IsTestProject>false</IsTestProject>
+    <PackAsTool>false</PackAsTool>
+    <EnablePackageValidation>true</EnablePackageValidation>
+  </PropertyGroup>
+
+  <!-- SDK defaults stay. CheckEol: true for exe, skipped for Library. InvariantGlobalization unset = cultures on. -->
+  <PropertyGroup>
+    <CheckEolTargetFramework>$(CheckEolTargetFramework)</CheckEolTargetFramework>
+    <InvariantGlobalization>$(InvariantGlobalization)</InvariantGlobalization>
+  </PropertyGroup>
+
+  <!--#if (UseNerdbankGitVersioning) -->
+  <!-- Versioning: Nerdbank -->
+  <!--#if (NerdbankGitVersioning == "Project") -->
+  <PropertyGroup>
+    <GitVersionBaseDirectory>$(MSBuildProjectDirectory)\Properties</GitVersionBaseDirectory>
+  </PropertyGroup>
+  <!--#endif -->
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <!--#else -->
+  <!-- Versioning -->
+  <PropertyGroup>
+    <VersionMajor>0</VersionMajor>
+    <VersionMinor>1</VersionMinor>
+    <VersionBuild>0</VersionBuild>
+    <VersionRevision>0</VersionRevision>
+    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+    <VersionSuffix Condition="'$(VersionSuffix)' == '' and '$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
+    <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+    <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+  </PropertyGroup>
+  <!--#endif -->
+
+  <!-- Package metadata -->
+  <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
+  <PropertyGroup>
+    <Authors>MyAuthor</Authors>
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Owners>MyCopyrightHolder</Owners>
+    <!--#else -->
+    <Owners>MyAuthor</Owners>
+    <!--#endif -->
+    <!--#if (PackageCopyrightHolderIsOrganization == true) -->
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Company>MyCopyrightHolder</Company>
+    <!--#else -->
+    <Company>MyAuthor</Company>
+    <!--#endif -->
+    <!--#else -->
+    <Company></Company>
+    <!--#endif -->
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Copyright>Copyright © 1975 MyCopyrightHolder</Copyright>
+    <!--#else -->
+    <Copyright>Copyright © 1975 MyAuthor</Copyright>
+    <!--#endif -->
+    <PackageId>__SourceName__</PackageId>
+    <PackageTags>dotnet;class;library</PackageTags>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType></RepositoryType>
+    <!-- NuGet gallery blurb. CDATA is optional and keeps multiline text. -->
+    <Description><![CDATA[]]></Description>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <!--#if (ProjectLicense == "MIT") -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <!--#endif -->
+    <!--#if (ProjectLicense == "BSD3Clause") -->
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <!--#endif -->
+    <!--#if (ProjectLicense == "Apache2") -->
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <!--#endif -->
+    <!--#if (ProjectLicense == "Custom") -->
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <!--#endif -->
+    <PackageIcon>Icon-128x128.png</PackageIcon>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes). Disk matches Solution Explorer. -->
+  <!-- Standard licenses: License.txt stays on disk (PackageLicenseExpression). -->
+  <!-- Custom: pack License.txt as PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
+  <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" />
+    <!--#if (ProjectLicense == "Custom") -->
+    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" Pack="true" PackagePath="" />
+    <!--#endif -->
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Pack</PackageOutputPath>
+  </PropertyGroup>
+
+  <!-- Publish behavior keep slim for library specs -->
+	<PropertyGroup Condition="'$(_IsPublishing)' == 'true'">
+		<!-- Flat publish output -->
+		<PublishDir Condition="'$(PublishDir)' == ''">$(MSBuildProjectDirectory)\bin\Publish\</PublishDir>
+		<PublishAot>false</PublishAot>
+		<PublishTrimmed>false</PublishTrimmed>
+	</PropertyGroup>
+
+  <!-- Publish behavior for executable future useage program main etc -->
+	<PropertyGroup Condition="'$(_IsPublishing)' == 'true' and '$(OutputType)' != 'Library'">
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<PublishSelfContained>true</PublishSelfContained>
+		<PublishSingleFile>true</PublishSingleFile>
+		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+	</PropertyGroup>
+
+  <!--#if (PublicApiAnalyzers) -->
+  <PropertyGroup>
+    <PublicApiDirectory>$(MSBuildProjectDirectory)\Properties\PublicAPI</PublicApiDirectory>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="5.6.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="$(PublicApiDirectory)\PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="$(PublicApiDirectory)\PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+  <!--#endif -->
+
+  <!-- Keep Git configuration on disk without showing it as a project item -->
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+<!--#if (PlaceSolution == "BesideLibrary") -->
+  <ItemGroup>
+    <None Remove="__SourceName__.slnx;Readme.md" />
+  </ItemGroup>
+<!--#endif -->
+
+  <!--#if (DirectoryMsBuildFiles) -->
+  <!-- Auto-imported from this directory. Link is Solution Explorer only (under Properties\). -->
+  <!-- Do not move the files into Properties/ on disk: MSBuild finds Directory.Build.* by folder. -->
+  <ItemGroup>
+    <None Remove="Directory.Build.props;Directory.Build.targets" />
+    <None Include="Directory.Build.props" Link="Properties\Directory.Build.props" />
+    <None Include="Directory.Build.targets" Link="Properties\Directory.Build.targets" />
+  </ItemGroup>
+  <!--#endif -->
+  <!--#if (DotNetToolManifest) -->
+  <!-- Disk path stays .config/: that is where `dotnet tool` looks. Link is Solution Explorer only. -->
+  <ItemGroup>
+    <None Remove=".config\dotnet-tools.json" />
+    <None Include=".config\dotnet-tools.json" Link="Properties\dotnet-tools.json" />
+  </ItemGroup>
+  <!--#endif -->
+<!--#if ((DirectoryMsBuildFiles) && (PlaceSolution == "BesideLibrary")) -->
+  <ItemGroup>
+    <None Remove="Directory.Solution.props;Directory.Solution.targets" />
+    <None Include="Directory.Solution.props" Link="Properties\Directory.Solution.props" />
+    <None Include="Directory.Solution.targets" Link="Properties\Directory.Solution.targets" />
+  </ItemGroup>
+<!--#endif -->
+
+  <!-- Source Link git state as properties (SDK 8+). Target hooks GenerateAssemblyInfo. -->
+  <Import Project="Properties/Build/SourceControlState.targets" />
+  <!--#if (NerdbankGitVersioning == "Repo") -->
+  <Import Project="Properties/Build/NerdbankRepositoryVersion.targets" />
+  <!--#endif -->
+  <!--#if (PublicApiAnalyzers) -->
+  <Import Project="Properties/Build/InitializePublicApi.targets" />
+  <!--#endif -->
+  <!--
+    Must stay last. This import is Sdk.targets plus the outer Publish dispatch.
+    The SDK reads properties and items while it loads (EnforceCodeStyleInBuild,
+    GlobalAnalyzerConfigFiles, AnalysisMode, EnablePackageValidation, WarningsAsErrors, publish). Anything after this line is after the
+    SDK and is ignored for that. Project Sdk="..." would append Sdk.targets
+    after this file and overwrite the Publish override.
+  -->
+  <Import Project="Properties/Build/ImportSdkTargets.targets" />
+
+</Project>

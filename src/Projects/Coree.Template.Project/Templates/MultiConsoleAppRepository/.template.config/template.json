@@ -2,23 +2,23 @@
   "$schema": "http://json.schemastore.org/template",
   "author": "Carsten Riedel",
   // Opts Visual Studio into category display in the New Project dialog
-  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "Analyzer", "Roslyn", "NuGet", "Test", "Solution", "Repository", "Multi-project", "Coree" ],
-  "identity": "CoreeTemplatesProjectMultiAnalyzerRepository",
+  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "ClassLibrary", "Library", "NuGet", "Test", "Solution", "Repository", "Multi-project", "Coree" ],
+  "identity": "CoreeTemplatesProjectMultiConsoleAppRepository",
   // Displayname is used in the New Project dialog and in the dotnet new list output.
-  "name": ".NET analyzer package repository",
-  "description": "Repository of one or more independently packable Roslyn analyzer packages (NuGet). Same combo and init system as the multi-library repository. Analyzer targets netstandard2.0 and packs under analyzers/dotnet/cs. Tests, Coverlet coverage, and a Visual Studio DebugHost (DebugRoslynComponent) are included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, and documentation template.",
-  "shortName": "analyzerrepo-coree",
+  "name": ".NET multi-library repository",
+  "description": "Repository of one or more independently packable C# class libraries (NuGet). Tests and Coverlet coverage included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, ASP.NET Web SDK, and documentation template.",
+  "shortName": "multiconsoleapprepo-coree",
   // Host metadata: libraries this template uses that the author does not own.
   // After create, CLI prints this URL. The markdown lives next to this file;
   // .template.config *.md is not packed and is not generated into the repo.
-  "thirdPartyNotices": "https://github.com/carsten-riedel/Coree.Template.Project/blob/main/src/Projects/Coree.Template.Project/Templates/MultiAnalyzerRepository/.template.config/THIRD-PARTY-NOTICES.md",
+  "thirdPartyNotices": "https://github.com/carsten-riedel/Coree.Template.Project/blob/main/src/Projects/Coree.Template.Project/Templates/MultiConsoleAppRepository/.template.config/THIRD-PARTY-NOTICES.md",
   "tags": {
     "language": "C#",
     "type": "solution",
     // Opts Visual Studio into its solution-template UI instead of the project-template UI.
     "editorTreatAs": "solution"
   },
-  "defaultName": "Organization.Domain.Analyzer", // Organization.Domain.Functionality
+  "defaultName": "Organization.Domain.ClassLibrary", // Organization.Domain.Functionality
   "sourceName": "__SourceName__", // Folders, csproj, namespace. Replaced by --name.
   // Visual Studio creates the outer solution directory; true would add another name directory.
   "preferNameDirectory": false,
@@ -38,100 +38,7 @@
       "binding": "host:HostIdentifier",
       "defaultValue": "dotnetcli"
     },
-    // Single-select DebugHost TFM (net8.0 / net9.0 / net10.0). Tests and the
-    // optional benchmark use the same value. The analyzer is always netstandard2.0.
-    // First parameter after HostIdentifier so Visual Studio lists it at the top.
-    "TargetFrameworks": {
-      "type": "parameter",
-      "description": "DebugHost target framework (.NET 8, 9, or 10). Tests and the optional benchmark use the same TFM. The analyzer package always targets netstandard2.0.",
-      "datatype": "choice",
-      "allowMultipleValues": false,
-      "enableQuotelessLiterals": true,
-      "displayName": "DebugHost target framework",
-      "choices": [
-        {
-          "choice": "net8.0",
-          "description": "DebugHost, tests, and benchmark on .NET 8",
-          "displayName": ".NET 8"
-        },
-        {
-          "choice": "net9.0",
-          "description": "DebugHost, tests, and benchmark on .NET 9",
-          "displayName": ".NET 9"
-        },
-        {
-          "choice": "net10.0",
-          "description": "DebugHost, tests, and benchmark on .NET 10",
-          "displayName": ".NET 10"
-        }
-      ],
-      "defaultValue": "net10.0"
-    },
-    // Converts the selected framework values to the semicolon-separated MSBuild list.
-    "TargetFrameworksValue": {
-      "type": "generated",
-      "generator": "join",
-      "replaces": "__TargetFrameworks__",
-      "parameters": {
-        "symbols": [
-          {
-            "type": "ref",
-            "value": "TargetFrameworks"
-          }
-        ],
-        "separator": ";",
-        "removeEmptyValues": true
-      }
-    },
-    // Resolves the selected framework to one value for paths and filenames.
-    "TargetFrameworkValue": {
-      "type": "generated",
-      "generator": "switch",
-      "replaces": "__TargetFramework__",
-      "parameters": {
-        "datatype": "string",
-        "cases": [
-          {
-            "condition": "(TargetFrameworks == \"net10.0\")",
-            "value": "net10.0"
-          },
-          {
-            "condition": "(TargetFrameworks == \"net9.0\")",
-            "value": "net9.0"
-          },
-          {
-            "condition": "(TargetFrameworks == \"net8.0\")",
-            "value": "net8.0"
-          }
-        ]
-      }
-    },
-    // Same order as TargetFrameworkValue. Pins src/global.json sdk.version
-    // to the DebugHost TFM (8.0.0 / 9.0.0 / 10.0.0), not netstandard2.0.
-    // Placeholder must not appear elsewhere.
-    "SdkPinVersion": {
-      "type": "generated",
-      "generator": "switch",
-      "replaces": "0.0.0-sdk-pin",
-      "parameters": {
-        "datatype": "string",
-        "cases": [
-          {
-            "condition": "(TargetFrameworks == \"net10.0\")",
-            "value": "10.0.0"
-          },
-          {
-            "condition": "(TargetFrameworks == \"net9.0\")",
-            "value": "9.0.0"
-          },
-          {
-            "condition": "(TargetFrameworks == \"net8.0\")",
-            "value": "8.0.0"
-          }
-        ]
-      }
-    },
-    // One multi-choice instead of N root bools (VS stays one group, like InitRepoItems).
+    // One multi-choice instead of N root bools (VS stays one group, like TFMs).
     // CLI default is empty: later libraries omit both switches, no root collisions.
     // Visual Studio does not allow an empty multi-choice (at least one value).
     // None is the explicit empty set; it is first so a host that snaps to the
@@ -147,12 +54,12 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "",
-      "description": "Pick individual first-create files. Omit on later packages in the same folder. For the full first-create set on CLI, use --InitAllRepoItems. src/global.json is optional and off by default (not in that set). Visual Studio cannot leave this empty: choose None.",
+      "description": "Pick individual first-create files. Omit on later libraries in the same folder. For the full first-create set on CLI, use --InitAllRepoItems. src/global.json is optional and off by default (not in that set). Visual Studio cannot leave this empty: choose None.",
       "displayName": "Repository root items",
       "choices": [
         {
           "choice": "None",
-          "description": "Do not add first-create files. Use this in Visual Studio when adding another analyzer package to an existing repository.",
+          "description": "Do not add first-create files. Use this in Visual Studio when adding another library to an existing repository.",
           "displayName": "None"
         },
         {
@@ -181,15 +88,21 @@
           "displayName": "LICENSE file at repository root"
         },
         {
+          "choice": "PackageBoundaries",
+          "description": "Add ChoosingPackageBoundaries.md at the repository root. Decision guide for NuGet package, project, and compatibility boundaries. First create only.",
+          "displayName": "Choosing package boundaries"
+        },
+        {
           "choice": "SrcGlobalJson",
-          "description": "Add src/global.json pinning the .NET SDK to this create's DebugHost target framework (8.0.0, 9.0.0, or 10.0.0; rollForward latestFeature). Optional; off by default; not part of --InitAllRepoItems. First create only. Walk-up from folders under src/. Does not pin commands run at the repository root. The analyzer package stays netstandard2.0.",
+          "description": "Add src/global.json pinning the .NET SDK to this create's highest selected target framework (8.0.0, 9.0.0, or 10.0.0; rollForward latestFeature). Optional; off by default; not part of --InitAllRepoItems. First create only. Walk-up from folders under src/. Does not pin commands run at the repository root.",
           "displayName": "src/global.json"
         }
       ]
     },
     // CLI-only first-create set: README, checkpoint, .gitattributes, .gitignore,
-    // LICENSE. Same five files as the Visual Studio ide.host default. Hidden in VS.
-    // src/global.json is not in this set (SrcGlobalJson, default off).
+    // LICENSE, ChoosingPackageBoundaries.md. Same six files as the Visual Studio
+    // ide.host default. Hidden in VS. src/global.json is not in this set
+    // (SrcGlobalJson, default off).
     // None on InitRepoItems still writes nothing. Root version.json is not
     // in this set; it is --NerdbankGitVersioning Repo plus first-create Init
     // (WriteRepoVersionJson).
@@ -197,20 +110,20 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, .gitignore, LICENSE). Same set as a Visual Studio first create. Does not add version.json or src/global.json. First create only.",
+      "description": "Add all repository-root files (README.md, AI-supported release checkpoint, .gitattributes, .gitignore, LICENSE, ChoosingPackageBoundaries.md). Same set as a Visual Studio first create. Does not add version.json or src/global.json. First create only.",
       "displayName": "All repository root items"
     },
     // Where the TEMPLATE .slnx is written.
     // SlnFolder (default): src/sln/__SourceName__/__SourceName__.slnx plus
-    // handbook Readme.md — one folder per package so `dotnet` there does not
+    // handbook Readme.md — one folder per library so `dotnet` there does not
     // see sibling .slnx files.
-    // BesideLibrary: src/prj/__SourceName__/ next to the packable analyzer
-    // csproj (slnx + handbook; tests, DebugHost, and benchmark stay sibling
-    // projects under src/prj/). Does not create src/sln/{name}/.
+    // BesideLibrary: src/prj/__SourceName__/ next to the packable csproj
+    // (slnx + handbook; tests and benchmark stay sibling projects under
+    // src/prj/). Does not create src/sln/{name}/.
     // RepoRoot: repository root. CLI renames to __SourceName__.slnx; Visual
     // Studio keeps __SourceName__.generated.slnx so it does not overwrite the
     // IDE's conventional {Name}.slnx. src/sln/{name}/Readme.md is still notes.
-    // RepoRoot stacks every package's .slnx in one directory; CLI/CI must pass
+    // RepoRoot stacks every library's .slnx in one directory; CLI/CI must pass
     // a solution path if more than one exists.
     "PlaceSolution": {
       "type": "parameter",
@@ -218,22 +131,22 @@
       "isRequired": false,
       "defaultValue": "SlnFolder",
       "enableQuotelessLiterals": true,
-      "description": "Where this analyzer's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideLibrary writes the .slnx and handbook next to the analyzer csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
+      "description": "Where this library's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideLibrary writes the .slnx and handbook next to the library csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
       "displayName": "Solution file location",
       "choices": [
         {
           "choice": "SlnFolder",
-          "description": "Default. One .slnx per package folder so `dotnet` does not ask which file to use.",
+          "description": "Default. One .slnx per library folder so `dotnet` does not ask which file to use.",
           "displayName": "src/sln/{name}/"
         },
         {
           "choice": "RepoRoot",
-          "description": "Repository root. Later packages share that directory, so `dotnet` needs the .slnx path (MSB1011).",
+          "description": "Repository root. Later libraries share that directory, so `dotnet` needs the .slnx path (MSB1011).",
           "displayName": "Repository root"
         },
         {
           "choice": "BesideLibrary",
-          "description": "Next to this analyzer's csproj (slnx and handbook). Does not create src/sln/{name}/. Tests, DebugHost, and benchmark stay sibling projects under src/prj/.",
+          "description": "Next to this library's csproj (slnx and handbook). Does not create src/sln/{name}/. Tests and benchmark stay sibling projects under src/prj/.",
           "displayName": "src/prj/{name}/"
         }
       ]
@@ -246,11 +159,45 @@
       "type": "computed",
       "value": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")"
     },
-    // One multi-choice for C# / debug / documentation in the analyzer, tests, DebugHost, and
-    // benchmark (VS combobox, like InitRepoItems). Checked =
+    // User-selectable target frameworks. Multiple values are supported for multi-targeting.
+    "TargetFrameworks": {
+      "type": "parameter",
+      "description": "The target framework for the project TargetFrameworks property.",
+      "datatype": "choice",
+      "allowMultipleValues": true,
+      "enableQuotelessLiterals": true,
+      "choices": [
+        {
+          "choice": "net8.0",
+          "description": "Target net8.0",
+          "displayName": ".NET 8.0"
+        },
+        {
+          "choice": "net9.0",
+          "description": "Target net9.0",
+          "displayName": ".NET 9.0"
+        },
+        {
+          "choice": "net10.0",
+          "description": "Target net10.0",
+          "displayName": ".NET 10.0"
+        }
+      ],
+      "defaultValue": "net8.0|net10.0"
+    },
+    // Uses the ASP.NET Core Web SDK for the library while test and benchmark projects keep their existing project roles.
+    "UseWebSdk": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "false",
+      "description": "Use Microsoft.NET.Sdk.Web instead of Microsoft.NET.Sdk for the class library project.",
+      "displayName": "Use the ASP.NET Core Web SDK"
+    },
+    // One multi-choice for C# / debug / documentation in library, tests, and
+    // benchmark (VS combobox, like TFMs and InitRepoItems). Checked =
     // current product default. Unchecked = the other explicit value.
     // Properties are always written. GenerateDocumentationFile is in this
-    // choice list; only the analyzer project writes it (own PropertyGroup).
+    // choice list; only the class library writes it (own PropertyGroup).
     // Tests/Benchmark have no XML docs surface. No None: CLI/VS default is
     // the five product values; Visual Studio keeps at least one checked.
     // Omit the switch on CLI.
@@ -261,7 +208,7 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded|GenerateDocumentationFile",
-      "description": "C# and debug settings for the analyzer package, tests, DebugHost, and benchmark. Uncheck an item to write the alternative value.",
+      "description": "C# and debug settings for the class library, tests, and benchmark. Uncheck an item to write the alternative value.",
       "displayName": "C# project options",
       "choices": [
         {
@@ -290,6 +237,69 @@
           "displayName": "XML documentation file"
         }
       ]
+    },
+    // Converts the selected framework values to the semicolon-separated MSBuild list.
+    "TargetFrameworksValue": {
+      "type": "generated",
+      "generator": "join",
+      "replaces": "__TargetFrameworks__",
+      "parameters": {
+        "symbols": [
+          {
+            "type": "ref",
+            "value": "TargetFrameworks"
+          }
+        ],
+        "separator": ";",
+        "removeEmptyValues": true
+      }
+    },
+    // Resolves the highest selected framework to one value for single-framework paths and filenames.
+    "TargetFrameworkValue": {
+      "type": "generated",
+      "generator": "switch",
+      "replaces": "__TargetFramework__",
+      "parameters": {
+        "datatype": "string",
+        "cases": [
+          {
+            "condition": "(TargetFrameworks == \"net10.0\")",
+            "value": "net10.0"
+          },
+          {
+            "condition": "(TargetFrameworks == \"net9.0\")",
+            "value": "net9.0"
+          },
+          {
+            "condition": "(TargetFrameworks == \"net8.0\")",
+            "value": "net8.0"
+          }
+        ]
+      }
+    },
+    // Same highest-first order as TargetFrameworkValue. Pins src/global.json
+    // sdk.version (8.0.0 / 9.0.0 / 10.0.0). Placeholder must not appear elsewhere.
+    "SdkPinVersion": {
+      "type": "generated",
+      "generator": "switch",
+      "replaces": "0.0.0-sdk-pin",
+      "parameters": {
+        "datatype": "string",
+        "cases": [
+          {
+            "condition": "(TargetFrameworks == \"net10.0\")",
+            "value": "10.0.0"
+          },
+          {
+            "condition": "(TargetFrameworks == \"net9.0\")",
+            "value": "9.0.0"
+          },
+          {
+            "condition": "(TargetFrameworks == \"net8.0\")",
+            "value": "8.0.0"
+          }
+        ]
+      }
     },
     // Package metadata parameters replace their matching placeholders in the project and package assets.
     "PackageAuthor": {
@@ -361,7 +371,7 @@
         },
         {
           "choice": "Off",
-          "description": "VersionMajor / VersionPrefix / PackageVersion in the analyzer csproj. No Nerdbank.GitVersioning package.",
+          "description": "VersionMajor / VersionPrefix / PackageVersion in the class library csproj. No Nerdbank.GitVersioning package.",
           "displayName": "Off (VersionPrefix in the library project)"
         }
       ]
@@ -372,23 +382,27 @@
     },
     "WriteRepoVersionJson": {
       "type": "computed",
-      "value": "(NerdbankGitVersioning == \"Repo\") && (InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"Readme\") || (InitRepoItems == \"AIReleaseCheckpoint\") || (InitRepoItems == \"GitAttributes\") || (InitRepoItems == \"GitIgnore\") || (InitRepoItems == \"RepoLicense\") || (InitRepoItems == \"SrcGlobalJson\"))"
+      "value": "(NerdbankGitVersioning == \"Repo\") && (InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"Readme\") || (InitRepoItems == \"AIReleaseCheckpoint\") || (InitRepoItems == \"GitAttributes\") || (InitRepoItems == \"GitIgnore\") || (InitRepoItems == \"RepoLicense\") || (InitRepoItems == \"PackageBoundaries\") || (InitRepoItems == \"SrcGlobalJson\"))"
     },
     "WriteRepoLicense": {
       "type": "computed",
       "value": "(InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"RepoLicense\"))"
     },
+    "WriteChoosingPackageBoundaries": {
+      "type": "computed",
+      "value": "(InitRepoItems != \"None\") && (InitAllRepoItems || (InitRepoItems == \"PackageBoundaries\"))"
+    },
     "WriteSrcGlobalJson": {
       "type": "computed",
       "value": "(InitRepoItems != \"None\") && (InitRepoItems == \"SrcGlobalJson\")"
     },
-    // Analyzer-only. Default off. First real build writes Properties/PublicAPI
+    // Library-only. Default off. First real build writes Properties/PublicAPI
     // baseline files if they are missing. Not a repository-root Init* item.
     "PublicApiAnalyzers": {
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add Microsoft.CodeAnalysis.PublicApiAnalyzers to the analyzer project. The first real build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected.",
+      "description": "Add Microsoft.CodeAnalysis.PublicApiAnalyzers to the class library. The first real build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected.",
       "displayName": "Public API analyzers"
     },
     // Multi-choice. Default empty/None. Same DocShell.html seed, two
@@ -441,7 +455,7 @@
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "MIT",
-      "description": "License for the analyzer package. Default MIT. Standards set PackageLicenseExpression. Custom packs License.txt. The LICENSE file at repository root copies this license.",
+      "description": "License for the class library. Default MIT. Standards set PackageLicenseExpression. Custom packs License.txt. The LICENSE file at repository root copies this license.",
       "displayName": "Project license",
       "choices": [
         {
@@ -471,8 +485,8 @@
     // (naming/XML/nullable/unused usings as error). Default is the same dump
     // with suggestions only. Off writes nothing. Generated disk name is always
     // .project.editor.globalconfig; seeds live under TemplateAssets/CodeStyle/
-    // as .project.editor.globalconfig.{choice}. Wire it in the analyzer csproj;
-    // EnforceCodeStyleInBuild is required or IDE naming
+    // as .project.editor.globalconfig.{choice}. Wire it before
+    // ImportSdkTargets; EnforceCodeStyleInBuild is required or IDE naming
     // stays IDE-only. OptimizeImplicitlyTriggeredBuild=false so VS Test
     // Explorer / F5 do not skip those analyzers (`dotnet test` does not).
     "ProjectEditorGlobalConfig": {
@@ -481,12 +495,12 @@
       "isRequired": false,
       "defaultValue": "Strict",
       "enableQuotelessLiterals": true,
-      "description": "Editor and analyzer rules beside the analyzer project, applied in the IDE and on build. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected.",
-      "displayName": "Code style rules for analyzer project",
+      "description": "Editor and analyzer rules beside the library project, applied in the IDE and on build. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected.",
+      "displayName": "Code style rules for library project",
       "choices": [
         {
           "choice": "Strict",
-          "description": "Same style dump as Default, plus naming/XML-doc/nullable/unused-using errors for a packable analyzer. Default. Needs XML docs and nullable on in C# project options.",
+          "description": "Same style dump as Default, plus naming/XML-doc/nullable/unused-using errors for a packable library. Default. Needs XML docs and nullable on in C# project options.",
           "displayName": "Strict (public release errors)"
         },
         {
@@ -505,7 +519,7 @@
       "type": "computed",
       "value": "(ProjectEditorGlobalConfig != \"Off\")"
     },
-    // Default/Off keep unused usings on EmDashAnalyzer so IDE0005 is visible.
+    // Default/Off keep unused usings on Class1 so IDE0005 is visible.
     // Strict omits them or the first build fails (IDE0005 is error).
     "KeepScaffoldUnusedUsings": {
       "type": "computed",
@@ -522,7 +536,7 @@
       "defaultValue": "Recommended",
       "enableQuotelessLiterals": true,
       "replaces": "__AnalysisMode__",
-      "description": "SDK code-analysis mode for the analyzer project (CA rules). Default Recommended. Minimum is fewer warnings. All is almost every CA rule as a warning. Test and benchmark projects are not affected.",
+      "description": "SDK code-analysis mode for the class library (CA rules). Default Recommended. Minimum is fewer warnings. All is almost every CA rule as a warning. Test and benchmark projects are not affected.",
       "displayName": "Code analysis mode",
       "choices": [
         {
@@ -550,7 +564,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "description": "Treat high and critical NuGet vulnerability warnings (NU1903, NU1904) as restore errors on the analyzer package. Default on. Low and moderate stay warnings. Turn off for an EOL or backport graph that cannot be cleaned. Test and benchmark projects are not affected. Does not change NuGetAudit (already on) or the test-project vulnerable report.",
+      "description": "Treat high and critical NuGet vulnerability warnings (NU1903, NU1904) as restore errors on the class library. Default on. Low and moderate stay warnings. Turn off for an EOL or backport graph that cannot be cleaned. Test and benchmark projects are not affected. Does not change NuGetAudit (already on) or the test-project vulnerable report.",
       "displayName": "Treat high/critical NuGet vulnerabilities as errors"
     },
     // Test-project coverage. Single choice because ReportGenerator consumes
@@ -564,12 +578,12 @@
       "isRequired": false,
       "defaultValue": "Coverlet",
       "enableQuotelessLiterals": true,
-      "description": "Test coverage on the test project. Default is Coverlet: dotnet test fails if the analyzer assembly is under 100% line/branch/method coverage. Lower Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. The analyzer project is not affected.",
+      "description": "Test coverage on the test project. Default is Coverlet: dotnet test fails if the library is under 100% line/branch/method coverage. Lower Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. The class library is not affected.",
       "displayName": "Test coverage",
       "choices": [
         {
           "choice": "Coverlet",
-          "description": "Add coverlet.msbuild and collect coverage on dotnet test. Default. Fails the test run below 100% line/branch/method on the analyzer assembly. Lower Threshold in the test csproj to allow less. Raw Coverlet output only.",
+          "description": "Add coverlet.msbuild and collect coverage on dotnet test. Default. Fails the test run below 100% line/branch/method on the library assembly. Lower Threshold in the test csproj to allow less. Raw Coverlet output only.",
           "displayName": "Coverlet only (100% gate)"
         },
         {
@@ -600,35 +614,34 @@
       "description": "Add an optional BenchmarkDotNet console project.",
       "displayName": "Add optional BenchmarkDotNet console project"
     },
-    // Opt-in empty Directory.Build.props/.targets next to this analyzer csproj
-    // and Directory.Solution.props/.targets next to this package's .slnx
+    // Opt-in empty Directory.Build.props/.targets next to this library csproj
+    // and Directory.Solution.props/.targets next to this library's .slnx
     // (src/sln/{name}/, repo root, or src/prj/{name}/ — follows PlaceSolution).
     // Combo-safe when the .slnx is not stacked in one shared directory.
     // Not Init. No Directory.Packages.props (CPM would not cover sibling tests).
-    // Tests, DebugHost, and benchmark are not in this switch. Default off.
+    // Tests and benchmark are not in this switch. Default off.
     "DirectoryMsBuildFiles": {
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add empty Directory.Build.props and Directory.Build.targets beside this analyzer project, and Directory.Solution.props and Directory.Solution.targets beside this package's .slnx (follows PlaceSolution). Landing files for extra MSBuild you do not want in the csproj. Test and benchmark projects are not affected. Default off.",
+      "description": "Add empty Directory.Build.props and Directory.Build.targets beside this library project, and Directory.Solution.props and Directory.Solution.targets beside this library's .slnx (follows PlaceSolution). Landing files for extra MSBuild you do not want in the csproj. Test and benchmark projects are not affected. Default off.",
       "displayName": "Empty Directory.Build and Directory.Solution MSBuild files"
     },
-    // Empty local tool manifest beside this analyzer csproj. Default on.
-    // Combo-safe: path includes the package name. Not Init. No tools pinned
-    // and no tool restore on build. Tests, DebugHost, and benchmark are not
-    // in this switch.
+    // Empty local tool manifest beside this library csproj. Default on.
+    // Combo-safe: path includes the library name. Not Init. No tools pinned
+    // and no tool restore on build. Tests and benchmark are not in this switch.
     "DotNetToolManifest": {
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "description": "Add an empty .config/dotnet-tools.json beside this analyzer project (no tools). Landing file for dotnet tool install --local. Default on. Every create; paths do not collide. Test, DebugHost, and benchmark projects are not affected. Does not restore tools on build.",
+      "description": "Add an empty .config/dotnet-tools.json beside this library project (no tools). Landing file for dotnet tool install --local. Default on. Every create; paths do not collide. Test and benchmark projects are not affected. Does not restore tools on build.",
       "displayName": "Empty local dotnet-tools.json"
     }
   },
   // Registers XML-style conditionals for extensions that hosts do not always
   // treat the same as the built-in XML/.md processor. Tokens must sit on their
-  // own lines because wholeLine is true. .targets stays registered so later
-  // generate-time hash-if in Properties/Build/*.targets still evaluate.
+  // own lines because wholeLine is true. .targets is required so UseWebSdk can
+  // pick Sdk.targets inside Properties/Build/ImportSdkTargets.targets at generate time.
   // .txt / LICENSE: each TemplateAssets/Licenses seed uses a shallow
   // //#if (PackageCopyrightHolderIsSet) / //#else / //#endif. Do not put
   // ProjectLicense #if in those files; extra sources pick the seed.
@@ -752,6 +765,12 @@
           "condition": "((InitRepoItems == \"None\") || ((InitAllRepoItems == false) && (InitRepoItems != \"GitIgnore\")))",
           "exclude": [
             ".gitignore"
+          ]
+        },
+        {
+          "condition": "((InitRepoItems == \"None\") || ((InitAllRepoItems == false) && (InitRepoItems != \"PackageBoundaries\")))",
+          "exclude": [
+            "ChoosingPackageBoundaries.md"
           ]
         },
         {
@@ -1156,7 +1175,7 @@
         "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
         "manualInstructions": [
           {
-            "text": "Close Visual Studio, open the .slnx next to the analyzer project under src/prj/, and delete the extra .slnx Visual Studio created in the repository root."
+            "text": "Close Visual Studio, open the .slnx next to the library project under src/prj/, and delete the extra .slnx Visual Studio created in the repository root."
           }
         ],
         "continueOnError": true

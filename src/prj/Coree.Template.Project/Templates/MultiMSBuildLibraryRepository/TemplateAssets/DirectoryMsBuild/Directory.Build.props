@@ -1,0 +1,16 @@
+<Project>
+  <!--
+    Landing file for extra properties on this task library only.
+    MSBuild imports it automatically from this directory (search stops here).
+    Test, DebugHost, and benchmark projects do not see it.
+
+    Add PropertyGroups here after create if you want them out of the csproj.
+    Keep GlobalAnalyzerConfigFiles, AnalysisMode, and pack layout in the
+    csproj / Build/*.targets — those must load in that order.
+
+    The template does not emit properties into this file vs the csproj with
+    generate-time #if. Sending each property to one disk file or the other
+    is theoretically possible (duplicate groups, opposite conditions, or an
+    extra source per symbol) and gets ugly fast. Move lines here by hand.
+  -->
+</Project>

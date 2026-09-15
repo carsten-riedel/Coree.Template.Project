@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "__SourceName__.DebugHost": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "workingDirectory": "$(ProjectDir)",
+      "commandLineArgs": "msbuild \"$(MSBuildProjectFullPath)\" -nologo -nodeReuse:false -p:BuildProjectReferences=false -t:RunDebugHostTask"
+    }
+  }
+}

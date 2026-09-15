@@ -1,0 +1,13 @@
+<Project>
+  <!--
+    Landing file for extra targets when this library's .slnx is built.
+    MSBuild imports it from the directory that contains the solution file.
+
+    Add Target elements here after create if you want them out of the solution.
+    Do not put the task project's pack targets here.
+
+    The template does not emit targets into this file vs a project file with
+    generate-time #if. Splitting them at create is theoretically possible and
+    gets ugly fast. Move lines here by hand.
+  -->
+</Project>

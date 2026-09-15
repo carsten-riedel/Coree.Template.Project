@@ -1,0 +1,24 @@
+<Project>
+
+  <UsingTask TaskName="__SourceName__.AddTask" AssemblyFile="..\__SourceName__.dll" />
+  <UsingTask TaskName="__SourceName__.TaskNodeTask" AssemblyFile="..\__SourceName__.dll" />
+  <UsingTask TaskName="__SourceName__.HomeTask" AssemblyFile="..\__SourceName__.dll" />
+  <UsingTask TaskName="__SourceName__.DumpEnvVarsTask" AssemblyFile="..\__SourceName__.dll" />
+
+  <Target Name="RunAddTask">
+    <AddTask Param1="5" Param2="3">
+      <Output TaskParameter="AddResult" PropertyName="Sum" />
+    </AddTask>
+    <Message Text="The sum is: $(Sum)" Importance="high" />
+    <TaskNodeTask>
+      <Output TaskParameter="TaskNodeFile" PropertyName="TaskNodeLocation" />
+    </TaskNodeTask>
+    <Message Text="Task node: $(TaskNodeLocation)" Importance="high" />
+    <HomeTask>
+      <Output TaskParameter="Home" PropertyName="HomeDirectory" />
+    </HomeTask>
+    <Message Text="Home: $(HomeDirectory)" Importance="high" />
+    <DumpEnvVarsTask />
+  </Target>
+
+</Project>

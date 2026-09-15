@@ -1,0 +1,15 @@
+<Project>
+  <!--
+    Landing file for extra targets on this task library only.
+    MSBuild imports it automatically from this directory, after the common targets.
+    Test and benchmark projects do not see it.
+
+    Add Target elements here after create if you want them out of the csproj.
+    The task project is a stock SDK project (`Project Sdk="Microsoft.NET.Sdk"`).
+    Keep task pack layout in Properties/Build/PackAsMsBuildTask.targets, not here.
+
+    The template does not emit targets into this file vs the csproj with
+    generate-time #if. Splitting them at create is theoretically possible and
+    gets ugly fast. Move lines here by hand.
+  -->
+</Project>

@@ -1,0 +1,251 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- MSBuild tasks must load in Visual Studio and `dotnet`. netstandard2.0 is that host surface. -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <!-- C# language features and debugging configuration -->
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "DisableImplicitUsings") -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!--#else -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "Nullable") -->
+    <Nullable>enable</Nullable>
+    <!--#else -->
+    <Nullable>disable</Nullable>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "DebugEmbedded") -->
+    <DebugType>embedded</DebugType>
+    <!--#else -->
+    <DebugType>none</DebugType>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "LangLatest") -->
+    <LangVersion>latest</LangVersion>
+    <!--#else -->
+    <LangVersion>default</LangVersion>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <!-- XML documentation file -->
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "GenerateDocumentationFile") -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!--#else -->
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <!--#if (UseProjectEditorGlobalConfig) -->
+  <!-- GlobalAnalyzerConfigFiles is what Roslyn reads. Visible=false so VS does not show that item twice. -->
+  <!-- None+Link is Solution Explorer only. Disk path stays next to the csproj: Properties/ would change analyzer scope. -->
+  <!-- EnforceCodeStyleInBuild is required or IDE1006 stays IDE-only and `dotnet build` ignores the file. -->
+  <!-- OptimizeImplicitlyTriggeredBuild=false: VS Test Explorer / F5 must not skip analyzers (dotnet test does not). -->
+  <PropertyGroup>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <OptimizeImplicitlyTriggeredBuild>false</OptimizeImplicitlyTriggeredBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <GlobalAnalyzerConfigFiles Include="$(MSBuildProjectDirectory)\.project.editor.globalconfig" Visible="false" />
+    <None Remove=".project.editor.globalconfig" />
+    <None Include=".project.editor.globalconfig" Link="Properties\.project.editor.globalconfig" />
+  </ItemGroup>
+  <!--#endif -->
+
+  <!-- SDK CA rule set. Always written; omitted AnalysisMode switch means Recommended. -->
+  <PropertyGroup>
+    <AnalysisMode>__AnalysisMode__</AnalysisMode>
+  </PropertyGroup>
+
+  <!--#if (NuGetAuditHighCriticalAsErrors) -->
+  <!-- Restore NuGetAudit is already on. High (NU1903) and critical (NU1904) fail restore. Low/moderate stay warnings. -->
+  <PropertyGroup>
+    <WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>
+  </PropertyGroup>
+  <!--#endif -->
+
+  <!-- Packaging: MSBuild task nupkg (tasks/<tfm>/ + build/), not a lib/ class library. -->
+  <!-- EnablePackageValidation looks for lib/ TFMs; this package has none. NU5128 is that missing lib group. -->
+  <!-- NU5100: task assemblies live under tasks/, not lib/; they are not consumer library dependencies. -->
+  <!-- DevelopmentDependency: consumers get UsingTask at restore; the package does not flow further. -->
+  <!-- IsTool is not used: it stuffed the DLL under tools/ and needed NU5102. PackAsMsBuildTask writes tasks/. -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <PublishRelease>true</PublishRelease>
+    <IsTestProject>false</IsTestProject>
+    <PackAsTool>false</PackAsTool>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <EnablePackageValidation>false</EnablePackageValidation>
+    <!-- NU5128: no lib/ group. NU5100: assemblies under tasks/ are not exposed as library dependencies. -->
+    <NoWarn>$(NoWarn);NU5128;NU5100</NoWarn>
+  </PropertyGroup>
+
+  <!-- SDK defaults stay. CheckEol: true for exe, skipped for Library. InvariantGlobalization unset = cultures on. -->
+  <PropertyGroup>
+    <CheckEolTargetFramework>$(CheckEolTargetFramework)</CheckEolTargetFramework>
+    <InvariantGlobalization>$(InvariantGlobalization)</InvariantGlobalization>
+  </PropertyGroup>
+
+  <!--#if (UseNerdbankGitVersioning) -->
+  <!-- Versioning: Nerdbank -->
+  <!--#if (NerdbankGitVersioning == "Project") -->
+  <PropertyGroup>
+    <GitVersionBaseDirectory>$(MSBuildProjectDirectory)\Properties</GitVersionBaseDirectory>
+  </PropertyGroup>
+  <!--#endif -->
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <!--#else -->
+  <!-- Versioning -->
+  <PropertyGroup>
+    <VersionMajor>0</VersionMajor>
+    <VersionMinor>1</VersionMinor>
+    <VersionBuild>0</VersionBuild>
+    <VersionRevision>0</VersionRevision>
+    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+    <VersionSuffix Condition="'$(VersionSuffix)' == '' and '$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
+    <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+    <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+  </PropertyGroup>
+  <!--#endif -->
+
+  <!-- Package metadata -->
+  <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
+  <PropertyGroup>
+    <Authors>MyAuthor</Authors>
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Owners>MyCopyrightHolder</Owners>
+    <!--#else -->
+    <Owners>MyAuthor</Owners>
+    <!--#endif -->
+    <!--#if (PackageCopyrightHolderIsOrganization == true) -->
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Company>MyCopyrightHolder</Company>
+    <!--#else -->
+    <Company>MyAuthor</Company>
+    <!--#endif -->
+    <!--#else -->
+    <Company></Company>
+    <!--#endif -->
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Copyright>Copyright © 1975 MyCopyrightHolder</Copyright>
+    <!--#else -->
+    <Copyright>Copyright © 1975 MyAuthor</Copyright>
+    <!--#endif -->
+    <PackageId>__SourceName__</PackageId>
+    <PackageTags>dotnet;msbuild;task</PackageTags>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType></RepositoryType>
+    <!-- NuGet gallery blurb. CDATA is optional and keeps multiline text. -->
+    <Description><![CDATA[]]></Description>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <!--#if (ProjectLicense == "MIT") -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <!--#endif -->
+    <!--#if (ProjectLicense == "BSD3Clause") -->
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <!--#endif -->
+    <!--#if (ProjectLicense == "Apache2") -->
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <!--#endif -->
+    <!--#if (ProjectLicense == "Custom") -->
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <!--#endif -->
+    <PackageIcon>Icon-128x128.png</PackageIcon>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes, build/*.props|targets). Disk matches Solution Explorer. -->
+  <!-- Standard licenses: License.txt stays on disk (PackageLicenseExpression). -->
+  <!-- Custom: pack License.txt as PackageLicenseFile. PackagePath empty: nupkg root / docs/ / build/, not Properties/. -->
+  <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" />
+    <!--#if (ProjectLicense == "Custom") -->
+    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" Pack="true" PackagePath="" />
+    <!--#endif -->
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Pack</PackageOutputPath>
+  </PropertyGroup>
+
+  <!-- Compile against MSBuild 15 so the task loads in VS 2017+ and current `dotnet`. Do not bump this version without raising the minimum host. The host supplies the assemblies at runtime. -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.9.20">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!--#if (PublicApiAnalyzers) -->
+  <PropertyGroup>
+    <PublicApiDirectory>$(MSBuildProjectDirectory)\Properties\PublicAPI</PublicApiDirectory>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="5.6.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="$(PublicApiDirectory)\PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="$(PublicApiDirectory)\PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+  <!--#endif -->
+
+  <!-- Keep Git configuration on disk without showing it as a project item -->
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+<!--#if (PlaceSolution == "BesideCsproj") -->
+  <ItemGroup>
+    <None Remove="__SourceName__.slnx;Readme.md" />
+  </ItemGroup>
+<!--#endif -->
+
+  <!--#if (DirectoryMsBuildFiles) -->
+  <!-- Auto-imported from this directory. Link is Solution Explorer only (under Properties\). -->
+  <!-- Do not move the files into Properties/ on disk: MSBuild finds Directory.Build.* by folder. -->
+  <ItemGroup>
+    <None Remove="Directory.Build.props;Directory.Build.targets" />
+    <None Include="Directory.Build.props" Link="Properties\Directory.Build.props" />
+    <None Include="Directory.Build.targets" Link="Properties\Directory.Build.targets" />
+  </ItemGroup>
+  <!--#endif -->
+  <!--#if (DotNetToolManifest) -->
+  <!-- Disk path stays .config/: that is where `dotnet tool` looks. Link is Solution Explorer only. -->
+  <ItemGroup>
+    <None Remove=".config\dotnet-tools.json" />
+    <None Include=".config\dotnet-tools.json" Link="Properties\dotnet-tools.json" />
+  </ItemGroup>
+  <!--#endif -->
+<!--#if ((DirectoryMsBuildFiles) && (PlaceSolution == "BesideCsproj")) -->
+  <ItemGroup>
+    <None Remove="Directory.Solution.props;Directory.Solution.targets" />
+    <None Include="Directory.Solution.props" Link="Properties\Directory.Solution.props" />
+    <None Include="Directory.Solution.targets" Link="Properties\Directory.Solution.targets" />
+  </ItemGroup>
+<!--#endif -->
+
+  <!-- Source Link git state as properties (SDK 8+). Target hooks GenerateAssemblyInfo. -->
+  <Import Project="Properties/Build/SourceControlState.targets" />
+  <!--#if (NerdbankGitVersioning == "Repo") -->
+  <Import Project="Properties/Build/NerdbankRepositoryVersion.targets" />
+  <!--#endif -->
+  <!--#if (PublicApiAnalyzers) -->
+  <Import Project="Properties/Build/InitializePublicApi.targets" />
+  <!--#endif -->
+  <Import Project="Properties/Build/PackAsMsBuildTask.targets" />
+
+</Project>

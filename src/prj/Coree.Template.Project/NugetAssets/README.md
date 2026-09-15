@@ -82,10 +82,11 @@ The package contains the following templates:
   2. [.NET Class library](#Net-class-library)
   3. [.NET multi-library repository](#net-multi-library-repository)
   4. [.NET multi-analyzer repository](#net-multi-analyzer-repository)
-  5. [.NET multi-console repository](#net-multi-console-repository)
-  6. [.NET Tool](#Net-Tool)
-  7. [.NET Wpf](#Net-Wpf-Windows-only)
-  8. [.NET Project Template](#Net-Project-Template)
+  5. [.NET multi-msbuild repository](#net-multi-msbuild-repository)
+  6. [.NET multi-console repository](#net-multi-console-repository)
+  7. [.NET Tool](#Net-Tool)
+  8. [.NET Wpf](#Net-Wpf-Windows-only)
+  9. [.NET Project Template](#Net-Project-Template)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -269,6 +270,21 @@ dotnet new multianalyzerrepo-coree --Author "Carsten Riedel" --output "./MyCompa
 The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
 
 Each analyzer keeps its `.slnx` in its own `src/sln/{name}/` folder. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the packable analyzer under `src/prj/{name}/`. DebugHost, tests, and the optional benchmark share one selected TFM (`.NET 10` by default); the packable analyzer itself is always `netstandard2.0`.
+
+## .NET multi-msbuild repository
+
+Same combo and init system as the multi-library repository, for independently packable MSBuild task packages. Each package targets `netstandard2.0` and packs the assembly under `tasks/netstandard2.0` with auto-imported `build/` props and targets (`UsingTask` plus a sample consumer `CoreCompile` extension). Tests are automated unit and integration tests. DebugHost is a separate MSBuild consumer for Visual Studio F5. This does **not** replace `msbuildtasklib-coree`.
+
+Initialize the shared repository layout once, then add additional task packages whenever you need them.
+
+```powershell
+dotnet new multimsbuildrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Tasks" --name "MyCompany.Tasks.Add" --InitAllRepoItems
+dotnet new multimsbuildrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Tasks" --name "MyCompany.Tasks.Pack"
+```
+
+The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
+
+Each task package keeps its `.slnx` in its own `src/sln/{name}/` folder. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the packable task under `src/prj/{name}/`. DebugHost, tests, and the optional benchmark share one selected TFM (`.NET 10` by default); the packable task itself is always `netstandard2.0`.
 
 ## .NET multi-console repository
 

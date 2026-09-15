@@ -1,0 +1,35 @@
+<Project>
+  <!--
+    Official MSBuild task nupkg layout
+    (https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation):
+
+    build/            auto-imported props/targets (NugetAssets glob)
+    tasks/<tfm>/      task assembly, private runtime dependencies, deps.json
+    not lib/
+
+    Microsoft.Build.* is ExcludeAssets=runtime: the host supplies those assemblies.
+    Later real tasks add PackageReference/ProjectReference with PrivateAssets=all;
+    CopyLocalLockFileAssemblies plus PackTaskRuntimeDependencies embed their runtime
+    assets next to the task DLL instead of exposing them as consumer dependencies.
+  -->
+  <PropertyGroup>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <GenerateDependencyFile>true</GenerateDependencyFile>
+    <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);PackTaskRuntimeDependencies</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+
+  <Target Name="PackTaskRuntimeDependencies" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)" TargetPath="%(ReferenceCopyLocalPaths.DestinationSubPath)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="AddBuildDependencyFileToBuiltProjectOutputGroupOutput"
+          BeforeTargets="BuiltProjectOutputGroup"
+          Condition="'$(GenerateDependencyFile)' == 'true'">
+    <ItemGroup>
+      <BuiltProjectOutputGroupOutput Include="$(ProjectDepsFilePath)" TargetPath="$(ProjectDepsFileName)" FinalOutputPath="$(ProjectDepsFilePath)" />
+    </ItemGroup>
+  </Target>
+</Project>

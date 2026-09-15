@@ -1,0 +1,7 @@
+<Project>
+  <!--
+    NuGet auto-imports this file into every PackageReference consumer csproj after the project.
+    UsingTask registrations live in the companion __SourceName__.props (imported first).
+    Add further consumer targets here, or call <DumpEnvVarsTask/> / <AddTask> from Directory.Build.targets.
+  -->
+</Project>

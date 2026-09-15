@@ -1,0 +1,53 @@
+<Solution>
+  <!-- Paths are relative to this file's final location.
+       PlaceSolution SlnFolder      → src/sln/__SourceName__/__SourceName__.slnx
+       PlaceSolution BesideCsproj  → src/prj/__SourceName__/__SourceName__.slnx
+       PlaceSolution RepoRoot       → repo root, so src/prj/ and src/sln/. -->
+<!--#if (PlaceSolution == "SlnFolder") -->
+  <Folder Name="/sln/__SourceName__/">
+    <File Path="Readme.md" />
+<!--#if (DirectoryMsBuildFiles) -->
+    <File Path="Directory.Solution.props" />
+    <File Path="Directory.Solution.targets" />
+<!--#endif -->
+  </Folder>
+<!--#elseif (PlaceSolution == "BesideCsproj") -->
+  <File Path="Readme.md" />
+<!--#if (DirectoryMsBuildFiles) -->
+  <File Path="Directory.Solution.props" />
+  <File Path="Directory.Solution.targets" />
+<!--#endif -->
+<!--#else -->
+  <Folder Name="/sln/__SourceName__/">
+    <File Path="src/sln/__SourceName__/Readme.md" />
+<!--#if (DirectoryMsBuildFiles) -->
+    <File Path="Directory.Solution.props" />
+    <File Path="Directory.Solution.targets" />
+<!--#endif -->
+  </Folder>
+<!--#endif -->
+  <Folder Name="/prj/">
+<!--#if (PlaceSolution == "SlnFolder") -->
+    <Project Path="../../prj/__SourceName__.Tests/__SourceName__.Tests.csproj" />
+    <Project Path="../../prj/__SourceName__/__SourceName__.csproj" />
+    <Project Path="../../prj/__SourceName__.DebugHost/__SourceName__.DebugHost.csproj" />
+<!--#elseif (PlaceSolution == "BesideCsproj") -->
+    <Project Path="../__SourceName__.Tests/__SourceName__.Tests.csproj" />
+    <Project Path="__SourceName__.csproj" />
+    <Project Path="../__SourceName__.DebugHost/__SourceName__.DebugHost.csproj" />
+<!--#else -->
+    <Project Path="src/prj/__SourceName__.Tests/__SourceName__.Tests.csproj" />
+    <Project Path="src/prj/__SourceName__/__SourceName__.csproj" />
+    <Project Path="src/prj/__SourceName__.DebugHost/__SourceName__.DebugHost.csproj" />
+<!--#endif -->
+<!--#if (BenchmarkProject == true) -->
+<!--#if (PlaceSolution == "SlnFolder") -->
+    <Project Path="../../prj/__SourceName__.Benchmark/__SourceName__.Benchmark.csproj" />
+<!--#elseif (PlaceSolution == "BesideCsproj") -->
+    <Project Path="../__SourceName__.Benchmark/__SourceName__.Benchmark.csproj" />
+<!--#else -->
+    <Project Path="src/prj/__SourceName__.Benchmark/__SourceName__.Benchmark.csproj" />
+<!--#endif -->
+<!--#endif -->
+  </Folder>
+</Solution>

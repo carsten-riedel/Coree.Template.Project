@@ -38,7 +38,7 @@
     <RepositoryType>git</RepositoryType>
     <Description>
       <![CDATA[
-          Templates for Visual Studio and the dotnet CLI: MSBuild tasks, class libraries, a multi-library repository, a multi-analyzer repository, a multi-console repository, .NET tools, PowerShell cmdlets, WinForms, WPF, and a project template.
+          Templates for Visual Studio and the dotnet CLI: MSBuild tasks, class libraries, a multi-library repository, a multi-analyzer repository, a multi-msbuild repository, a multi-console repository, .NET tools, PowerShell cmdlets, WinForms, WPF, and a project template.
 	    ]]>
     </Description>
 

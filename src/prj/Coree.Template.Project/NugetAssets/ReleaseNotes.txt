@@ -1,4 +1,8 @@
-﻿0.4.2 (2026-09-14)
+﻿0.4.3 (2026-09-15)
+
+ - Multi-msbuild repository template (`multimsbuildrepo-coree`): netstandard2.0 task packages under `tasks/`, DebugHost F5 consumer, tests, optional benchmark. Does not replace `msbuildtasklib-coree`.
+
+0.4.2 (2026-09-14)
 
  - Multi-library, multi-analyzer, and multi-console repository templates (`src/prj` + `src/sln`, `--PlaceSolution BesideCsproj`)
  - Repeatable `dotnet new` into one repo: `--Author`, root items, licenses, Directory.Build, docs under `Properties/`

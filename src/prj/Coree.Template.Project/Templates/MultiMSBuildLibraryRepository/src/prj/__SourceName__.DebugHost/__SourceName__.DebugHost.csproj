@@ -1,0 +1,78 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- In-repo MSBuild consumer for F5. Not packed. Do not start a console Main. -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>__TargetFramework__</TargetFramework>
+  </PropertyGroup>
+
+  <!-- C# language features and debugging configuration -->
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "DisableImplicitUsings") -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!--#else -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "Nullable") -->
+    <Nullable>enable</Nullable>
+    <!--#else -->
+    <Nullable>disable</Nullable>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "DebugEmbedded") -->
+    <DebugType>embedded</DebugType>
+    <!--#else -->
+    <DebugType>none</DebugType>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "LangLatest") -->
+    <LangVersion>latest</LangVersion>
+    <!--#else -->
+    <LangVersion>default</LangVersion>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <IsTestProject>false</IsTestProject>
+    <PackAsTool>false</PackAsTool>
+  </PropertyGroup>
+
+  <!-- Solution/F5 pre-build compiles the task first. Do not compile against it as a library. -->
+  <ItemGroup>
+    <ProjectReference Include="..\__SourceName__\__SourceName__.csproj"
+                      ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <!-- Keep Git configuration on disk without showing it as a project item -->
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+  <!-- Load the already-built task DLL. PackageReference consumers use Properties/NugetAssets/build instead. -->
+  <PropertyGroup>
+    <_TaskAssemblyFile>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', '__SourceName__', 'bin', '$(Configuration)', 'netstandard2.0', '__SourceName__.dll'))</_TaskAssemblyFile>
+  </PropertyGroup>
+  <UsingTask TaskName="__SourceName__.AddTask" AssemblyFile="$(_TaskAssemblyFile)" />
+  <UsingTask TaskName="__SourceName__.TaskNodeTask" AssemblyFile="$(_TaskAssemblyFile)" />
+  <UsingTask TaskName="__SourceName__.HomeTask" AssemblyFile="$(_TaskAssemblyFile)" />
+  <UsingTask TaskName="__SourceName__.DumpEnvVarsTask" AssemblyFile="$(_TaskAssemblyFile)" />
+
+  <!-- Explicit F5 target. A normal Build does not run it. -->
+  <Target Name="RunDebugHostTask">
+    <AddTask Param1="5" Param2="3">
+      <Output TaskParameter="AddResult" PropertyName="Sum" />
+    </AddTask>
+    <Message Text="The sum is: $(Sum)" Importance="high" />
+    <TaskNodeTask>
+      <Output TaskParameter="TaskNodeFile" PropertyName="TaskNodeLocation" />
+      <Output TaskParameter="TaskNodeDir" PropertyName="TaskNodeDirectory" />
+    </TaskNodeTask>
+    <Message Text="Task node: $(TaskNodeLocation)" Importance="high" />
+    <HomeTask>
+      <Output TaskParameter="Home" PropertyName="HomeDirectory" />
+    </HomeTask>
+    <Message Text="Home: $(HomeDirectory)" Importance="high" />
+    <DumpEnvVarsTask />
+  </Target>
+
+</Project>

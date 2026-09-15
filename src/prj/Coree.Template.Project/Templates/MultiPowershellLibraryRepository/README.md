@@ -6,13 +6,13 @@ The target selector uses PowerShell names while the generated project uses the m
 
 | Selection | Build target | Intended host |
 | --- | --- | --- |
-| Windows PowerShell 5.1, broader compatibility (.NET Framework 4.6.2) | `net462` | Windows PowerShell 5.1 on older supported .NET Framework installations |
-| PowerShell 7.4+, broader compatibility (.NET 8) | `net8.0` | PowerShell 7.4 and newer, including PowerShell 7.6 |
+| Windows PowerShell 5.1 - broader compatibility (.NET Framework 4.6.2) | `net462` | Windows PowerShell 5.1 on older supported .NET Framework installations |
+| PowerShell 7.4+ - broader compatibility (.NET 8) | `net8.0` | PowerShell 7.4 and newer, including PowerShell 7.6 |
 | Windows PowerShell 5.1 (.NET Framework 4.8) | `net48` | Windows PowerShell 5.1 |
 | PowerShell 7.6 (.NET 10) | `net10.0` | PowerShell 7.6 when newer PowerShell or .NET APIs are required |
 | Cross-edition portable (.NET Standard 2.0) | `netstandard2.0` | Windows PowerShell 5.1 and PowerShell 7 with the shared PowerShellStandard API |
 
-The default is `Windows PowerShell 5.1, broader compatibility (.NET Framework 4.6.2)` plus `PowerShell 7.4+, broader compatibility (.NET 8)`. .NET Framework 4.8 can load the .NET Framework 4.6.2 binary, and PowerShell 7.6 can load the .NET 8 binary. Select `.NET Framework 4.8` or `.NET 10` only when the module needs their newer APIs. Select `Cross-edition portable (.NET Standard 2.0)` instead when the smaller shared API is enough and one binary is preferable.
+The default is `Windows PowerShell 5.1 - broader compatibility (.NET Framework 4.6.2)` plus `PowerShell 7.4+ - broader compatibility (.NET 8)`. .NET Framework 4.8 can load the .NET Framework 4.6.2 binary, and PowerShell 7.6 can load the .NET 8 binary. Select `.NET Framework 4.8` or `.NET 10` only when the module needs their newer APIs. Select `Cross-edition portable (.NET Standard 2.0)` instead when the smaller shared API is enough and one binary is preferable.
 
 The targets belong to two native host families: Desktop (`net462`, `net48`) and Core (`net8.0`, `net10.0`). `netstandard2.0` represents their shared PowerShell Standard surface, not a third host family. The scaffold therefore keeps one multi-target project and compiles the same cmdlets for every selected target. Add conditional code or host-specific files only when the module actually uses APIs that differ between those families or target versions.
 

@@ -163,6 +163,9 @@
     // hosts stay a contiguous prefix so a first-choice snap cannot land on
     // portable. isRequired false: Visual Studio otherwise treats the group as
     // user-required while the displayed default is not a selected value.
+    // displayName must not contain `|` or `,`: the engine treats both as
+    // multi-choice separators and Visual Studio joins/splits the combo text
+    // with them. Hyphens are safe.
     "PowerShellTargets": {
       "type": "parameter",
       "description": "PowerShell hosts this binary module supports. Select several to ship host-specific binaries in one PowerShell Gallery module. The portable target is an alternative when one cross-edition API surface is sufficient.",
@@ -175,12 +178,12 @@
         {
           "choice": "net462",
           "description": "Windows PowerShell 5.1 binary targeting .NET Framework 4.6.2 for broader legacy Windows compatibility.",
-          "displayName": "Windows PowerShell 5.1, broader compatibility (.NET Framework 4.6.2)"
+          "displayName": "Windows PowerShell 5.1 - broader compatibility (.NET Framework 4.6.2)"
         },
         {
           "choice": "net8.0",
           "description": "Broader PowerShell 7 compatibility starting with PowerShell 7.4. PowerShell 7.6 can also load this .NET 8 binary.",
-          "displayName": "PowerShell 7.4+, broader compatibility (.NET 8)"
+          "displayName": "PowerShell 7.4+ - broader compatibility (.NET 8)"
         },
         {
           "choice": "net48",

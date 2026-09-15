@@ -259,28 +259,23 @@
     },
     // Exclusive seeds under TemplateAssets/ProgramSamples/{choice}/
     // App|Tests|Benchmark/. Extra sources copy each folder onto the stub
-    // project path (no per-file rename). Default matches an explicit
-    // Main(string[] args) console sample, not top-level statements (tests
-    // call Program.Main). Program.cs adds using System (and
-    // System.Threading.Tasks for async) only when DisableImplicitUsings.
+    // project path (no per-file rename). MinimalClassic is the VS WPF
+    // skeleton (App.xaml + MainWindow). Tests construct MainWindow; they
+    // do not call generated App.Main (message loop). Code-behind usings
+    // only when DisableImplicitUsings.
     "ProgramSample": {
       "type": "parameter",
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "MinimalClassic",
       "enableQuotelessLiterals": true,
-      "description": "Which console Program.cs sample to copy. Default is a classic int Main(string[] args). Minimal async is async Task<int> Main(string[] args). Tests and the optional benchmark method are copied with the same choice.",
+      "description": "Which WPF sample to copy. Default is the Visual Studio minimal MainWindow app. Tests and the optional benchmark method are copied with the same choice.",
       "displayName": "Program sample",
       "choices": [
         {
           "choice": "MinimalClassic",
-          "description": "Classic int Main(string[] args) that writes Hello, World! and returns 0.",
+          "description": "Visual Studio WPF skeleton: App.xaml StartupUri and an empty MainWindow.",
           "displayName": "Minimal classic"
-        },
-        {
-          "choice": "MinimalAsync",
-          "description": "async Task<int> Main(string[] args) that writes Hello, World! and returns 0.",
-          "displayName": "Minimal async"
         }
       ]
     },
@@ -584,12 +579,12 @@
       "isRequired": false,
       "defaultValue": "Coverlet",
       "enableQuotelessLiterals": true,
-      "description": "Test coverage on the test project. Default is Coverlet: dotnet test fails if the console app is under 100% line/branch/method coverage. Lower Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. The console app is not affected.",
+      "description": "Test coverage on the test project. Default is Coverlet: dotnet test fails if the app is under 100% line/branch/method coverage. Lower Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. The app is not affected.",
       "displayName": "Test coverage",
       "choices": [
         {
           "choice": "Coverlet",
-          "description": "Add coverlet.msbuild and collect coverage on dotnet test. Default. Fails the test run below 100% line/branch/method on the console app assembly. Lower Threshold in the test csproj to allow less. Raw Coverlet output only.",
+          "description": "Add coverlet.msbuild and collect coverage on dotnet test. Default. Fails the test run below 100% line/branch/method on the app assembly. Lower Threshold in the test csproj to allow less. Raw Coverlet output only.",
           "displayName": "Coverlet only (100% gate)"
         },
         {
@@ -861,21 +856,6 @@
       "source": "./TemplateAssets/ProgramSamples/MinimalClassic/Benchmark/",
       "target": "./src/prj/__SourceName__.Benchmark/",
       "condition": "((ProgramSample == \"MinimalClassic\") && BenchmarkProject)"
-    },
-    {
-      "source": "./TemplateAssets/ProgramSamples/MinimalAsync/App/",
-      "target": "./src/prj/__SourceName__/",
-      "condition": "(ProgramSample == \"MinimalAsync\")"
-    },
-    {
-      "source": "./TemplateAssets/ProgramSamples/MinimalAsync/Tests/",
-      "target": "./src/prj/__SourceName__.Tests/",
-      "condition": "(ProgramSample == \"MinimalAsync\")"
-    },
-    {
-      "source": "./TemplateAssets/ProgramSamples/MinimalAsync/Benchmark/",
-      "target": "./src/prj/__SourceName__.Benchmark/",
-      "condition": "((ProgramSample == \"MinimalAsync\") && BenchmarkProject)"
     },
     {
       "source": "./TemplateAssets/",

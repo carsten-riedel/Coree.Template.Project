@@ -66,7 +66,7 @@
         "text": "Program sample"
       },
       "description": {
-        "text": "Which Program.cs to copy. Default is classic int Main(string[] args). Minimal async is async Task<int> Main(string[] args). Matching tests (and the optional benchmark method) come with the same choice."
+        "text": "Which WPF sample to copy. Default is the Visual Studio minimal MainWindow app. Matching tests (and the optional benchmark method) come with the same choice."
       }
     },
     {
@@ -150,7 +150,7 @@
         "text": "Test coverage"
       },
       "description": {
-        "text": "Single choice. Default is Coverlet: dotnet test fails below 100% line, branch, and method coverage on the console app. Edit Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. ReportGenerator needs Coverlet output, so the two are not independent checkboxes."
+        "text": "Single choice. Default is Coverlet: dotnet test fails below 100% line, branch, and method coverage on the app. Edit Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. ReportGenerator needs Coverlet output, so the two are not independent checkboxes."
       }
     },
     {

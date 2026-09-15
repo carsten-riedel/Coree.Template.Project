@@ -1,5 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
 
 namespace __SourceName__.Tests
 {
@@ -13,12 +12,12 @@ namespace __SourceName__.Tests
 
         }
 
-        [TestMethod]
-        public void TestMainMethod()
+        [STATestMethod]
+        public void MainWindow_Constructs()
         {
-            var result = __SourceName__.Program.Main(System.Array.Empty<string>());
-
-            Assert.AreEqual(0, result);
+            var window = new __SourceName__.MainWindow();
+            Assert.AreEqual("MainWindow", window.Title);
+            window.Close();
         }
     }
 }

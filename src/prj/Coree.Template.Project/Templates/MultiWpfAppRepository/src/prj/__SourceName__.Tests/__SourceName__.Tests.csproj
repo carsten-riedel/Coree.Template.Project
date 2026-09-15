@@ -5,6 +5,7 @@
     <OutputType>Library</OutputType>
     <!-- Same Windows TFMs as the app (ProjectReference). -->
     <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <!-- C# language features and debugging configuration -->
@@ -49,12 +50,19 @@
 
   <!--#if (CoverletMSBuild == true) -->
   <!-- coverlet.msbuild: CollectCoverage is enough for `dotnet test` on SDK MSBuild. -->
-  <!-- Include is the console app only (sourceName). Threshold fails the test run when that assembly is under 100% line/branch/method total. -->
+  <!-- Include is the app assembly only (sourceName). Threshold fails the test run when that assembly is under 100% line/branch/method total. -->
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
     <CoverletOutput>./CoverletOutput/</CoverletOutput>
     <Include>[__SourceName__]*</Include>
+    <!-- App.g.cs Main calls Run() (message loop). Markup compile also emits #line into .xaml. -->
+    <!-- GeneratedCodeAttribute matches PresentationBuildTasks (App.g.cs / MainWindow.g.cs). -->
+    <ExcludeByFile>**/*.g.cs,**/*.xaml</ExcludeByFile>
+    <ExcludeByAttribute>GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+    <!-- Coverlet Cecil must resolve PresentationFramework (coverlet#1713 / KnownIssues). No test RID. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
     <Threshold>100</Threshold>
     <ThresholdType>line,branch,method</ThresholdType>
     <ThresholdStat>total</ThresholdStat>

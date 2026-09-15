@@ -5,8 +5,11 @@ namespace __SourceName__.Benchmark;
 public class Benchmarks
 {
     [Benchmark]
-    public int Main()
+    public string MainWindow_Title()
     {
-        return __SourceName__.Program.Main(System.Array.Empty<string>());
+        var window = new __SourceName__.MainWindow();
+        var title = window.Title;
+        window.Close();
+        return title;
     }
 }

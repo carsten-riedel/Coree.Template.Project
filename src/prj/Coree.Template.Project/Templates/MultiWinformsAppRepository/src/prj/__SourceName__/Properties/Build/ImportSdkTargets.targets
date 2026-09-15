@@ -1,0 +1,11 @@
+<Project>
+  <!--
+    Explicit Sdk.targets close so PublishDefaultFramework.targets can run
+    after the SDK (needed for switchless `dotnet publish`; see that file).
+    A Project Sdk attribute would import Sdk.targets last and wipe the override.
+    Nested import is conditioned: dispatch is outer-only; inner builds keep
+    the real SDK Publish.
+  -->
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+  <Import Project="$(MSBuildThisFileDirectory)PublishDefaultFramework.targets" Condition="'$(IsCrossTargetingBuild)' == 'true'" />
+</Project>

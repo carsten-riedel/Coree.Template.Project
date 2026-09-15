@@ -1,0 +1,13 @@
+<Project>
+  <!--
+    Landing file for extra targets when this app's .slnx is built.
+    MSBuild imports it from the directory that contains the solution file.
+
+    Add Target elements here after create if you want them out of the solution.
+    Do not move Properties/Build/ImportSdkTargets.targets here — that import must stay last in the csproj.
+
+    The template does not emit targets into this file vs a project file with
+    generate-time #if. Splitting them at create is theoretically possible and
+    gets ugly fast. Move lines here by hand.
+  -->
+</Project>

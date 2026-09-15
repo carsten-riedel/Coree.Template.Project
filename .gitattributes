@@ -1,0 +1,4 @@
+# This repository is a .NET template pack. HTML (DocShell seeds, GitHub Pages)
+# and GitHub Actions under .github must not appear in the detected-language bar.
+*.html linguist-detectable=false
+/.github/** linguist-detectable=false

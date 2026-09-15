@@ -5,3 +5,5 @@
 *.sln merge=binary
 *.slnx text
 *.png binary
+# DocShell.html is documentation bootstrap, not the product language.
+*.html linguist-detectable=false

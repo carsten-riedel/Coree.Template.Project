@@ -1,0 +1,176 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- One binary per selected PowerShell compatibility target. -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <IsTestProject>false</IsTestProject>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <PowerShellModuleOutputPath>$(MSBuildProjectDirectory)\bin\Module\$(Configuration)\__SourceName__</PowerShellModuleOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "DisableImplicitUsings") -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!--#else -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "Nullable") -->
+    <Nullable>enable</Nullable>
+    <!--#else -->
+    <Nullable>disable</Nullable>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "DebugEmbedded") -->
+    <DebugType>embedded</DebugType>
+    <!--#else -->
+    <DebugType>none</DebugType>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "LangLatest") -->
+    <LangVersion>latest</LangVersion>
+    <!--#else -->
+    <LangVersion>default</LangVersion>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "GenerateDocumentationFile") -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!--#else -->
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <!--#if (UseProjectEditorGlobalConfig) -->
+  <PropertyGroup>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <OptimizeImplicitlyTriggeredBuild>false</OptimizeImplicitlyTriggeredBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <GlobalAnalyzerConfigFiles Include="$(MSBuildProjectDirectory)\.project.editor.globalconfig" Visible="false" />
+    <None Remove=".project.editor.globalconfig" />
+    <None Include=".project.editor.globalconfig" Link="Properties\.project.editor.globalconfig" />
+  </ItemGroup>
+  <!--#endif -->
+
+  <PropertyGroup>
+    <AnalysisMode>__AnalysisMode__</AnalysisMode>
+  </PropertyGroup>
+
+  <!--#if (NuGetAuditHighCriticalAsErrors) -->
+  <PropertyGroup>
+    <WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>
+  </PropertyGroup>
+  <!--#endif -->
+
+  <!-- PowerShell host reference for each selected compatibility target. -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="PowerShellStandard.Library" Version="5.1.1" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462' or '$(TargetFramework)' == 'net48'">
+    <PackageReference Include="Microsoft.PowerShell.5.ReferenceAssemblies" Version="1.1.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="System.Management.Automation" Version="7.4.20" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="System.Management.Automation" Version="7.6.6" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!--#if (UseNerdbankGitVersioning) -->
+  <!--#if (NerdbankGitVersioning == "Project") -->
+  <PropertyGroup>
+    <GitVersionBaseDirectory>$(MSBuildProjectDirectory)\Properties</GitVersionBaseDirectory>
+  </PropertyGroup>
+  <!--#endif -->
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94" PrivateAssets="all" />
+  </ItemGroup>
+  <!--#else -->
+  <PropertyGroup>
+    <VersionMajor>0</VersionMajor>
+    <VersionMinor>1</VersionMinor>
+    <VersionBuild>0</VersionBuild>
+    <VersionRevision>0</VersionRevision>
+    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionBuild).$(VersionRevision)</VersionPrefix>
+    <VersionSuffix Condition="'$(VersionSuffix)' == '' and '$(Configuration)' == 'Debug'">prerelease</VersionSuffix>
+    <PackageVersion Condition="'$(VersionSuffix)' == ''">$(VersionPrefix)</PackageVersion>
+    <PackageVersion Condition="'$(VersionSuffix)' != ''">$(VersionPrefix)-$(VersionSuffix)</PackageVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+  </PropertyGroup>
+  <!--#endif -->
+
+  <!-- Assembly ownership metadata. Gallery metadata lives in the module manifest. -->
+  <PropertyGroup>
+    <Authors>MyAuthor</Authors>
+    <!--#if (PackageCopyrightHolderIsOrganization == true) -->
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Company>MyCopyrightHolder</Company>
+    <!--#else -->
+    <Company>MyAuthor</Company>
+    <!--#endif -->
+    <!--#else -->
+    <Company></Company>
+    <!--#endif -->
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Copyright>Copyright © 1975 MyCopyrightHolder</Copyright>
+    <!--#else -->
+    <Copyright>Copyright © 1975 MyAuthor</Copyright>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <!--#if (PublicApiAnalyzers) -->
+  <PropertyGroup>
+    <PublicApiDirectory>$(MSBuildProjectDirectory)\Properties\PublicAPI</PublicApiDirectory>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="5.6.0" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <AdditionalFiles Include="$(PublicApiDirectory)\PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="$(PublicApiDirectory)\PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+  <!--#endif -->
+
+  <!-- Add non-PowerShell runtime dependencies to PowerShellModuleDependency when the module gains them. -->
+
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+  <!--#if (PlaceSolution == "BesideCsproj") -->
+  <ItemGroup>
+    <None Remove="__SourceName__.slnx;Readme.md" />
+  </ItemGroup>
+  <!--#endif -->
+
+  <!--#if (DirectoryMsBuildFiles) -->
+  <ItemGroup>
+    <None Remove="Directory.Build.props;Directory.Build.targets" />
+    <None Include="Directory.Build.props" Link="Properties\Directory.Build.props" />
+    <None Include="Directory.Build.targets" Link="Properties\Directory.Build.targets" />
+  </ItemGroup>
+  <!--#endif -->
+  <!--#if (DotNetToolManifest) -->
+  <ItemGroup>
+    <None Remove=".config\dotnet-tools.json" />
+    <None Include=".config\dotnet-tools.json" Link="Properties\dotnet-tools.json" />
+  </ItemGroup>
+  <!--#endif -->
+  <!--#if ((DirectoryMsBuildFiles) && (PlaceSolution == "BesideCsproj")) -->
+  <ItemGroup>
+    <None Remove="Directory.Solution.props;Directory.Solution.targets" />
+    <None Include="Directory.Solution.props" Link="Properties\Directory.Solution.props" />
+    <None Include="Directory.Solution.targets" Link="Properties\Directory.Solution.targets" />
+  </ItemGroup>
+  <!--#endif -->
+
+  <Import Project="Properties/Build/SourceControlState.targets" />
+  <!--#if (NerdbankGitVersioning == "Repo") -->
+  <Import Project="Properties/Build/NerdbankRepositoryVersion.targets" />
+  <!--#endif -->
+  <!--#if (PublicApiAnalyzers) -->
+  <Import Project="Properties/Build/InitializePublicApi.targets" />
+  <!--#endif -->
+  <Import Project="Properties/Build/StagePowerShellModule.targets" />
+
+</Project>

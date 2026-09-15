@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- F5 launcher only. The PowerShell module remains the product. -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>__TestTargetFramework__</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <IsTestProject>false</IsTestProject>
+    <!-- F5 must run the module-build target even when this empty launcher is otherwise up to date. -->
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!--#if (CSharpProjectOptions == "DisableImplicitUsings") -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!--#else -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "Nullable") -->
+    <Nullable>enable</Nullable>
+    <!--#else -->
+    <Nullable>disable</Nullable>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "DebugEmbedded") -->
+    <DebugType>embedded</DebugType>
+    <!--#else -->
+    <DebugType>none</DebugType>
+    <!--#endif -->
+    <!--#if (CSharpProjectOptions == "LangLatest") -->
+    <LangVersion>latest</LangVersion>
+    <!--#else -->
+    <LangVersion>default</LangVersion>
+    <!--#endif -->
+  </PropertyGroup>
+
+  <!-- Build the outer multi-target module project so every selected host binary is staged. -->
+  <!-- This is deliberately not a ProjectReference: Visual Studio otherwise requests GetTargetPath from the outer cross-targeting build. -->
+  <PropertyGroup>
+    <_PowerShellModuleProject>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)', '..', '__SourceName__', '__SourceName__.csproj'))</_PowerShellModuleProject>
+  </PropertyGroup>
+  <Target Name="BuildPowerShellModuleForDebugHost" BeforeTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
+    <MSBuild Projects="$(_PowerShellModuleProject)"
+             Targets="Build"
+             Properties="Configuration=$(Configuration)"
+             RemoveProperties="TargetFramework;RuntimeIdentifier;SelfContained"
+             BuildInParallel="false" />
+  </Target>
+
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+</Project>

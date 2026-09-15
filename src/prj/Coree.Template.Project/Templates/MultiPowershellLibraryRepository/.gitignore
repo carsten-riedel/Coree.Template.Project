@@ -1,0 +1,8 @@
+# Repository-root ignore (first create). Nested src/prj and src/sln .gitignore files still apply.
+.vs/
+bin/
+obj/
+*.user
+*.suo
+.DS_Store
+Thumbs.db

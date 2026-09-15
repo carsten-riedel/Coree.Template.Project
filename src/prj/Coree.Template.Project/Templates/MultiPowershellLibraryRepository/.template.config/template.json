@@ -156,6 +156,12 @@
     },
     // The values are TFMs so the join generator remains simple; the UI exposes
     // PowerShell editions/releases so users do not have to know their runtime TFMs.
+    // Visual Studio checkbox groups snap to the first choice when they do not
+    // apply a pipe default, and they stop at the first choice that is not in
+    // that default. Keep the defaulted hosts as a contiguous prefix matching
+    // defaultValue / ide.host.json. Portable last: it is an alternative, not a
+    // host family. isRequired false: Visual Studio otherwise shows the pipe
+    // string and will not accept it as a selection.
     "PowerShellTargets": {
       "type": "parameter",
       "description": "PowerShell hosts this binary module supports. Select several to ship host-specific binaries in one PowerShell Gallery module. The portable target is an alternative when one cross-edition API surface is sufficient.",
@@ -165,19 +171,9 @@
       "isRequired": false,
       "choices": [
         {
-          "choice": "netstandard2.0",
-          "description": "One portable binary using PowerShellStandard.Library. Broad Desktop/Core reach, but only the shared PowerShell API surface.",
-          "displayName": "Cross-edition portable (.NET Standard 2.0)"
-        },
-        {
           "choice": "net462",
           "description": "Windows PowerShell 5.1 binary targeting .NET Framework 4.6.2 for broader legacy Windows compatibility.",
           "displayName": "Windows PowerShell 5.1, broader compatibility (.NET Framework 4.6.2)"
-        },
-        {
-          "choice": "net48",
-          "description": "Windows PowerShell 5.1 binary targeting .NET Framework 4.8.",
-          "displayName": "Windows PowerShell 5.1 (.NET Framework 4.8)"
         },
         {
           "choice": "net8.0",
@@ -185,9 +181,19 @@
           "displayName": "PowerShell 7.4+, broader compatibility (.NET 8)"
         },
         {
+          "choice": "net48",
+          "description": "Windows PowerShell 5.1 binary targeting .NET Framework 4.8.",
+          "displayName": "Windows PowerShell 5.1 (.NET Framework 4.8)"
+        },
+        {
           "choice": "net10.0",
           "description": "PowerShell 7.6 binary targeting .NET 10. Choose this when the module needs the newer PowerShell or .NET API surface.",
           "displayName": "PowerShell 7.6 (.NET 10)"
+        },
+        {
+          "choice": "netstandard2.0",
+          "description": "One portable binary using PowerShellStandard.Library. Broad Desktop/Core reach, but only the shared PowerShell API surface.",
+          "displayName": "Cross-edition portable (.NET Standard 2.0)"
         }
       ],
       "defaultValue": "net462|net8.0"

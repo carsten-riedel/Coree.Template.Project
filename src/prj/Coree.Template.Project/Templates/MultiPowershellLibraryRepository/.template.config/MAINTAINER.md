@@ -10,13 +10,13 @@ This template keeps the repository-composition UX of the other multi templates. 
 
 | UI choice | Value |
 | --- | --- |
-| Cross-edition portable (.NET Standard 2.0) | `netstandard2.0` |
 | Windows PowerShell 5.1, broader compatibility (.NET Framework 4.6.2) | `net462` |
-| Windows PowerShell 5.1 (.NET Framework 4.8) | `net48` |
 | PowerShell 7.4+, broader compatibility (.NET 8) | `net8.0` |
+| Windows PowerShell 5.1 (.NET Framework 4.8) | `net48` |
 | PowerShell 7.6 (.NET 10) | `net10.0` |
+| Cross-edition portable (.NET Standard 2.0) | `netstandard2.0` |
 
-Default: `net462|net8.0`. The .NET Framework 4.6.2 binary is the broader Windows PowerShell 5.1 choice and remains loadable on .NET Framework 4.8; `net48` is opt-in for modules that need its newer API surface. The .NET 8 binary is the broader PowerShell 7 choice and is also loadable by PowerShell 7.6; `net10.0` is opt-in for modules that need its newer API surface. `netstandard2.0` is a deliberate one-binary alternative using `PowerShellStandard.Library`, not a third host family. Selecting redundant targets is allowed because `dotnet new` multi-choice parameters do not provide useful conflict validation; descriptions must keep the trade-off explicit. Keep `PowerShellTargets` explicitly optional (`isRequired: false`): Visual Studio otherwise treats the field as user-required and displays the multi-value default without accepting it as a selected value.
+Default: `net462|net8.0`. Choice order in `template.json` must keep those two values as a contiguous prefix (same order as `defaultValue` and `ide.host.json`). Visual Studio checkbox groups otherwise snap to the first choice or stop at the first non-default item; portable first made the wizard select `netstandard2.0` instead of the two host binaries. The .NET Framework 4.6.2 binary is the broader Windows PowerShell 5.1 choice and remains loadable on .NET Framework 4.8; `net48` is opt-in for modules that need its newer API surface. The .NET 8 binary is the broader PowerShell 7 choice and is also loadable by PowerShell 7.6; `net10.0` is opt-in for modules that need its newer API surface. `netstandard2.0` is a deliberate one-binary alternative using `PowerShellStandard.Library`, not a third host family. Selecting redundant targets is allowed because `dotnet new` multi-choice parameters do not provide useful conflict validation; descriptions must keep the trade-off explicit. Keep `PowerShellTargets` explicitly optional (`isRequired: false`): Visual Studio otherwise treats the field as user-required and displays the multi-value default without accepting it as a selected value.
 
 `__TestTargetFramework__` resolves to the newest selected Core TFM, otherwise the selected Windows TFM, otherwise `net8.0` for a portable module. `src/global.json` pins SDK 10 only when `net10.0` is selected; all other combinations pin SDK 8.
 

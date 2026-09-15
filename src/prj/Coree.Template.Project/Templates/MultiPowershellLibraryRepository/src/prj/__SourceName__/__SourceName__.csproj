@@ -1,16 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- One binary per selected PowerShell compatibility target. -->
+  <!-- General build settings: defines the output type and target framework -->
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
-    <IsPackable>false</IsPackable>
-    <IsPublishable>false</IsPublishable>
-    <IsTestProject>false</IsTestProject>
+  </PropertyGroup>
+
+  <!-- Staged importable module tree. Pack adds selected TFM folders from here; host SMA is never copied. -->
+  <PropertyGroup>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <PowerShellModuleOutputPath>$(MSBuildProjectDirectory)\bin\Module\$(Configuration)\__SourceName__</PowerShellModuleOutputPath>
   </PropertyGroup>
 
+  <!-- C# language features and debugging configuration -->
   <PropertyGroup>
     <!--#if (CSharpProjectOptions == "DisableImplicitUsings") -->
     <ImplicitUsings>disable</ImplicitUsings>
@@ -32,6 +34,10 @@
     <!--#else -->
     <LangVersion>default</LangVersion>
     <!--#endif -->
+  </PropertyGroup>
+
+  <!-- XML documentation file -->
+  <PropertyGroup>
     <!--#if (CSharpProjectOptions == "GenerateDocumentationFile") -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <!--#else -->
@@ -40,6 +46,10 @@
   </PropertyGroup>
 
   <!--#if (UseProjectEditorGlobalConfig) -->
+  <!-- GlobalAnalyzerConfigFiles is what Roslyn reads. Visible=false so VS does not show that item twice. -->
+  <!-- None+Link is Solution Explorer only. Disk path stays next to the csproj: Properties/ would change analyzer scope. -->
+  <!-- EnforceCodeStyleInBuild is required or IDE1006 stays IDE-only and `dotnet build` ignores the file. -->
+  <!-- OptimizeImplicitlyTriggeredBuild=false: VS Test Explorer / F5 must not skip analyzers (dotnet test does not). -->
   <PropertyGroup>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <OptimizeImplicitlyTriggeredBuild>false</OptimizeImplicitlyTriggeredBuild>
@@ -51,43 +61,51 @@
   </ItemGroup>
   <!--#endif -->
 
+  <!-- SDK CA rule set. Always written; omitted AnalysisMode switch means Recommended. -->
   <PropertyGroup>
     <AnalysisMode>__AnalysisMode__</AnalysisMode>
   </PropertyGroup>
 
   <!--#if (NuGetAuditHighCriticalAsErrors) -->
+  <!-- Restore NuGetAudit is already on. High (NU1903) and critical (NU1904) fail restore. Low/moderate stay warnings. -->
   <PropertyGroup>
     <WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>
   </PropertyGroup>
   <!--#endif -->
 
-  <!-- Shared source compiles for every selected target. Introduce conditional code or
-       conditional Compile Remove rules only when host APIs actually diverge. -->
-  <!-- PowerShell host reference for each selected compatibility target. -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="PowerShellStandard.Library" Version="5.1.1" PrivateAssets="all" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net462' or '$(TargetFramework)' == 'net48'">
-    <PackageReference Include="Microsoft.PowerShell.5.ReferenceAssemblies" Version="1.1.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageReference Include="System.Management.Automation" Version="7.4.20" PrivateAssets="all" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-    <PackageReference Include="System.Management.Automation" Version="7.6.6" PrivateAssets="all" />
-  </ItemGroup>
+  <!-- Packaging and publish configuration -->
+  <!-- EnablePackageValidation: off. Gallery pack has no lib/ TFMs; NU5128/NU5100 are that layout. No baseline at generate. -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <PublishRelease>true</PublishRelease>
+    <IsTestProject>false</IsTestProject>
+    <PackAsTool>false</PackAsTool>
+    <EnablePackageValidation>false</EnablePackageValidation>
+    <!-- NU5128: no lib/ group. NU5100: assemblies under host TFM folders are the Gallery layout. -->
+    <NoWarn>$(NoWarn);NU5128;NU5100</NoWarn>
+  </PropertyGroup>
+
+  <!-- SDK defaults stay. CheckEol: true for exe, skipped for Library. InvariantGlobalization unset = cultures on. -->
+  <PropertyGroup>
+    <CheckEolTargetFramework>$(CheckEolTargetFramework)</CheckEolTargetFramework>
+    <InvariantGlobalization>$(InvariantGlobalization)</InvariantGlobalization>
+  </PropertyGroup>
 
   <!--#if (UseNerdbankGitVersioning) -->
+  <!-- Versioning: Nerdbank -->
   <!--#if (NerdbankGitVersioning == "Project") -->
   <PropertyGroup>
     <GitVersionBaseDirectory>$(MSBuildProjectDirectory)\Properties</GitVersionBaseDirectory>
   </PropertyGroup>
   <!--#endif -->
   <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94" PrivateAssets="all" />
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
   <!--#else -->
+  <!-- Versioning -->
   <PropertyGroup>
     <VersionMajor>0</VersionMajor>
     <VersionMinor>1</VersionMinor>
@@ -100,11 +118,18 @@
     <InformationalVersion>$(PackageVersion)</InformationalVersion>
     <AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
   </PropertyGroup>
+  <Target Name="GetBuildVersion" />
   <!--#endif -->
 
-  <!-- Assembly ownership metadata. Gallery metadata lives in the module manifest. -->
+  <!-- Package metadata -->
+  <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
+    <!--#if (PackageCopyrightHolderIsSet) -->
+    <Owners>MyCopyrightHolder</Owners>
+    <!--#else -->
+    <Owners>MyAuthor</Owners>
+    <!--#endif -->
     <!--#if (PackageCopyrightHolderIsOrganization == true) -->
     <!--#if (PackageCopyrightHolderIsSet) -->
     <Company>MyCopyrightHolder</Company>
@@ -119,33 +144,118 @@
     <!--#else -->
     <Copyright>Copyright © 1975 MyAuthor</Copyright>
     <!--#endif -->
+    <PackageId>__SourceName__</PackageId>
+    <PackageTags>PowerShell;PSGallery;BinaryModule</PackageTags>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType></RepositoryType>
+    <!-- NuGet gallery blurb. Must not stay empty: pack would write "Package Description" into the nuspec. -->
+    <Description><![CDATA[Binary PowerShell module __SourceName__.]]></Description>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <!--#if (ProjectLicense == "MIT") -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <!--#endif -->
+    <!--#if (ProjectLicense == "BSD3Clause") -->
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <!--#endif -->
+    <!--#if (ProjectLicense == "Apache2") -->
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <!--#endif -->
+    <!--#if (ProjectLicense == "Custom") -->
+    <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <!--#endif -->
+    <PackageIcon>Icon-128x128.png</PackageIcon>
+    <!-- Same file as PSData.ReleaseNotes after pack. Nuspec for NuGet; Gallery page uses the stamped psd1. -->
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
+
+  <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes). Disk matches Solution Explorer. -->
+  <!-- Standard licenses: License.txt stays on disk (PackageLicenseExpression) and is staged into the Gallery nupkg. -->
+  <!-- Custom: License.txt is PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
+  <!-- PackAsPowerShellModule packs the staged module tree so the nupkg matches Import-Module, including a stamped manifest. -->
+  <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Pack</PackageOutputPath>
+  </PropertyGroup>
+
+  <!-- Publish behavior keep slim for library specs -->
+	<PropertyGroup Condition="'$(_IsPublishing)' == 'true'">
+		<!-- Flat publish output -->
+		<PublishDir Condition="'$(PublishDir)' == ''">$(MSBuildProjectDirectory)\bin\Publish\</PublishDir>
+		<PublishAot>false</PublishAot>
+		<PublishTrimmed>false</PublishTrimmed>
+	</PropertyGroup>
+
+  <!-- Publish behavior for executable future useage program main etc -->
+	<PropertyGroup Condition="'$(_IsPublishing)' == 'true' and '$(OutputType)' != 'Library'">
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<PublishSelfContained>true</PublishSelfContained>
+		<PublishSingleFile>true</PublishSingleFile>
+		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+	</PropertyGroup>
+
+  <!-- Shared source compiles for every selected target. Introduce conditional code or
+       conditional Compile Remove rules only when host APIs actually diverge. -->
+  <!-- PowerShell host reference for each selected compatibility target. The host supplies these at runtime. -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="PowerShellStandard.Library" Version="5.1.1">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462' or '$(TargetFramework)' == 'net48'">
+    <PackageReference Include="Microsoft.PowerShell.5.ReferenceAssemblies" Version="1.1.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+    <PackageReference Include="System.Management.Automation" Version="7.4.20">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="System.Management.Automation" Version="7.6.6">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- Add non-PowerShell runtime dependencies to PowerShellModuleDependency when the module gains them. -->
 
   <!--#if (PublicApiAnalyzers) -->
   <PropertyGroup>
     <PublicApiDirectory>$(MSBuildProjectDirectory)\Properties\PublicAPI</PublicApiDirectory>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="5.6.0" PrivateAssets="all">
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="5.6.0">
+      <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
     <AdditionalFiles Include="$(PublicApiDirectory)\PublicAPI.Shipped.txt" />
     <AdditionalFiles Include="$(PublicApiDirectory)\PublicAPI.Unshipped.txt" />
   </ItemGroup>
   <!--#endif -->
 
-  <!-- Add non-PowerShell runtime dependencies to PowerShellModuleDependency when the module gains them. -->
-
+  <!-- Keep Git configuration on disk without showing it as a project item -->
   <ItemGroup>
     <None Remove=".gitignore" />
   </ItemGroup>
-  <!--#if (PlaceSolution == "BesideCsproj") -->
+<!--#if (PlaceSolution == "BesideCsproj") -->
   <ItemGroup>
     <None Remove="__SourceName__.slnx;Readme.md" />
   </ItemGroup>
-  <!--#endif -->
+<!--#endif -->
 
   <!--#if (DirectoryMsBuildFiles) -->
+  <!-- Auto-imported from this directory. Link is Solution Explorer only (under Properties\). -->
+  <!-- Do not move the files into Properties/ on disk: MSBuild finds Directory.Build.* by folder. -->
   <ItemGroup>
     <None Remove="Directory.Build.props;Directory.Build.targets" />
     <None Include="Directory.Build.props" Link="Properties\Directory.Build.props" />
@@ -153,19 +263,21 @@
   </ItemGroup>
   <!--#endif -->
   <!--#if (DotNetToolManifest) -->
+  <!-- Disk path stays .config/: that is where `dotnet tool` looks. Link is Solution Explorer only. -->
   <ItemGroup>
     <None Remove=".config\dotnet-tools.json" />
     <None Include=".config\dotnet-tools.json" Link="Properties\dotnet-tools.json" />
   </ItemGroup>
   <!--#endif -->
-  <!--#if ((DirectoryMsBuildFiles) && (PlaceSolution == "BesideCsproj")) -->
+<!--#if ((DirectoryMsBuildFiles) && (PlaceSolution == "BesideCsproj")) -->
   <ItemGroup>
     <None Remove="Directory.Solution.props;Directory.Solution.targets" />
     <None Include="Directory.Solution.props" Link="Properties\Directory.Solution.props" />
     <None Include="Directory.Solution.targets" Link="Properties\Directory.Solution.targets" />
   </ItemGroup>
-  <!--#endif -->
+<!--#endif -->
 
+  <!-- Source Link git state as properties (SDK 8+). Target hooks GenerateAssemblyInfo. -->
   <Import Project="Properties/Build/SourceControlState.targets" />
   <!--#if (NerdbankGitVersioning == "Repo") -->
   <Import Project="Properties/Build/NerdbankRepositoryVersion.targets" />
@@ -174,5 +286,6 @@
   <Import Project="Properties/Build/InitializePublicApi.targets" />
   <!--#endif -->
   <Import Project="Properties/Build/StagePowerShellModule.targets" />
+  <Import Project="Properties/Build/PackAsPowerShellModule.targets" />
 
 </Project>

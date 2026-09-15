@@ -97,7 +97,7 @@
         "text": "Documentation template"
       },
       "description": {
-        "text": "Optional DocShell.html seed. Module docs go under this module's Properties/ModuleAssets/docs and stage with the PowerShell module. Repository docs go under docs/ at the repo root (first create only). Choose None when adding another module unless you only want module docs."
+        "text": "Optional DocShell.html seed. NuGet package docs go under this module's Properties/NugetAssets/docs and pack with the nupkg. Repository docs go under docs/ at the repo root (first create only). Choose None when adding another module unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
       }
     },
     {
@@ -109,7 +109,7 @@
         "text": "Project license"
       },
       "description": {
-        "text": "Default MIT. The selected License.txt is staged with the PowerShell module; the optional repository-root LICENSE copies it."
+        "text": "Default MIT. Standard licenses set PackageLicenseExpression and keep License.txt on disk. Custom packs License.txt as the NuGet license file. The LICENSE file at repository root copies this license."
       }
     },
     {

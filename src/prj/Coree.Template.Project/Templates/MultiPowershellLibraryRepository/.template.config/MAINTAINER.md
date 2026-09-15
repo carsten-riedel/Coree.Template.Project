@@ -35,7 +35,7 @@ The DebugHost is intentionally separate from tests. F5 invokes the outer module 
 
 ## Module layout
 
-`Properties/ModuleAssets/` is the source package root:
+`Properties/NugetAssets/` is the source package root, same folder as the other multi templates:
 
 - `{Name}.psd1` is the Gallery manifest.
 - `{Name}.psm1` selects the best compatible binary for the current host.
@@ -43,7 +43,7 @@ The DebugHost is intentionally separate from tests. F5 invokes the outer module 
 
 `Properties/Build/StagePowerShellModule.targets` stages a complete importable tree under `bin/Module/<Configuration>/{Name}/`, with one subfolder per selected TFM. It copies only the module assembly automatically. Product runtime dependencies must be added explicitly as `PowerShellModuleDependency`; PowerShell host assemblies must never be copied into the module.
 
-The class-library NuGet pack/publish override, Web SDK option, and generic package-boundary guide were removed because they model the wrong product. A final packaging pass still needs a repeatable `Publish-PSResource` flow that creates a Gallery-compatible `.nupkg` from the staged Release module. Do not reintroduce normal SDK `dotnet pack` output as the distributable artifact.
+The class-library NuGet pack/publish override, Web SDK option, and generic package-boundary guide were removed because they model the wrong product. `dotnet pack -c Release` is the Gallery package command: `IsPackable` is true, `IncludeBuildOutput` is false, and `PackAsPowerShellModule.targets` adds the staged host TFM folders next to `Properties/NugetAssets/` at the nupkg root. Do not reintroduce normal SDK `lib/<tfm>/` pack output as the distributable artifact. `Publish-PSResource` remains optional for a Gallery-side publish of that same module tree.
 
 ## Template mechanics
 

@@ -36,8 +36,7 @@ docs/                                   repository documentation seed
 src/global.json                         SDK pin required by the selected PowerShell targets
 <!--#endif -->
 src/prj/__SourceName__/                 binary module project and cmdlets
-src/prj/__SourceName__/Properties/ModuleAssets/
-                                        manifest, loader, license, readme, and release notes
+src/prj/__SourceName__/Properties/NugetAssets/  nupkg assets (readme, icon, notes, manifest, loader)
 src/prj/__SourceName__.Tests/           unit tests plus real PowerShell host tests
 src/prj/__SourceName__.DebugHost/       F5 profiles for powershell.exe and pwsh.exe
 <!--#if (BenchmarkProject == true) -->
@@ -51,7 +50,7 @@ Run `dotnet build` to compile every selected target. The build stages an importa
 src/prj/__SourceName__/bin/Module/<Configuration>/__SourceName__/
 ```
 
-The root `__SourceName__.psm1` selects the best compatible DLL for the current PowerShell host. `dotnet test` keeps fast C# unit coverage and also imports the staged module in installed `powershell.exe` and `pwsh.exe` hosts. A missing host or an unselected edition is reported as an inconclusive host test, not a false failure.
+The root `__SourceName__.psm1` selects the best compatible DLL for the current PowerShell host. `dotnet pack -c Release` writes a PowerShell Gallery nupkg under `src/prj/__SourceName__/bin/Pack/` from that staged tree (manifest at the package root, not `lib/`). `dotnet test` keeps fast C# unit coverage and also imports the staged module in installed `powershell.exe` and `pwsh.exe` hosts. A missing host or an unselected edition is reported as an inconclusive host test, not a false failure.
 
 For F5 debugging, set `__SourceName__.DebugHost` as the startup project. The default profile is `PowerShell 7` whenever that host is in the create (DebugHost is then a Core TFM, matching `pwsh.exe`). `Windows PowerShell 5.1` launches `powershell.exe`; Visual Studio's Core debugger does not bind cmdlet breakpoints there. The host waits until the debugger is attached, then imports the staged manifest and calls `Get-SampleValue`.
 

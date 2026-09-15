@@ -12,7 +12,7 @@
           AfterTargets="Build"
           Condition="'$(TargetFramework)' != ''">
     <ItemGroup>
-      <_PowerShellModuleAsset Include="$(MSBuildProjectDirectory)\Properties\ModuleAssets\**\*" />
+      <_PowerShellModuleAsset Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*" />
     </ItemGroup>
     <MakeDir Directories="$(PowerShellModuleOutputPath)\$(TargetFramework)" />
     <Copy SourceFiles="@(_PowerShellModuleAsset)"

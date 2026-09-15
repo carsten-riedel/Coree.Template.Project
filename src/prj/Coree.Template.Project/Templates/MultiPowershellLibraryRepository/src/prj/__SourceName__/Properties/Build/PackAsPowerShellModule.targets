@@ -1,0 +1,139 @@
+<Project>
+  <!--
+    PowerShell Gallery nupkg is the staged module tree at the package root
+    (manifest, loader, assets, one folder per selected host TFM). Not lib/<tfm>/.
+    Host SMA assemblies stay PrivateAssets and are never staged.
+  -->
+  <PropertyGroup>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
+
+  <UsingTask TaskName="StampPowerShellModuleManifest"
+             TaskFactory="RoslynCodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <ManifestPath ParameterType="System.String" Required="true" />
+      <GalleryPackageVersion ParameterType="System.String" Required="true" />
+      <ReleaseNotesPath ParameterType="System.String" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        var packageVersion = GalleryPackageVersion.Split(';')[0].Trim();
+        var plus = packageVersion.IndexOf('+');
+        if (plus >= 0)
+        {
+          packageVersion = packageVersion.Substring(0, plus);
+        }
+        var dash = packageVersion.IndexOf('-');
+        var numeric = dash < 0 ? packageVersion : packageVersion.Substring(0, dash);
+        var prerelease = dash < 0 ? string.Empty : packageVersion.Substring(dash + 1);
+        var parts = numeric.Split('.');
+        if (parts.Length == 4 && parts[3] == "0")
+        {
+          numeric = parts[0] + "." + parts[1] + "." + parts[2];
+        }
+        var text = File.ReadAllText(ManifestPath);
+        text = Regex.Replace(text, @"(?m)^(\s*ModuleVersion\s*=\s*)'[^']*'", "${1}'" + numeric + "'");
+        text = Regex.Replace(text, @"(?m)^\s*Prerelease\s*=\s*'[^']*'\s*\r?\n", "");
+        if (!string.IsNullOrEmpty(prerelease))
+        {
+          text = Regex.Replace(
+            text,
+            @"(?m)^(\s*PSData\s*=\s*@\{\s*)$",
+            "${1}" + Environment.NewLine + "            Prerelease = '" + prerelease + "'");
+        }
+        if (!string.IsNullOrEmpty(ReleaseNotesPath) && File.Exists(ReleaseNotesPath))
+        {
+          var notes = File.ReadAllText(ReleaseNotesPath).TrimEnd('\r', '\n');
+          var assignment = "ReleaseNotes = @'" + Environment.NewLine + notes + Environment.NewLine + "'@";
+          text = Regex.Replace(text, @"(?m)^(\s*)ReleaseNotes\s*=\s*'[^']*'", "${1}" + assignment);
+        }
+        File.WriteAllText(ManifestPath, text);
+      ]]></Code>
+    </Task>
+  </UsingTask>
+
+  <UsingTask TaskName="AssignRelativePackagePaths"
+             TaskFactory="RoslynCodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Root ParameterType="System.String" Required="true" />
+      <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+      <Packed ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Class" Language="cs"><![CDATA[
+using System;
+using System.IO;
+using System.Linq;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
+
+public class AssignRelativePackagePaths : Task
+{
+    [Required]
+    public string Root { get; set; }
+
+    [Required]
+    public ITaskItem[] Files { get; set; }
+
+    [Output]
+    public ITaskItem[] Packed { get; set; }
+
+    public override bool Execute()
+    {
+        var root = Path.GetFullPath(Root);
+        if (!root.EndsWith(Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal)
+            && !root.EndsWith(Path.AltDirectorySeparatorChar.ToString(), StringComparison.Ordinal))
+        {
+            root += Path.DirectorySeparatorChar;
+        }
+
+        Packed = Files.Select(file =>
+        {
+            var full = Path.GetFullPath(file.GetMetadata("FullPath"));
+            var relative = full.StartsWith(root, StringComparison.OrdinalIgnoreCase)
+                ? full.Substring(root.Length)
+                : Path.GetFileName(full);
+            var item = new TaskItem(full);
+            item.SetMetadata("Pack", "true");
+            item.SetMetadata("PackagePath", relative.Replace('\\', '/'));
+            return (ITaskItem)item;
+        }).ToArray();
+        return true;
+    }
+}
+]]></Code>
+    </Task>
+  </UsingTask>
+
+  <!-- Outer pack only. The nupkg is the same tree DebugHost imports from bin/Module. -->
+  <Target Name="IncludeStagedPowerShellModuleInPackage"
+          BeforeTargets="_GetPackageFiles"
+          DependsOnTargets="GetBuildVersion"
+          Condition="'$(IsPackable)' == 'true' And '$(TargetFramework)' == ''">
+    <Error Condition="!Exists('$(PowerShellModuleOutputPath)')"
+           Text="Staged PowerShell module is missing at $(PowerShellModuleOutputPath). Pack requires a build of the selected host targets." />
+    <ItemGroup>
+      <_StagedModuleManifest Include="$(PowerShellModuleOutputPath)\*.psd1" />
+      <_StagedPackFile Include="$(PowerShellModuleOutputPath)\**\*" />
+    </ItemGroup>
+    <Message Importance="high" Text="Stamping PowerShell Gallery manifest from PackageVersion=$(PackageVersion) NuGetPackageVersion=$(NuGetPackageVersion)" />
+    <PropertyGroup>
+      <_GalleryStampVersion>$(NuGetPackageVersion)</_GalleryStampVersion>
+      <_GalleryStampVersion Condition="'$(_GalleryStampVersion)' == ''">$(PackageVersion)</_GalleryStampVersion>
+    </PropertyGroup>
+    <StampPowerShellModuleManifest ManifestPath="%(_StagedModuleManifest.FullPath)"
+                                   GalleryPackageVersion="$(_GalleryStampVersion)"
+                                   ReleaseNotesPath="$(PowerShellModuleOutputPath)\ReleaseNotes.txt" />
+    <AssignRelativePackagePaths Root="$(PowerShellModuleOutputPath)" Files="@(_StagedPackFile)">
+      <Output TaskParameter="Packed" ItemName="_GalleryPackFile" />
+    </AssignRelativePackagePaths>
+    <ItemGroup>
+      <None Include="@(_GalleryPackFile)" Pack="true" PackagePath="%(_GalleryPackFile.PackagePath)" />
+    </ItemGroup>
+  </Target>
+</Project>

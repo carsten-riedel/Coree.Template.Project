@@ -24,6 +24,16 @@
     PrivateData = @{
         PSData = @{
             Tags = @('PowerShell', 'BinaryModule')
+#if (ProjectLicense == "MIT")
+            LicenseUri = 'https://licenses.nuget.org/MIT'
+#endif
+#if (ProjectLicense == "BSD3Clause")
+            LicenseUri = 'https://opensource.org/licenses/BSD-3-Clause'
+#endif
+#if (ProjectLicense == "Apache2")
+            LicenseUri = 'https://www.apache.org/licenses/LICENSE-2.0'
+#endif
+            # Pack copies NugetAssets/ReleaseNotes.txt here. Gallery UI reads this field, not the nuspec.
             ReleaseNotes = 'See ReleaseNotes.txt in the module package.'
         }
     }

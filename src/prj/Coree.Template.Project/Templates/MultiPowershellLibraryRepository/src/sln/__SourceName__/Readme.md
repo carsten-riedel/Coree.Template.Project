@@ -35,6 +35,20 @@ src/prj/__SourceName__/bin/Module/<Configuration>/__SourceName__/
 
 The root manifest loads `__SourceName__.psm1`; that loader chooses a compatible DLL in `net48`, `net462`, `net10.0`, `net8.0`, or `netstandard2.0` according to the current PowerShell host and the binaries selected at template creation.
 
+## Pack for PowerShell Gallery
+
+```bash
+<!--#if (PlaceSolution == "SlnFolder") -->
+dotnet pack ../../prj/__SourceName__/__SourceName__.csproj -c Release
+<!--#elseif (PlaceSolution == "BesideCsproj") -->
+dotnet pack __SourceName__.csproj -c Release
+<!--#else -->
+dotnet pack src/prj/__SourceName__/__SourceName__.csproj -c Release
+<!--#endif -->
+```
+
+The nupkg lands under `src/prj/__SourceName__/bin/Pack/`. Manifest and loader are at the package root; selected host TFM folders sit beside them. This is not a class-library `lib/` pack.
+
 ## Shared and host-specific code
 
 There are two native host families: Desktop (`net462`, `net48`) and Core (`net8.0`, `net10.0`). The `netstandard2.0` target is their shared PowerShell Standard surface, not a third family. All source files compile for every selected target by default, which is appropriate while the cmdlets stay within their common API surface.
@@ -91,7 +105,7 @@ The module assembly uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first 
 
 ## Module documentation seed
 
-`src/prj/__SourceName__/Properties/ModuleAssets/docs/DocShell.html` stages with this module. Replace the seed with documentation for the exported commands and supported PowerShell hosts.
+`src/prj/__SourceName__/Properties/NugetAssets/docs/DocShell.html` stages with this module. Replace the seed with documentation for the exported commands and supported PowerShell hosts.
 <!--#endif -->
 <!--#if (BenchmarkProject == true) -->
 

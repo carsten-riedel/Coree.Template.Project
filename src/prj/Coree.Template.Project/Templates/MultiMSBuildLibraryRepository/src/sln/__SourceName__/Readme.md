@@ -132,7 +132,7 @@ ReportGenerator writes a summary under `../__SourceName__.Tests/ReportGeneratorO
 dotnet pack
 ```
 
-Creates one `.nupkg` in `src/prj/__SourceName__/bin/Pack/` with the task assembly under `tasks/netstandard2.0/` (not `lib/`) and `__SourceName__.props` / `__SourceName__.targets` under `build/`. PackageReference consumers get those files auto-imported into their csproj: `UsingTask` plus a sample `CoreCompile` property populate (`HomeTask` / `TaskNodeTask`). Private runtime dependencies and `deps.json` land next to the task DLL when present. Test, DebugHost, and optional benchmark projects are not packed.
+Creates one `.nupkg` in `src/prj/__SourceName__/bin/Pack/` with the task assembly under `tasks/netstandard2.0/` (not `lib/`) and `__SourceName__.props` / `__SourceName__.targets` under `build/`. PackageReference consumers get those files auto-imported into their csproj: `UsingTask` in `.props`, sample `CoreCompile` property populate (`HomeTask` / `TaskNodeTask`) in `.targets`. Private runtime dependencies and `deps.json` land next to the task DLL when present. Test, DebugHost, and optional benchmark projects are not packed.
 <!--#if (NuGetAuditHighCriticalAsErrors) -->
 
 Restore fails this task package on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that package’s packages (txt/json) and is still info-only.
@@ -191,7 +191,7 @@ To break in the MSBuild task:
 
 A normal `dotnet build` of the solution does not run `RunDebugHostTask`. Do not use Microsoft.Build.Locator or an in-process `BuildManager`.
 
-The nupkg ships `build/__SourceName__.props` and `build/__SourceName__.targets`. NuGet auto-imports both into every PackageReference consumer csproj (and that project's `Directory.Build.props` / `Directory.Build.targets`). The `.props` file registers fully qualified `UsingTask` entries for `__SourceName__.AddTask`, `__SourceName__.TaskNodeTask`, `__SourceName__.HomeTask`, and `__SourceName__.DumpEnvVarsTask` pointing at `tasks/netstandard2.0/`, and runs `HomeTask` / `TaskNodeTask` before `CoreCompile` so the consumer gets `$(HomeDirectory)`, `$(TaskNodeDirectory)`, and `$(TaskNodeLocation)`. `DumpEnvVarsTask` and `AddTask` stay opt-in: invoke them from a consumer target or `Directory.Build.targets`. DebugHost does not import that nupkg file: F5 loads `bin/$(Configuration)/netstandard2.0/__SourceName__.dll` from the in-repo build output.
+The nupkg ships `build/__SourceName__.props` and `build/__SourceName__.targets`. NuGet auto-imports both into every PackageReference consumer csproj (and that project's `Directory.Build.props` / `Directory.Build.targets`). The `.props` file (imported first) registers fully qualified `UsingTask` entries for `__SourceName__.AddTask`, `__SourceName__.TaskNodeTask`, `__SourceName__.HomeTask`, and `__SourceName__.DumpEnvVarsTask` pointing at `tasks/netstandard2.0/`. The `.targets` file (imported after the project) runs `HomeTask` / `TaskNodeTask` before `CoreCompile` so the consumer gets `$(HomeDirectory)`, `$(TaskNodeDirectory)`, and `$(TaskNodeLocation)`. `DumpEnvVarsTask` and `AddTask` stay opt-in: invoke them from a consumer target or `Directory.Build.targets`. DebugHost does not import those nupkg files: F5 loads `bin/$(Configuration)/netstandard2.0/__SourceName__.dll` from the in-repo build output.
 
 For stepping without F5, debug `FunctionalTests` (in-process `Execute`) or `IntegrationTests` (`Resources/TestScript.msbuild`) from Test Explorer.
 

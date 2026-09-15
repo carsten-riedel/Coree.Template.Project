@@ -2,8 +2,8 @@
   <!--
     NuGet auto-imports this file into every PackageReference consumer csproj
     (and anything that csproj imports, including Directory.Build.props/targets).
-    UsingTask is the function surface. Invoke tasks from this file, from
-    build/__SourceName__.targets, from the consumer csproj, or from Directory.Build.targets.
+    UsingTask is the function surface. Targets that call those tasks belong in
+    build/__SourceName__.targets (this file is imported first).
   -->
   <PropertyGroup>
     <_TaskFolder>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', 'tasks', 'netstandard2.0'))</_TaskFolder>
@@ -13,16 +13,4 @@
   <UsingTask TaskName="__SourceName__.TaskNodeTask" AssemblyFile="$(_TaskAssembly)" />
   <UsingTask TaskName="__SourceName__.HomeTask" AssemblyFile="$(_TaskAssembly)" />
   <UsingTask TaskName="__SourceName__.DumpEnvVarsTask" AssemblyFile="$(_TaskAssembly)" />
-
-  <!-- Sample csproj extension: properties on the consuming project before CoreCompile. -->
-  <!-- DumpEnvVarsTask and AddTask stay registered; call them from a consumer target when needed. -->
-  <Target Name="__SourceName__PopulateTaskProperties" BeforeTargets="CoreCompile">
-    <HomeTask>
-      <Output TaskParameter="Home" PropertyName="HomeDirectory" />
-    </HomeTask>
-    <TaskNodeTask>
-      <Output TaskParameter="TaskNodeDir" PropertyName="TaskNodeDirectory" />
-      <Output TaskParameter="TaskNodeFile" PropertyName="TaskNodeLocation" />
-    </TaskNodeTask>
-  </Target>
 </Project>

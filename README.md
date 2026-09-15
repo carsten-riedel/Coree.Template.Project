@@ -362,7 +362,7 @@ Create and grow a repository-like structure containing one or more independently
 
 Initialize the shared repository layout once, then add additional task packages whenever you need them.
 
-Each package targets `netstandard2.0` and packs the assembly under `tasks/netstandard2.0` (`DevelopmentDependency`) with auto-imported `build/` props and targets (`UsingTask` plus a sample consumer `CoreCompile` extension). Tests are automated unit and integration tests. DebugHost is a separate MSBuild consumer for Visual Studio F5 (not a Roslyn `DebugRoslynComponent` host).
+Each package targets `netstandard2.0` and packs the assembly under `tasks/netstandard2.0` (`DevelopmentDependency`) with auto-imported `build/` props (`UsingTask`) and targets (sample consumer `CoreCompile` extension). Tests are automated unit and integration tests. DebugHost is a separate MSBuild consumer for Visual Studio F5 (not a Roslyn `DebugRoslynComponent` host).
 
 **Initialize the layout once. Compose as many task packages as you need.**
 

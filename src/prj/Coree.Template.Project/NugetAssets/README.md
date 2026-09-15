@@ -273,7 +273,7 @@ Each analyzer keeps its `.slnx` in its own `src/sln/{name}/` folder. `--PlaceSol
 
 ## .NET multi-msbuild repository
 
-Same combo and init system as the multi-library repository, for independently packable MSBuild task packages. Each package targets `netstandard2.0` and packs the assembly under `tasks/netstandard2.0` with auto-imported `build/` props and targets (`UsingTask` plus a sample consumer `CoreCompile` extension). Tests are automated unit and integration tests. DebugHost is a separate MSBuild consumer for Visual Studio F5. This does **not** replace `msbuildtasklib-coree`.
+Same combo and init system as the multi-library repository, for independently packable MSBuild task packages. Each package targets `netstandard2.0` and packs the assembly under `tasks/netstandard2.0` with auto-imported `build/` props (`UsingTask`) and targets (sample consumer `CoreCompile` extension). Tests are automated unit and integration tests. DebugHost is a separate MSBuild consumer for Visual Studio F5. This does **not** replace `msbuildtasklib-coree`.
 
 Initialize the shared repository layout once, then add additional task packages whenever you need them.
 

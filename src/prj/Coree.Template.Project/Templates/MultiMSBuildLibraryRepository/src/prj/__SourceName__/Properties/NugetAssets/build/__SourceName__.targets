@@ -2,6 +2,15 @@
   <!--
     NuGet auto-imports this file into every PackageReference consumer csproj after the project.
     UsingTask registrations live in the companion __SourceName__.props (imported first).
-    Add further consumer targets here, or call <DumpEnvVarsTask/> / <AddTask> from Directory.Build.targets.
+    DumpEnvVarsTask and AddTask stay registered; call them from a further target or Directory.Build.targets.
   -->
+  <Target Name="__SourceName__PopulateTaskProperties" BeforeTargets="CoreCompile">
+    <HomeTask>
+      <Output TaskParameter="Home" PropertyName="HomeDirectory" />
+    </HomeTask>
+    <TaskNodeTask>
+      <Output TaskParameter="TaskNodeDir" PropertyName="TaskNodeDirectory" />
+      <Output TaskParameter="TaskNodeFile" PropertyName="TaskNodeLocation" />
+    </TaskNodeTask>
+  </Target>
 </Project>

@@ -433,9 +433,22 @@ For more information and resources for templating:
   - [MS Learn: Create a project template](https://learn.microsoft.com/en-us/dotnet/core/tutorials/cli-templates-create-project-template)
   - [MS Learn: Create a template package](https://learn.microsoft.com/en-us/dotnet/core/tutorials/cli-templates-create-template-package?pivots=dotnet-6-0)
   - [Github: Templating Wiki](https://github.com/dotnet/templating/wiki)
+  - [Github: template.json reference](https://github.com/dotnet/templating/wiki/Reference-for-template.json)
   - [Github: Net template samples](https://github.com/dotnet/templating/tree/main/dotnet-template-samples)
+  - [Schema: template.json](https://json.schemastore.org/template)
   - [Microsoft Project Repository .net winforms templates](https://github.com/dotnet/winforms/tree/main/pkg/Microsoft.Dotnet.WinForms.ProjectTemplates/content/WinFormsApplication-CSharp)
 
 For more information and resources for msbuild tasks:
-  - [MSbuild Custom Task](https://github.com/dotnet/samples/tree/main/msbuild/custom-task-code-generation)
+  - [MS Learn: Create a custom task for code generation](https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation)
+  - [MS Learn: Task writing](https://learn.microsoft.com/en-us/visualstudio/msbuild/task-writing)
+  - [Github: MSBuild custom task sample](https://github.com/dotnet/samples/tree/main/msbuild/custom-task-code-generation)
+
+For more information and resources for source generators and analyzers:
+  - [MS Learn: Source generators overview](https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/source-generators-overview)
+  - [Github: Source generators cookbook](https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.cookbook.md)
+  - [MS Learn: Analyzer package path format](https://learn.microsoft.com/en-us/nuget/guides/analyzers-conventions#analyzers-path-format)
+
+For more information and resources for .NET tools and NuGet packages:
+  - [MS Learn: How to create a .NET tool](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools-how-to-create)
+  - [MS Learn: NuGet package authoring best practices](https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices)
 

@@ -1,5 +1,8 @@
+#if( CSharpProjectOptions == "DisableImplicitUsings" )
+using System;
+
+#endif
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics;
 
 namespace __SourceName__.Tests
 {
@@ -14,11 +17,10 @@ namespace __SourceName__.Tests
         }
 
         [TestMethod]
-        public void TestMainMethod()
+        public void Form1_Constructs()
         {
-            var result = __SourceName__.Program.Main(System.Array.Empty<string>());
-
-            Assert.AreEqual(0, result);
+            using var form = new __SourceName__.Form1();
+            Assert.AreEqual("Form1", form.Text);
         }
     }
 }

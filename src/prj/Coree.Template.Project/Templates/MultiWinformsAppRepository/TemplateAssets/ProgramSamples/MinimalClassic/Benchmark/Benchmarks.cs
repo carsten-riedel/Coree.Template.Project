@@ -5,8 +5,9 @@ namespace __SourceName__.Benchmark;
 public class Benchmarks
 {
     [Benchmark]
-    public int Main()
+    public string Form1_Text()
     {
-        return __SourceName__.Program.Main(System.Array.Empty<string>());
+        using var form = new __SourceName__.Form1();
+        return form.Text;
     }
 }

@@ -66,7 +66,7 @@
         "text": "Program sample"
       },
       "description": {
-        "text": "Which Program.cs to copy. Default is classic int Main(string[] args). Minimal async is async Task<int> Main(string[] args). Matching tests (and the optional benchmark method) come with the same choice."
+        "text": "Which WinForms sample to copy. Default is the Visual Studio minimal Form1 app. Matching tests (and the optional benchmark method) come with the same choice."
       }
     },
     {

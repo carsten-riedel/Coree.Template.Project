@@ -7,6 +7,7 @@ namespace __SourceName__.Benchmark;
 
 public static class Program
 {
+    [STAThread]
     public static void Main(string[] args)
     {
         SetProjectDirectoryAsCurrentDirectory();

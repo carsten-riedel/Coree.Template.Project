@@ -1,23 +1,22 @@
 #if( CSharpProjectOptions == "DisableImplicitUsings" )
 using System;
+using System.Windows.Forms;
 
 #endif
 namespace __SourceName__
 {
-    /// <summary>
-    /// Console entry point. Tests call <see cref="Main"/> as a method.
-    /// </summary>
     internal static class Program
     {
         /// <summary>
-        /// Writes a greeting and exits successfully so <c>dotnet run</c> does something visible.
+        ///  The main entry point for the application.
         /// </summary>
-        /// <param name="args">Command-line arguments.</param>
-        /// <returns>0 (success).</returns>
-        public static int Main(string[] args)
+        [STAThread]
+        static void Main()
         {
-            Console.WriteLine("Hello, World!");
-            return 0;
+            // To customize application configuration such as set high DPI settings or default font,
+            // see https://aka.ms/applicationconfiguration.
+            ApplicationConfiguration.Initialize();
+            Application.Run(new Form1());
         }
     }
 }

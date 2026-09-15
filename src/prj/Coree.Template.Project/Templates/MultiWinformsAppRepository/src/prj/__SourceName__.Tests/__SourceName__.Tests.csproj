@@ -5,6 +5,7 @@
     <OutputType>Library</OutputType>
     <!-- Same Windows TFMs as the app (ProjectReference). -->
     <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <!-- C# language features and debugging configuration -->
@@ -49,12 +50,16 @@
 
   <!--#if (CoverletMSBuild == true) -->
   <!-- coverlet.msbuild: CollectCoverage is enough for `dotnet test` on SDK MSBuild. -->
-  <!-- Include is the console app only (sourceName). Threshold fails the test run when that assembly is under 100% line/branch/method total. -->
+  <!-- Include is the app assembly only (sourceName). Threshold fails the test run when that assembly is under 100% line/branch/method total. -->
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
     <CoverletOutput>./CoverletOutput/</CoverletOutput>
     <Include>[__SourceName__]*</Include>
+    <!-- Program.Main starts the message loop. WinForms ApplicationConfiguration.g.cs is compiler-generated bootstrap. -->
+    <!-- Form1.Dispose(false) is the finalizer branch; ExcludeFromCodeCoverage is on that method in the designer file. -->
+    <ExcludeByFile>**/Program.cs,**/*.g.cs</ExcludeByFile>
+    <ExcludeByAttribute>CompilerGeneratedAttribute</ExcludeByAttribute>
     <Threshold>100</Threshold>
     <ThresholdType>line,branch,method</ThresholdType>
     <ThresholdStat>total</ThresholdStat>

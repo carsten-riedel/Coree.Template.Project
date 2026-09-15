@@ -114,7 +114,7 @@ After a test run, the links below point to generated reports. Each selected targ
 <!--#endif -->
 
 <!--#if (CoverletMSBuild == true) -->
-Coverlet measures only the console app (`[__SourceName__]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
+Coverlet measures the app (`[__SourceName__]*`), skips `Program.cs` and generated `*.g.cs` (WinForms `ApplicationConfiguration`), skips `Form1.Dispose` via `[ExcludeFromCodeCoverage]`, and fails `dotnet test` if line, branch, or method coverage is under 100% on the rest.
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
 <!--#if (PlaceSolution == "SlnFolder") -->

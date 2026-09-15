@@ -3,7 +3,8 @@
 
   <!-- General build settings: defines the output type and target framework -->
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
     <!--
       Keep TargetFrameworks only. Do not add TargetFramework.
       `dotnet publish` with no -f uses the default TFM from

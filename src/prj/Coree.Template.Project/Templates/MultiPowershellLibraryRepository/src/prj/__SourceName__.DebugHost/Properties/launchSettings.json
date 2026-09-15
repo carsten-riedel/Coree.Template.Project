@@ -1,22 +1,22 @@
 {
   "profiles": {
-//#if (SupportsWindowsPowerShell)
-    "Windows PowerShell 5.1": {
-      "commandName": "Executable",
-      "executablePath": "powershell.exe",
-      "workingDirectory": "$(ProjectDir)",
-      "commandLineArgs": "-NoLogo -NoProfile -NoExit -ExecutionPolicy Bypass -Command \"& { Import-Module -Force '$(ProjectDir)..\\__SourceName__\\bin\\Module\\$(Configuration)\\__SourceName__\\__SourceName__.psd1'; Get-SampleValue -InputObject 'debug' }\""
-    }
-//#if (SupportsPowerShellCore)
-    ,
-//#endif
-//#endif
 //#if (SupportsPowerShellCore)
     "PowerShell 7": {
       "commandName": "Executable",
       "executablePath": "pwsh.exe",
       "workingDirectory": "$(ProjectDir)",
-      "commandLineArgs": "-NoLogo -NoProfile -NoExit -Command \"& { Import-Module -Force '$(ProjectDir)..\\__SourceName__\\bin\\Module\\$(Configuration)\\__SourceName__\\__SourceName__.psd1'; Get-SampleValue -InputObject 'debug' }\""
+      "commandLineArgs": "-NoLogo -NoProfile -NoExit -Command \"& { $attachedWait = 0; while (-not [System.Diagnostics.Debugger]::IsAttached -and $attachedWait -lt 200) { Start-Sleep -Milliseconds 50; $attachedWait++ }; Import-Module -Force '..\\__SourceName__\\bin\\Module\\$(Configuration)\\__SourceName__\\__SourceName__.psd1'; Get-SampleValue -InputObject 'debug' }\""
+    }
+//#if (SupportsWindowsPowerShell)
+    ,
+//#endif
+//#endif
+//#if (SupportsWindowsPowerShell)
+    "Windows PowerShell 5.1": {
+      "commandName": "Executable",
+      "executablePath": "powershell.exe",
+      "workingDirectory": "$(ProjectDir)",
+      "commandLineArgs": "-NoLogo -NoProfile -NoExit -ExecutionPolicy Bypass -Command \"& { $attachedWait = 0; while (-not [System.Diagnostics.Debugger]::IsAttached -and $attachedWait -lt 200) { Start-Sleep -Milliseconds 50; $attachedWait++ }; Import-Module -Force '..\\__SourceName__\\bin\\Module\\$(Configuration)\\__SourceName__\\__SourceName__.psd1'; Get-SampleValue -InputObject 'debug' }\""
     }
 //#endif
   }

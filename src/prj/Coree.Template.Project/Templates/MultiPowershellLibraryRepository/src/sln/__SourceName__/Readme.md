@@ -69,7 +69,12 @@ Coverlet measures host-independent module logic in process. The sample cmdlet ad
 
 ## Debug in Visual Studio
 
-Set `__SourceName__.DebugHost` as the startup project. Choose the `Windows PowerShell 5.1` or `PowerShell 7` launch profile. F5 first builds and stages the module, then starts the real host and imports that staged manifest. Breakpoints in `GetSampleValueCommand` therefore run in the same kind of process as consumers.
+Set `__SourceName__.DebugHost` as the startup project. Pitfalls and the F5 profile that actually binds cmdlet breakpoints:
+<!--#if (PlaceSolution == "SlnFolder") -->
+[DEBUGHOST_HOWTO.md](../../prj/__SourceName__.DebugHost/DEBUGHOST_HOWTO.md).
+<!--#else -->
+[DEBUGHOST_HOWTO.md](../__SourceName__.DebugHost/DEBUGHOST_HOWTO.md).
+<!--#endif -->
 
 The DebugHost owns no module logic and is never packaged.
 

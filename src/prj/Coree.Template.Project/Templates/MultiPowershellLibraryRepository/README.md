@@ -53,7 +53,7 @@ src/prj/__SourceName__/bin/Module/<Configuration>/__SourceName__/
 
 The root `__SourceName__.psm1` selects the best compatible DLL for the current PowerShell host. `dotnet test` keeps fast C# unit coverage and also imports the staged module in installed `powershell.exe` and `pwsh.exe` hosts. A missing host or an unselected edition is reported as an inconclusive host test, not a false failure.
 
-For F5 debugging, set `__SourceName__.DebugHost` as the startup project and choose either `Windows PowerShell 5.1` or `PowerShell 7`. The selected executable imports the same staged module used by integration tests, so breakpoints in compiled cmdlets exercise the real host path.
+For F5 debugging, set `__SourceName__.DebugHost` as the startup project. The default profile is `PowerShell 7` whenever that host is in the create (DebugHost is then a Core TFM, matching `pwsh.exe`). `Windows PowerShell 5.1` launches `powershell.exe`; Visual Studio's Core debugger does not bind cmdlet breakpoints there. The host waits until the debugger is attached, then imports the staged manifest and calls `Get-SampleValue`.
 
 <!--#if (WriteSrcGlobalJson) -->
 `src/global.json` pins .NET 10 when PowerShell 7.6 is selected and .NET 8 otherwise (`rollForward: latestFeature`). It applies to commands whose working directory is under `src/`.

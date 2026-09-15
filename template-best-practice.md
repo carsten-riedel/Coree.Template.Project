@@ -523,7 +523,9 @@ A `.gitignore` you do want on disk can still be globbed into the project as a `N
 
 **Aliases.** CLI invents `-P` from `--PackageAuthor`. `dotnetcli.host.json` `"shortName": ""` turns that off per symbol.
 
-**Separator.** `|` in `ide.host.json` defaults. Current `dotnet new` wants spaces (`--InitRepoItems Readme License`) or a repeated switch. The IDE string is not CLI input.
+**Separator.** `|` in `ide.host.json` defaults. Current `dotnet new` wants spaces (`--InitRepoItems Readme License`) or a repeated switch. The IDE string is not CLI input. The engine also splits multi-choice strings on `,` and cannot escape `|` or `,` inside a choice value ([multi-choice specifics](https://github.com/dotnet/templating/wiki/Reference-for-template.json)).
+
+**Visual Studio ticks.** The generic multi-choice combo (any name other than the built-in `Framework` / `TargetFrameworks` picker) joins `displayName`s with commas for the closed caption, then splits that caption to tick boxes. A comma or pipe in `displayName` shows the right line and leaves every box unchecked; Create can still send the `ide.host.json` default. Hyphens are safe. `Framework` (exact casing) and `TargetFrameworks` use the native TFM control and only understand installed TFM tokens — a custom name whose values happen to look like `net8.0` still gets the generic combo. A pipe `defaultValue` in `template.json` for that combo is the same caption-without-ticks failure; keep `template.json` empty and put the VS set in `ide.host.json`, like Init. List the defaulted choices first as a contiguous prefix if a host snaps to the first item. `isRequired: false` keeps Create enabled when the caption is not a bound selection (`isRequired` is unreliable in VS: [templating#6870](https://github.com/dotnet/templating/issues/6870)).
 
 **Solution file vs Visual Studio’s extra `.slnx`.** VS often writes `{Name}.slnx` at the repo root. Possible responses: stub `{Name}.generated.slnx` and rename to `{Name}.slnx` only when `IsCliHost`; or always place the template solution under `src/sln/{Name}/` and mention the extra root file in a VS-only post-action.
 

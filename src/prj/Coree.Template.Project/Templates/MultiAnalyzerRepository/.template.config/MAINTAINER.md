@@ -117,7 +117,7 @@ Subset on the first create (checkpoint only, no landing README):
 dotnet new multianalyzerrepo-coree --Author "abcd" --name "Organization.Domain.Analyzer1" --output "<repo>" --InitRepoItems AIReleaseCheckpoint
 ```
 
-**Visual Studio:** first create uses the `ide.host.json` default (same five root files as `--InitAllRepoItems`; `src/global.json` unchecked). A second package in the IDE cannot omit the group: choose **None**. Folgelibraries in the same folder are otherwise the CLI path above. Why the two hosts differ is in **CLI ↔ Visual Studio** below.
+**Visual Studio:** first create uses the `ide.host.json` default (same five root files as `--InitAllRepoItems`; `src/global.json` unchecked). A second package in the IDE cannot omit the group: choose **None**. Later packages in the same folder are otherwise the CLI path above. Why the two hosts differ is in **CLI ↔ Visual Studio** below.
 
 ## CLI ↔ Visual Studio
 

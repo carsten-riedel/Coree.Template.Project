@@ -115,7 +115,7 @@ Subset on the first create (checkpoint only, no landing README):
 dotnet new multilibraryrepo-coree --Author "abcd" --name "Organization.Domain.ClassLibrary1" --output "<repo>" --InitRepoItems AIReleaseCheckpoint
 ```
 
-**Visual Studio:** first create uses the `ide.host.json` default (same six root files as `--InitAllRepoItems`; `src/global.json` unchecked). A second library in the IDE cannot omit the group: choose **None**. Folgelibraries in the same folder are otherwise the CLI path above. Why the two hosts differ is in **CLI ↔ Visual Studio** below.
+**Visual Studio:** first create uses the `ide.host.json` default (same six root files as `--InitAllRepoItems`; `src/global.json` unchecked). A second library in the IDE cannot omit the group: choose **None**. Later libraries in the same folder are otherwise the CLI path above. Why the two hosts differ is in **CLI ↔ Visual Studio** below.
 
 ## CLI ↔ Visual Studio
 

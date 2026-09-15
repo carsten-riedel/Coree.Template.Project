@@ -156,12 +156,13 @@
     },
     // The values are TFMs so the join generator remains simple; the UI exposes
     // PowerShell editions/releases so users do not have to know their runtime TFMs.
-    // Visual Studio checkbox groups snap to the first choice when they do not
-    // apply a pipe default, and they stop at the first choice that is not in
-    // that default. Keep the defaulted hosts as a contiguous prefix matching
-    // defaultValue / ide.host.json. Portable last: it is an alternative, not a
-    // host family. isRequired false: Visual Studio otherwise shows the pipe
-    // string and will not accept it as a selection.
+    // CLI default is empty: UseDefaultPowerShellTargets then writes net462;net8.0.
+    // Visual Studio does not bind a pipe defaultValue in this file to checkboxes
+    // (it shows the display names and leaves every box unchecked). Same split as
+    // InitRepoItems: empty here, real VS selection in ide.host.json. Defaulted
+    // hosts stay a contiguous prefix so a first-choice snap cannot land on
+    // portable. isRequired false: Visual Studio otherwise treats the group as
+    // user-required while the displayed default is not a selected value.
     "PowerShellTargets": {
       "type": "parameter",
       "description": "PowerShell hosts this binary module supports. Select several to ship host-specific binaries in one PowerShell Gallery module. The portable target is an alternative when one cross-edition API surface is sufficient.",
@@ -169,6 +170,7 @@
       "allowMultipleValues": true,
       "enableQuotelessLiterals": true,
       "isRequired": false,
+      "defaultValue": "",
       "choices": [
         {
           "choice": "net462",
@@ -195,8 +197,13 @@
           "description": "One portable binary using PowerShellStandard.Library. Broad Desktop/Core reach, but only the shared PowerShell API surface.",
           "displayName": "Cross-edition portable (.NET Standard 2.0)"
         }
-      ],
-      "defaultValue": "net462|net8.0"
+      ]
+    },
+    // True when no host was selected (CLI omit, or VS with no checkbox bound).
+    // Product default is then net462 plus net8.0. Any explicit choice turns this off.
+    "UseDefaultPowerShellTargets": {
+      "type": "computed",
+      "value": "(PowerShellTargets != \"net462\" && PowerShellTargets != \"net48\" && PowerShellTargets != \"net8.0\" && PowerShellTargets != \"net10.0\" && PowerShellTargets != \"netstandard2.0\")"
     },
     // One multi-choice for C# / debug / documentation in module, tests, and
     // debug host (VS combobox, like targets and InitRepoItems). Checked =
@@ -244,10 +251,10 @@
       ]
     },
     // Converts the selected framework values to the semicolon-separated MSBuild list.
-    "PowerShellTargetFrameworksValue": {
+    // Empty selection (CLI omit) coalesces to the product default.
+    "PowerShellTargetFrameworksJoined": {
       "type": "generated",
       "generator": "join",
-      "replaces": "__TargetFrameworks__",
       "parameters": {
         "symbols": [
           {
@@ -257,6 +264,22 @@
         ],
         "separator": ";",
         "removeEmptyValues": true
+      }
+    },
+    "PowerShellTargetFrameworksFallback": {
+      "type": "generated",
+      "generator": "constant",
+      "parameters": {
+        "value": "net462;net8.0"
+      }
+    },
+    "PowerShellTargetFrameworksValue": {
+      "type": "generated",
+      "generator": "coalesce",
+      "replaces": "__TargetFrameworks__",
+      "parameters": {
+        "sourceVariableName": "PowerShellTargetFrameworksJoined",
+        "fallbackVariableName": "PowerShellTargetFrameworksFallback"
       }
     },
     // Tests and DebugHost need one runnable framework. Prefer a selected Core
@@ -273,7 +296,7 @@
             "value": "net10.0"
           },
           {
-            "condition": "(PowerShellTargets == \"net8.0\")",
+            "condition": "(PowerShellTargets == \"net8.0\" || UseDefaultPowerShellTargets)",
             "value": "net8.0"
           },
           {
@@ -327,7 +350,7 @@
             "value": "'Desktop', 'Core'"
           },
           {
-            "condition": "((PowerShellTargets == \"net462\" || PowerShellTargets == \"net48\") && (PowerShellTargets == \"net8.0\" || PowerShellTargets == \"net10.0\"))",
+            "condition": "((PowerShellTargets == \"net462\" || PowerShellTargets == \"net48\") && (PowerShellTargets == \"net8.0\" || PowerShellTargets == \"net10.0\") || UseDefaultPowerShellTargets)",
             "value": "'Desktop', 'Core'"
           },
           {
@@ -349,7 +372,7 @@
         "datatype": "string",
         "cases": [
           {
-            "condition": "(PowerShellTargets == \"netstandard2.0\" || PowerShellTargets == \"net462\" || PowerShellTargets == \"net48\")",
+            "condition": "(PowerShellTargets == \"netstandard2.0\" || PowerShellTargets == \"net462\" || PowerShellTargets == \"net48\" || UseDefaultPowerShellTargets)",
             "value": "5.1"
           },
           {
@@ -365,11 +388,11 @@
     },
     "SupportsWindowsPowerShell": {
       "type": "computed",
-      "value": "(PowerShellTargets == \"netstandard2.0\" || PowerShellTargets == \"net462\" || PowerShellTargets == \"net48\")"
+      "value": "(PowerShellTargets == \"netstandard2.0\" || PowerShellTargets == \"net462\" || PowerShellTargets == \"net48\" || UseDefaultPowerShellTargets)"
     },
     "SupportsPowerShellCore": {
       "type": "computed",
-      "value": "(PowerShellTargets == \"netstandard2.0\" || PowerShellTargets == \"net8.0\" || PowerShellTargets == \"net10.0\")"
+      "value": "(PowerShellTargets == \"netstandard2.0\" || PowerShellTargets == \"net8.0\" || PowerShellTargets == \"net10.0\" || UseDefaultPowerShellTargets)"
     },
     // Author / copyright placeholders (assembly and PowerShell module).
     "Author": {

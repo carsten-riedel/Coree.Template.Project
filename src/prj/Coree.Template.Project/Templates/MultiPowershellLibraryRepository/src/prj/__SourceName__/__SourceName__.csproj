@@ -61,6 +61,8 @@
   </PropertyGroup>
   <!--#endif -->
 
+  <!-- Shared source compiles for every selected target. Introduce conditional code or
+       conditional Compile Remove rules only when host APIs actually diverge. -->
   <!-- PowerShell host reference for each selected compatibility target. -->
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="PowerShellStandard.Library" Version="5.1.1" PrivateAssets="all" />

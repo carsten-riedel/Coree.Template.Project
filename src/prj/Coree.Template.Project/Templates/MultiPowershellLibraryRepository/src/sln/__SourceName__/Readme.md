@@ -35,6 +35,12 @@ src/prj/__SourceName__/bin/Module/<Configuration>/__SourceName__/
 
 The root manifest loads `__SourceName__.psm1`; that loader chooses a compatible DLL in `net48`, `net462`, `net10.0`, `net8.0`, or `netstandard2.0` according to the current PowerShell host and the binaries selected at template creation.
 
+## Shared and host-specific code
+
+There are two native host families: Desktop (`net462`, `net48`) and Core (`net8.0`, `net10.0`). The `netstandard2.0` target is their shared PowerShell Standard surface, not a third family. All source files compile for every selected target by default, which is appropriate while the cmdlets stay within their common API surface.
+
+For a small host-specific branch, use the SDK-defined `NETFRAMEWORK`, `NET8_0_OR_GREATER`, or `NET10_0_OR_GREATER` compile symbol in the existing file. When those branches become substantial, move them into clearly named host-specific files and exclude those files conditionally by `TargetFramework` in the project. The SDK already includes all `.cs` files by default, so use conditional `Compile Remove` rules rather than adding duplicate conditional `Compile Include` items. Keep the implementation in this one multi-target project unless the module develops an independently useful component with a genuinely separate responsibility.
+
 ## Test
 
 ```bash

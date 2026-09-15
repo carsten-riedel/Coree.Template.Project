@@ -20,6 +20,8 @@ Default: `net462|net8.0`. The .NET Framework 4.6.2 binary is the broader Windows
 
 `__TestTargetFramework__` resolves to the newest selected Core TFM, otherwise the selected Windows TFM, otherwise `net8.0` for a portable module. `src/global.json` pins SDK 10 only when `net10.0` is selected; all other combinations pin SDK 8.
 
+The source model has two native host families, Desktop (`net462`, `net48`) and Core (`net8.0`, `net10.0`). `netstandard2.0` is their shared PowerShell Standard surface. Keep one multi-target module project and shared source files by default. Do not scaffold empty host-specific files or a second module project. Small real divergences can use `NETFRAMEWORK`, `NET8_0_OR_GREATER`, or `NET10_0_OR_GREATER`; larger divergences can use named folders plus conditional `Compile Remove` rules, because the SDK default compile glob already includes every `.cs` file.
+
 ## Project responsibilities
 
 - `src/prj/{Name}` owns cmdlets, host references, manifest, loader, staging, and eventually Gallery packaging.

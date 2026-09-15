@@ -12,7 +12,7 @@ The target selector uses PowerShell names while the generated project uses the m
 | PowerShell 7.4+, broader compatibility (.NET 8) | `net8.0` | PowerShell 7.4 and newer, including PowerShell 7.6 |
 | PowerShell 7.6 (.NET 10) | `net10.0` | PowerShell 7.6 when newer PowerShell or .NET APIs are required |
 
-The default is `Windows PowerShell 5.1 (.NET Framework 4.8)` plus `PowerShell 7.4+, broader compatibility (.NET 8)`. PowerShell 7.6 can load that .NET 8 binary. Select its `.NET 10` target only when the module needs newer APIs. Select `Cross-edition portable (.NET Standard 2.0)` instead when the smaller shared API is enough and one binary is preferable.
+The default is `Windows PowerShell 5.1, broader compatibility (.NET Framework 4.6.2)` plus `PowerShell 7.4+, broader compatibility (.NET 8)`. .NET Framework 4.8 can load the .NET Framework 4.6.2 binary, and PowerShell 7.6 can load the .NET 8 binary. Select `.NET Framework 4.8` or `.NET 10` only when the module needs their newer APIs. Select `Cross-edition portable (.NET Standard 2.0)` instead when the smaller shared API is enough and one binary is preferable.
 
 <!--#if (PlaceSolution == "SlnFolder") -->
 This module's `.slnx` and notes live under `src/sln/__SourceName__/`. CLI commands for this module start in that folder.

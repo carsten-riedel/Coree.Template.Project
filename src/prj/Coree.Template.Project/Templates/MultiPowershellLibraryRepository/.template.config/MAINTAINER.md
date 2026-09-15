@@ -16,7 +16,7 @@ This template keeps the repository-composition UX of the other multi templates. 
 | PowerShell 7.4+, broader compatibility (.NET 8) | `net8.0` |
 | PowerShell 7.6 (.NET 10) | `net10.0` |
 
-Default: `net48|net8.0`. The .NET 8 binary is the broader PowerShell 7 choice and is also loadable by PowerShell 7.6; `net10.0` is opt-in for modules that need its newer API surface. `netstandard2.0` is a deliberate one-binary alternative using `PowerShellStandard.Library`, not a third host family. Selecting redundant targets is allowed because `dotnet new` multi-choice parameters do not provide useful conflict validation; descriptions must keep the trade-off explicit.
+Default: `net462|net8.0`. The .NET Framework 4.6.2 binary is the broader Windows PowerShell 5.1 choice and remains loadable on .NET Framework 4.8; `net48` is opt-in for modules that need its newer API surface. The .NET 8 binary is the broader PowerShell 7 choice and is also loadable by PowerShell 7.6; `net10.0` is opt-in for modules that need its newer API surface. `netstandard2.0` is a deliberate one-binary alternative using `PowerShellStandard.Library`, not a third host family. Selecting redundant targets is allowed because `dotnet new` multi-choice parameters do not provide useful conflict validation; descriptions must keep the trade-off explicit. Keep `PowerShellTargets` explicitly optional (`isRequired: false`): Visual Studio otherwise treats the field as user-required and displays the multi-value default without accepting it as a selected value.
 
 `__TestTargetFramework__` resolves to the newest selected Core TFM, otherwise the selected Windows TFM, otherwise `net8.0` for a portable module. `src/global.json` pins SDK 10 only when `net10.0` is selected; all other combinations pin SDK 8.
 

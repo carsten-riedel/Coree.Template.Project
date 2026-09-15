@@ -32,13 +32,13 @@
     {
       "id": "PowerShellTargets",
       "isVisible": true,
-      "defaultValue": "net48|net8.0",
+      "defaultValue": "net462|net8.0",
       "persistenceScope": "none",
       "name": {
         "text": "PowerShell targets"
       },
       "description": {
-        "text": "Choose PowerShell hosts, not raw .NET versions. Default ships Windows PowerShell 5.1 on .NET Framework 4.8 plus the broadly compatible PowerShell 7.4+ binary on .NET 8. PowerShell 7.6 can load the .NET 8 binary; select .NET 10 only when its newer API surface is needed."
+        "text": "Choose PowerShell hosts, not raw .NET versions. Default ships the broadly compatible Windows PowerShell 5.1 binary on .NET Framework 4.6.2 plus the broadly compatible PowerShell 7.4+ binary on .NET 8. PowerShell 7.6 can load the .NET 8 binary; select .NET Framework 4.8 or .NET 10 only when their newer API surfaces are needed."
       }
     },
     {

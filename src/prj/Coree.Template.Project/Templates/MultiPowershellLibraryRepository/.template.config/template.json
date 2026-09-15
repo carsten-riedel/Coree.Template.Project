@@ -162,6 +162,7 @@
       "datatype": "choice",
       "allowMultipleValues": true,
       "enableQuotelessLiterals": true,
+      "isRequired": false,
       "choices": [
         {
           "choice": "netstandard2.0",
@@ -189,7 +190,7 @@
           "displayName": "PowerShell 7.6 (.NET 10)"
         }
       ],
-      "defaultValue": "net48|net8.0"
+      "defaultValue": "net462|net8.0"
     },
     // One multi-choice for C# / debug / documentation in module, tests, and
     // debug host (VS combobox, like targets and InitRepoItems). Checked =

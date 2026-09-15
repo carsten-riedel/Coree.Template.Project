@@ -12,7 +12,7 @@ The generated root `README.md` lives beside this folder, one level up. That file
 | --- | --- |
 | `template.json` | Identity, symbols, sources, post-actions. |
 | `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**. `persistenceScope: none` so the New Project dialog does not reuse the last create. Host mapping: **CLI ↔ Visual Studio**. No `icon` property: see **Visual Studio template icon**. |
-| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `Author`, `CSharpProjectOptions`, `ProgramSample`, `ProjectLicense`, `NerdbankGitVersioning`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `NuGetAuditHighCriticalAsErrors`, `TestCoverage`, `DirectoryMsBuildFiles`, `DotNetToolManifest`, and `Publish` so they do not steal single-letter aliases. |
+| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `Author`, `CSharpProjectOptions`, `ProgramSample`, `ProjectLicense`, `NerdbankGitVersioning`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `TestCoverage`, `DirectoryMsBuildFiles`, `DotNetToolManifest`, and `Publish` so they do not steal single-letter aliases. |
 | `icon.png` | **Intentionally absent.** Visual Studio then uses the template **package** icon. |
 | `MAINTAINER.md` | This file. |
 
@@ -148,7 +148,7 @@ A combo repository is two or more `dotnet new` calls into the **same** `--output
 Other host-only switch behavior (not root files, same class of reason):
 
 - **`PlaceSolution` `RepoRoot`:** CLI renames to `{Name}.slnx` at repo root. Visual Studio keeps `{Name}.generated.slnx` so it does not overwrite the `{Name}.slnx` the IDE always writes. `SlnFolder` and `BesideCsproj` rename on both hosts (paths are not the VS root file). Post-actions that open the handbook Readme and tell you to close/reopen are `HostIdentifier == "vs"` only. `primaryOutputs` index 0 is the surviving handbook path (`src/sln/{Name}/Readme.md` or `src/prj/{Name}/Readme.md` when `BesideCsproj`).
-- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `DocumentationTemplate` / `TestCoverage` / `AnalysisMode` / `NuGetAuditHighCriticalAsErrors` / `DirectoryMsBuildFiles` / `DotNetToolManifest`:** same defaults on both hosts (`NerdbankGitVersioning` `Project`, `DocumentationTemplate` empty/`None`, `TestCoverage` `Coverlet`, `AnalysisMode` `Recommended`, `ProjectEditorGlobalConfig` `Strict`, `NuGetAuditHighCriticalAsErrors` `true`, `DirectoryMsBuildFiles` `false`, `DotNetToolManifest` `true`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later app can pass `--NerdbankGitVersioning Repo` again. `--DocumentationTemplate Repository` on a later app is Exit 73.
+- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `DocumentationTemplate` / `TestCoverage` / `AnalysisMode` / `DirectoryMsBuildFiles` / `DotNetToolManifest`:** same defaults on both hosts (`NerdbankGitVersioning` `Project`, `DocumentationTemplate` empty/`None`, `TestCoverage` `Coverlet`, `AnalysisMode` `Recommended`, `ProjectEditorGlobalConfig` `Strict`, `DirectoryMsBuildFiles` `false`, `DotNetToolManifest` `true`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later app can pass `--NerdbankGitVersioning Repo` again. `--DocumentationTemplate Repository` on a later app is Exit 73.
 - **`Author`:** required on both. CLI `--Author`.
 
 ## `InitRepoItems` / `InitAllRepoItems`
@@ -400,19 +400,6 @@ Warnings only unless the consumer later sets `TreatWarningsAsErrors`. `All` is n
 
 Place the PropertyGroup **before** `ImportSdkTargets`.
 
-## `NuGetAuditHighCriticalAsErrors`
-
-App-only bool, default **true**. UI label **Treat high/critical NuGet vulnerabilities as errors**. CLI long name **`--NuGetAuditHighCriticalAsErrors`**. Omit the switch → on. `--NuGetAuditHighCriticalAsErrors false` writes nothing. Tests and benchmark are not in this switch. Combo-safe.
-
-SDK restore already runs NuGetAudit (NU1901–NU1904 warnings). This switch only appends `<WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>` on the console app, before `ImportSdkTargets`. Low (`NU1901`) and moderate (`NU1902`) stay warnings. Do not set `NuGetAudit` / `NuGetAuditMode` / `TreatWarningsAsErrors` here (`NuGetAudit` is already on; multi-TFM with net10 already uses `all`). Do not promote the test-project `WriteNugetReport` `dotnet list package` files: that command’s exit code is not a findings gate.
-
-Turn the switch off for an EOL or backport graph (for example net8 after support ends) that cannot be cleaned without dropping a TFM. Do not put this on tests: MSTest/Coverlet CVEs must not fail the nupkg restore.
-
-```powershell
-dotnet new multiwinformsrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiwinformsrepo-coree --Author "abcd" --name "...App2" --output $out --NuGetAuditHighCriticalAsErrors false
-```
-
 ## `DocumentationTemplate`
 
 Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, repository-root `docs/` only (no package-docs destination: these apps are not a NuGet tool). Extra sources copy that file only (`exclude` of `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, and `ProgramSamples/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
@@ -440,7 +427,7 @@ The app is publishable, not a NuGet tool. Target frameworks are Windows TFMs (`n
 
 Do not put `TargetFramework` next to `TargetFrameworks` to avoid `-f`. That was the previous approach: MSBuild saw a single TFM, pack needed `BuildForPack`, and a `net8.0-windows` consumer could not reference the project. `_IsPublishing` on `TargetFramework` still fails when that consumer publishes (the flag is global).
 
-Implementation (do not “simplify” into one always-imported file or back to `<Project Sdk="...">`): `Properties/Build/ImportSdkTargets.targets` always closes `Sdk.targets`; `PublishDefaultFramework.targets` loads only when `IsCrossTargetingBuild` is true. **`ImportSdkTargets` must be the last import in the console app csproj.** That file *is* `Sdk.targets` plus the outer publish dispatch. The SDK reads properties and items while it loads (`EnforceCodeStyleInBuild`, `GlobalAnalyzerConfigFiles`, `AnalysisMode`, `WarningsAsErrors`, publish). Anything after that line is after the SDK and is ignored for those. `Project Sdk="..."` would append `Sdk.targets` after this file and overwrite the Publish override. `SourceControlState.targets` is a `BeforeTargets` hook on `GenerateAssemblyInfo` (SDK 8+ Source Link); it can sit just above the SDK close. `PublishRelease` keeps a direct project `dotnet publish` on Release. Tests may keep `SetTargetFramework`; external consumers must not need it. `<!--#if` in `.targets` is generate-time (`**/*.targets` in `specialCustomOperations`).
+Implementation (do not “simplify” into one always-imported file or back to `<Project Sdk="...">`): `Properties/Build/ImportSdkTargets.targets` always closes `Sdk.targets`; `PublishDefaultFramework.targets` loads only when `IsCrossTargetingBuild` is true. **`ImportSdkTargets` must be the last import in the console app csproj.** That file *is* `Sdk.targets` plus the outer publish dispatch. The SDK reads properties and items while it loads (`EnforceCodeStyleInBuild`, `GlobalAnalyzerConfigFiles`, `AnalysisMode`, publish). Anything after that line is after the SDK and is ignored for those. `Project Sdk="..."` would append `Sdk.targets` after this file and overwrite the Publish override. `SourceControlState.targets` is a `BeforeTargets` hook on `GenerateAssemblyInfo` (SDK 8+ Source Link); it can sit just above the SDK close. `PublishRelease` keeps a direct project `dotnet publish` on Release. Tests may keep `SetTargetFramework`; external consumers must not need it. `<!--#if` in `.targets` is generate-time (`**/*.targets` in `specialCustomOperations`).
 
 All three project files remove `.gitignore` from their `None` items so it stays on disk without appearing as a project item. The test ignore also covers generated `NugetReport/` output.
 
@@ -477,7 +464,6 @@ dotnet new multiwinformsrepo-coree --Author "abcd" --name "...App2" --output $ou
 - **`CSharpProjectOptions`**: see section above. Do not split back into per-property dropdowns.
 - **`ProjectEditorGlobalConfig`**: see section above. Default `Strict`. `Default` is suggestions-only. Seeds in `TemplateAssets/CodeStyle/`; generated disk name stays `.project.editor.globalconfig`. Csproj wire-up on the console app only, before `ImportSdkTargets`.
 - **`AnalysisMode`**: see section above. Default `Recommended`. App only. CA warnings, not build errors.
-- **`NuGetAuditHighCriticalAsErrors`**: see section above. Default `true`. App only. NU1903/NU1904 as restore errors. Off for EOL/backport graphs.
 - **`DocumentationTemplate` / `WriteRepoDocTemplate`**: see section above. Default empty/`None`. Repository `docs/` only. Seed only; not the vendored site.
 - **`PlaceSolution`**: single choice, default `SlnFolder` → `src/sln/__SourceName__/__SourceName__.slnx` plus handbook `Readme.md` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). `RepoRoot` on CLI renames to a root `.slnx`; `RepoRoot` in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS’s conventional root `.slnx`. `RepoRoot` still writes `src/sln/{Name}/Readme.md` as notes and stacks every app’s `.slnx` in one directory. `BesideCsproj` writes `src/prj/{Name}/{Name}.slnx` and the handbook next to the app csproj and does not create `src/sln/{Name}/`. The `.slnx` virtual folder `/sln/{Name}/` is omitted for `BesideCsproj`; `Readme.md` is a solution item beside the file.
 - **`HostIdentifier` / `IsCliHost`**: bind + computed; used for that rename and for VS-only post-actions.

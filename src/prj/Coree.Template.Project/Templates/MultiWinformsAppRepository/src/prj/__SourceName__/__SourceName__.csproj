@@ -62,13 +62,6 @@
     <AnalysisMode>__AnalysisMode__</AnalysisMode>
   </PropertyGroup>
 
-  <!--#if (NuGetAuditHighCriticalAsErrors) -->
-  <!-- Restore NuGetAudit is already on. High (NU1903) and critical (NU1904) fail restore. Low/moderate stay warnings. -->
-  <PropertyGroup>
-    <WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>
-  </PropertyGroup>
-  <!--#endif -->
-
   <!-- Packaging and publish configuration -->
   <PropertyGroup>
     <IsPackable>false</IsPackable>
@@ -213,7 +206,7 @@
   <!--
     Must stay last. This import is Sdk.targets plus the outer Publish dispatch.
     The SDK reads properties and items while it loads (EnforceCodeStyleInBuild,
-    GlobalAnalyzerConfigFiles, AnalysisMode, WarningsAsErrors, publish). Anything after this line is after the
+    GlobalAnalyzerConfigFiles, AnalysisMode, publish). Anything after this line is after the
     SDK and is ignored for that. Project Sdk="..." would append Sdk.targets
     after this file and overwrite the Publish override.
   -->

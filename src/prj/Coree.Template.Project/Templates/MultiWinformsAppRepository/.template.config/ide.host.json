@@ -34,18 +34,6 @@
       "isVisible": true
     },
     {
-      "id": "RuntimeIdentifier",
-      "isVisible": true,
-      "defaultValue": "win-x64",
-      "persistenceScope": "none",
-      "name": {
-        "text": "Publish runtime"
-      },
-      "description": {
-        "text": "Used only on publish. Default Windows x64. Raspberry Pi is linux-arm64 (64-bit OS). Linux x64 covers Debian, Ubuntu, CentOS, Fedora. Alpine/Docker ARM64 is linux-musl-arm64. Restore and build stay RID-less."
-      }
-    },
-    {
       "id": "Publish",
       "isVisible": true,
       "defaultValue": "FrameworkIncludedSingleCompressed",
@@ -55,18 +43,6 @@
       },
       "description": {
         "text": "Used only on publish. Default is self-contained single-file with ReadyToRun and compression. The other recipes match the WPF template set."
-      }
-    },
-    {
-      "id": "PackAsNuGetTool",
-      "isVisible": true,
-      "defaultValue": "true",
-      "persistenceScope": "none",
-      "name": {
-        "text": "Additional pack as NuGet tool"
-      },
-      "description": {
-        "text": "Default on. In addition to publish, pack a NuGet tool nupkg: IsPackable, PackAsTool, Properties/NugetAssets, and NuGet-only csproj properties. ToolCommandName in the csproj is the command after install (project name). Edit that property to override. Uncheck for publish-only (no nupkg assets). Authors, company, copyright, and description stay either way. Test and benchmark projects are not affected."
       }
     },
     {
@@ -126,7 +102,7 @@
         "text": "Documentation template"
       },
       "description": {
-        "text": "Optional DocShell.html seed. NuGet package docs go under this app's Properties/NugetAssets/docs and pack with the nupkg (needs Additional pack as NuGet tool). Repository docs go under docs/ at the repo root (first create only). Choose None when adding another console app unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
+        "text": "Optional DocShell.html seed. Repository docs go under docs/ at the repo root (first create only). Choose None when adding another app unless you only want to skip docs. Bootstrap and mini docs are a checkpoint task."
       }
     },
     {
@@ -138,7 +114,7 @@
         "text": "Project license"
       },
       "description": {
-        "text": "Default MIT. When packing as a NuGet tool, standard licenses set PackageLicenseExpression and keep License.txt on disk; Custom packs License.txt as the NuGet license file. The LICENSE file at repository root copies this license either way."
+        "text": "Default MIT. The LICENSE file at repository root copies this license when that first-create item is selected."
       }
     },
     {

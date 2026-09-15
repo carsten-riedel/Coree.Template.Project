@@ -8,9 +8,9 @@
       Keep TargetFrameworks only. Do not add TargetFramework.
       `dotnet publish` with no -f uses the default TFM from
       Properties/Build/PublishDefaultFramework.targets. Override with
-      `dotnet publish -f net8.0` (or net10.0, any selected TFM).
+      `dotnet publish -f net8.0-windows` (or net10.0-windows, any selected TFM).
       Edit that file to change the default.
-      To try a newer TFM (net11, ...) before shipping it: append it to
+      To try a newer TFM (net11.0-windows, ...) before shipping it: append it to
       TargetFrameworks so build/test fail on incompatibilities, leave the
       targets file as-is until you want bare publish to follow.
     -->
@@ -71,17 +71,8 @@
 
   <!-- Packaging and publish configuration -->
   <PropertyGroup>
-    <!--#if (PackAsNuGetTool) -->
-    <IsPackable>true</IsPackable>
-    <PackAsTool>true</PackAsTool>
-    <!-- Command after install. Empty Condition: override in Directory.Build.props or -p:ToolCommandName. -->
-    <ToolCommandName Condition="'$(ToolCommandName)' == ''">__SourceName__</ToolCommandName>
-    <!-- EnablePackageValidation: TFM/runtime holes on pack. No baseline at generate; set PackageValidationBaselineVersion after the first nuget.org publish. -->
-    <EnablePackageValidation>true</EnablePackageValidation>
-    <!--#else -->
     <IsPackable>false</IsPackable>
     <PackAsTool>false</PackAsTool>
-    <!--#endif -->
     <IsPublishable>true</IsPublishable>
     <PublishRelease>true</PublishRelease>
     <IsTestProject>false</IsTestProject>
@@ -121,7 +112,7 @@
   </PropertyGroup>
   <!--#endif -->
 
-  <!-- Assembly identity (also NuGet Authors/Company/Copyright/Description when packing). -->
+  <!-- Assembly identity. -->
   <PropertyGroup>
     <Authors>MyAuthor</Authors>
     <!--#if (PackageCopyrightHolderIsOrganization == true) -->
@@ -141,52 +132,6 @@
     <Description><![CDATA[]]></Description>
   </PropertyGroup>
 
-  <!--#if (PackAsNuGetTool) -->
-  <!-- NuGet package metadata. Files live in Properties/NugetAssets/. -->
-  <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
-  <PropertyGroup>
-    <!--#if (PackageCopyrightHolderIsSet) -->
-    <Owners>MyCopyrightHolder</Owners>
-    <!--#else -->
-    <Owners>MyAuthor</Owners>
-    <!--#endif -->
-    <PackageId>__SourceName__</PackageId>
-    <PackageTags>dotnet;console</PackageTags>
-    <PackageProjectUrl></PackageProjectUrl>
-    <RepositoryUrl></RepositoryUrl>
-    <RepositoryType></RepositoryType>
-    <PackageReadmeFile>Readme.md</PackageReadmeFile>
-    <!--#if (ProjectLicense == "MIT") -->
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <!--#endif -->
-    <!--#if (ProjectLicense == "BSD3Clause") -->
-    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-    <!--#endif -->
-    <!--#if (ProjectLicense == "Apache2") -->
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <!--#endif -->
-    <!--#if (ProjectLicense == "Custom") -->
-    <PackageLicenseFile>License.txt</PackageLicenseFile>
-    <!--#endif -->
-    <PackageIcon>Icon-128x128.png</PackageIcon>
-    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
-  </PropertyGroup>
-
-  <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes). Disk matches Solution Explorer. -->
-  <!-- Standard licenses: License.txt stays on disk (PackageLicenseExpression). -->
-  <!-- Custom: pack License.txt as PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
-  <ItemGroup>
-    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" />
-    <!--#if (ProjectLicense == "Custom") -->
-    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" Pack="true" PackagePath="" />
-    <!--#endif -->
-  </ItemGroup>
-
-  <PropertyGroup>
-    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Pack</PackageOutputPath>
-  </PropertyGroup>
-  <!--#endif -->
-
   <!-- Publish output. Recipes apply only while _IsPublishing. -->
 	<PropertyGroup Condition="'$(_IsPublishing)' == 'true'">
 		<!-- Flat publish output -->
@@ -195,20 +140,9 @@
 		<PublishTrimmed>false</PublishTrimmed>
 	</PropertyGroup>
 
-  <!-- Publish profile and RID. Generate-time choices; MSBuild reads them only when publishing. -->
+  <!-- Publish profile. Generate-time choices; MSBuild reads them only when publishing. RID is always win-x64. -->
 	<PropertyGroup Condition="'$(_IsPublishing)' == 'true'">
-		<!--#if (RuntimeIdentifier == win-x64) -->
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
-		<!--#endif -->
-		<!--#if (RuntimeIdentifier == linux-arm64) -->
-		<RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
-		<!--#endif -->
-		<!--#if (RuntimeIdentifier == linux-x64) -->
-		<RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-		<!--#endif -->
-		<!--#if (RuntimeIdentifier == linux-musl-arm64) -->
-		<RuntimeIdentifier>linux-musl-arm64</RuntimeIdentifier>
-		<!--#endif -->
 		<!--#if (Publish == FrameworkIncludedSingleCompressed) -->
 		<SelfContained>true</SelfContained>
 		<PublishSingleFile>true</PublishSingleFile>
@@ -279,7 +213,7 @@
   <!--
     Must stay last. This import is Sdk.targets plus the outer Publish dispatch.
     The SDK reads properties and items while it loads (EnforceCodeStyleInBuild,
-    GlobalAnalyzerConfigFiles, AnalysisMode, EnablePackageValidation, WarningsAsErrors, publish). Anything after this line is after the
+    GlobalAnalyzerConfigFiles, AnalysisMode, WarningsAsErrors, publish). Anything after this line is after the
     SDK and is ignored for that. Project Sdk="..." would append Sdk.targets
     after this file and overwrite the Publish override.
   -->

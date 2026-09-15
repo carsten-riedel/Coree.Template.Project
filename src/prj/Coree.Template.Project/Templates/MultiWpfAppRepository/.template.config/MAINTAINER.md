@@ -1,6 +1,6 @@
-# `.template.config` (MultiConsoleAppRepository)
+# `.template.config` (MultiWpfAppRepository)
 
-Product surface: **`.NET multi-console repository`**. `identity` is `CoreeTemplatesProjectMultiConsoleAppRepository`; CLI short name is `multiconsolerepo-coree`. No `ChoosingPackageBoundaries.md`.
+Product surface: **`.NET multi-wpf repository`**. `identity` is `CoreeTemplatesProjectMultiWpfAppRepository`; CLI short name is `multiwpfrepo-coree`. No `ChoosingPackageBoundaries.md`.
 
 Maintainer notes for this template host folder (`MAINTAINER.md`). Markdown here is **not** packed into `Coree.Template.Project` (`Templates\**\.template.config\**\*.md` is excluded). It is also **not** copied into a generated repository; only `template.json` / host JSON drive `dotnet new` and Visual Studio.
 
@@ -12,7 +12,7 @@ The generated root `README.md` lives beside this folder, one level up. That file
 | --- | --- |
 | `template.json` | Identity, symbols, sources, post-actions. |
 | `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**. `persistenceScope: none` so the New Project dialog does not reuse the last create. Host mapping: **CLI ↔ Visual Studio**. No `icon` property: see **Visual Studio template icon**. |
-| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `Author`, `CSharpProjectOptions`, `ProgramSample`, `ProjectLicense`, `NerdbankGitVersioning`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `NuGetAuditHighCriticalAsErrors`, `TestCoverage`, `DirectoryMsBuildFiles`, `DotNetToolManifest`, `RuntimeIdentifier`, `Publish`, and `PackAsNuGetTool` so they do not steal single-letter aliases. |
+| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `Author`, `CSharpProjectOptions`, `ProgramSample`, `ProjectLicense`, `NerdbankGitVersioning`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `NuGetAuditHighCriticalAsErrors`, `TestCoverage`, `DirectoryMsBuildFiles`, `DotNetToolManifest`, and `Publish` so they do not steal single-letter aliases. |
 | `icon.png` | **Intentionally absent.** Visual Studio then uses the template **package** icon. |
 | `MAINTAINER.md` | This file. |
 
@@ -24,7 +24,6 @@ Create a new project shows one icon per template. Two files can supply it; they 
 | --- | --- | --- |
 | Template package | `src/prj/Coree.Template.Project/NugetAssets/Icon.png` (`PackageIcon` on `Coree.Template.Project.csproj`) | NuGet listing **and** the VS picker when this template does not declare its own icon. |
 | This template | `.template.config/icon.png`, optional `ide.host.json` `"icon": "icon.png"` | VS picker for **this** template only. Overrides the package icon. |
-| Generated app | `src/prj/{Name}/Properties/NugetAssets/Icon-128x128.png` | The **consumer** nupkg after `dotnet pack`. Not the template picker. |
 
 Verified in Visual Studio (Create a new project, Recent project templates): a template with `.template.config/icon.png` showed that image; sibling Coree templates without one showed the package icon. Leave this template’s picker icon **undefined** so the package icon is used. Ship per-template picker icons later; do not copy `Icon-128x128.png` here as a stand-in.
 
@@ -45,9 +44,9 @@ Folder install is the local loop. Verify by generating into `%TEMP%`. Do not `do
 Combo repo, three apps, root files only once:
 
 ```powershell
-dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp1" --output "C:\Users\Valgrind\source\repos\MultiConsoleAppRepository-multisolution-optin" --InitAllRepoItems
-dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp2" --output "C:\Users\Valgrind\source\repos\MultiConsoleAppRepository-multisolution-optin"
-dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp3" --output "C:\Users\Valgrind\source\repos\MultiConsoleAppRepository-multisolution-optin"
+dotnet new multiwpfrepo-coree --Author "abcd" --name "Organization.Domain.WpfApp1" --output "C:\Users\Valgrind\source\repos\MultiConsoleAppRepository-multisolution-optin" --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp2" --output "C:\Users\Valgrind\source\repos\MultiConsoleAppRepository-multisolution-optin"
+dotnet new multiwpfrepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp3" --output "C:\Users\Valgrind\source\repos\MultiConsoleAppRepository-multisolution-optin"
 ```
 
 ### CLI use cases
@@ -57,7 +56,7 @@ dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.Co
 **Default, one app**
 
 ```powershell
-dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp1" --output $out --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "abcd" --name "Organization.Domain.WpfApp1" --output $out --InitAllRepoItems
 ```
 
 Root: `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.gitignore`, `LICENSE`. App: Nerdbank **Project**, `Properties/version.json`.
@@ -66,12 +65,12 @@ Root: `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.giti
 
 ```powershell
 # combo gut
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md again)
-# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems
+# dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+# dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems
 ```
 
 Call 1 writes the five root files. Call 2 only adds `src/prj` / `src/sln`. Both apps get `Properties/version.json`.
@@ -80,39 +79,39 @@ Call 1 writes the five root files. Call 2 only adds `src/prj` / `src/sln`. Both 
 
 ```powershell
 # combo gut — Call 2 only wires the app; generate does not stamp version.json again
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --NerdbankGitVersioning Repo
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --NerdbankGitVersioning Repo
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json)
-# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
 
 **Nerdbank project folder, multi-app** (this is the omit-the-switch default)
 
 ```powershell
 # combo gut — same as the default combo; `--NerdbankGitVersioning Project` is optional
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out
 ```
 
 **Two separate repos (not a combo)**
 
 ```powershell
-dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.AppA" --output $outA --InitAllRepoItems
-dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.AppB" --output $outB --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "abcd" --name "Organization.Domain.AppA" --output $outA --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "abcd" --name "Organization.Domain.AppB" --output $outB --InitAllRepoItems
 ```
 
 Each `--output` is its own first create.
 
-After the first call in the default combo the repo root has `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.gitignore`, and `LICENSE`. Each app gets `Properties/version.json` and `Properties/NugetAssets/`. Calls 2 and 3 add `src/prj` / `src/sln` trees only. Passing `--InitAllRepoItems` or `--InitRepoItems Readme` again into the same folder is Exit 73 (collision); `--force` would overwrite. `--InitRepoItems SrcGlobalJson` is a separate first-create opt-in (`src/global.json`, default off).
+After the first call in the default combo the repo root has `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.gitignore`, and `LICENSE`. Each app gets `Properties/version.json`. Calls 2 and 3 add `src/prj` / `src/sln` trees only. Passing `--InitAllRepoItems` or `--InitRepoItems Readme` again into the same folder is Exit 73 (collision); `--force` would overwrite. `--InitRepoItems SrcGlobalJson` is a separate first-create opt-in (`src/global.json`, default off).
 
 `--InitAllRepoItems` is the CLI first-create set (same five files as Visual Studio). It does **not** add `version.json` or `src/global.json`. `--InitRepoItems` picks individual files. Values are separated by **spaces**. Repeating `--InitRepoItems` per value also works. A quoted `Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense` string is **not** valid CLI input on current `dotnet new`; `|` is only the host default separator in `ide.host.json`.
 
 Subset on the first create (checkpoint only, no landing README):
 
 ```powershell
-dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.ConsoleApp1" --output "<repo>" --InitRepoItems AIReleaseCheckpoint
+dotnet new multiwpfrepo-coree --Author "abcd" --name "Organization.Domain.WpfApp1" --output "<repo>" --InitRepoItems AIReleaseCheckpoint
 ```
 
 **Visual Studio:** first create uses the `ide.host.json` default (same five root files as `--InitAllRepoItems`; `src/global.json` unchecked). A second app in the IDE cannot omit the group: choose **None**. Later apps in the same folder are otherwise the CLI path above. Why the two hosts differ is in **CLI ↔ Visual Studio** below.
@@ -149,7 +148,7 @@ A combo repository is two or more `dotnet new` calls into the **same** `--output
 Other host-only switch behavior (not root files, same class of reason):
 
 - **`PlaceSolution` `RepoRoot`:** CLI renames to `{Name}.slnx` at repo root. Visual Studio keeps `{Name}.generated.slnx` so it does not overwrite the `{Name}.slnx` the IDE always writes. `SlnFolder` and `BesideCsproj` rename on both hosts (paths are not the VS root file). Post-actions that open the handbook Readme and tell you to close/reopen are `HostIdentifier == "vs"` only. `primaryOutputs` index 0 is the surviving handbook path (`src/sln/{Name}/Readme.md` or `src/prj/{Name}/Readme.md` when `BesideCsproj`).
-- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `DocumentationTemplate` / `TestCoverage` / `AnalysisMode` / `NuGetAuditHighCriticalAsErrors` / `DirectoryMsBuildFiles` / `DotNetToolManifest`:** same defaults on both hosts (`NerdbankGitVersioning` `Project`, `DocumentationTemplate` empty/`None`, `TestCoverage` `Coverlet`, `AnalysisMode` `Recommended`, `ProjectEditorGlobalConfig` `Strict`, `NuGetAuditHighCriticalAsErrors` `true`, `DirectoryMsBuildFiles` `false`, `DotNetToolManifest` `true`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later app can pass `--NerdbankGitVersioning Repo` again. `--DocumentationTemplate Package` is safe on later apps; `--DocumentationTemplate Repository` on a later app is Exit 73.
+- **`CSharpProjectOptions` / TFMs / `ProjectLicense` / `NerdbankGitVersioning` / `DocumentationTemplate` / `TestCoverage` / `AnalysisMode` / `NuGetAuditHighCriticalAsErrors` / `DirectoryMsBuildFiles` / `DotNetToolManifest`:** same defaults on both hosts (`NerdbankGitVersioning` `Project`, `DocumentationTemplate` empty/`None`, `TestCoverage` `Coverlet`, `AnalysisMode` `Recommended`, `ProjectEditorGlobalConfig` `Strict`, `NuGetAuditHighCriticalAsErrors` `true`, `DirectoryMsBuildFiles` `false`, `DotNetToolManifest` `true`). `--NerdbankGitVersioning Repo` does not write the root file by itself (`WriteRepoVersionJson` does), so a later app can pass `--NerdbankGitVersioning Repo` again. `--DocumentationTemplate Repository` on a later app is Exit 73.
 - **`Author`:** required on both. CLI `--Author`.
 
 ## `InitRepoItems` / `InitAllRepoItems`
@@ -170,19 +169,19 @@ This template does not stamp `ChoosingPackageBoundaries.md` (library-repo decisi
 
 ## AI-supported release checkpoint
 
-The generated product still contains placeholders that can only become true **after implementation** — especially empty `<Description>` and, when `PackAsNuGetTool` is on, empty `src/prj/*/Properties/NugetAssets/Readme.md`. A human or an LLM can fill those from the code. That is a **gate before the first publish**, not a generate-time script and not standing agent rules.
+The generated product still contains placeholders that can only become true **after implementation** — especially empty `<Description>`. A human or an LLM can fill those from the code. That is a **gate before the first publish**, not a generate-time script and not standing agent rules.
 
 **Not:** run-once / post-bootstrap right after `dotnet new`. The app may still be `Program`.  
 **Not:** a forever queue in the GitHub `README.md`. That file is the customer landing page.  
 **Not:** a template-stamped `AGENTS.md`. That would collide with the consumer’s own agent file and would outlive the scaffold.
 
-**Yes:** one repo-root file, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, stamped only when `InitAllRepoItems` is on or `InitRepoItems` includes `AIReleaseCheckpoint` (first create). `TEMPLATE-` marks it as delete-me scaffold; `AI` matches the VS choice. It is a **Template-Checkpoint-Release**: close template residue, then **self-dissolve**. After that, new chats read the libraries and the real NuGet docs. The file is written for a person; an assistant can fill it from the product. It is not a prompt and not standing agent rules.
+**Yes:** one repo-root file, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, stamped only when `InitAllRepoItems` is on or `InitRepoItems` includes `AIReleaseCheckpoint` (first create). `TEMPLATE-` marks it as delete-me scaffold; `AI` matches the VS choice. It is a **Template-Checkpoint-Release**: close template residue, then **self-dissolve**. After that, new chats read the apps and the real docs. The file is written for a person; an assistant can fill it from the product. It is not a prompt and not standing agent rules.
 
-Why the repo root, not `src/sln/{Name}/`: the first look at a combo repo is the customer surface; one fat checklist can say “update every NuGet readme in this repository” without a per-app marker. Apps added later are in scope until the file is deleted.
+Why the repo root, not `src/sln/{Name}/`: the first look at a combo repo is the customer surface; one fat checklist can say “fill every app description in this repository” without a per-app marker. Apps added later are in scope until the file is deleted.
 
 The VS label **AI-supported release checkpoint** names the *job*, not a recurring agent run. The switch does not start a model. Someone later (person or LLM) works that file to 100% observable items, then deletes it. “AI-supported” belongs in the choice display name; it must not read as “edit with AI on every create.”
 
-The generated file is the contract (ten numbered, checkable items). Do not put free-form “run this shell” instructions in it (prompt injection). Do not mix standing style rules into it — those must not self-delete.
+The generated file is the contract (nine numbered, checkable items). Do not put free-form “run this shell” instructions in it (prompt injection). Do not mix standing style rules into it — those must not self-delete.
 
 ## `CSharpProjectOptions`
 
@@ -218,22 +217,18 @@ Analog of `dotnet new console --use-program-main` (explicit `Program` + `args`),
 
 ## `ProjectLicense`
 
-Single choice (dropdown, not a checkbox group). Project + (when packing) NuGet. Repository-root `LICENSE` is `InitRepoItems` choice `RepoLicense` (UI: **LICENSE file at repository root**) or `--InitAllRepoItems`, not a second VS bool.
+Single choice (dropdown, not a checkbox group). These apps are publish-only (not a NuGet tool). Repository-root `LICENSE` is `InitRepoItems` choice `RepoLicense` (UI: **LICENSE file at repository root**) or `--InitAllRepoItems`, not a second VS bool.
 
-When **`PackAsNuGetTool` is off**, this dropdown only feeds repository-root `LICENSE` (`WriteRepoLicense`). No `Properties/NugetAssets/License.txt` and no `PackageLicenseExpression` / `PackageLicenseFile`.
+This dropdown only feeds repository-root `LICENSE` (`WriteRepoLicense`). No `Properties/NugetAssets/License.txt` and no `PackageLicenseExpression` / `PackageLicenseFile`.
 
-When **on**:
+| Choice | Root `LICENSE` when `WriteRepoLicense` |
+| --- | --- |
+| `MIT` (CLI/VS default) | MIT |
+| `BSD3Clause` | BSD 3-Clause |
+| `Apache2` | Apache 2.0 |
+| `Custom` | copyright notice only |
 
-| Choice | `Properties/NugetAssets/License.txt` | NuGet |
-| --- | --- | --- |
-| `MIT` (CLI/VS default) | MIT text on disk, not packed | `PackageLicenseExpression` `MIT` |
-| `BSD3Clause` | BSD 3-Clause text on disk, not packed | `PackageLicenseExpression` `BSD-3-Clause` |
-| `Apache2` | Apache 2.0 text on disk, not packed | `PackageLicenseExpression` `Apache-2.0` |
-| `Custom` | copyright notice only; packed | `PackageLicenseFile` `License.txt` |
-
-Do not set `PackageLicenseFile` together with an expression (NU5033). The glob excludes `License.txt` except for `Custom`.
-
-Seeds live under `TemplateAssets/Licenses/` (`MIT.txt`, `BSD3Clause.txt`, `Apache2.txt`, `Custom.txt`). Extra sources copy the chosen seed to `src/prj/{Name}/Properties/NugetAssets/License.txt` only when `PackAsNuGetTool` is on, and to repository-root `LICENSE` only when `WriteRepoLicense` is true. Do not leave a mega-file under `src/prj/__SourceName__/Properties/NugetAssets/`. DocShell extra sources must `exclude` `Licenses/**` (same as `CodeStyle/**` and `Versioning/**`). Each seed may use a shallow `//#if (PackageCopyrightHolderIsSet)` / `//#else` / `//#endif`. Do not put `ProjectLicense` `#if` in the seed: extra sources pick the file.
+Seeds live under `TemplateAssets/Licenses/` (`MIT.txt`, `BSD3Clause.txt`, `Apache2.txt`, `Custom.txt`). Extra sources copy the chosen seed to repository-root `LICENSE` only when `WriteRepoLicense` is true. DocShell extra sources must `exclude` `Licenses/**` (same as `CodeStyle/**` and `Versioning/**`). Each seed may use a shallow `//#if (PackageCopyrightHolderIsSet)` / `//#else` / `//#endif`. Do not put `ProjectLicense` `#if` in the seed: extra sources pick the file.
 
 `RepoLicense` is off on CLI unless listed in `--InitRepoItems` or `--InitAllRepoItems` is on. Visual Studio includes it in the first-create default. `WriteRepoLicense` is `(InitRepoItems != None) && (InitAllRepoItems || InitRepoItems == RepoLicense)`. First create only; a later app with `RepoLicense` or `InitAllRepoItems` selected collides (Exit 73), same as root README. `None` excludes it even if leftover checks remain.
 
@@ -243,12 +238,12 @@ Single choice (dropdown), same shape as `ProjectLicense`. CLI long name is **`--
 
 ```powershell
 # combo gut
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --NerdbankGitVersioning Repo
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --NerdbankGitVersioning Repo
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json again)
-# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
 
 Call 1: five root files plus root `version.json`, app wire is Nerdbank repo. Call 2: `--NerdbankGitVersioning Repo`, **no** Init, **no** second root stamp (Exit 0). Omit `--NerdbankGitVersioning` for **Project** (`Properties/version.json`). `--NerdbankGitVersioning Off` for the VersionPrefix group.
@@ -319,12 +314,12 @@ Seeds live under `TemplateAssets/Versioning/`. `Project/version.json` uses `path
 
 ```powershell
 # combo gut
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md again)
-# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems
+# dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+# dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems
 ```
 
 | Call | InitAll | `NerdbankGitVersioning` | Root `version.json` | VersionPrefix |
@@ -336,12 +331,12 @@ dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
 
 ```powershell
 # combo gut
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --NerdbankGitVersioning Repo
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --NerdbankGitVersioning Repo
 
 # combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json again)
-# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
-# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
+# dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
 
 | Call | InitAll | `NerdbankGitVersioning` | Root `version.json` | VersionPrefix |
@@ -353,8 +348,8 @@ dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
 
 ```powershell
 # combo gut — same as the default combo; `--NerdbankGitVersioning Project` is optional
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out
 ```
 
 ### Combos that look successful but are incomplete or mixed
@@ -414,49 +409,42 @@ SDK restore already runs NuGetAudit (NU1901–NU1904 warnings). This switch only
 Turn the switch off for an EOL or backport graph (for example net8 after support ends) that cannot be cleaned without dropping a TFM. Do not put this on tests: MSTest/Coverlet CVEs must not fail the nupkg restore.
 
 ```powershell
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --NuGetAuditHighCriticalAsErrors false
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --NuGetAuditHighCriticalAsErrors false
 ```
 
 ## `DocumentationTemplate`
 
-Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, two destinations. Extra sources copy that file only (`exclude` of `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, and `ProgramSamples/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
+Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, repository-root `docs/` only (no package-docs destination: these apps are not a NuGet tool). Extra sources copy that file only (`exclude` of `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, and `ProgramSamples/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
 
 | Choice | Path | When | Combo later app |
 | --- | --- | --- | --- |
-| `Package` | `src/prj/{Name}/Properties/NugetAssets/docs/DocShell.html` | every create **and** `PackAsNuGetTool` (`WritePackageDocTemplate`) | pass `Package` again (no-op if pack-as-tool is off) |
 | `Repository` | `docs/DocShell.html` | first create | omit `Repository` (Exit 73 if stamped again) |
 | `None` | nothing | — | wins over the other choices |
 
 ```powershell
-# combo gut
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --DocumentationTemplate Package Repository
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --DocumentationTemplate Package
-
 # combo error (Exit 73) — Call 2 stamps docs/DocShell.html again
-# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --DocumentationTemplate Repository
-# dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --DocumentationTemplate Repository
+# dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --DocumentationTemplate Repository
+# dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --DocumentationTemplate Repository
 ```
 
-`Properties/NugetAssets/docs` is packed with the nupkg (`PackagePath` empty, so `docs/` inside the package, not `Properties/`). Repo-root `docs/` is not packed. `WritePackageDocTemplate` is `(PackAsNuGetTool) && Package && not None`. The checkpoint infers package vs repository documentation from `Properties/NugetAssets/docs` vs repo-root `docs/`; it does not name this switch.
+Repo-root `docs/` is not packed. `WriteRepoDocTemplate` is `Repository` and not `None`. The checkpoint infers repository documentation from repo-root `docs/`; it does not name this switch.
 
 ## Project roles and Git ignores
 
-The console app is publishable. `PackAsNuGetTool` (bool, default **true**) is the additional NuGet-tool pack. On: `IsPackable` and `PackAsTool` true; `ToolCommandName` is `__SourceName__` with `Condition="'$(ToolCommandName)' == ''"` so the csproj line (or `-p:ToolCommandName`) is the override; NugetAssets files and pack ItemGroup; `EnablePackageValidation`. Off (`--PackAsNuGetTool false`): `IsPackable` false, `PackAsTool` false, no `ToolCommandName`, no NuGet-only csproj properties, no `Properties/NugetAssets/` (primary exclude plus license extra sources off). Authors, Company, Copyright, and Description stay (assembly). Do not add a wizard string for the command. `IsPublishable` is `true` so `PublishDefaultFramework` runs on bare `dotnet publish`. `Properties/Build/` is MSBuild (`ImportSdkTargets` last). `Properties/NugetAssets/` is nupkg assets (readme, icon, notes, optional `docs/`). Both folders are on disk under `Properties/` so Explorer and Solution Explorer match; they are not source. Do not keep them at the project root and `Link` them. `.project.editor.globalconfig`, `.config/dotnet-tools.json`, and `Directory.Build.*` stay next to the csproj. `Properties/AssemblyInfo.cs` grants `InternalsVisibleTo` the test assembly (`__SourceName__.Tests`) and the optional benchmark (`__SourceName__.Benchmark`). The entry point is `internal` (`Program`); tests and benchmark call `Main` as a method. The test project’s root `AssemblyInfo.cs` is only MSTest `Parallelize`. Tests and the optional BenchmarkDotNet executable explicitly set `IsPackable` and `IsPublishable` to `false`, including when automation calls each `.csproj` directly. The benchmark keeps one target framework (the highest selected) and runs with `dotnet run -c Release`. Versioning default is Nerdbank **Project** (`Properties/version.json`). Tests and benchmark are not packable. **`--NerdbankGitVersioning`** `Off` is VersionPrefix; `Repo` is the shared root file.
+The app is publishable, not a NuGet tool. Target frameworks are Windows TFMs (`net8.0-windows`, `net9.0-windows`, `net10.0-windows`; default `net8.0-windows` and `net10.0-windows`). Tests use the same `TargetFrameworks` list; the optional benchmark uses the highest selected value as `TargetFramework`. Publish RID is fixed `win-x64` (no wizard, no `--RuntimeIdentifier`, no x86). Restore and build stay RID-less. `IsPackable` is `false`, `PackAsTool` is `false`, no `ToolCommandName`, no NuGet-only csproj properties, no `Properties/NugetAssets/` (primary exclude). Authors, Company, Copyright, and Description stay (assembly). `IsPublishable` is `true` so `PublishDefaultFramework` runs on bare `dotnet publish`. `Properties/Build/` is MSBuild (`ImportSdkTargets` last). `.project.editor.globalconfig`, `.config/dotnet-tools.json`, and `Directory.Build.*` stay next to the csproj. `Properties/AssemblyInfo.cs` grants `InternalsVisibleTo` the test assembly (`__SourceName__.Tests`) and the optional benchmark (`__SourceName__.Benchmark`). The entry point is `internal` (`Program`); tests and benchmark call `Main` as a method. The test project’s root `AssemblyInfo.cs` is only MSTest `Parallelize`. Tests and the optional BenchmarkDotNet executable explicitly set `IsPackable` and `IsPublishable` to `false`, including when automation calls each `.csproj` directly. The benchmark keeps one target framework (the highest selected) and runs with `dotnet run -c Release`. Versioning default is Nerdbank **Project** (`Properties/version.json`). Tests and benchmark are not packable. **`--NerdbankGitVersioning`** `Off` is VersionPrefix; `Repo` is the shared root file.
 
-**Test project layout.** Mini-scopes in this order: general TFMs, language/debug (from `CSharpProjectOptions`), packaging, test configuration (`TestTfmsInParallel` + MSTest logger), Coverlet `#if` block, ReportGenerator `#if` block, NugetReport + `WriteNugetReport`, `.gitignore` hide, `ProjectReference`, then **External dependencies** `PackageReference`s last. Coverage is **`--TestCoverage`**: `Coverlet` (default), `CoverletAndReport`, `None`. Do not restore independent Coverlet/ReportGenerator bools: ReportGenerator consumes `@(CoverletReport)`. Coverlet is `coverlet.msbuild` + `CollectCoverage=true`; that **does** run on `dotnet test` (VSTest path, SDK 10), including Linux/WSL (`dotnet` ships MSBuild). The Coverlet `#if` also writes `Include` `[__SourceName__]*` (sourceName → the console app assembly only) and `Threshold` `100` / `line,branch,method` / `total`. Those are generate-time properties, not wizard fields: Visual Studio cannot show extra inputs only when Coverlet is selected. `--TestCoverage None` omits the whole PropertyGroup. Lower the threshold in the test csproj when 100% is not yet the gate. The scaffold `Program.Main` is covered so a first `dotnet test` still passes. Report/logger/NugetReport paths use `$([MSBuild]::NormalizeDirectory(...))` so Linux does not create a folder named `ReportGeneratorOutput\net10.0`.
+**Test project layout.** Mini-scopes in this order: general TFMs, language/debug (from `CSharpProjectOptions`), packaging, test configuration (`TestTfmsInParallel` + MSTest logger), Coverlet `#if` block, ReportGenerator `#if` block, NugetReport + `WriteNugetReport`, `.gitignore` hide, `ProjectReference`, then **External dependencies** `PackageReference`s last. Coverage is **`--TestCoverage`**: `Coverlet` (default), `CoverletAndReport`, `None`. Do not restore independent Coverlet/ReportGenerator bools: ReportGenerator consumes `@(CoverletReport)`. Coverlet is `coverlet.msbuild` + `CollectCoverage=true`; that **does** run on `dotnet test` (VSTest path, SDK 10) on Windows (`dotnet` ships MSBuild). The Coverlet `#if` also writes `Include` `[__SourceName__]*` (sourceName → the console app assembly only) and `Threshold` `100` / `line,branch,method` / `total`. Those are generate-time properties, not wizard fields: Visual Studio cannot show extra inputs only when Coverlet is selected. `--TestCoverage None` omits the whole PropertyGroup. Lower the threshold in the test csproj when 100% is not yet the gate. The scaffold `Program.Main` is covered so a first `dotnet test` still passes. Report/logger/NugetReport paths use `$([MSBuild]::NormalizeDirectory(...))` so a backslash path does not create a folder named `ReportGeneratorOutput\net10.0-windows`.
 
-**Why `PublishDefaultFramework` exists.** When `IsPublishable` is `true` (this template's default), generated apps are used as `dotnet publish` with no `-f` and no extra properties. Publish must write one default TFM to `bin/Publish`. The SDK does **not** do that for multi-targeting: `Publish` is NETSDK1129 unless the caller passes a framework. The dispatch is that default (highest selected TFM, `__TargetFramework__`). Restore, build, test, pack, and `ProjectReference` stay on the stock SDK. Pack as a NuGet tool is `--PackAsNuGetTool` (default on; `--PackAsNuGetTool false` opts out).
+**Why `PublishDefaultFramework` exists.** When `IsPublishable` is `true` (this template's default), generated apps are used as `dotnet publish` with no `-f` and no extra properties. Publish must write one default TFM to `bin/Publish`. The SDK does **not** do that for multi-targeting: `Publish` is NETSDK1129 unless the caller passes a framework. The dispatch is that default (highest selected TFM, `__TargetFramework__`). Restore, build, test, pack, and `ProjectReference` stay on the stock SDK. These apps are not packed as a NuGet tool.
 
-Do not put `TargetFramework` next to `TargetFrameworks` to avoid `-f`. That was the previous approach: MSBuild saw a single TFM, pack needed `BuildForPack`, and a `net8.0` consumer could not reference the project. `_IsPublishing` on `TargetFramework` still fails when that consumer publishes (the flag is global).
+Do not put `TargetFramework` next to `TargetFrameworks` to avoid `-f`. That was the previous approach: MSBuild saw a single TFM, pack needed `BuildForPack`, and a `net8.0-windows` consumer could not reference the project. `_IsPublishing` on `TargetFramework` still fails when that consumer publishes (the flag is global).
 
-Implementation (do not “simplify” into one always-imported file or back to `<Project Sdk="...">`): `Properties/Build/ImportSdkTargets.targets` always closes `Sdk.targets`; `PublishDefaultFramework.targets` loads only when `IsCrossTargetingBuild` is true. **`ImportSdkTargets` must be the last import in the console app csproj.** That file *is* `Sdk.targets` plus the outer publish dispatch. The SDK reads properties and items while it loads (`EnforceCodeStyleInBuild`, `GlobalAnalyzerConfigFiles`, `AnalysisMode`, `EnablePackageValidation`, `WarningsAsErrors`, publish). Anything after that line is after the SDK and is ignored for those. `Project Sdk="..."` would append `Sdk.targets` after this file and overwrite the Publish override. `SourceControlState.targets` is a `BeforeTargets` hook on `GenerateAssemblyInfo` (SDK 8+ Source Link); it can sit just above the SDK close. `PublishRelease` keeps a direct project `dotnet publish` on Release. Tests may keep `SetTargetFramework`; external consumers must not need it. `<!--#if` in `.targets` is generate-time (`**/*.targets` in `specialCustomOperations`).
+Implementation (do not “simplify” into one always-imported file or back to `<Project Sdk="...">`): `Properties/Build/ImportSdkTargets.targets` always closes `Sdk.targets`; `PublishDefaultFramework.targets` loads only when `IsCrossTargetingBuild` is true. **`ImportSdkTargets` must be the last import in the console app csproj.** That file *is* `Sdk.targets` plus the outer publish dispatch. The SDK reads properties and items while it loads (`EnforceCodeStyleInBuild`, `GlobalAnalyzerConfigFiles`, `AnalysisMode`, `WarningsAsErrors`, publish). Anything after that line is after the SDK and is ignored for those. `Project Sdk="..."` would append `Sdk.targets` after this file and overwrite the Publish override. `SourceControlState.targets` is a `BeforeTargets` hook on `GenerateAssemblyInfo` (SDK 8+ Source Link); it can sit just above the SDK close. `PublishRelease` keeps a direct project `dotnet publish` on Release. Tests may keep `SetTargetFramework`; external consumers must not need it. `<!--#if` in `.targets` is generate-time (`**/*.targets` in `specialCustomOperations`).
 
 All three project files remove `.gitignore` from their `None` items so it stays on disk without appearing as a project item. The test ignore also covers generated `NugetReport/` output.
 
-When `PackAsNuGetTool` is on, the console app sets `EnablePackageValidation` (no extra wizard). That is TFM/runtime consistency on `dotnet pack`, not a baseline against nuget.org. Do not stamp `PackageValidationBaselineVersion` at generate; after the first nuget.org publish the consumer sets it to that version. Tests and benchmark are not packable.
-
-With `PlaceSolution` `SlnFolder` (default), each `src/sln/{Name}/` gets its own `.gitignore` for `.vs/` next to that app's `.slnx` and handbook `Readme.md`. `RepoRoot` still writes `src/sln/{Name}/Readme.md` as notes (no nested `.gitignore`); delete that folder if you do not need it. `BesideCsproj` writes the `.slnx` and handbook next to the packable csproj and does **not** create `src/sln/{Name}/` (`src/prj/{Name}/.gitignore` already ignores `.vs/`). Repository-root `.gitignore` is `InitRepoItems` `GitIgnore` / `--InitAllRepoItems` (first create only). Later apps omit Init and do not overwrite it. If root ignore is off, the `RepoRoot` variant and Visual Studio's extra root `.vs/` stay the owner's problem.
+With `PlaceSolution` `SlnFolder` (default), each `src/sln/{Name}/` gets its own `.gitignore` for `.vs/` next to that app's `.slnx` and handbook `Readme.md`. `RepoRoot` still writes `src/sln/{Name}/Readme.md` as notes (no nested `.gitignore`); delete that folder if you do not need it. `BesideCsproj` writes the `.slnx` and handbook next to the app csproj and does **not** create `src/sln/{Name}/` (`src/prj/{Name}/.gitignore` already ignores `.vs/`). Repository-root `.gitignore` is `InitRepoItems` `GitIgnore` / `--InitAllRepoItems` (first create only). Later apps omit Init and do not overwrite it. If root ignore is off, the `RepoRoot` variant and Visual Studio's extra root `.vs/` stay the owner's problem.
 
 ## `DirectoryMsBuildFiles`
 
@@ -464,11 +452,11 @@ App + this app's `.slnx` only. Bool, default **false**. UI label **Empty Directo
 
 Seeds live under `TemplateAssets/DirectoryMsBuild/`. Extra sources copy `Directory.Build.props` / `.targets` next to the console app csproj, and `Directory.Solution.props` / `.targets` next to this app's `.slnx` (`src/sln/{Name}/` for `SlnFolder`, `src/prj/{Name}/` for `BesideCsproj`, repo root for `RepoRoot` — later app then collides, same as stacking `.slnx` files). DocShell extra sources must `exclude` `Versioning/**` and `DirectoryMsBuild/**`.
 
-The files are almost empty `<Project>` stubs with comments. MSBuild auto-imports them from those directories. Do not move `ImportSdkTargets` / analyzer config / pack validation into them. The template does not `#if` properties into these files vs the csproj (possible, ugly). The console app csproj `None Include`s the two `Directory.Build.*` files with `Link` under `Properties\` (Solution Explorer only). Do **not** move the files into `Properties/` on disk: auto-import follows the directory of the file, same as `.project.editor.globalconfig`. `Directory.Solution.*` stay beside the `.slnx`. When `PlaceSolution` is `BesideCsproj`, the console app csproj also `Link`s those two solution files (same folder as the csproj) so they do not look like stray project items.
+The files are almost empty `<Project>` stubs with comments. MSBuild auto-imports them from those directories. Do not move `ImportSdkTargets` / analyzer config into them. The template does not `#if` properties into these files vs the csproj (possible, ugly). The console app csproj `None Include`s the two `Directory.Build.*` files with `Link` under `Properties\` (Solution Explorer only). Do **not** move the files into `Properties/` on disk: auto-import follows the directory of the file, same as `.project.editor.globalconfig`. `Directory.Solution.*` stay beside the `.slnx`. When `PlaceSolution` is `BesideCsproj`, the console app csproj also `Link`s those two solution files (same folder as the csproj) so they do not look like stray project items.
 
 ```powershell
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --DirectoryMsBuildFiles
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --DirectoryMsBuildFiles
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --DirectoryMsBuildFiles
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --DirectoryMsBuildFiles
 ```
 
 ## `DotNetToolManifest`
@@ -478,25 +466,25 @@ App project only. Bool, default **true**. UI label **Empty local dotnet-tools.js
 The console app csproj `None Include`s the file with `Link` under `Properties\` (Solution Explorer only). Disk path stays `.config/`.
 
 ```powershell
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
-dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --DotNetToolManifest false
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --DotNetToolManifest false
 ```
 
 ## Other symbols worth not breaking
 
-- **`ProjectLicense` / `RepoLicense` / `InitAllRepoItems` / `GitIgnore` / `SrcGlobalJson`**: see section above. Default MIT. SPDX expression for standards; `PackageLicenseFile` only for `Custom`. Root `LICENSE` is the `RepoLicense` item or the CLI all-set. Root `.gitignore` is `GitIgnore` in that same first-create set. This template does not stamp `ChoosingPackageBoundaries.md`. `src/global.json` is `SrcGlobalJson`: opt-in, default off, not in `--InitAllRepoItems`.
+- **`ProjectLicense` / `RepoLicense` / `InitAllRepoItems` / `GitIgnore` / `SrcGlobalJson`**: see section above. Default MIT. Root `LICENSE` is the `RepoLicense` item or the CLI all-set (no package license metadata). Root `.gitignore` is `GitIgnore` in that same first-create set. This template does not stamp `ChoosingPackageBoundaries.md`. `src/global.json` is `SrcGlobalJson`: opt-in, default off, not in `--InitAllRepoItems`.
 - **`NerdbankGitVersioning` / `WriteRepoVersionJson`**: see section above. Default `Project`. Root `version.json` is first-create only (`Repo` plus Init).
 - **`CSharpProjectOptions`**: see section above. Do not split back into per-property dropdowns.
 - **`ProjectEditorGlobalConfig`**: see section above. Default `Strict`. `Default` is suggestions-only. Seeds in `TemplateAssets/CodeStyle/`; generated disk name stays `.project.editor.globalconfig`. Csproj wire-up on the console app only, before `ImportSdkTargets`.
 - **`AnalysisMode`**: see section above. Default `Recommended`. App only. CA warnings, not build errors.
 - **`NuGetAuditHighCriticalAsErrors`**: see section above. Default `true`. App only. NU1903/NU1904 as restore errors. Off for EOL/backport graphs.
-- **`DocumentationTemplate` / `WritePackageDocTemplate` / `WriteRepoDocTemplate`**: see section above. Default empty/`None`. Seed only; not the vendored site.
-- **`PlaceSolution`**: single choice, default `SlnFolder` → `src/sln/__SourceName__/__SourceName__.slnx` plus handbook `Readme.md` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). `RepoRoot` on CLI renames to a root `.slnx`; `RepoRoot` in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS’s conventional root `.slnx`. `RepoRoot` still writes `src/sln/{Name}/Readme.md` as notes and stacks every app’s `.slnx` in one directory. `BesideCsproj` writes `src/prj/{Name}/{Name}.slnx` and the handbook next to the packable csproj and does not create `src/sln/{Name}/`. The `.slnx` virtual folder `/sln/{Name}/` is omitted for `BesideCsproj`; `Readme.md` is a solution item beside the file.
+- **`DocumentationTemplate` / `WriteRepoDocTemplate`**: see section above. Default empty/`None`. Repository `docs/` only. Seed only; not the vendored site.
+- **`PlaceSolution`**: single choice, default `SlnFolder` → `src/sln/__SourceName__/__SourceName__.slnx` plus handbook `Readme.md` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). `RepoRoot` on CLI renames to a root `.slnx`; `RepoRoot` in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS’s conventional root `.slnx`. `RepoRoot` still writes `src/sln/{Name}/Readme.md` as notes and stacks every app’s `.slnx` in one directory. `BesideCsproj` writes `src/prj/{Name}/{Name}.slnx` and the handbook next to the app csproj and does not create `src/sln/{Name}/`. The `.slnx` virtual folder `/sln/{Name}/` is omitted for `BesideCsproj`; `Readme.md` is a solution item beside the file.
 - **`HostIdentifier` / `IsCliHost`**: bind + computed; used for that rename and for VS-only post-actions.
 - **`Author`**: required. CLI `--Author`.
-- **`<Description>`**: not a template parameter. Generate leaves an empty CDATA block for multiline gallery text; the checkpoint fills it (assistant-supported).
-- **`PackAsNuGetTool`**: bool, default `true`. UI **Additional pack as NuGet tool**. CLI `--PackAsNuGetTool`. Omit the switch → on. `--PackAsNuGetTool false` is publish-only (no NugetAssets). Combo-safe. On: `IsPackable` / `PackAsTool` / `ToolCommandName`, NuGet-only properties, `Properties/NugetAssets/`, pack ItemGroup, `EnablePackageValidation`. Authors/Company/Copyright/Description always. Not `DotNetToolManifest` (local empty tools.json).
-- **`EnablePackageValidation`**: not a symbol. Written only when `PackAsNuGetTool` is on (before `ImportSdkTargets`). No `PackageValidationBaselineVersion` at generate.
+- **`<Description>`**: not a template parameter. Generate leaves an empty CDATA block for multiline text; the checkpoint fills it (assistant-supported). Distribution is `dotnet publish`, not a NuGet tool nupkg.
+- **`TargetFrameworks`**: Windows TFMs only (`net8.0-windows` / `net9.0-windows` / `net10.0-windows`). Default `net8.0-windows|net10.0-windows`. Joined into `__TargetFrameworks__` on the app and tests; highest selected is `__TargetFramework__` for benchmark and bare publish. Do not restore portable `net8.0` choices here.
+- **Publish RID**: not a symbol. Always `win-x64` while `_IsPublishing`. No VS/CLI picker. Tests and benchmark stay RID-less.
 - **`TestCoverage`**: single choice, default `Coverlet`. Replaces the two independent Coverlet/ReportGenerator bools. Coverage stats on `dotnet test` are opt-out; ReportGenerator is opt-in (`CoverletAndReport`). There is no Report-without-Coverlet. `--TestCoverage None` drops Coverlet too. Computed `CoverletMSBuild` / `ReportGenerator` drive the test csproj and sln-readme `#if`s.
 - **`DirectoryMsBuildFiles`**: see section above. Default `false`. Empty `Directory.Build.*` beside the console app and `Directory.Solution.*` beside this `.slnx`. No `Directory.Packages.props`.
 - **`DotNetToolManifest`**: see section above. Default `true`. Empty `src/prj/{Name}/.config/dotnet-tools.json`. `--DotNetToolManifest false` skips it.

@@ -2,23 +2,23 @@
   "$schema": "http://json.schemastore.org/template",
   "author": "Carsten Riedel",
   // Opts Visual Studio into category display in the New Project dialog
-  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "Console", "ConsoleApp", "NuGet", "Test", "Solution", "Repository", "Multi-project", "Coree" ],
-  "identity": "CoreeTemplatesProjectMultiConsoleAppRepository",
+  "classifications": [ "Common", "dotnet", "Windows", "WPF", "Test", "Solution", "Repository", "Multi-project", "Coree" ],
+  "identity": "CoreeTemplatesProjectMultiWpfAppRepository",
   // Displayname is used in the New Project dialog and in the dotnet new list output.
-  "name": ".NET multi-console repository",
-  "description": "Repository of one or more independently publishable C# console apps. Tests and Coverlet coverage included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, and documentation template.",
-  "shortName": "multiconsolerepo-coree",
+  "name": ".NET multi-wpf repository",
+  "description": "Repository of one or more independently publishable C# WPF apps. Tests and Coverlet coverage included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, and documentation template.",
+  "shortName": "multiwpfrepo-coree",
   // Host metadata: libraries this template uses that the author does not own.
   // After create, CLI prints this URL. The markdown lives next to this file;
   // .template.config *.md is not packed and is not generated into the repo.
-  "thirdPartyNotices": "https://github.com/carsten-riedel/Coree.Template.Project/blob/main/src/prj/Coree.Template.Project/Templates/MultiConsoleAppRepository/.template.config/THIRD-PARTY-NOTICES.md",
+  "thirdPartyNotices": "https://github.com/carsten-riedel/Coree.Template.Project/blob/main/src/prj/Coree.Template.Project/Templates/MultiWpfAppRepository/.template.config/THIRD-PARTY-NOTICES.md",
   "tags": {
     "language": "C#",
     "type": "solution",
     // Opts Visual Studio into its solution-template UI instead of the project-template UI.
     "editorTreatAs": "solution"
   },
-  "defaultName": "Organization.Domain.ConsoleApp", // Organization.Domain.Functionality
+  "defaultName": "Organization.Domain.WpfApp", // Organization.Domain.Functionality
   "sourceName": "__SourceName__", // Folders, csproj, namespace. Replaced by --name.
   // Visual Studio creates the outer solution directory; true would add another name directory.
   "preferNameDirectory": false,
@@ -154,65 +154,33 @@
       "type": "computed",
       "value": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")"
     },
-    // User-selectable target frameworks. Multiple values are supported for multi-targeting.
+    // User-selectable Windows TFMs. Multiple values are supported for
+    // multi-targeting. App, tests, and benchmark all use these values
+    // (tests: TargetFrameworks; benchmark: highest as TargetFramework).
     "TargetFrameworks": {
       "type": "parameter",
-      "description": "The target framework for the project TargetFrameworks property.",
+      "description": "Windows target frameworks for the app, tests, and benchmark (netN.0-windows).",
       "datatype": "choice",
       "allowMultipleValues": true,
       "enableQuotelessLiterals": true,
       "choices": [
         {
-          "choice": "net8.0",
-          "description": "Target net8.0",
-          "displayName": ".NET 8.0"
+          "choice": "net8.0-windows",
+          "description": "Target net8.0-windows",
+          "displayName": ".NET 8.0 Windows"
         },
         {
-          "choice": "net9.0",
-          "description": "Target net9.0",
-          "displayName": ".NET 9.0"
+          "choice": "net9.0-windows",
+          "description": "Target net9.0-windows",
+          "displayName": ".NET 9.0 Windows"
         },
         {
-          "choice": "net10.0",
-          "description": "Target net10.0",
-          "displayName": ".NET 10.0"
+          "choice": "net10.0-windows",
+          "description": "Target net10.0-windows",
+          "displayName": ".NET 10.0 Windows"
         }
       ],
-      "defaultValue": "net8.0|net10.0"
-    },
-    // Publish-time only (_IsPublishing). Portable RIDs: Windows x64 default,
-    // linux-arm64 = Raspberry Pi 64-bit (preferred; linux-arm is 32-bit Pi),
-    // linux-x64 = glibc desktop/server, linux-musl-arm64 = Alpine/Docker ARM64.
-    "RuntimeIdentifier": {
-      "type": "parameter",
-      "description": "Runtime identifier used when publishing. Does not affect restore or build. Default Windows x64.",
-      "datatype": "choice",
-      "allowMultipleValues": false,
-      "enableQuotelessLiterals": true,
-      "displayName": "Publish runtime",
-      "choices": [
-        {
-          "choice": "win-x64",
-          "description": "Windows x64.",
-          "displayName": "Windows x64"
-        },
-        {
-          "choice": "linux-arm64",
-          "description": "Raspberry Pi 3+ with a 64-bit OS (preferred). 32-bit Raspberry Pi OS is linux-arm, not listed.",
-          "displayName": "Raspberry Pi (linux-arm64)"
-        },
-        {
-          "choice": "linux-x64",
-          "description": "Linux x64 glibc: Debian, Ubuntu, CentOS Stream, Fedora, and derivatives.",
-          "displayName": "Linux x64 (Debian, Ubuntu, CentOS, Fedora)"
-        },
-        {
-          "choice": "linux-musl-arm64",
-          "description": "Alpine Linux and musl-based Docker images on 64-bit Arm. Still a current portable RID.",
-          "displayName": "Linux arm64 musl (Alpine / Docker)"
-        }
-      ],
-      "defaultValue": "win-x64"
+      "defaultValue": "net8.0-windows|net10.0-windows"
     },
     // Publish-time only. Same named recipes as wpfapp-coree.
     "Publish": {
@@ -250,18 +218,6 @@
         }
       ],
       "defaultValue": "FrameworkIncludedSingleCompressed"
-    },
-    // Default on: IsPackable + PackAsTool; ToolCommandName is the project name
-    // with an empty Condition so the csproj line is the override point.
-    // Off (--PackAsNuGetTool false): publish stays the only distribution path.
-    // Assembly identity (Authors/Company/Copyright/Description) always.
-    // NuGet-only properties and Properties/NugetAssets/ only when on.
-    "PackAsNuGetTool": {
-      "type": "parameter",
-      "dataType": "bool",
-      "defaultValue": "true",
-      "description": "Additionally pack this console app as a NuGet tool (IsPackable and PackAsTool). Default on. Publish stays available. The command name is ToolCommandName in the csproj (project name, overridable). Writes Properties/NugetAssets and NuGet-only csproj properties. Authors, company, copyright, and description stay either way. Turn off for publish-only (no nupkg assets). Test and benchmark projects are not affected.",
-      "displayName": "Additional pack as NuGet tool"
     },
     // One multi-choice for C# / debug in the console app, tests, and
     // benchmark (VS combobox, like TFMs and InitRepoItems). Checked =
@@ -353,16 +309,16 @@
         "datatype": "string",
         "cases": [
           {
-            "condition": "(TargetFrameworks == \"net10.0\")",
-            "value": "net10.0"
+            "condition": "(TargetFrameworks == \"net10.0-windows\")",
+            "value": "net10.0-windows"
           },
           {
-            "condition": "(TargetFrameworks == \"net9.0\")",
-            "value": "net9.0"
+            "condition": "(TargetFrameworks == \"net9.0-windows\")",
+            "value": "net9.0-windows"
           },
           {
-            "condition": "(TargetFrameworks == \"net8.0\")",
-            "value": "net8.0"
+            "condition": "(TargetFrameworks == \"net8.0-windows\")",
+            "value": "net8.0-windows"
           }
         ]
       }
@@ -377,21 +333,21 @@
         "datatype": "string",
         "cases": [
           {
-            "condition": "(TargetFrameworks == \"net10.0\")",
+            "condition": "(TargetFrameworks == \"net10.0-windows\")",
             "value": "10.0.0"
           },
           {
-            "condition": "(TargetFrameworks == \"net9.0\")",
+            "condition": "(TargetFrameworks == \"net9.0-windows\")",
             "value": "9.0.0"
           },
           {
-            "condition": "(TargetFrameworks == \"net8.0\")",
+            "condition": "(TargetFrameworks == \"net8.0-windows\")",
             "value": "8.0.0"
           }
         ]
       }
     },
-    // Author / copyright placeholders (assembly; also NuGet when packing).
+    // Author / copyright placeholders (assembly identity).
     "Author": {
       "type": "parameter",
       "dataType": "string",
@@ -482,11 +438,11 @@
       "type": "computed",
       "value": "(InitRepoItems != \"None\") && (InitRepoItems == \"SrcGlobalJson\")"
     },
-    // Multi-choice. Default empty/None. Same DocShell.html seed, two
-    // destinations. Package is per app (no combo collision). Repository
-    // is repo-root docs/ and collides on a later app (Exit 73).
-    // Not part of InitAllRepoItems. Do not vendor the 25-file site here:
-    // bootstrap follows DocShell.html and takes the versions it pins then.
+    // Multi-choice. Default empty/None. Same DocShell.html seed.
+    // Repository is repo-root docs/ and collides on a later app (Exit 73).
+    // Not part of InitAllRepoItems. No package-docs destination: these apps
+    // are publish-only (no NuGet tool nupkg). Do not vendor the 25-file site
+    // here: bootstrap follows DocShell.html and takes the versions it pins then.
     "DocumentationTemplate": {
       "type": "parameter",
       "datatype": "choice",
@@ -494,7 +450,7 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "",
-      "description": "Optional offline documentation template (DocShell.html). Package writes it under this app's Properties/NugetAssets/docs (packed with the nupkg; requires Additional pack as NuGet tool). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
+      "description": "Optional offline documentation template (DocShell.html). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
       "displayName": "Documentation template",
       "choices": [
         {
@@ -503,57 +459,46 @@
           "displayName": "None"
         },
         {
-          "choice": "Package",
-          "description": "Add DocShell.html under this app's Properties/NugetAssets/docs. Requires Additional pack as NuGet tool. Every create; paths do not collide. Packed with the nupkg.",
-          "displayName": "NuGet package docs (Properties/NugetAssets/docs)"
-        },
-        {
           "choice": "Repository",
           "description": "Add DocShell.html under docs/ at the repository root. First create only; a later app in the same folder that selects this again is Exit 73.",
           "displayName": "Repository docs (docs/)"
         }
       ]
     },
-    "WritePackageDocTemplate": {
-      "type": "computed",
-      "value": "(PackAsNuGetTool) && (DocumentationTemplate == \"Package\") && (DocumentationTemplate != \"None\")"
-    },
     "WriteRepoDocTemplate": {
       "type": "computed",
       "value": "(DocumentationTemplate == \"Repository\") && (DocumentationTemplate != \"None\")"
     },
-    // Project / NuGet license. Single choice. MIT first and default.
-    // Standard licenses: PackageLicenseExpression; License.txt on disk only
-    // (not packed — NU5033 if combined with PackageLicenseFile).
-    // Custom: copyright-only License.txt packed as PackageLicenseFile.
-    // Repo root LICENSE is InitRepoItems RepoLicense or InitAllRepoItems, not this dropdown.
+    // Project license. Single choice. MIT first and default.
+    // Repo root LICENSE is InitRepoItems RepoLicense or InitAllRepoItems.
+    // These apps are publish-only (no NuGet tool nupkg / PackageLicenseExpression).
     "ProjectLicense": {
       "type": "parameter",
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "MIT",
-      "description": "License for the console app. Default MIT. When packing as a NuGet tool, standards set PackageLicenseExpression and Custom packs License.txt. The LICENSE file at repository root copies this license either way.",
+      "description": "License for the app. Default MIT. The LICENSE file at repository root copies this license when that first-create item is selected.",
       "displayName": "Project license",
       "choices": [
         {
           "choice": "MIT",
-          "description": "MIT. PackageLicenseExpression MIT. License.txt on disk only.",
+          "description": "MIT. Used for the repository-root LICENSE when that file is written.",
           "displayName": "MIT"
         },
         {
           "choice": "BSD3Clause",
-          "description": "BSD 3-Clause. PackageLicenseExpression BSD-3-Clause. License.txt on disk only.",
+          "description": "BSD 3-Clause. Used for the repository-root LICENSE when that file is written.",
           "displayName": "BSD 3-Clause"
         },
         {
           "choice": "Apache2",
-          "description": "Apache 2.0. PackageLicenseExpression Apache-2.0. License.txt on disk only.",
+          "description": "Apache 2.0. Used for the repository-root LICENSE when that file is written.",
           "displayName": "Apache 2.0"
         },
         {
           "choice": "Custom",
-          "description": "Copyright only (all rights reserved until you add terms). Writes License.txt and packs it as PackageLicenseFile.",
-          "displayName": "Custom (License.txt)"
+          "description": "Copyright only (all rights reserved until you add terms). Used for the repository-root LICENSE when that file is written.",
+          "displayName": "Custom"
         }
       ]
     },
@@ -867,7 +812,6 @@
           ]
         },
         {
-          "condition": "(PackAsNuGetTool == false)",
           "exclude": [
             "src/prj/__SourceName__/Properties/NugetAssets/**"
           ]
@@ -946,22 +890,6 @@
     },
     {
       "source": "./TemplateAssets/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/docs/",
-      "condition": "WritePackageDocTemplate",
-      "modifiers": [
-        {
-          "exclude": [
-            "Versioning/**",
-            "CodeStyle/**",
-            "Licenses/**",
-            "DirectoryMsBuild/**",
-            "ProgramSamples/**"
-          ]
-        }
-      ]
-    },
-    {
-      "source": "./TemplateAssets/",
       "target": "./docs/",
       "condition": "WriteRepoDocTemplate",
       "modifiers": [
@@ -1006,82 +934,6 @@
         {
           "rename": {
             ".project.editor.globalconfig.strict": ".project.editor.globalconfig"
-          }
-        }
-      ]
-    },
-    {
-      "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(PackAsNuGetTool && (ProjectLicense == \"MIT\"))",
-      "modifiers": [
-        {
-          "exclude": [
-            "BSD3Clause.txt",
-            "Apache2.txt",
-            "Custom.txt"
-          ]
-        },
-        {
-          "rename": {
-            "MIT.txt": "License.txt"
-          }
-        }
-      ]
-    },
-    {
-      "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(PackAsNuGetTool && (ProjectLicense == \"BSD3Clause\"))",
-      "modifiers": [
-        {
-          "exclude": [
-            "MIT.txt",
-            "Apache2.txt",
-            "Custom.txt"
-          ]
-        },
-        {
-          "rename": {
-            "BSD3Clause.txt": "License.txt"
-          }
-        }
-      ]
-    },
-    {
-      "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(PackAsNuGetTool && (ProjectLicense == \"Apache2\"))",
-      "modifiers": [
-        {
-          "exclude": [
-            "MIT.txt",
-            "BSD3Clause.txt",
-            "Custom.txt"
-          ]
-        },
-        {
-          "rename": {
-            "Apache2.txt": "License.txt"
-          }
-        }
-      ]
-    },
-    {
-      "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(PackAsNuGetTool && (ProjectLicense == \"Custom\"))",
-      "modifiers": [
-        {
-          "exclude": [
-            "MIT.txt",
-            "BSD3Clause.txt",
-            "Apache2.txt"
-          ]
-        },
-        {
-          "rename": {
-            "Custom.txt": "License.txt"
           }
         }
       ]

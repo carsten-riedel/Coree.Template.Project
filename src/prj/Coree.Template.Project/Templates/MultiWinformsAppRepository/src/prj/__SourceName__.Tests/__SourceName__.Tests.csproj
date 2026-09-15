@@ -3,6 +3,7 @@
   <!-- General build settings: defines the output type and target framework -->
   <PropertyGroup>
     <OutputType>Library</OutputType>
+    <!-- Same Windows TFMs as the app (ProjectReference). -->
     <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
   </PropertyGroup>
 

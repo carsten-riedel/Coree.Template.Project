@@ -20,9 +20,9 @@
     Do not "fix" publish by also setting TargetFramework on the csproj.
     That is the old approach. MSBuild then treats the app as a single
     TFM, pack needs a homemade pre-build of every framework (BuildForPack),
-    and a net8.0 consumer cannot reference a project that advertises
-    net8.0;net10.0. Gating TargetFramework on _IsPublishing looks smaller
-    but still breaks `dotnet publish` of that same net8.0 consumer, because
+    and a net8.0-windows consumer cannot reference a project that advertises
+    net8.0-windows;net10.0-windows. Gating TargetFramework on _IsPublishing looks smaller
+    but still breaks `dotnet publish` of that same net8.0-windows consumer, because
     the CLI sets _IsPublishing on the whole graph.
 
     This file is imported only on the outer evaluation (see

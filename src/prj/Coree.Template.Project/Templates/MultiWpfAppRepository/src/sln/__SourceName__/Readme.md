@@ -77,10 +77,6 @@ The `.slnx` and this readme live in this folder next to the console app. Open a 
 <!--#endif -->
 <!--#endif -->
 ```
-<!--#if (PackAsNuGetTool) -->
-
-Package metadata, license, icon, and release notes live in `src/prj/__SourceName__/Properties/NugetAssets/`.
-<!--#endif -->
 
 `--tl:off` is optional. Without it the CLI shows the compact terminal logger. Add `--tl:off` for the classic per-project log. The commands work either way.
 
@@ -101,7 +97,7 @@ dotnet test
 
 MSTest is explicitly configured for method-level parallel execution within one test assembly. Tests must therefore not share mutable global state.
 
-After a test run, the links below point to generated reports. Each selected target framework writes its own files (`net8.0`, `net10.0`, …).
+After a test run, the links below point to generated reports. Each selected target framework writes its own files (`net8.0-windows`, `net10.0-windows`, …).
 
 <!--#if (PlaceSolution == "SlnFolder") -->
 [Test results (trx)](../../prj/__SourceName__.Tests/MSTestResults/__SourceName__.Tests-__TargetFramework__.trx)
@@ -122,9 +118,9 @@ Coverlet measures only the console app (`[__SourceName__]*`) and fails `dotnet t
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
 <!--#if (PlaceSolution == "SlnFolder") -->
-ReportGenerator writes one summary per target framework under `../../prj/__SourceName__.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
+ReportGenerator writes one summary per target framework under `../../prj/__SourceName__.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0-windows/SummaryGithub.md`).
 <!--#else -->
-ReportGenerator writes one summary per target framework under `../__SourceName__.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
+ReportGenerator writes one summary per target framework under `../__SourceName__.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0-windows/SummaryGithub.md`).
 <!--#endif -->
 <!--#endif -->
 
@@ -134,40 +130,15 @@ ReportGenerator writes one summary per target framework under `../__SourceName__
 dotnet publish
 ```
 
-`dotnet publish` with no `--framework` publishes the default TFM from `src/prj/__SourceName__/Properties/Build/PublishDefaultFramework.targets` to `src/prj/__SourceName__/bin/Publish/`. Override with `dotnet publish --framework net8.0` (or another selected TFM). Edit that targets file to change the default. To try a newer TFM (net11, …) before shipping it, append it to `TargetFrameworks` so build/test catch incompatibilities; leave the targets file until bare publish should follow. RID and the publish recipe (self-contained, single-file, …) are generate-time choices and apply only while publishing. Test and optional benchmark projects are not published.
+`dotnet publish` with no `--framework` publishes the default TFM from `src/prj/__SourceName__/Properties/Build/PublishDefaultFramework.targets` to `src/prj/__SourceName__/bin/Publish/`. Override with `dotnet publish --framework net8.0-windows` (or another selected TFM). Edit that targets file to change the default. To try a newer TFM (net11.0-windows, …) before shipping it, append it to `TargetFrameworks` so build/test catch incompatibilities; leave the targets file until bare publish should follow. Publish always uses `win-x64`. The publish recipe (self-contained, single-file, …) is a generate-time choice and applies only while publishing. Test and optional benchmark projects are not published.
 <!--#if (NuGetAuditHighCriticalAsErrors) -->
 
 Restore fails this console app on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that app’s packages (txt/json) and is still info-only.
 <!--#endif -->
-<!--#if (WritePackageDocTemplate) -->
-
-## Package documentation template
-
-`src/prj/__SourceName__/Properties/NugetAssets/docs/DocShell.html` is the offline documentation seed. It packs with the nupkg (`docs/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this app. Repository-root `docs/` is a separate site if present.
-<!--#endif -->
-<!--#if (PackAsNuGetTool) -->
-
-## Additional pack as NuGet tool
-
-`dotnet pack` writes a tool nupkg to `src/prj/__SourceName__/bin/Pack/`. Install from that folder (or nuget.org after publish). The command after install is `ToolCommandName` in the console app csproj (the project name). Change that property, or pass `-p:ToolCommandName=...` on pack. Publish remains available; it is a different output than the tool nupkg.
-
-```bash
-dotnet pack
-```
-
-Test and optional benchmark projects are not packed.
-<!--#else -->
 
 ## Pack
 
-`IsPackable` is `false`. Distribution is `dotnet publish`. To write a `.nupkg` to `src/prj/__SourceName__/bin/Pack/` for all selected target frameworks, set `IsPackable` to `true` and run:
-
-```bash
-dotnet pack
-```
-
-Test and optional benchmark projects are not packed.
-<!--#endif -->
+`IsPackable` is `false`. Distribution is `dotnet publish`. These apps are not NuGet tools. Test and optional benchmark projects are not packed.
 
 ## CI
 

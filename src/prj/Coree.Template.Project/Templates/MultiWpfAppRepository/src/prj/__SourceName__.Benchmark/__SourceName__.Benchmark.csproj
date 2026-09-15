@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- General build settings: run benchmarks on the highest selected target framework -->
+  <!-- Highest selected Windows TFM (same switch as the app publish default). -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>__TargetFramework__</TargetFramework>

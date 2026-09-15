@@ -99,9 +99,12 @@ The package contains the following templates:
   4. [.NET multi-analyzer repository](#net-multi-analyzer-repository)
   5. [.NET multi-msbuild repository](#net-multi-msbuild-repository)
   6. [.NET multi-console repository](#net-multi-console-repository)
-  7. [.NET Tool](#Net-Tool)
-  8. [.NET Wpf](#Net-Wpf-Windows-only)
-  9. [.NET Project Template](#Net-Project-Template)
+  7. [.NET multi-winforms repository](#net-multi-winforms-repository)
+  8. [.NET multi-wpf repository](#net-multi-wpf-repository)
+  9. [.NET multi-PowerShell module repository](#net-multi-powershell-module-repository)
+  10. [.NET Tool](#Net-Tool)
+  11. [.NET Wpf](#Net-Wpf-Windows-only)
+  12. [.NET Project Template](#Net-Project-Template)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -467,6 +470,51 @@ MyCompany.Cli/
 The top-level directory is shared. Each additional `dotnet new` call contributes another app-specific project, test project, and solution area. Each app remains its own independently buildable and publishable unit while sharing the same repository-like structure.
 
 You do not need a different template for a single-app layout and a multi-app layout. Start with one, add another when you need it, or generate the complete set from a script.
+
+## .NET multi-winforms repository
+
+Same combo and init system as the multi-console repository, for independently publishable C# Windows Forms apps (Windows only). Tests and Coverlet are included. This does **not** replace `winforms-coree` or `winformsdi-coree`.
+
+Initialize the shared repository layout once, then add additional apps whenever you need them.
+
+```powershell
+dotnet new multiwinformsrepo-coree --Author "Carsten Riedel" --output "./MyCompany.WinForms" --name "MyCompany.WinForms" --InitAllRepoItems
+dotnet new multiwinformsrepo-coree --Author "Carsten Riedel" --output "./MyCompany.WinForms" --name "MyCompany.WinForms.Settings"
+```
+
+`--Author` is required. The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
+
+Each app keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`). `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the app under `src/prj/{name}/`.
+
+## .NET multi-wpf repository
+
+Same combo and init system as the multi-console repository, for independently publishable C# WPF apps (Windows only). Tests and Coverlet are included. This does **not** replace `wpfapp-coree`.
+
+Initialize the shared repository layout once, then add additional apps whenever you need them.
+
+```powershell
+dotnet new multiwpfrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Wpf" --name "MyCompany.Wpf" --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Wpf" --name "MyCompany.Wpf.Editor"
+```
+
+`--Author` is required. The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
+
+Each app keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`). `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the app under `src/prj/{name}/`.
+
+## .NET multi-PowerShell module repository
+
+Same combo and init system as the multi-library repository, for independently packable binary PowerShell modules. The target selector uses PowerShell host names; the generated project uses the matching TFMs (default Windows PowerShell 5.1 on .NET Framework 4.6.2 plus PowerShell 7.4+ on .NET 8). `dotnet pack -c Release` writes a PowerShell Gallery nupkg under `bin/Pack/` from the staged module tree (manifest at the package root, not `lib/`). Tests import that staged module in real `powershell.exe` / `pwsh.exe` hosts. DebugHost is a separate F5 launcher; set it as the startup project. This does **not** replace `powershelllib-coree`.
+
+Initialize the shared repository layout once, then add additional modules whenever you need them.
+
+```powershell
+dotnet new multipowershellrepo-coree --Author "Carsten Riedel" --output "./MyCompany.PowerShell" --name "MyCompany.PowerShell" --InitAllRepoItems
+dotnet new multipowershellrepo-coree --Author "Carsten Riedel" --output "./MyCompany.PowerShell" --name "MyCompany.PowerShell.Admin"
+```
+
+`--Author` is required. The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
+
+Each module keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`). `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the module under `src/prj/{name}/`. Manifest, loader, license, readme, and release notes live in `Properties/NugetAssets/`.
 
 ## .NET Tool
 This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.

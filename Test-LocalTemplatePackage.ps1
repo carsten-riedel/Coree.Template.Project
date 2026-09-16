@@ -13,7 +13,7 @@ $ErrorActionPreference = 'Stop'
 
 $packageId = 'Coree.Template.Project'
 $sourceRoot = Join-Path -Path $PSScriptRoot -ChildPath 'src'
-$packageOutputDirectory = Join-Path -Path $sourceRoot -ChildPath 'prj\Coree.Template.Project\bin\Package'
+$packageOutputDirectory = Join-Path -Path $sourceRoot -ChildPath 'prj\Coree.Template.Project\bin\Pack'
 $localPackagePattern = "$packageId.*.nupkg"
 
 function Invoke-DotNet {

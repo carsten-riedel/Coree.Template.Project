@@ -1,4 +1,11 @@
 <Solution>
+  <!-- Paths are relative to this file's final location.
+       PlaceSolution SlnFolder      → src/sln/Coree.Template.Project/Coree.Template.Project.slnx
+       PlaceSolution BesideCsproj  → src/prj/Coree.Template.Project/Coree.Template.Project.slnx
+       PlaceSolution RepoRoot       → repo root, so src/prj/ and src/sln/. -->
+  <Folder Name="/sln/Coree.Template.Project/">
+    <File Path="Readme.md" />
+  </Folder>
   <Folder Name="/prj/">
     <Project Path="../../prj/Coree.Template.Project/Coree.Template.Project.csproj" />
   </Folder>

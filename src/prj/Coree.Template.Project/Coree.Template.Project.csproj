@@ -1,17 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- Branding information -->
+  <!-- General build settings: defines the output type and target framework -->
   <PropertyGroup>
-    <Branding>Carsten Riedel</Branding>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-    <!-- Company and copyright information -->
-  <PropertyGroup>
-    <Copyright>Copyright (c) 2026 $(Branding)</Copyright>
-    <Company></Company>
-  </PropertyGroup>
-
-    <!-- C# language features and debugging configuration -->
+  <!-- C# language features and debugging configuration -->
   <PropertyGroup>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -19,61 +14,22 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <!-- Restore NuGetAudit is already on. High (NU1903) and critical (NU1904) fail restore. Low/moderate stay warnings. -->
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>
   </PropertyGroup>
 
-  <!-- NuGet Package configuration -->
-
-  <!-- Package metadata-->
-  <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
-
+  <!-- Packaging configuration -->
+  <!-- EnablePackageValidation: TFM/runtime holes on pack. No baseline at generate; set PackageValidationBaselineVersion after the first nuget.org publish. -->
   <PropertyGroup>
-    <Authors>Carsten Riedel</Authors>
-    <Owners>Carsten Riedel</Owners>
-    <PackageId>Coree.Template.Project</PackageId>
-    <PackageTags>Project;Templates;.NET;ClassLibrary;Library;Analyzer;SourceGenerator;Roslyn;Console;Repository;Multi-project;NuGet;Coree;MSBuild;WPF</PackageTags>
-    <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <Description>
-      <![CDATA[
-          Templates for Visual Studio and the dotnet CLI: MSBuild tasks, class libraries, multi-library, multi-analyzer, multi-source-generator, multi-msbuild, and multi-console repositories, .NET tools, PowerShell cmdlets, WinForms, WPF, and a project template.
-	    ]]>
-    </Description>
-
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseFile>License.txt</PackageLicenseFile>
-    <PackageIcon>Icon.png</PackageIcon>
-    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
-  </PropertyGroup>
-
-  <!-- Versioning: Nerdbank (Properties/version.json). Same Project layout as the multi templates. -->
-  <PropertyGroup>
-    <GitVersionBaseDirectory>$(MSBuildProjectDirectory)\Properties</GitVersionBaseDirectory>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <!-- Package specs -->
-  <ItemGroup>
-  <!-- NuGet template layout. Exclude bin/obj/.vs (VS can create those if an slnx is opened)
-       and maintainer markdown under .template.config (not template content, not shipped). -->
-    <None Include="$(MSBuildProjectDirectory)\Templates\**\*" Exclude="$(MSBuildProjectDirectory)\Templates\**\**\bin\**;$(MSBuildProjectDirectory)\Templates\**\**\obj\**;$(MSBuildProjectDirectory)\Templates\**\**\.vs\**;$(MSBuildProjectDirectory)\Templates\**\.template.config\**\*.md" Pack="true" PackagePath="" />
-    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*"  Pack="true" PackagePath="" />
-  </ItemGroup>
-
-  <PropertyGroup>
-    <PackRelease>false</PackRelease>
-    <PublishRelease>false</PublishRelease>
-    <IncludeBuildOutput>False</IncludeBuildOutput>
-    <IncludeSource>False</IncludeSource>
-    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-    <EnableDefaultItems>False</EnableDefaultItems>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IncludeSource>false</IncludeSource>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <EnableDefaultItems>false</EnableDefaultItems>
     <IsPackable>true</IsPackable>
+    <IsPublishable>false</IsPublishable>
+    <PackAsTool>false</PackAsTool>
+    <EnablePackageValidation>true</EnablePackageValidation>
     <IsShipping>false</IsShipping>
     <NoWarn>2008;NU5105</NoWarn>
     <NoPackageAnalysis>true</NoPackageAnalysis>
@@ -83,10 +39,66 @@
     <PackageType>Template</PackageType>
     <!-- Suppress creation of contentFiles directory -->
     <ContentTargetFolders>.\</ContentTargetFolders>
-    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Package</PackageOutputPath>
   </PropertyGroup>
 
-  <!-- dotnet pack -c Debug -->
-  <!-- dotnet new install bin\Package\Coree.Template.Project.0.2.8863.32697-prerelease.nupkg -->
-  <!-- dotnet new uninstall Coree.Template.Project -->
+  <!-- Versioning: Nerdbank -->
+  <PropertyGroup>
+    <GitVersionBaseDirectory>$(MSBuildProjectDirectory)\Properties</GitVersionBaseDirectory>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.10.94">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- Package metadata -->
+  <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->
+  <PropertyGroup>
+    <Authors>Carsten Riedel</Authors>
+    <Owners>Carsten Riedel</Owners>
+    <Company></Company>
+    <Copyright>Copyright © 2026 Carsten Riedel</Copyright>
+    <PackageId>Coree.Template.Project</PackageId>
+    <PackageTags>Project;Templates;.NET;ClassLibrary;Library;Analyzer;SourceGenerator;Roslyn;Console;Repository;Multi-project;NuGet;Coree;MSBuild;WPF</PackageTags>
+    <PackageProjectUrl>https://github.com/carsten-riedel/Coree.Template.Project</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/carsten-riedel/Coree.Template.Project</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+      <Description>
+      <![CDATA[
+          Templates for Visual Studio and the dotnet CLI: MSBuild tasks, class libraries, multi-library, multi-analyzer, multi-source-generator, multi-msbuild, and multi-console repositories, .NET tools, PowerShell cmdlets, WinForms, WPF, and a project template.
+	    ]]>
+    </Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>Icon-128x128.png</PackageIcon>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <!-- Package specs -->
+  <!-- NuGet template layout. Exclude bin/obj/.vs (VS can create those if an slnx is opened)
+       and maintainer markdown under .template.config (not template content, not shipped). -->
+  <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)\Templates\**\*" Exclude="$(MSBuildProjectDirectory)\Templates\**\**\bin\**;$(MSBuildProjectDirectory)\Templates\**\**\obj\**;$(MSBuildProjectDirectory)\Templates\**\**\.vs\**;$(MSBuildProjectDirectory)\Templates\**\.template.config\**\*.md" Pack="true" PackagePath="" />
+    <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes). Disk matches Solution Explorer. -->
+    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" />
+    <!-- License.txt is generated only for Custom; the wildcard excludes it so the explicit PackageLicenseFile item controls packing. -->
+  </ItemGroup>
+
+  <!-- Standard licenses use PackageLicenseExpression and create no License.txt. -->
+  <!-- Custom: pack License.txt as PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
+  <PropertyGroup>
+    <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Pack</PackageOutputPath>
+  </PropertyGroup>
+
+  <!-- Keep Git configuration on disk without showing it as a project item -->
+  <ItemGroup>
+    <None Remove=".gitignore" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Templates\" />
+  </ItemGroup>
+
+
+  <!-- Source Link git state as properties (SDK 8+). Target hooks GenerateAssemblyInfo. -->
+  <Import Project="Properties/Build/SourceControlState.targets" />
 </Project>

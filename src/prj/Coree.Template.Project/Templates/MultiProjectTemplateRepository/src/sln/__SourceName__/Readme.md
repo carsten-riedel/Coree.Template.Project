@@ -11,15 +11,15 @@ The `.slnx` is written elsewhere (`PlaceSolution`). Use this folder for shared n
 <!--#endif -->
 <!--#if ((HostIdentifier == "vs") && (PlaceSolution == "SlnFolder")) -->
 
-Visual Studio created an extra `.slnx` in the repository root. Close this solution, open the `.slnx` in this folder (`src/sln/__SourceName__/`), and delete the extra `.slnx` in the repository root.
+Visual Studio created an automatically generated root `.slnx`. The correct template default has overwritten it, but the root `.slnx` is still present. Close Visual Studio, open the `.slnx` in this folder (`src/sln/__SourceName__/`), and delete the extra conventional root `.slnx` if you do not need it.
 <!--#endif -->
 <!--#if ((HostIdentifier == "vs") && (PlaceSolution == "BesideCsproj")) -->
 
-Visual Studio created an extra `.slnx` in the repository root. Close this solution, open `src/prj/__SourceName__/__SourceName__.slnx`, and delete the extra `.slnx` in the repository root.
+Visual Studio created an automatically generated root `.slnx`. The correct template default has overwritten it, but the root `.slnx` is still present. Open the `.slnx` next to the library project under `src/prj/`, and delete the extra conventional root `.slnx` if you do not need it.
 <!--#endif -->
 <!--#if ((HostIdentifier == "vs") && (PlaceSolution == "RepoRoot")) -->
 
-Visual Studio created a conventional root `.slnx`. Open `__SourceName__.generated.slnx` in the repository root for the template layout (includes `sln`). Delete the extra conventional `.slnx` if you do not need it.
+Visual Studio created an automatically generated root `.slnx`. The correct template default has overwritten it, but the root `.slnx` is still present. Use the template `.slnx` in the repository root and delete any extra conventional root `.slnx` if you do not need it.
 <!--#endif -->
 <!--#if (PlaceSolution == "RepoRoot") -->
 

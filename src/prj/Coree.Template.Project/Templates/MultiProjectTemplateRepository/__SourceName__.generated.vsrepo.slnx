@@ -3,21 +3,6 @@
        PlaceSolution SlnFolder      → src/sln/__SourceName__/__SourceName__.slnx
        PlaceSolution BesideCsproj  → src/prj/__SourceName__/__SourceName__.slnx
        PlaceSolution RepoRoot       → repo root, so src/prj/ and src/sln/. -->
-<!--#if (PlaceSolution == "SlnFolder") -->
-  <Folder Name="/sln/__SourceName__/">
-    <File Path="Readme.md" />
-<!--#if (DirectoryMsBuildFiles) -->
-    <File Path="Directory.Solution.props" />
-    <File Path="Directory.Solution.targets" />
-<!--#endif -->
-  </Folder>
-<!--#elseif (PlaceSolution == "BesideCsproj") -->
-  <File Path="Readme.md" />
-<!--#if (DirectoryMsBuildFiles) -->
-  <File Path="Directory.Solution.props" />
-  <File Path="Directory.Solution.targets" />
-<!--#endif -->
-<!--#else -->
   <Folder Name="/sln/__SourceName__/">
     <File Path="src/sln/__SourceName__/Readme.md" />
 <!--#if (DirectoryMsBuildFiles) -->
@@ -25,14 +10,7 @@
     <File Path="Directory.Solution.targets" />
 <!--#endif -->
   </Folder>
-<!--#endif -->
   <Folder Name="/prj/">
-<!--#if (PlaceSolution == "SlnFolder") -->
     <Project Path="src/prj/__SourceName__/__SourceName__.csproj" />
-<!--#elseif (PlaceSolution == "BesideCsproj") -->
-    <Project Path="__SourceName__.csproj" />
-<!--#else -->
-    <Project Path="src/prj/__SourceName__/__SourceName__.csproj" />
-<!--#endif -->
   </Folder>
 </Solution>

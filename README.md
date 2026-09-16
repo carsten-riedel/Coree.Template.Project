@@ -103,9 +103,10 @@ The package contains the following templates:
   8. [.NET multi-winforms repository](#net-multi-winforms-repository)
   9. [.NET multi-wpf repository](#net-multi-wpf-repository)
   10. [.NET multi-PowerShell module repository](#net-multi-powershell-module-repository)
-  11. [.NET Tool](#Net-Tool)
-  12. [.NET Wpf](#Net-Wpf-Windows-only)
-  13. [.NET Project Template](#Net-Project-Template)
+  11. [.NET multi-project-template repository](#net-multi-project-template-repository)
+  12. [.NET Tool](#Net-Tool)
+  13. [.NET Wpf](#Net-Wpf-Windows-only)
+  14. [.NET Project Template](#Net-Project-Template)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -187,6 +188,14 @@ dotnet new install Coree.Template.Project & cd /D %userprofile% & mkdir "source\
 ## .NET multi-library repository
 
 Create and grow a repository-like structure containing one or more independently packable .NET class libraries using repeatable `dotnet new` calls.
+
+**Ready-to-run baseline**
+
+- **Projects:** packable class library and MSTest project.
+- **Quality:** Coverlet coverage by default; `CoverletAndReport` adds ReportGenerator HTML/Markdown output.
+- **Performance:** optional BenchmarkDotNet console project.
+- **Debugging:** no separate DebugHost; the library is exercised through tests and benchmarks.
+- **Versioning:** optional Nerdbank.GitVersioning, default per-library `Properties/version.json`; `Repo` selects one repository-root file, `Off` keeps manual `VersionPrefix` values.
 
 Initialize the shared repository layout once, then add additional libraries whenever you need them.
 
@@ -279,6 +288,14 @@ You do not need a different template for a single-library layout and a multi-lib
 
 Create and grow a repository-like structure containing one or more independently packable Roslyn analyzer NuGet packages using repeatable `dotnet new` calls. This is not `sourcegenerator-coree` (source generators).
 
+**Ready-to-run baseline**
+
+- **Package:** `netstandard2.0` analyzer packed under `analyzers/dotnet/cs`.
+- **Quality:** Roslyn analyzer tests, Coverlet coverage by default, and optional ReportGenerator HTML/Markdown output.
+- **Performance:** optional BenchmarkDotNet console project.
+- **Debugging:** separate Console DebugHost for compiler execution and Visual Studio's Roslyn Component profile.
+- **Versioning:** optional Nerdbank.GitVersioning, default per-analyzer `Properties/version.json`; `Repo` selects one repository-root file, `Off` keeps manual `VersionPrefix` values.
+
 Initialize the shared repository layout once, then add additional analyzer packages whenever you need them.
 
 Each package targets `netstandard2.0` and packs the assembly under `analyzers/dotnet/cs` (`DevelopmentDependency`). Tests use Microsoft.CodeAnalysis.CSharp.Analyzer.Testing. Each create adds a DebugHost console so Visual Studio can F5 the analyzer via `DebugRoslynComponent`.
@@ -362,7 +379,15 @@ You do not need a different template for a single-analyzer layout and a multi-an
 
 ## .NET multi-source-generator repository
 
-Create and grow a repository containing one or more independently packable Roslyn source-generator packages. Each generator targets `netstandard2.0`, packs under `analyzers/dotnet/cs`, and gets its own tests, Console DebugHost, and solution area.
+Create and grow a repository containing one or more independently packable Roslyn source-generator packages.
+
+**Ready-to-run baseline**
+
+- **Package:** `netstandard2.0` generator packed under `analyzers/dotnet/cs`.
+- **Quality:** tests compile and execute generated code; Coverlet coverage is enabled by default and ReportGenerator output is optional.
+- **Performance:** optional BenchmarkDotNet console project.
+- **Debugging:** Console DebugHost and Visual Studio Roslyn Component setup are included.
+- **Versioning:** optional Nerdbank.GitVersioning, default per-generator `Properties/version.json`; `Repo` selects one repository-root file, `Off` keeps manual `VersionPrefix` values.
 
 The scaffold uses annotated C# classes as the source of truth. `JsonSupportGenerator` is incremental and generates `TypeNameJson.Serialize` / `Deserialize` helpers. Tests compile and execute the generated API; the DebugHost consumes it and acts as the Visual Studio `DebugRoslynComponent` target. The generator performs no project-file writes or dynamic compilation.
 
@@ -376,6 +401,14 @@ The first call adds the shared repository files; later calls use the same output
 ## .NET multi-msbuild repository
 
 Create and grow a repository-like structure containing one or more independently packable MSBuild task NuGet packages using repeatable `dotnet new` calls. This does **not** replace `msbuildtasklib-coree`.
+
+**Ready-to-run baseline**
+
+- **Package:** `netstandard2.0` MSBuild task packed with its `build/` props and targets.
+- **Quality:** unit and integration tests, Coverlet coverage by default, and optional ReportGenerator HTML/Markdown output.
+- **Performance:** optional BenchmarkDotNet console project.
+- **Debugging:** separate MSBuild consumer DebugHost for Visual Studio F5.
+- **Versioning:** optional Nerdbank.GitVersioning, default per-task `Properties/version.json`; `Repo` selects one repository-root file, `Off` keeps manual `VersionPrefix` values.
 
 Initialize the shared repository layout once, then add additional task packages whenever you need them.
 
@@ -397,6 +430,14 @@ Each task package keeps a `src/sln/{name}/` notes folder. By default the `.slnx`
 ## .NET multi-console repository
 
 Create and grow a repository-like structure containing one or more independently publishable .NET console apps using repeatable `dotnet new` calls.
+
+**Ready-to-run baseline**
+
+- **Projects:** console app and MSTest project.
+- **Quality:** Coverlet coverage by default; `CoverletAndReport` adds ReportGenerator HTML/Markdown output.
+- **Performance:** optional BenchmarkDotNet console project.
+- **Publish/debug:** selectable single-file and ReadyToRun profiles; the app itself is the Visual Studio/CLI debug target, so no separate DebugHost is needed.
+- **Versioning:** optional Nerdbank.GitVersioning, default per-app `Properties/version.json`; `Repo` selects one repository-root file, `Off` keeps manual `VersionPrefix` values.
 
 Initialize the shared repository layout once, then add additional apps whenever you need them.
 
@@ -487,7 +528,15 @@ You do not need a different template for a single-app layout and a multi-app lay
 
 ## .NET multi-winforms repository
 
-Same combo and init system as the multi-console repository, for independently publishable C# Windows Forms apps (Windows only). Tests and Coverlet are included. This does **not** replace `winforms-coree` or `winformsdi-coree`.
+Same combo and init system as the multi-console repository, for independently publishable C# Windows Forms apps (Windows only). This does **not** replace `winforms-coree` or `winformsdi-coree`.
+
+**Ready-to-run baseline**
+
+- **Projects:** WinForms app and MSTest project.
+- **Quality:** Coverlet coverage by default; `CoverletAndReport` adds ReportGenerator HTML/Markdown output.
+- **Performance:** optional BenchmarkDotNet console project.
+- **Publish/debug:** selectable single-file and ReadyToRun profiles; the app itself is the Visual Studio debug target, so no separate DebugHost is needed.
+- **Versioning:** optional Nerdbank.GitVersioning, default per-app `Properties/version.json`; `Repo` selects one repository-root file, `Off` keeps manual `VersionPrefix` values.
 
 Initialize the shared repository layout once, then add additional apps whenever you need them.
 
@@ -502,7 +551,15 @@ Each app keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives th
 
 ## .NET multi-wpf repository
 
-Same combo and init system as the multi-console repository, for independently publishable C# WPF apps (Windows only). Tests and Coverlet are included. This does **not** replace `wpfapp-coree`.
+Same combo and init system as the multi-console repository, for independently publishable C# WPF apps (Windows only). This does **not** replace `wpfapp-coree`.
+
+**Ready-to-run baseline**
+
+- **Projects:** WPF app and MSTest project.
+- **Quality:** Coverlet coverage by default; `CoverletAndReport` adds ReportGenerator HTML/Markdown output.
+- **Performance:** optional BenchmarkDotNet console project.
+- **Publish/debug:** selectable single-file and ReadyToRun profiles; the app itself is the Visual Studio debug target, so no separate DebugHost is needed.
+- **Versioning:** optional Nerdbank.GitVersioning, default per-app `Properties/version.json`; `Repo` selects one repository-root file, `Off` keeps manual `VersionPrefix` values.
 
 Initialize the shared repository layout once, then add additional apps whenever you need them.
 
@@ -517,7 +574,15 @@ Each app keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives th
 
 ## .NET multi-PowerShell module repository
 
-Same combo and init system as the multi-library repository, for independently packable binary PowerShell modules. The target selector uses PowerShell host names; the generated project uses the matching TFMs (default Windows PowerShell 5.1 on .NET Framework 4.6.2 plus PowerShell 7.4+ on .NET 8). `dotnet pack -c Release` writes a PowerShell Gallery nupkg under `bin/Pack/` from the staged module tree (manifest at the package root, not `lib/`). Tests import that staged module in real `powershell.exe` / `pwsh.exe` hosts. DebugHost is a separate F5 launcher; set it as the startup project. This does **not** replace `powershelllib-coree`.
+Same combo and init system as the multi-library repository, for independently packable binary PowerShell modules. This does **not** replace `powershelllib-coree`.
+
+**Ready-to-run baseline**
+
+- **Package:** binary module with host-based TFM selection (default Windows PowerShell 5.1 on .NET Framework 4.6.2 plus PowerShell 7.4+ on .NET 8).
+- **Quality:** real import tests in `powershell.exe` / `pwsh.exe`, Coverlet coverage by default, and optional ReportGenerator HTML/Markdown output.
+- **Performance:** optional BenchmarkDotNet console project.
+- **Debugging/publish:** separate DebugHost F5 launcher; `dotnet pack -c Release` stages a PowerShell Gallery package under `bin/Pack/`.
+- **Versioning:** optional Nerdbank.GitVersioning, default per-module `Properties/version.json`; `Repo` selects one repository-root file, `Off` keeps manual `VersionPrefix` values.
 
 Initialize the shared repository layout once, then add additional modules whenever you need them.
 
@@ -529,6 +594,27 @@ dotnet new multipowershellrepo-coree --Author "Carsten Riedel" --output "./MyCom
 `--Author` is required. The first call creates the shared directory layout. `--InitAllRepoItems` adds `README.md`, `LICENSE`, `.gitattributes`, `.gitignore`, and `TEMPLATE-AI-RELEASE-CHECKPOINT.md`. Later calls use the same `--output` and omit `--InitAllRepoItems`.
 
 Each module keeps a `src/sln/{name}/` notes folder. By default the `.slnx` lives there too (`--PlaceSolution SlnFolder`). `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the module under `src/prj/{name}/`. Manifest, loader, license, readme, and release notes live in `Properties/NugetAssets/`.
+
+## .NET multi-project-template repository
+
+Create and grow a repository containing one or more independently packable .NET project-template NuGet packages. `multiprojecttemplaterepo-coree` is the authoring/meta-template in this family.
+
+**Baseline**
+
+- **Package:** packable `netstandard2.0` project-template package with `Templates/` content and NuGet assets.
+- **Sample:** minimal nested console template (`template.json`, `.csproj`, and `Program.cs`) as a starting point for authoring.
+- **Repository:** repeatable multi-package layout with selectable solution placement.
+- **Versioning:** optional Nerdbank.GitVersioning, default per-package `Properties/version.json`; `Repo` selects one repository-root file, `Off` keeps manual `VersionPrefix` values.
+- **Scope:** intentionally no application DebugHost, benchmark, or test project; the nested sample is itself the template example.
+
+Initialize the shared repository layout once, then add additional project-template packages whenever you need them.
+
+```powershell
+dotnet new multiprojecttemplaterepo-coree --Author "Carsten Riedel" --output "./MyCompany.Templates" --name "MyCompany.Templates.Console" --InitAllRepoItems
+dotnet new multiprojecttemplaterepo-coree --Author "Carsten Riedel" --output "./MyCompany.Templates" --name "MyCompany.Templates.Web"
+```
+
+`--Author` is required. The first call creates the shared repository files; later calls use the same `--output` directory and omit `--InitAllRepoItems`. `--PlaceSolution SlnFolder` is the default; `RepoRoot` and `BesideCsproj` remain available for the solution location. The packable project-template package keeps its nested templates under `Templates/` and can be packed with `dotnet pack`.
 
 ## .NET Tool
 This template provides a foundation for building a .NET commandline tool. The template is structured to support NuGet packaging and publishing, requiring an author's specification and ToolCommandName for these purposes.

@@ -82,14 +82,15 @@ The package contains the following templates:
   2. [.NET Class library](#Net-class-library)
   3. [.NET multi-library repository](#net-multi-library-repository)
   4. [.NET multi-analyzer repository](#net-multi-analyzer-repository)
-  5. [.NET multi-msbuild repository](#net-multi-msbuild-repository)
-  6. [.NET multi-console repository](#net-multi-console-repository)
-  7. [.NET multi-winforms repository](#net-multi-winforms-repository)
-  8. [.NET multi-wpf repository](#net-multi-wpf-repository)
-  9. [.NET multi-PowerShell module repository](#net-multi-powershell-module-repository)
-  10. [.NET Tool](#Net-Tool)
-  11. [.NET Wpf](#Net-Wpf-Windows-only)
-  12. [.NET Project Template](#Net-Project-Template)
+  5. [.NET multi-source-generator repository](#net-multi-source-generator-repository)
+  6. [.NET multi-msbuild repository](#net-multi-msbuild-repository)
+  7. [.NET multi-console repository](#net-multi-console-repository)
+  8. [.NET multi-winforms repository](#net-multi-winforms-repository)
+  9. [.NET multi-wpf repository](#net-multi-wpf-repository)
+  10. [.NET multi-PowerShell module repository](#net-multi-powershell-module-repository)
+  11. [.NET Tool](#Net-Tool)
+  12. [.NET Wpf](#Net-Wpf-Windows-only)
+  13. [.NET Project Template](#Net-Project-Template)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -274,6 +275,19 @@ The first call creates the shared directory layout. `--InitAllRepoItems` adds `R
 
 Each analyzer keeps its `.slnx` in its own `src/sln/{name}/` folder. `--PlaceSolution RepoRoot` writes it at the repository root; `--PlaceSolution BesideCsproj` writes it next to the packable analyzer under `src/prj/{name}/`. DebugHost, tests, and the optional benchmark share one selected TFM (`.NET 10` by default); the packable analyzer itself is always `netstandard2.0`.
 
+## .NET multi-source-generator repository
+
+Same combo and init system as the multi-library repository, for independently packable Roslyn source-generator packages. Each generator targets `netstandard2.0`, packs under `analyzers/dotnet/cs`, and includes direct GeneratorDriver tests plus a Console DebugHost for Visual Studio `DebugRoslynComponent`.
+
+The scaffold marks C# classes with `GenerateJsonSupportAttribute` and generates `TypeNameJson.Serialize` / `Deserialize` helpers. The C# types remain the source of truth; the generator performs no file writes or dynamic compilation.
+
+```powershell
+dotnet new multisourcegeneratorrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Generators" --name "MyCompany.Generators.Json" --InitAllRepoItems
+dotnet new multisourcegeneratorrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Generators" --name "MyCompany.Generators.Mapping"
+```
+
+The first call adds the shared repository files; later calls use the same output and omit `--InitAllRepoItems`. DebugHost, tests, and the optional benchmark share the selected runnable TFM (`.NET 10` by default), while the generator package remains `netstandard2.0`.
+
 ## .NET multi-msbuild repository
 
 Same combo and init system as the multi-library repository, for independently packable MSBuild task packages. Each package targets `netstandard2.0` and packs the assembly under `tasks/netstandard2.0` with auto-imported `build/` props (`UsingTask`) and targets (sample consumer `CoreCompile` extension). Tests are automated unit and integration tests. DebugHost is a separate MSBuild consumer for Visual Studio F5. This does **not** replace `msbuildtasklib-coree`.
@@ -451,4 +465,3 @@ For more information and resources for source generators and analyzers:
 For more information and resources for .NET tools and NuGet packages:
   - [MS Learn: How to create a .NET tool](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools-how-to-create)
   - [MS Learn: NuGet package authoring best practices](https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices)
-

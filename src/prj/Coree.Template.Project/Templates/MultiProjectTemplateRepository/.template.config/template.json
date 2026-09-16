@@ -534,7 +534,7 @@
           }
         },
         {
-          "condition": "((HostIdentifier == \"vs\") && (PlaceSolution != \"RepoRoot\"))",
+          "condition": "((HostIdentifier == \"vs\"))",
           "rename": {
             "__SourceName__.generated.vsrepo.slnx": "__SourceName__.slnx"
           }

@@ -760,7 +760,7 @@
       "path": "__SourceName__.slnx"
     },
     {
-      "condition": "(HostIdentifier == \"vs\" && (PlaceSolution != \"RepoRoot\"))",
+      "condition": "(HostIdentifier == \"vs\")",
       "path": "__SourceName__.slnx"
     }
   ],

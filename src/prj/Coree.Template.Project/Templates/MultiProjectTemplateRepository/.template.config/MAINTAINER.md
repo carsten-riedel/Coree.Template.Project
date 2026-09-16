@@ -22,7 +22,7 @@ Create a new project shows one icon per template. Two files can supply it; they 
 
 | Source | Path | What uses it |
 | --- | --- | --- |
-| Template package | `src/prj/Coree.Template.Project/NugetAssets/Icon.png` (`PackageIcon` on `Coree.Template.Project.csproj`) | NuGet listing **and** the VS picker when this template does not declare its own icon. |
+| Template package | `src/prj/Coree.Template.Project/Properties/NugetAssets/Icon.png` (`PackageIcon` on `Coree.Template.Project.csproj`) | NuGet listing **and** the VS picker when this template does not declare its own icon. |
 | This template | `.template.config/icon.png`, optional `ide.host.json` `"icon": "icon.png"` | VS picker for **this** template only. Overrides the package icon. |
 | Generated library | `src/prj/{Name}/Properties/NugetAssets/Icon-128x128.png` | The **consumer** nupkg after `dotnet pack`. Not the template picker. |
 
@@ -182,7 +182,7 @@ The generated file is the contract (ten numbered, checkable items). Do not put f
 
 ## `CSharpProjectOptions`
 
-One multi-choice (`allowMultipleValues`), same VS checkbox combobox as TFMs and `InitRepoItems`. Not four/five separate dropdowns.
+One multi-choice (`allowMultipleValues`), same VS checkbox combobox as `InitRepoItems`. Not four separate dropdowns.
 
 | Choice | Checked (default) | Unchecked |
 | --- | --- | --- |
@@ -190,11 +190,10 @@ One multi-choice (`allowMultipleValues`), same VS checkbox combobox as TFMs and 
 | `Nullable` | `enable` | `disable` |
 | `LangLatest` | `latest` | `default` (TFM C# version; valid compiler value) |
 | `DebugEmbedded` | `embedded` | `none` |
-| `GenerateDocumentationFile` | `true` | `false` |
 
-Language/debug values are **always written** (no omitted PropertyGroup) into the library csproj. `GenerateDocumentationFile` is in this same choice list and writes the library's XML documentation setting.
+Language/debug values are **always written** (no omitted PropertyGroup) into the library csproj.
 
-No `None`. CLI and VS default is the five product values. Visual Studio cannot leave a multi-choice empty; at least one box stays checked. CLI: omit the switch, or pass values with **spaces** (`--CSharpProjectOptions Nullable LangLatest DebugEmbedded`). `|` is only the host default separator.
+No `None`. CLI and VS default is the four product values. Visual Studio cannot leave a multi-choice empty; at least one box stays checked. CLI: omit the switch, or pass values with **spaces** (`--CSharpProjectOptions Nullable LangLatest DebugEmbedded`). `|` is only the host default separator.
 
 
 ## `ProjectLicense`

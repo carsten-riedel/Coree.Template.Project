@@ -30,15 +30,6 @@
     <!--#endif -->
   </PropertyGroup>
 
-  <!-- XML documentation file -->
-  <PropertyGroup>
-    <!--#if (CSharpProjectOptions == "GenerateDocumentationFile") -->
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <!--#else -->
-    <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <!--#endif -->
-  </PropertyGroup>
-
   <!--#if (NuGetAuditHighCriticalAsErrors) -->
   <!-- Restore NuGetAudit is already on. High (NU1903) and critical (NU1904) fail restore. Low/moderate stay warnings. -->
   <PropertyGroup>

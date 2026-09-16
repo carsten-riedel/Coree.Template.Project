@@ -146,10 +146,10 @@
       "type": "computed",
       "value": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")"
     },
-    // One multi-choice for C# / debug / documentation in the packable project
+    // One multi-choice for C# and debug settings in the packable project
     // (VS combobox, like InitRepoItems). Checked = current product
     // default. Unchecked = the other explicit value. Properties are always
-    // written. No None: CLI/VS default is the five product values; Visual
+    // written. No None: CLI/VS default is the four product values; Visual
     // Studio keeps at least one checked.
     // Omit the switch on CLI.
     "CSharpProjectOptions": {
@@ -158,7 +158,7 @@
       "allowMultipleValues": true,
       "enableQuotelessLiterals": true,
       "isRequired": false,
-      "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded|GenerateDocumentationFile",
+      "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded",
       "description": "C# and debug settings for the packable project. Uncheck an item to write the alternative value.",
       "displayName": "C# project options",
       "choices": [
@@ -181,11 +181,6 @@
           "choice": "DebugEmbedded",
           "description": "Embed portable PDBs in the assembly. Uncheck for no debug symbols.",
           "displayName": "Embedded debug symbols"
-        },
-        {
-          "choice": "GenerateDocumentationFile",
-          "description": "Emit an XML documentation file. Uncheck to skip it.",
-          "displayName": "XML documentation file"
         }
       ]
     },

@@ -32,13 +32,13 @@
     {
       "id": "CSharpProjectOptions",
       "isVisible": true,
-      "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded|GenerateDocumentationFile",
+      "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded",
       "persistenceScope": "none",
       "name": {
         "text": "C# project options"
       },
       "description": {
-        "text": "Checked values write explicit C# and debug properties on the packable project. XML documentation is project-only. Uncheck one to write the alternative."
+        "text": "Checked values write explicit C# and debug properties on the packable project. Uncheck one to write the alternative."
       }
     },
     {

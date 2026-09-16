@@ -756,10 +756,6 @@
       "path": "src/prj/__SourceName__/__SourceName__.slnx"
     },
     {
-      "condition": "(PlaceSolution == \"RepoRoot\")",
-      "path": "__SourceName__.slnx"
-    },
-    {
       "condition": "(HostIdentifier == \"vs\")",
       "path": "__SourceName__.slnx"
     }

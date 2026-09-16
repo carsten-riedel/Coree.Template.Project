@@ -1,5 +1,6 @@
-﻿0.4.5 (2026-09-16)
+﻿0.7.0 (2026-09-16)
 
+ - Completed the classic multi-project repository template family: multi-library, multi-analyzer, multi-source-generator, multi-console, multi-msbuild, multi-PowerShell, multi-winforms, multi-wpf, and multi-project-template repositories with consistent repository, solution-placement, packaging, and Visual Studio/CLI conventions.
  - Multi-source-generator repository template (`multisourcegeneratorrepo-coree`): incremental C#-model-to-JSON-support sample, GeneratorDriver tests, Console DebugHost, and analyzer-path NuGet packaging.
 
 0.4.4 (2026-09-15)

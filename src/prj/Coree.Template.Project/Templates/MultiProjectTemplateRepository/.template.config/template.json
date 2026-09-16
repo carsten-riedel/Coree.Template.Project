@@ -107,9 +107,9 @@
     // see sibling .slnx files.
     // BesideCsproj: src/prj/__SourceName__/ next to the packable csproj
     // (slnx + handbook). Does not create src/sln/{name}/.
-    // RepoRoot: repository root. CLI and Visual Studio rename to
-    // __SourceName__.slnx. Visual Studio may still create a conventional root
-    // solution during project creation; src/sln/{name}/Readme.md remains notes.
+    // RepoRoot: repository root. CLI renames to __SourceName__.slnx; Visual
+    // Studio keeps __SourceName__.generated.slnx so it does not overwrite the
+    // IDE's conventional {Name}.slnx. src/sln/{name}/Readme.md is still notes.
     // RepoRoot stacks every library's .slnx in one directory; CLI/CI must pass
     // a solution path if more than one exists.
     "PlaceSolution": {
@@ -137,6 +137,14 @@
           "displayName": "src/prj/{name}/"
         }
       ]
+    },
+    // True for dotnet new / preview CLI. Used so only CLI renames
+    // .generated.slnx → __SourceName__.slnx at repo root when PlaceSolution is
+    // RepoRoot. Visual Studio keeps the .generated name and therefore does
+    // not overwrite its own root .slnx.
+    "IsCliHost": {
+      "type": "computed",
+      "value": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")"
     },
     // One multi-choice for C# and debug settings in the packable project
     // (VS combobox, like InitRepoItems). Checked = current product
@@ -452,11 +460,9 @@
   //
   // SlnFolder → src/sln/__SourceName__/__SourceName__.slnx (CLI and VS).
   // BesideCsproj → src/prj/__SourceName__/__SourceName__.slnx (CLI and VS).
-  // RepoRoot → __SourceName__.slnx at repo root (CLI and VS).
-  // VS + SlnFolder/BesideCsproj also emits
-  // __SourceName__.generated.vsrepo.slnx as __SourceName__.slnx. Visual Studio
-  // still creates its temporary project arrangement, but the correct template
-  // solution masks that intermediate layout in the root file.
+  // RepoRoot + CLI → __SourceName__.slnx at repo root.
+  // RepoRoot + VS → no rename; file stays __SourceName__.generated.slnx so it
+  //   does not collide with Visual Studio's {Name}.slnx at the same folder.
   "sources": [
     {
       "modifiers": [
@@ -498,12 +504,6 @@
           ]
         },
         {
-          "condition": "((HostIdentifier != \"vs\") || (PlaceSolution == \"RepoRoot\"))",
-          "exclude": [
-            "__SourceName__.generated.vsrepo.slnx"
-          ]
-        },
-        {
           "exclude": [
             "TemplateAssets/**"
           ]
@@ -528,15 +528,9 @@
           ]
         },
         {
-          "condition": "(PlaceSolution == \"RepoRoot\")",
+          "condition": "((PlaceSolution == \"RepoRoot\") && IsCliHost)",
           "rename": {
             "__SourceName__.generated.slnx": "__SourceName__.slnx"
-          }
-        },
-        {
-          "condition": "((HostIdentifier == \"vs\"))",
-          "rename": {
-            "__SourceName__.generated.vsrepo.slnx": "__SourceName__.slnx"
           }
         },
         {
@@ -735,9 +729,8 @@
   // Host bookkeeping only. Exactly one handbook Readme survives; it is index 0
   // for the VS open-file post action (filtered list, not declared holes).
   // Solution paths are the names AFTER source rename, BEFORE sourceName replace.
-  // RepoRoot actual file is __SourceName__.slnx. VS also exposes that root
-  // copy for SlnFolder/BesideCsproj; keep it after the handbook so the
-  // open-file post action continues to use index 0 for Readme.md.
+  // RepoRoot+CLI actual file is __SourceName__.slnx; primaryOutputs still names
+  // the pre-CLI-rename .generated path.
   "primaryOutputs": [
     {
       "condition": "(PlaceSolution != \"BesideCsproj\")",
@@ -748,16 +741,16 @@
       "path": "src/prj/__SourceName__/Readme.md"
     },
     {
-      "condition": "((PlaceSolution == \"SlnFolder\")    && (HostIdentifier != \"vs\"))",
+      "condition": "(PlaceSolution == \"SlnFolder\")",
       "path": "src/sln/__SourceName__/__SourceName__.slnx"
     },
     {
-      "condition": "((PlaceSolution == \"BesideCsproj\") && (HostIdentifier != \"vs\"))",
+      "condition": "(PlaceSolution == \"BesideCsproj\")",
       "path": "src/prj/__SourceName__/__SourceName__.slnx"
     },
     {
-      "condition": "(HostIdentifier == \"vs\")",
-      "path": "__SourceName__.slnx"
+      "condition": "(PlaceSolution == \"RepoRoot\")",
+      "path": "__SourceName__.generated.slnx"
     }
   ],
   // Visual Studio only. CLI ignores open-file and we skip display actions there.
@@ -775,12 +768,34 @@
         "continueOnError": true
       },
       {
-        "condition": "(HostIdentifier == \"vs\" && (PlaceSolution != \"RepoRoot\"))",
+        "condition": "(HostIdentifier == \"vs\" && (PlaceSolution == \"SlnFolder\"))",
         "description": "Finish the repository layout",
         "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
         "manualInstructions": [
           {
-            "text": "Visual Studio created an automatically generated root .slnx. The correct template solution overwrote its contents, but the root .slnx remains as an extra conventional solution. Use the .slnx in the selected solution location and delete the extra root .slnx if you do not need it."
+            "text": "Close Visual Studio, open the .slnx under src/sln/, and delete the extra .slnx Visual Studio created in the repository root."
+          }
+        ],
+        "continueOnError": true
+      },
+      {
+        "condition": "(HostIdentifier == \"vs\" && (PlaceSolution == \"BesideCsproj\"))",
+        "description": "Finish the repository layout",
+        "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
+        "manualInstructions": [
+          {
+            "text": "Close Visual Studio, open the .slnx next to the library project under src/prj/, and delete the extra .slnx Visual Studio created in the repository root."
+          }
+        ],
+        "continueOnError": true
+      },
+      {
+        "condition": "(HostIdentifier == \"vs\" && (PlaceSolution == \"RepoRoot\"))",
+        "description": "Finish the repository layout",
+        "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
+        "manualInstructions": [
+          {
+            "text": "Visual Studio created a conventional root .slnx. Open the .generated.slnx in the repository root for the template layout (includes sln). Delete the extra conventional .slnx if you do not need it."
           }
         ],
         "continueOnError": true

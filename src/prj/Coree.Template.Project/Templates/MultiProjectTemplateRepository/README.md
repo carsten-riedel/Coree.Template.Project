@@ -23,7 +23,11 @@ src/sln/__SourceName__/      this library's .slnx and notes
 src/prj/__SourceName__/      packable project-template package, .slnx, and notes
 src/prj/__SourceName__/Templates/  project-template folders
 <!--#else -->
+<!--#if (HostIdentifier == "vs") -->
+__SourceName__.generated.slnx  solution
+<!--#else -->
 __SourceName__.slnx          solution
+<!--#endif -->
 src/sln/__SourceName__/      optional notes / cross-project files
 <!--#endif -->
 <!--#if (PlaceSolution != "BesideCsproj") -->
@@ -36,10 +40,6 @@ src/prj/__SourceName__/Properties/NugetAssets/  nupkg assets (readme, icon, note
 src/prj/__SourceName__/.config/dotnet-tools.json  empty local tool manifest
 <!--#endif -->
 ```
-
-<!--#if ((HostIdentifier == "vs") && (PlaceSolution != "RepoRoot")) -->
-Visual Studio created an automatically generated root `.slnx`. The correct template solution overwrote its contents, but the root `.slnx` remains as an extra conventional solution. Use the `.slnx` in the selected solution location and delete the extra root `.slnx` if you do not need it.
-<!--#endif -->
 
 <!--#if (PlaceSolution == "SlnFolder") -->
 Open a terminal in `src/sln/__SourceName__/` and run `dotnet restore`, `dotnet build`, or `dotnet pack`. The CLI finds the one solution in that folder; you do not pass a `.slnx` or `.csproj` path.

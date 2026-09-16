@@ -25,28 +25,12 @@
       "longName": "NerdbankGitVersioning",
       "shortName": ""
     },
-    "PublicApiAnalyzers": {
-      "longName": "PublicApiAnalyzers",
-      "shortName": ""
-    },
     "DocumentationTemplate": {
       "longName": "DocumentationTemplate",
       "shortName": ""
     },
-    "ProjectEditorGlobalConfig": {
-      "longName": "ProjectEditorGlobalConfig",
-      "shortName": ""
-    },
-    "AnalysisMode": {
-      "longName": "AnalysisMode",
-      "shortName": ""
-    },
     "NuGetAuditHighCriticalAsErrors": {
       "longName": "NuGetAuditHighCriticalAsErrors",
-      "shortName": ""
-    },
-    "TestCoverage": {
-      "longName": "TestCoverage",
       "shortName": ""
     },
     "DirectoryMsBuildFiles": {

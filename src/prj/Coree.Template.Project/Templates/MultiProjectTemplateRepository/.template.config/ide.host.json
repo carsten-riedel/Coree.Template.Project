@@ -4,13 +4,13 @@
     {
       "id": "InitRepoItems",
       "isVisible": true,
-      "defaultValue": "Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense|PackageBoundaries",
+      "defaultValue": "Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense",
       "persistenceScope": "none",
       "name": {
         "text": "Repository root items"
       },
       "description": {
-        "text": "Root files for the first create, including LICENSE from the project license, a slim .gitignore, and ChoosingPackageBoundaries.md. src/global.json is optional and unchecked by default. version.json is not a checkbox here; choose This repository on a first create to add the root file. Visual Studio requires at least one value; choose None when adding another library to the same repository."
+        "text": "Root files for the first create, including LICENSE from the project license and a slim .gitignore. version.json is not a checkbox here; choose This repository on a first create to add the root file. Visual Studio requires at least one value; choose None when adding another library to the same repository."
       }
     },
     {
@@ -30,14 +30,6 @@
       }
     },
     {
-      "id": "TargetFrameworks",
-      "isVisible": true
-    },
-    {
-      "id": "UseWebSdk",
-      "isVisible": true
-    },
-    {
       "id": "CSharpProjectOptions",
       "isVisible": true,
       "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded|GenerateDocumentationFile",
@@ -46,7 +38,7 @@
         "text": "C# project options"
       },
       "description": {
-        "text": "Checked values write explicit C# and debug properties on the class library, tests, and benchmark. XML documentation is library-only. Uncheck one to write the alternative."
+        "text": "Checked values write explicit C# and debug properties on the packable project. XML documentation is project-only. Uncheck one to write the alternative."
       }
     },
     {
@@ -74,17 +66,6 @@
       }
     },
     {
-      "id": "PublicApiAnalyzers",
-      "isVisible": true,
-      "persistenceScope": "none",
-      "name": {
-        "text": "Public API analyzers"
-      },
-      "description": {
-        "text": "Adds Microsoft.CodeAnalysis.PublicApiAnalyzers to this class library. The first build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected."
-      }
-    },
-    {
       "id": "DocumentationTemplate",
       "isVisible": true,
       "defaultValue": "None",
@@ -109,30 +90,6 @@
       }
     },
     {
-      "id": "ProjectEditorGlobalConfig",
-      "isVisible": true,
-      "defaultValue": "Strict",
-      "persistenceScope": "none",
-      "name": {
-        "text": "Code style rules for library project"
-      },
-      "description": {
-        "text": "Single choice. Default is Strict: naming, XML docs, nullable, unused usings, and reserved identifiers (CA1716) fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected."
-      }
-    },
-    {
-      "id": "AnalysisMode",
-      "isVisible": true,
-      "defaultValue": "Recommended",
-      "persistenceScope": "none",
-      "name": {
-        "text": "Code analysis mode"
-      },
-      "description": {
-        "text": "SDK CA rules on the class library only. Default Recommended. Minimum is fewer warnings. All is almost every CA rule. Separate from code style Strict and from Public API analyzers."
-      }
-    },
-    {
       "id": "NuGetAuditHighCriticalAsErrors",
       "isVisible": true,
       "defaultValue": "true",
@@ -141,24 +98,8 @@
         "text": "Treat high/critical NuGet vulnerabilities as errors"
       },
       "description": {
-        "text": "Default on. Restore fails this class library on high (NU1903) and critical (NU1904) vulnerable packages. Low and moderate stay warnings. Uncheck for an EOL or backport graph. Test and benchmark projects are not affected. NugetReport next to the tests lists that library and is still info-only."
+        "text": "Default on. Restore fails this packable project on high (NU1903) and critical (NU1904) vulnerable packages. Low and moderate stay warnings. Uncheck for an EOL or backport graph."
       }
-    },
-    {
-      "id": "TestCoverage",
-      "isVisible": true,
-      "defaultValue": "Coverlet",
-      "persistenceScope": "none",
-      "name": {
-        "text": "Test coverage"
-      },
-      "description": {
-        "text": "Single choice. Default is Coverlet: dotnet test fails below 100% line, branch, and method coverage on the library. Edit Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. ReportGenerator needs Coverlet output, so the two are not independent checkboxes."
-      }
-    },
-    {
-      "id": "BenchmarkProject",
-      "isVisible": true
     },
     {
       "id": "DirectoryMsBuildFiles",
@@ -168,7 +109,7 @@
         "text": "Empty Directory.Build and Directory.Solution files"
       },
       "description": {
-        "text": "Default off. Writes empty Directory.Build.props and Directory.Build.targets beside this library, and Directory.Solution.props and Directory.Solution.targets beside this library's .slnx. Landing files for extra MSBuild. Tests and benchmark are not affected. No Directory.Packages.props."
+        "text": "Default off. Writes empty Directory.Build.props and Directory.Build.targets beside this library, and Directory.Solution.props and Directory.Solution.targets beside this library's .slnx. Landing files for extra MSBuild. No Directory.Packages.props."
       }
     },
     {
@@ -180,7 +121,7 @@
         "text": "Empty local dotnet-tools.json"
       },
       "description": {
-        "text": "Default on. Writes an empty .config/dotnet-tools.json beside this library (no tools). Landing file for dotnet tool install --local. Uncheck to skip. Tests and benchmark are not affected. Does not restore tools on build."
+        "text": "Default on. Writes an empty .config/dotnet-tools.json beside this library (no tools). Landing file for dotnet tool install --local. Uncheck to skip. Does not restore tools on build."
       }
     }
   ]

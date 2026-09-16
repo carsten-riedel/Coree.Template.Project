@@ -1,15 +1,9 @@
-<!--#if (UseWebSdk) -->
-<Project>
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk.Web" />
-<!--#else -->
-<Project>
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
-<!--#endif -->
+<Project Sdk="Microsoft.NET.Sdk">
 
   <!-- General build settings: defines the output type and target framework -->
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <!-- C# language features and debugging configuration -->
@@ -45,27 +39,6 @@
     <!--#endif -->
   </PropertyGroup>
 
-  <!--#if (UseProjectEditorGlobalConfig) -->
-  <!-- GlobalAnalyzerConfigFiles is what Roslyn reads. Visible=false so VS does not show that item twice. -->
-  <!-- None+Link is Solution Explorer only. Disk path stays next to the csproj: Properties/ would change analyzer scope. -->
-  <!-- EnforceCodeStyleInBuild is required or IDE1006 stays IDE-only and `dotnet build` ignores the file. -->
-  <!-- OptimizeImplicitlyTriggeredBuild=false: VS Test Explorer / F5 must not skip analyzers (dotnet test does not). -->
-  <PropertyGroup>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <OptimizeImplicitlyTriggeredBuild>false</OptimizeImplicitlyTriggeredBuild>
-  </PropertyGroup>
-  <ItemGroup>
-    <GlobalAnalyzerConfigFiles Include="$(MSBuildProjectDirectory)\.project.editor.globalconfig" Visible="false" />
-    <None Remove=".project.editor.globalconfig" />
-    <None Include=".project.editor.globalconfig" Link="Properties\.project.editor.globalconfig" />
-  </ItemGroup>
-  <!--#endif -->
-
-  <!-- SDK CA rule set. Always written; omitted AnalysisMode switch means Recommended. -->
-  <PropertyGroup>
-    <AnalysisMode>__AnalysisMode__</AnalysisMode>
-  </PropertyGroup>
-
   <!--#if (NuGetAuditHighCriticalAsErrors) -->
   <!-- Restore NuGetAudit is already on. High (NU1903) and critical (NU1904) fail restore. Low/moderate stay warnings. -->
   <PropertyGroup>
@@ -73,21 +46,13 @@
   </PropertyGroup>
   <!--#endif -->
 
-  <!-- Packaging and publish configuration -->
+  <!-- Packaging configuration -->
   <!-- EnablePackageValidation: TFM/runtime holes on pack. No baseline at generate; set PackageValidationBaselineVersion after the first nuget.org publish. -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <IsPublishable>false</IsPublishable>
-    <PublishRelease>true</PublishRelease>
-    <IsTestProject>false</IsTestProject>
     <PackAsTool>false</PackAsTool>
     <EnablePackageValidation>true</EnablePackageValidation>
-  </PropertyGroup>
-
-  <!-- SDK defaults stay. CheckEol: true for exe, skipped for Library. InvariantGlobalization unset = cultures on. -->
-  <PropertyGroup>
-    <CheckEolTargetFramework>$(CheckEolTargetFramework)</CheckEolTargetFramework>
-    <InvariantGlobalization>$(InvariantGlobalization)</InvariantGlobalization>
   </PropertyGroup>
 
   <!--#if (UseNerdbankGitVersioning) -->
@@ -179,39 +144,6 @@
     <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Pack</PackageOutputPath>
   </PropertyGroup>
 
-  <!-- Publish behavior keep slim for library specs -->
-	<PropertyGroup Condition="'$(_IsPublishing)' == 'true'">
-		<!-- Flat publish output -->
-		<PublishDir Condition="'$(PublishDir)' == ''">$(MSBuildProjectDirectory)\bin\Publish\</PublishDir>
-		<PublishAot>false</PublishAot>
-		<PublishTrimmed>false</PublishTrimmed>
-	</PropertyGroup>
-
-  <!-- Publish behavior for executable future useage program main etc -->
-	<PropertyGroup Condition="'$(_IsPublishing)' == 'true' and '$(OutputType)' != 'Library'">
-		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
-		<PublishSelfContained>true</PublishSelfContained>
-		<PublishSingleFile>true</PublishSingleFile>
-		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
-		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
-	</PropertyGroup>
-
-  <!--#if (PublicApiAnalyzers) -->
-  <PropertyGroup>
-    <PublicApiDirectory>$(MSBuildProjectDirectory)\Properties\PublicAPI</PublicApiDirectory>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="5.6.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="$(PublicApiDirectory)\PublicAPI.Shipped.txt" />
-    <AdditionalFiles Include="$(PublicApiDirectory)\PublicAPI.Unshipped.txt" />
-  </ItemGroup>
-  <!--#endif -->
-
   <!-- Keep Git configuration on disk without showing it as a project item -->
   <ItemGroup>
     <None Remove=".gitignore" />
@@ -251,16 +183,4 @@
   <!--#if (NerdbankGitVersioning == "Repo") -->
   <Import Project="Properties/Build/NerdbankRepositoryVersion.targets" />
   <!--#endif -->
-  <!--#if (PublicApiAnalyzers) -->
-  <Import Project="Properties/Build/InitializePublicApi.targets" />
-  <!--#endif -->
-  <!--
-    Must stay last. This import is Sdk.targets plus the outer Publish dispatch.
-    The SDK reads properties and items while it loads (EnforceCodeStyleInBuild,
-    GlobalAnalyzerConfigFiles, AnalysisMode, EnablePackageValidation, WarningsAsErrors, publish). Anything after this line is after the
-    SDK and is ignored for that. Project Sdk="..." would append Sdk.targets
-    after this file and overwrite the Publish override.
-  -->
-  <Import Project="Properties/Build/ImportSdkTargets.targets" />
-
 </Project>

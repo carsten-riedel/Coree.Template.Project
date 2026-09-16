@@ -4,7 +4,7 @@
 This folder is the per-library area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` lives here; keep the folder while that is true. You can still add extra solution items here.
 <!--#elseif (PlaceSolution == "BesideCsproj") -->
-This folder is the packable class library. The `.slnx` and this readme sit next to the `.csproj`. Tests and the optional benchmark stay sibling projects under `src/prj/`. There is no `src/sln/` tree for this library.
+This folder is the packable class library. The `.slnx` and this readme sit next to the `.csproj`. There is no `src/sln/` tree for this library.
 <!--#else -->
 This folder is the per-library area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` is written elsewhere (`PlaceSolution`). Use this folder for shared notes or extra solution items, or delete it if you do not need it.
@@ -23,10 +23,7 @@ Visual Studio created a conventional root `.slnx`. Open `__SourceName__.generate
 <!--#endif -->
 <!--#if (PlaceSolution == "RepoRoot") -->
 
-The solution file lives at the repository root. Open a terminal there for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet pack`. If more than one `.slnx` sits in that directory, pass the solution path to `dotnet`.
-<!--#if (WriteSrcGlobalJson) -->
-`src/global.json` does not apply to those commands: the SDK muxer starts at the repository root and does not walk into `src/`.
-<!--#endif -->
+The solution file lives at the repository root. Open a terminal there for `dotnet restore`, `dotnet build`, and `dotnet pack`. If more than one `.slnx` sits in that directory, pass the solution path to `dotnet`.
 <!--#else -->
 
 <!--#if (PlaceSolution == "SlnFolder") -->
@@ -42,9 +39,6 @@ The `.slnx` and this readme live in this folder next to the packable library. Op
 ./Directory.Solution.props  optional empty solution MSBuild landing file
 ./Directory.Solution.targets
 <!--#endif -->
-<!--#if (WriteSrcGlobalJson) -->
-../../global.json            .NET SDK pin (highest selected TFM)
-<!--#endif -->
 ../../prj/__SourceName__/    packable class library
 <!--#if (DirectoryMsBuildFiles) -->
 ../../prj/__SourceName__/Directory.Build.props  optional empty library MSBuild landing file
@@ -52,10 +46,6 @@ The `.slnx` and this readme live in this folder next to the packable library. Op
 <!--#endif -->
 <!--#if (DotNetToolManifest) -->
 ../../prj/__SourceName__/.config/dotnet-tools.json  empty local tool manifest
-<!--#endif -->
-../../prj/__SourceName__.Tests/  tests (not packed)
-<!--#if (BenchmarkProject == true) -->
-../../prj/__SourceName__.Benchmark/  optional BenchmarkDotNet console app
 <!--#endif -->
 <!--#else -->
 ./                         you are here (this readme + __SourceName__.slnx + __SourceName__.csproj)
@@ -65,15 +55,8 @@ The `.slnx` and this readme live in this folder next to the packable library. Op
 ./Directory.Build.props     optional empty library MSBuild landing file
 ./Directory.Build.targets
 <!--#endif -->
-<!--#if (WriteSrcGlobalJson) -->
-../global.json               .NET SDK pin (highest selected TFM)
-<!--#endif -->
 <!--#if (DotNetToolManifest) -->
 ./.config/dotnet-tools.json  empty local tool manifest
-<!--#endif -->
-../__SourceName__.Tests/     tests (not packed)
-<!--#if (BenchmarkProject == true) -->
-../__SourceName__.Benchmark/  optional BenchmarkDotNet console app
 <!--#endif -->
 <!--#endif -->
 ```
@@ -89,59 +72,16 @@ dotnet restore
 dotnet build
 ```
 
-## Test
-
-The test project explicitly allows target frameworks to run in parallel. Test results and other per-target-framework reports next to the test project are isolated. No parallelism switch is needed on the command line:
-
-```bash
-dotnet test
-```
-
-MSTest is explicitly configured for method-level parallel execution within one test assembly. Tests must therefore not share mutable global state.
-
-After a test run, the links below point to generated reports. Each selected target framework writes its own files (`net8.0`, `net10.0`, …).
-
-<!--#if (PlaceSolution == "SlnFolder") -->
-[Test results (trx)](../../prj/__SourceName__.Tests/MSTestResults/__SourceName__.Tests-__TargetFramework__.trx)
-[Test results (html)](../../prj/__SourceName__.Tests/MSTestResults/result-__TargetFramework__.html)
-<!--#if (CoverletMSBuild == true) -->
-[Coverlet output](../../prj/__SourceName__.Tests/CoverletOutput/coverage.__TargetFramework__.opencover.xml)
-<!--#endif -->
-<!--#else -->
-[Test results (trx)](../__SourceName__.Tests/MSTestResults/__SourceName__.Tests-__TargetFramework__.trx)
-[Test results (html)](../__SourceName__.Tests/MSTestResults/result-__TargetFramework__.html)
-<!--#if (CoverletMSBuild == true) -->
-[Coverlet output](../__SourceName__.Tests/CoverletOutput/coverage.__TargetFramework__.opencover.xml)
-<!--#endif -->
-<!--#endif -->
-
-<!--#if (CoverletMSBuild == true) -->
-Coverlet measures only the class library (`[__SourceName__]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
-<!--#endif -->
-<!--#if (ReportGenerator == true) -->
-<!--#if (PlaceSolution == "SlnFolder") -->
-ReportGenerator writes one summary per target framework under `../../prj/__SourceName__.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
-<!--#else -->
-ReportGenerator writes one summary per target framework under `../__SourceName__.Tests/ReportGeneratorOutput/<TFM>/SummaryGithub.md` (for example, `.../ReportGeneratorOutput/net10.0/SummaryGithub.md`).
-<!--#endif -->
-<!--#endif -->
-
 ## Pack
 
 ```bash
 dotnet pack
 ```
 
-Creates one `.nupkg` in `src/prj/__SourceName__/bin/Pack/` containing the library for all selected target frameworks. Test and optional benchmark projects are not packed.
+Creates one `.nupkg` in `src/prj/__SourceName__/bin/Pack/` containing the project-template package.
 <!--#if (NuGetAuditHighCriticalAsErrors) -->
 
-Restore fails this class library on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that library’s packages (txt/json) and is still info-only.
-<!--#endif -->
-<!--#if (PublicApiAnalyzers) -->
-
-## Public API baseline
-
-The class library uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first real `dotnet build` writes `src/prj/__SourceName__/Properties/PublicAPI/PublicAPI.Shipped.txt` and `PublicAPI.Unshipped.txt` if they are missing, then records the current public surface. Commit those files. Later public additions belong in `PublicAPI.Unshipped.txt` (analyzer RS0016 / `dotnet format analyzers` with `--diagnostics RS0016`).
+Restore fails this class library on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings.
 <!--#endif -->
 <!--#if (WritePackageDocTemplate) -->
 
@@ -150,38 +90,13 @@ The class library uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first re
 `src/prj/__SourceName__/Properties/NugetAssets/docs/DocShell.html` is the offline documentation seed. It packs with the nupkg (`docs/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this library. Repository-root `docs/` is a separate site if present.
 <!--#endif -->
 
-## Publish
-
-The class library sets `IsPublishable` to `false`. Distribution is `dotnet pack`. To write output to `src/prj/__SourceName__/bin/Publish/` for the highest selected target framework, set `IsPublishable` to `true` and run:
-
-```bash
-dotnet publish
-```
-
-This is a class library, not an executable.
-
 ## CI
 
-Use `-m:1` for the build so a pipeline does not depend on machine load. It avoids occasional file locks when the library is built as a solution project and as a test `ProjectReference` at the same time. Multi-target test execution is already configured as parallel in the test project. Run these commands from this folder so each library has exactly one `.slnx` in the working directory.
+Use `-m:1` for the build so a pipeline does not depend on machine load. Run these commands from this folder so each library has exactly one `.slnx` in the working directory.
 
 ```bash
 dotnet restore
 dotnet build --no-restore -m:1
-dotnet test --no-build
 dotnet pack
 ```
-<!--#if (BenchmarkProject == true) -->
-
-## Benchmarks
-
-The benchmark is a local executable targeting the highest selected framework. It is neither packed nor published; start it with the command below.
-
-```bash
-<!--#if (PlaceSolution == "SlnFolder") -->
-dotnet run --project ../../prj/__SourceName__.Benchmark/__SourceName__.Benchmark.csproj -c Release
-<!--#else -->
-dotnet run --project ../__SourceName__.Benchmark/__SourceName__.Benchmark.csproj -c Release
-<!--#endif -->
-```
-<!--#endif -->
 <!--#endif -->

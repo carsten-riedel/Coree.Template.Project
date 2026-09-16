@@ -5,15 +5,6 @@ Libraries this template uses that are not owned or provided by the template auth
 ## Default content
 
 - [Nerdbank.GitVersioning](https://github.com/dotnet/Nerdbank.GitVersioning) (MIT)
-- [coverlet.msbuild](https://github.com/coverlet-coverage/coverlet) (MIT)
-- [Microsoft.NET.Test.Sdk](https://github.com/microsoft/vstest) (MIT)
-- [MSTest.TestAdapter](https://github.com/microsoft/testfx) / [MSTest.TestFramework](https://github.com/microsoft/testfx) (MIT)
-
-## Optional content
-
-- [ReportGenerator](https://github.com/danielpalme/ReportGenerator) (Apache-2.0)
-- [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) (MIT)
-- [Microsoft.CodeAnalysis.PublicApiAnalyzers](https://github.com/dotnet/roslyn-analyzers) (MIT)
 
 ## Documentation template (DocShell)
 

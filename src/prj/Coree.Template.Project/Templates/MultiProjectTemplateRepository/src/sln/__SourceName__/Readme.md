@@ -9,17 +9,9 @@ This folder is the packable class library. The `.slnx` and this readme sit next 
 This folder is the per-library area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` is written elsewhere (`PlaceSolution`). Use this folder for shared notes or extra solution items, or delete it if you do not need it.
 <!--#endif -->
-<!--#if ((HostIdentifier == "vs") && (PlaceSolution == "SlnFolder")) -->
+<!--#if ((HostIdentifier == "vs") && (PlaceSolution != "RepoRoot")) -->
 
-Visual Studio created an automatically generated root `.slnx`. The correct template default has overwritten it, but the root `.slnx` is still present. Close Visual Studio, open the `.slnx` in this folder (`src/sln/__SourceName__/`), and delete the extra conventional root `.slnx` if you do not need it.
-<!--#endif -->
-<!--#if ((HostIdentifier == "vs") && (PlaceSolution == "BesideCsproj")) -->
-
-Visual Studio created an automatically generated root `.slnx`. The correct template default has overwritten it, but the root `.slnx` is still present. Open the `.slnx` next to the library project under `src/prj/`, and delete the extra conventional root `.slnx` if you do not need it.
-<!--#endif -->
-<!--#if ((HostIdentifier == "vs") && (PlaceSolution == "RepoRoot")) -->
-
-Visual Studio created an automatically generated root `.slnx`. The correct template default has overwritten it, but the root `.slnx` is still present. Use the template `.slnx` in the repository root and delete any extra conventional root `.slnx` if you do not need it.
+Visual Studio created an automatically generated root `.slnx`. The correct template solution overwrote its contents, but the root `.slnx` remains as an extra conventional solution. Use the `.slnx` in the selected solution location and delete the extra root `.slnx` if you do not need it.
 <!--#endif -->
 <!--#if (PlaceSolution == "RepoRoot") -->
 

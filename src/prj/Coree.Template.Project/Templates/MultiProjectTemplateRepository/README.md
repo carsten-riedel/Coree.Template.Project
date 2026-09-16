@@ -38,7 +38,7 @@ src/prj/__SourceName__/.config/dotnet-tools.json  empty local tool manifest
 ```
 
 <!--#if ((HostIdentifier == "vs") && (PlaceSolution != "RepoRoot")) -->
-Visual Studio created an automatically generated root `.slnx`. The correct template default has overwritten it, but the root `.slnx` is still present. Use the `.slnx` in the selected target location and delete the extra conventional root `.slnx` if you do not need it.
+Visual Studio created an automatically generated root `.slnx`. The correct template solution overwrote its contents, but the root `.slnx` remains as an extra conventional solution. Use the `.slnx` in the selected solution location and delete the extra root `.slnx` if you do not need it.
 <!--#endif -->
 
 <!--#if (PlaceSolution == "SlnFolder") -->

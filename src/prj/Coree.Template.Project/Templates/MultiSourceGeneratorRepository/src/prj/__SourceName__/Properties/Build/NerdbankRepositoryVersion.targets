@@ -1,0 +1,62 @@
+<Project>
+  <!--
+    Template generate cannot skip-or-write: a second dotnet new that stamps
+    root version.json is Exit 73. This target is imported only when Repo
+    after generate. In template source the #if around the Import is an XML
+    comment, so MSBuild always loads this file. ../../../version.json from
+    src/prj/__SourceName__ is this template folder. Skip the copy when
+    ../../../.template.config exists (host tree, not a generated repo).
+    Same-build Nerdbank must see the file, so run before GetBuildVersion.
+    Seed is Properties/Build/Nerdbank.version.json (same payload as TemplateAssets/Versioning/Repo/version.json).
+  -->
+  <UsingTask
+    TaskName="CopyFileIfNotExists"
+    TaskFactory="RoslynCodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <SourceFile ParameterType="System.String" Required="true" />
+      <DestinationFile ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System.IO" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        if (!File.Exists(DestinationFile))
+        {
+          var directory = Path.GetDirectoryName(DestinationFile);
+          if (!string.IsNullOrEmpty(directory))
+          {
+            Directory.CreateDirectory(directory);
+          }
+
+          try
+          {
+            File.Copy(SourceFile, DestinationFile);
+          }
+          catch (IOException)
+          {
+            if (!File.Exists(DestinationFile))
+            {
+              throw;
+            }
+          }
+        }
+      ]]></Code>
+    </Task>
+  </UsingTask>
+
+  <ItemGroup>
+    <None Remove="$(MSBuildThisFileDirectory)Nerdbank.version.json" />
+  </ItemGroup>
+
+  <Target Name="EnsureNerdbankRepositoryVersionJson" BeforeTargets="GetBuildVersion;GenerateNerdbankVersionInformation;PrepareForBuild;GenerateAssemblyInfo;Pack">
+    <PropertyGroup>
+      <_NerdbankRepositoryVersionJson>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)\..\..\..\version.json'))</_NerdbankRepositoryVersionJson>
+      <_NerdbankRepositoryVersionJsonSeed>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)Nerdbank.version.json'))</_NerdbankRepositoryVersionJsonSeed>
+      <_NerdbankTemplateHostConfig>$([MSBuild]::NormalizePath('$(MSBuildProjectDirectory)\..\..\..\.template.config'))</_NerdbankTemplateHostConfig>
+    </PropertyGroup>
+    <CopyFileIfNotExists
+      Condition="Exists('$(_NerdbankRepositoryVersionJsonSeed)') AND !Exists('$(_NerdbankRepositoryVersionJson)') AND !Exists('$(_NerdbankTemplateHostConfig)')"
+      SourceFile="$(_NerdbankRepositoryVersionJsonSeed)"
+      DestinationFile="$(_NerdbankRepositoryVersionJson)" />
+  </Target>
+</Project>

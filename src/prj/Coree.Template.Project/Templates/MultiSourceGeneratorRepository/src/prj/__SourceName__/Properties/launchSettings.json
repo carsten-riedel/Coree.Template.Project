@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "__SourceName__": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\__SourceName__.DebugHost\\__SourceName__.DebugHost.csproj"
+    }
+  }
+}

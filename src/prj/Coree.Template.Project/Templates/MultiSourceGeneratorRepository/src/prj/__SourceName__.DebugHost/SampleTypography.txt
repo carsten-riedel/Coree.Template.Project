@@ -1,0 +1,3 @@
+ASCII hyphen and quotes: 1-2 "hello"
+Em dash (EMD001): 1—2
+Typographic quotes (TSQ001): “hello”

@@ -1,0 +1,55 @@
+<Project>
+  <!--
+    Consuming projects set EmDashAnalyzerSeverity and SmartQuotesAnalyzerSeverity.
+    Values: warning (default), error, message, or off.
+    Additional files: EmDashAnalyzerIncludes / EmDashAnalyzerExcludes and the SmartQuotes pair.
+    Includes are semicolon-separated globs relative to the consuming project directory.
+    Excludes are subtracted from that analyzer's includes. Demo includes: *.txt;*.csproj.
+    Empty includes disable additional-file scanning. The analyzer also skips additional files when includes are unset.
+    CompilerVisibleProperty is required or the compiler does not pass the values to the analyzer.
+    EditorConfig treats ';' as a comment, so a target rewrites the compiler-visible copies with '|'.
+  -->
+  <PropertyGroup>
+    <EmDashAnalyzerSeverity Condition="'$(EmDashAnalyzerSeverity)' == ''">warning</EmDashAnalyzerSeverity>
+    <SmartQuotesAnalyzerSeverity Condition="'$(SmartQuotesAnalyzerSeverity)' == ''">warning</SmartQuotesAnalyzerSeverity>
+    <EmDashAnalyzerIncludes Condition="'$(EmDashAnalyzerIncludes)' == ''">*.txt;*.csproj</EmDashAnalyzerIncludes>
+    <SmartQuotesAnalyzerIncludes Condition="'$(SmartQuotesAnalyzerIncludes)' == ''">*.txt;*.csproj</SmartQuotesAnalyzerIncludes>
+  </PropertyGroup>
+  <ItemGroup>
+    <CompilerVisibleProperty Include="EmDashAnalyzerSeverity" />
+    <CompilerVisibleProperty Include="SmartQuotesAnalyzerSeverity" />
+    <CompilerVisibleProperty Include="EmDashAnalyzerIncludes" />
+    <CompilerVisibleProperty Include="EmDashAnalyzerExcludes" />
+    <CompilerVisibleProperty Include="SmartQuotesAnalyzerIncludes" />
+    <CompilerVisibleProperty Include="SmartQuotesAnalyzerExcludes" />
+    <CompilerVisibleProperty Include="MSBuildProjectDirectory" />
+  </ItemGroup>
+  <Target Name="AddTypographyAdditionalFiles"
+          BeforeTargets="GenerateMSBuildEditorConfigFileCore;CoreCompile">
+    <ItemGroup>
+      <_EmDashAnalyzerIncludeGlob Include="$(EmDashAnalyzerIncludes)" Condition="'$(EmDashAnalyzerIncludes)' != ''" />
+      <_EmDashAnalyzerExcludeGlob Include="$(EmDashAnalyzerExcludes)" Condition="'$(EmDashAnalyzerExcludes)' != ''" />
+      <_EmDashAnalyzerExcludeGlob Include="bin\**;obj\**" />
+      <_EmDashAnalyzerAdditionalFile Include="@(_EmDashAnalyzerIncludeGlob->'$(MSBuildProjectDirectory)\%(Identity)')"
+                                     Exclude="@(_EmDashAnalyzerExcludeGlob->'$(MSBuildProjectDirectory)\%(Identity)')" />
+      <_SmartQuotesAnalyzerIncludeGlob Include="$(SmartQuotesAnalyzerIncludes)" Condition="'$(SmartQuotesAnalyzerIncludes)' != ''" />
+      <_SmartQuotesAnalyzerExcludeGlob Include="$(SmartQuotesAnalyzerExcludes)" Condition="'$(SmartQuotesAnalyzerExcludes)' != ''" />
+      <_SmartQuotesAnalyzerExcludeGlob Include="bin\**;obj\**" />
+      <_SmartQuotesAnalyzerAdditionalFile Include="@(_SmartQuotesAnalyzerIncludeGlob->'$(MSBuildProjectDirectory)\%(Identity)')"
+                                          Exclude="@(_SmartQuotesAnalyzerExcludeGlob->'$(MSBuildProjectDirectory)\%(Identity)')" />
+      <AdditionalFiles Include="@(_EmDashAnalyzerAdditionalFile);@(_SmartQuotesAnalyzerAdditionalFile)" />
+      <_EmDashAnalyzerIncludeGlob Remove="@(_EmDashAnalyzerIncludeGlob)" />
+      <_EmDashAnalyzerExcludeGlob Remove="@(_EmDashAnalyzerExcludeGlob)" />
+      <_EmDashAnalyzerAdditionalFile Remove="@(_EmDashAnalyzerAdditionalFile)" />
+      <_SmartQuotesAnalyzerIncludeGlob Remove="@(_SmartQuotesAnalyzerIncludeGlob)" />
+      <_SmartQuotesAnalyzerExcludeGlob Remove="@(_SmartQuotesAnalyzerExcludeGlob)" />
+      <_SmartQuotesAnalyzerAdditionalFile Remove="@(_SmartQuotesAnalyzerAdditionalFile)" />
+    </ItemGroup>
+    <PropertyGroup>
+      <EmDashAnalyzerIncludes Condition="'$(EmDashAnalyzerIncludes)' != ''">$([System.String]::Copy('$(EmDashAnalyzerIncludes)').Replace(';','|'))</EmDashAnalyzerIncludes>
+      <EmDashAnalyzerExcludes Condition="'$(EmDashAnalyzerExcludes)' != ''">$([System.String]::Copy('$(EmDashAnalyzerExcludes)').Replace(';','|'))</EmDashAnalyzerExcludes>
+      <SmartQuotesAnalyzerIncludes Condition="'$(SmartQuotesAnalyzerIncludes)' != ''">$([System.String]::Copy('$(SmartQuotesAnalyzerIncludes)').Replace(';','|'))</SmartQuotesAnalyzerIncludes>
+      <SmartQuotesAnalyzerExcludes Condition="'$(SmartQuotesAnalyzerExcludes)' != ''">$([System.String]::Copy('$(SmartQuotesAnalyzerExcludes)').Replace(';','|'))</SmartQuotesAnalyzerExcludes>
+    </PropertyGroup>
+  </Target>
+</Project>

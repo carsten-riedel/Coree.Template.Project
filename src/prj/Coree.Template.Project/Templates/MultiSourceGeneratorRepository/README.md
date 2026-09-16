@@ -1,6 +1,7 @@
 # __SourceName__
 
 .NET multi-source-generator repository. The GitHub landing page is this file.
+The scaffold uses annotated C# classes as the source of truth and generates `TypeNameJson` serialization helpers. Tests run the generator directly; the separate Console DebugHost consumes the generated API and is the Visual Studio `DebugRoslynComponent` compile target.
 <!--#if (PlaceSolution == "SlnFolder") -->
 Each package's `.slnx` and notes live under `src/sln/__SourceName__/`. CLI commands for this package start in that folder.
 <!--#elseif (PlaceSolution == "BesideCsproj") -->

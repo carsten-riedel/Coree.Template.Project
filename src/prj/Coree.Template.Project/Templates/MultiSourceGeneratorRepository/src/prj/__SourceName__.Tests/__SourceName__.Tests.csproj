@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- DebugHost / test host TFM from the wizard. The analyzer under test is netstandard2.0. -->
+  <!-- DebugHost / test host TFM from the wizard. The source-generator under test is netstandard2.0. -->
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>__TargetFramework__</TargetFramework>
@@ -46,7 +46,7 @@
 
   <!--#if (CoverletMSBuild == true) -->
   <!-- coverlet.msbuild: CollectCoverage is enough for `dotnet test` on SDK MSBuild. -->
-  <!-- Include is the packable analyzer only (sourceName). Threshold fails the test run when that assembly is under 100% line/branch/method total. -->
+  <!-- Include is the packable source-generator only (sourceName). Threshold fails the test run when that assembly is under 100% line/branch/method total. -->
   <PropertyGroup>
     <CollectCoverage>true</CollectCoverage>
     <CoverletOutputFormat>opencover,json</CoverletOutputFormat>
@@ -68,7 +68,7 @@
   </Target>
   <!--#endif -->
 
-  <!-- Package inventory of the packable analyzer, not this test project. -->
+  <!-- Package inventory of the packable source-generator, not this test project. -->
   <PropertyGroup>
     <NugetReportDir Condition=" '$(NugetReportDir)' == '' ">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'NugetReport'))</NugetReportDir>
     <NugetReportProject Condition=" '$(NugetReportProject)' == '' ">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', '__SourceName__', '__SourceName__.csproj'))</NugetReportProject>
@@ -91,7 +91,7 @@
     <None Remove=".gitignore" />
   </ItemGroup>
 
-  <!-- Analyzer is netstandard2.0. Do not SetTargetFramework to the test TFM. -->
+  <!-- Source-generator is netstandard2.0. Do not SetTargetFramework to the test TFM. -->
   <ItemGroup>
     <ProjectReference Include="..\__SourceName__\__SourceName__.csproj" />
   </ItemGroup>
@@ -101,8 +101,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="4.4.0" />
     <PackageReference Include="MSTest.TestFramework" Version="4.4.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.14.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="1.1.3" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
     <!--#if (CoverletMSBuild == true) -->
     <PackageReference Include="coverlet.msbuild" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>

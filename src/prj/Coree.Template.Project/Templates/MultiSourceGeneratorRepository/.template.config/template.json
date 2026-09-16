@@ -6,7 +6,7 @@
   "identity": "CoreeTemplatesProjectMultiSourceGeneratorRepository",
   // Displayname is used in the New Project dialog and in the dotnet new list output.
   "name": ".NET multi-source-generator repository",
-  "description": "Repository of one or more independently packable Roslyn source-generator packages (NuGet). Same combo and init system as the multi-library repository. Source generators target netstandard2.0 and pack under analyzers/dotnet/cs. Tests, Coverlet coverage, and a Visual Studio DebugHost (DebugRoslynComponent) are included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, and documentation template.",
+  "description": "Repository of one or more independently packable Roslyn source-generator packages (NuGet). Same combo and init system as the multi-library repository. Source generators target netstandard2.0 and pack under analyzers/dotnet/cs. Includes an incremental C#-model-to-JSON-support sample, GeneratorDriver tests, Coverlet coverage, and a Console DebugHost for Visual Studio DebugRoslynComponent; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, and documentation template.",
   "shortName": "multisourcegeneratorrepo-coree",
   // Host metadata: libraries this template uses that the author does not own.
   // After create, CLI prints this URL. The markdown lives next to this file;
@@ -246,7 +246,7 @@
       "type": "computed",
       "value": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")"
     },
-    // One multi-choice for C# / debug / documentation in the analyzer, tests, DebugHost, and
+    // One multi-choice for C# / debug / documentation in the source-generator, tests, DebugHost, and
     // benchmark (VS combobox, like InitRepoItems). Checked =
     // current product default. Unchecked = the other explicit value.
     // Properties are always written. GenerateDocumentationFile is in this
@@ -361,7 +361,7 @@
         },
         {
           "choice": "Off",
-          "description": "VersionMajor / VersionPrefix / PackageVersion in the analyzer csproj. No Nerdbank.GitVersioning package.",
+          "description": "VersionMajor / VersionPrefix / PackageVersion in the source-generator csproj. No Nerdbank.GitVersioning package.",
           "displayName": "Off (VersionPrefix in the library project)"
         }
       ]
@@ -382,7 +382,7 @@
       "type": "computed",
       "value": "(InitRepoItems != \"None\") && (InitRepoItems == \"SrcGlobalJson\")"
     },
-    // Analyzer-only. Default off. First real build writes Properties/PublicAPI
+    // Source-generator-only. Default off. First real build writes Properties/PublicAPI
     // baseline files if they are missing. Not a repository-root Init* item.
     "PublicApiAnalyzers": {
       "type": "parameter",
@@ -466,15 +466,15 @@
         }
       ]
     },
-    // Library-only .project.editor.globalconfig via GlobalAnalyzerConfigFiles.
+    // Source-generator-only .project.editor.globalconfig via GlobalAnalyzerConfigFiles.
     // Strict (default) is the VS style dump plus public-release build gates
     // (naming/XML/nullable/unused usings as error). Default is the same dump
     // with suggestions only. Off writes nothing. Generated disk name is always
     // .project.editor.globalconfig; seeds live under TemplateAssets/CodeStyle/
-    // as .project.editor.globalconfig.{choice}. Wire it in the analyzer csproj;
+    // as .project.editor.globalconfig.{choice}. Wire it in the source-generator csproj;
     // EnforceCodeStyleInBuild is required or IDE naming
     // stays IDE-only. OptimizeImplicitlyTriggeredBuild=false so VS Test
-    // Explorer / F5 do not skip those analyzers (`dotnet test` does not).
+    // Explorer / F5 do not skip those rules (`dotnet test` does not).
     "ProjectEditorGlobalConfig": {
       "type": "parameter",
       "datatype": "choice",
@@ -505,13 +505,7 @@
       "type": "computed",
       "value": "(ProjectEditorGlobalConfig != \"Off\")"
     },
-    // Default/Off keep unused usings on EmDashAnalyzer so IDE0005 is visible.
-    // Strict omits them or the first build fails (IDE0005 is error).
-    "KeepScaffoldUnusedUsings": {
-      "type": "computed",
-      "value": "(ProjectEditorGlobalConfig != \"Strict\")"
-    },
-    // Library-only SDK CA rule set (AnalysisMode). Not style/CS (that is
+    // Source-generator-only SDK CA rule set (AnalysisMode). Not style/CS (that is
     // ProjectEditorGlobalConfig) and not Public API analyzers. Recommended
     // is the omit-the-switch default. Always written so the generated csproj
     // does not follow a later SDK Default shift. Tests and benchmark omit it.
@@ -569,7 +563,7 @@
       "choices": [
         {
           "choice": "Coverlet",
-          "description": "Add coverlet.msbuild and collect coverage on dotnet test. Default. Fails the test run below 100% line/branch/method on the analyzer assembly. Lower Threshold in the test csproj to allow less. Raw Coverlet output only.",
+          "description": "Add coverlet.msbuild and collect coverage on dotnet test. Default. Fails the test run below 100% line/branch/method on the source-generator assembly. Lower Threshold in the test csproj to allow less. Raw Coverlet output only.",
           "displayName": "Coverlet only (100% gate)"
         },
         {

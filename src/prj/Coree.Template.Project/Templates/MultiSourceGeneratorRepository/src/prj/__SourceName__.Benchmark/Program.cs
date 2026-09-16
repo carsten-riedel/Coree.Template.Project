@@ -4,22 +4,15 @@ using System.Linq;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using __SourceName__;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace __SourceName__.Benchmark;
 
 public class Benchmarks
 {
     [Benchmark]
-    public DiagnosticAnalyzer CreateEmDashAnalyzer()
+    public JsonSupportGenerator CreateGenerator()
     {
-        return new EmDashAnalyzer();
-    }
-
-    [Benchmark]
-    public DiagnosticAnalyzer CreateSmartQuotesAnalyzer()
-    {
-        return new SmartQuotesAnalyzer();
+        return new JsonSupportGenerator();
     }
 }
 

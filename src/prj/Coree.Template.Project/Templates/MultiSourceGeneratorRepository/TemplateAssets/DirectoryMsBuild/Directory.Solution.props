@@ -4,7 +4,7 @@
     MSBuild imports it from the directory that contains the solution file.
 
     Add PropertyGroups here after create if you want them out of the solution.
-    Project-level SDK-close and analyzer config stay in the class-library csproj.
+    Project-level SDK-close and generator config stay in the source-generator csproj.
 
     The template does not emit properties into this file vs a project file with
     generate-time #if. Splitting them at create is theoretically possible and

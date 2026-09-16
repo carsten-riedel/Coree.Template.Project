@@ -1,9 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- Same props the nupkg imports for PackageReference consumers. -->
-  <Import Project="..\__SourceName__\Build\__SourceName__.props" />
-
-  <!-- Startable console and compile target for the analyzer DebugRoslynComponent profile. Not packed. -->
+  <!-- Startable console and compile target for the source-generator DebugRoslynComponent profile. Not packed. -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>__TargetFramework__</TargetFramework>
@@ -40,27 +37,11 @@
     <PackAsTool>false</PackAsTool>
   </PropertyGroup>
 
-  <!-- Sample analyzer severity: warning (default), error, message, or off. -->
-  <!-- Additional files: includes minus excludes, globs relative to this project. Empty includes skip that scan. -->
-  <PropertyGroup>
-    <EmDashAnalyzerSeverity>warning</EmDashAnalyzerSeverity>
-    <SmartQuotesAnalyzerSeverity>warning</SmartQuotesAnalyzerSeverity>
-    <EmDashAnalyzerIncludes>*.txt;*.csproj</EmDashAnalyzerIncludes>
-    <EmDashAnalyzerExcludes></EmDashAnalyzerExcludes>
-    <SmartQuotesAnalyzerIncludes>*.txt;*.csproj</SmartQuotesAnalyzerIncludes>
-    <SmartQuotesAnalyzerExcludes></SmartQuotesAnalyzerExcludes>
-  </PropertyGroup>
-
-  <!-- Load the in-repo analyzer at compile time. Do not reference it as a library. -->
+  <!-- Load the in-repo source-generator at compile time. Do not reference it as a library. -->
   <ItemGroup>
     <ProjectReference Include="..\__SourceName__\__SourceName__.csproj"
                       OutputItemType="Analyzer"
                       ReferenceOutputAssembly="false" />
-  </ItemGroup>
-
-  <!-- Additional-file sample: 1—2 and “hello”. -->
-  <ItemGroup>
-    <None Include="SampleTypography.txt" />
   </ItemGroup>
 
   <!-- Keep Git configuration on disk without showing it as a project item -->

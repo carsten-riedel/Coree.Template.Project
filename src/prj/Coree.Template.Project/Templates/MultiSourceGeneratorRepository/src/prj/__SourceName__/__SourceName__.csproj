@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- Analyzer packages must load in Visual Studio and `dotnet`. netstandard2.0 is that host surface. -->
+  <!-- Source-generator packages must load in Visual Studio and `dotnet`. netstandard2.0 is that host surface. -->
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -41,9 +41,9 @@
 
   <!--#if (UseProjectEditorGlobalConfig) -->
   <!-- GlobalAnalyzerConfigFiles is what Roslyn reads. Visible=false so VS does not show that item twice. -->
-  <!-- None+Link is Solution Explorer only. Disk path stays next to the csproj: Properties/ would change analyzer scope. -->
+  <!-- None+Link is Solution Explorer only. Disk path stays next to the csproj: Properties/ would change rule scope. -->
   <!-- EnforceCodeStyleInBuild is required or IDE1006 stays IDE-only and `dotnet build` ignores the file. -->
-  <!-- OptimizeImplicitlyTriggeredBuild=false: VS Test Explorer / F5 must not skip analyzers (dotnet test does not). -->
+  <!-- OptimizeImplicitlyTriggeredBuild=false: VS Test Explorer / F5 must not skip generators (dotnet test does not). -->
   <PropertyGroup>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <OptimizeImplicitlyTriggeredBuild>false</OptimizeImplicitlyTriggeredBuild>
@@ -67,7 +67,7 @@
   </PropertyGroup>
   <!--#endif -->
 
-  <!-- Packaging: analyzer nupkg (analyzers/dotnet/cs), not a lib/ class library. -->
+  <!-- Packaging: source-generator nupkg (analyzers/dotnet/cs), not a lib/ class library. -->
   <!-- EnablePackageValidation looks for lib/ TFMs; this package has none. NU5128 is that missing lib group. -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
@@ -143,7 +143,7 @@
     <Copyright>Copyright © 1975 MyAuthor</Copyright>
     <!--#endif -->
     <PackageId>__SourceName__</PackageId>
-    <PackageTags>dotnet;roslyn;analyzer</PackageTags>
+    <PackageTags>dotnet;roslyn;source-generator;analyzer</PackageTags>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
     <RepositoryType></RepositoryType>

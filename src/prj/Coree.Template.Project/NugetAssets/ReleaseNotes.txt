@@ -1,4 +1,8 @@
-﻿0.4.4 (2026-09-15)
+﻿0.4.5 (2026-09-16)
+
+ - Multi-source-generator repository template (`multisourcegeneratorrepo-coree`): incremental C#-model-to-JSON-support sample, GeneratorDriver tests, Console DebugHost, and analyzer-path NuGet packaging.
+
+0.4.4 (2026-09-15)
 
  - Multi-winforms repository template (`multiwinformsrepo-coree`): independently publishable Windows Forms apps. Does not replace `winforms-coree` or `winformsdi-coree`.
  - Multi-wpf repository template (`multiwpfrepo-coree`): independently publishable WPF apps. Does not replace `wpfapp-coree`.

@@ -1,7 +1,16 @@
 using System;
+using __SourceName__;
 
 namespace __SourceName__.DebugHost
 {
+    [GenerateJsonSupport]
+    internal sealed class Customer
+    {
+        public string Id { get; set; } = string.Empty;
+
+        public int Number { get; set; }
+    }
+
     internal static class Program
     {
         private static void Main()
@@ -9,20 +18,14 @@ namespace __SourceName__.DebugHost
             // Make __SourceName__ the Visual Studio startup project and start debugging from there (F5).
             // Select the __SourceName__ Roslyn Component launch profile. Do not F5 this console.
             // Visual Studio needs the .NET Compiler Platform SDK component.
-            // F5 on this console only runs Main; it does not attach to the analyzer.
+            // F5 on this console only runs Main; generator breakpoints are hit while this project compiles.
 
-            // Change EmDashAnalyzerSeverity / SmartQuotesAnalyzerSeverity on this csproj
-            // (warning, error, message, or off).
-            // Change EmDashAnalyzerIncludes / SmartQuotesAnalyzerIncludes
-            // and EmDashAnalyzerExcludes / SmartQuotesAnalyzerExcludes
-            // (semicolon-separated globs; empty includes skip additional files).
-            // ASCII hyphen and quotes do not report.
-            Console.WriteLine("1-2");
-            Console.WriteLine("\"hello\"");
+            var customer = new Customer { Id = "C-42", Number = 42 };
+            var json = CustomerJson.Serialize(customer);
+            var roundTrip = CustomerJson.Deserialize(json);
 
-            // Em dash reports EMD001; typographic quotes report TSQ001.
-            Console.WriteLine("1—2");
-            Console.WriteLine("“hello”");
+            Console.WriteLine(json);
+            Console.WriteLine($"Round trip: {roundTrip?.Id} / {roundTrip?.Number}");
         }
     }
 }

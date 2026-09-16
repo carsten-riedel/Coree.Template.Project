@@ -157,7 +157,7 @@
         "text": "Test coverage"
       },
       "description": {
-        "text": "Single choice. Default is Coverlet: dotnet test fails below 100% line, branch, and method coverage on the analyzer assembly. Edit Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. ReportGenerator needs Coverlet output, so the two are not independent checkboxes."
+        "text": "Single choice. Default is Coverlet: dotnet test fails below 100% line, branch, and method coverage on the source-generator assembly. Edit Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. ReportGenerator needs Coverlet output, so the two are not independent checkboxes."
       }
     },
     {

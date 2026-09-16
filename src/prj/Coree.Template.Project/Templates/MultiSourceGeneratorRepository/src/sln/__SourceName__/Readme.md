@@ -132,7 +132,7 @@ ReportGenerator writes a summary under `../__SourceName__.Tests/ReportGeneratorO
 dotnet pack
 ```
 
-Creates one `.nupkg` in `src/prj/__SourceName__/bin/Pack/` with the source-generator under `analyzers/dotnet/cs` (not `lib/`) and `__SourceName__.props` under `build/` and `buildTransitive/` (`EmDashAnalyzerSeverity`, `SmartQuotesAnalyzerSeverity`, `EmDashAnalyzerIncludes`, `EmDashAnalyzerExcludes`, `SmartQuotesAnalyzerIncludes`, `SmartQuotesAnalyzerExcludes`). Test, DebugHost, and optional benchmark projects are not packed.
+Creates one `.nupkg` in `src/prj/__SourceName__/bin/Pack/` with the source-generator assembly and XML documentation under `analyzers/dotnet/cs` (not `lib/`). Test, DebugHost, and optional benchmark projects are not packed.
 <!--#if (NuGetAuditHighCriticalAsErrors) -->
 
 Restore fails this source-generator package on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that package’s packages (txt/json) and is still info-only.
@@ -158,11 +158,11 @@ The source-generator package sets `IsPublishable` to `false`. Distribution is `d
 dotnet publish
 ```
 
-This is a Roslyn analyzer, not an executable. Consumers install the nupkg; they do not publish this project.
+This is a Roslyn source generator, not an executable. Consumers install the nupkg; they do not publish this project.
 
 ## CI
 
-Use `-m:1` for the build so a pipeline does not depend on machine load. It avoids occasional file locks when the analyzer is built as a solution project and as a test `ProjectReference` at the same time. Multi-target test execution is already configured as parallel in the test project. Run these commands from this folder so each package has exactly one `.slnx` in the working directory.
+Use `-m:1` for the build so a pipeline does not depend on machine load. It avoids occasional file locks when the source generator is built as a solution project and as a test `ProjectReference` at the same time. Method-level test execution is configured as parallel in the test project. Run these commands from this folder so each package has exactly one `.slnx` in the working directory.
 
 ```bash
 dotnet restore
@@ -188,17 +188,17 @@ dotnet run --project ../__SourceName__.Benchmark/__SourceName__.Benchmark.csproj
 
 ## Debug (Visual Studio)
 
-To break in the analyzer, install the **.NET Compiler Platform SDK** Visual Studio component, then:
+To break in the source generator, install the **.NET Compiler Platform SDK** Visual Studio component, then:
 
 1. Set `__SourceName__` as the startup project (not `__SourceName__.DebugHost`).
 2. Select the `__SourceName__` launch profile (Roslyn Component).
-3. Set a breakpoint in `EmDashAnalyzer` or `SmartQuotesAnalyzer`.
+3. Set a breakpoint in `JsonSupportGenerator.Initialize`, `CreateTarget`, or `Emit`.
 4. Press F5. Visual Studio compiles `__SourceName__.DebugHost` and attaches to that compilation.
 
-`__SourceName__.DebugHost` is only the compile target. The em dash in `"1—2"` reports EMD001; the typographic quotes in `"“hello”"` report TSQ001. ASCII `"1-2"` and `"hello"` do not. `SampleTypography.txt` and this host csproj are additional files for the same IDs when the glob properties match. F5 / `dotnet run` on the console only runs `Main`; it does not attach to the analyzer.
+`__SourceName__.DebugHost` is a small Console consumer and the compile target for the Roslyn Component profile. Its `Customer` type is marked with `[GenerateJsonSupport]`; the generator adds `CustomerJson.Serialize` and `CustomerJson.Deserialize`, and `Main` performs a JSON round trip through that generated API.
 
-Severity is an MSBuild property on the compile target (`EmDashAnalyzerSeverity`, `SmartQuotesAnalyzerSeverity`): `warning` (default), `error`, `message`, or `off`. Additional-file globs are `EmDashAnalyzerIncludes` / `EmDashAnalyzerExcludes` and the SmartQuotes pair (semicolon-separated, project directory; demo includes `*.txt;*.csproj`; empty includes skip that scan; excludes subtract from that analyzer's includes). The analyzer nupkg ships `build/` and `buildTransitive/` props so PackageReference consumers get the same knobs. DebugHost imports that props file because it uses a project analyzer reference, not the nupkg.
+F5 from the source-generator project attaches while Visual Studio compiles the DebugHost. Running the DebugHost directly only executes `Main`; the generator has already run during its build. Keep the DebugHost as a consumer example, not as a replacement for the generator tests.
 
-For stepping without F5, debug `FunctionalTests` from Test Explorer.
+For stepping without F5, debug `JsonSupportGeneratorTests` from Test Explorer.
 
-`DebugHost` is not packed. `dotnet pack` still produces only the analyzer nupkg.
+`DebugHost` is not packed. `dotnet pack` still produces only the source-generator nupkg.

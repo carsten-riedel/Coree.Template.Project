@@ -1,18 +1,12 @@
 <Project>
   <!--
-    Analyzer nupkgs put the assembly under analyzers/dotnet/cs, not lib/.
+    Source-generator nupkgs put the assembly under analyzers/dotnet/cs, not lib/.
     IncludeBuildOutput is false on the csproj so the SDK does not also write lib/{tfm}/.
     This target runs during pack of netstandard2.0.
-    __SourceName__.props is the consumer MSBuild surface (severity and additional-file include/exclude glob properties).
   -->
   <PropertyGroup>
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);PackAsAnalyzer</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="$(MSBuildThisFileDirectory)__SourceName__.props" />
-    <None Include="$(MSBuildThisFileDirectory)__SourceName__.props" Pack="true" PackagePath="build\" Visible="false" />
-    <None Include="$(MSBuildThisFileDirectory)__SourceName__.props" Pack="true" PackagePath="buildTransitive\" Visible="false" />
-  </ItemGroup>
   <Target Name="PackAsAnalyzer">
     <ItemGroup>
       <TfmSpecificPackageFile Include="$(TargetPath)" PackagePath="analyzers/dotnet/cs" />

@@ -97,14 +97,15 @@ The package contains the following templates:
   2. [.NET Class library](#Net-class-library)
   3. [.NET multi-library repository](#net-multi-library-repository)
   4. [.NET multi-analyzer repository](#net-multi-analyzer-repository)
-  5. [.NET multi-msbuild repository](#net-multi-msbuild-repository)
-  6. [.NET multi-console repository](#net-multi-console-repository)
-  7. [.NET multi-winforms repository](#net-multi-winforms-repository)
-  8. [.NET multi-wpf repository](#net-multi-wpf-repository)
-  9. [.NET multi-PowerShell module repository](#net-multi-powershell-module-repository)
-  10. [.NET Tool](#Net-Tool)
-  11. [.NET Wpf](#Net-Wpf-Windows-only)
-  12. [.NET Project Template](#Net-Project-Template)
+  5. [.NET multi-source-generator repository](#net-multi-source-generator-repository)
+  6. [.NET multi-msbuild repository](#net-multi-msbuild-repository)
+  7. [.NET multi-console repository](#net-multi-console-repository)
+  8. [.NET multi-winforms repository](#net-multi-winforms-repository)
+  9. [.NET multi-wpf repository](#net-multi-wpf-repository)
+  10. [.NET multi-PowerShell module repository](#net-multi-powershell-module-repository)
+  11. [.NET Tool](#Net-Tool)
+  12. [.NET Wpf](#Net-Wpf-Windows-only)
+  13. [.NET Project Template](#Net-Project-Template)
 
 #### Hint:
 For testing packages created using these templates, consider setting up a local NuGet test repository. If you're looking to utilize locally built packages, simply establish a NuGet file repository.
@@ -358,6 +359,19 @@ MyCompany.Analyzers/
 The top-level directory is shared. Each additional `dotnet new` call contributes another analyzer project, tests, DebugHost, and solution area. Each package remains independently buildable and packable.
 
 You do not need a different template for a single-analyzer layout and a multi-analyzer layout. Start with one, add another when you need it, or generate the complete set from a script.
+
+## .NET multi-source-generator repository
+
+Create and grow a repository containing one or more independently packable Roslyn source-generator packages. Each generator targets `netstandard2.0`, packs under `analyzers/dotnet/cs`, and gets its own tests, Console DebugHost, and solution area.
+
+The scaffold uses annotated C# classes as the source of truth. `JsonSupportGenerator` is incremental and generates `TypeNameJson.Serialize` / `Deserialize` helpers. Tests compile and execute the generated API; the DebugHost consumes it and acts as the Visual Studio `DebugRoslynComponent` target. The generator performs no project-file writes or dynamic compilation.
+
+```powershell
+dotnet new multisourcegeneratorrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Generators" --name "MyCompany.Generators.Json" --InitAllRepoItems
+dotnet new multisourcegeneratorrepo-coree --Author "Carsten Riedel" --output "./MyCompany.Generators" --name "MyCompany.Generators.Mapping"
+```
+
+The first call adds the shared repository files; later calls use the same output and omit `--InitAllRepoItems`. DebugHost, tests, and the optional benchmark share the selected runnable TFM (`.NET 10` by default), while the generator package remains `netstandard2.0`.
 
 ## .NET multi-msbuild repository
 
@@ -624,4 +638,3 @@ For more information and resources for source generators and analyzers:
 For more information and resources for .NET tools and NuGet packages:
   - [MS Learn: How to create a .NET tool](https://learn.microsoft.com/en-us/dotnet/core/tools/global-tools-how-to-create)
   - [MS Learn: NuGet package authoring best practices](https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices)
-

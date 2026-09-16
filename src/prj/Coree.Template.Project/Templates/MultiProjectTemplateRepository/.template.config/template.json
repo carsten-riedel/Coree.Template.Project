@@ -748,11 +748,11 @@
       "path": "src/prj/__SourceName__/Readme.md"
     },
     {
-      "condition": "(PlaceSolution == \"SlnFolder\")",
+      "condition": "((PlaceSolution == \"SlnFolder\")    && (HostIdentifier != \"vs\"))",
       "path": "src/sln/__SourceName__/__SourceName__.slnx"
     },
     {
-      "condition": "(PlaceSolution == \"BesideCsproj\")",
+      "condition": "((PlaceSolution == \"BesideCsproj\") && (HostIdentifier != \"vs\"))",
       "path": "src/prj/__SourceName__/__SourceName__.slnx"
     },
     {

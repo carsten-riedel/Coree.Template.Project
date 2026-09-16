@@ -532,6 +532,11 @@
           "rename": {
             "__SourceName__.generated.slnx": "__SourceName__.slnx"
           }
+        },
+        {
+          "rename": {
+            "TemplateConfig": ".template.config"
+          }
         }
       ]
     },

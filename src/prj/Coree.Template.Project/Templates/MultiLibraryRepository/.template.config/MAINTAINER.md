@@ -206,16 +206,16 @@ Benchmark previously hardcoded `ImplicitUsings` enable. It now follows the switc
 
 Single choice (dropdown, not a checkbox group). Project + NuGet only. Repository-root `LICENSE` is `InitRepoItems` choice `RepoLicense` (UI: **LICENSE file at repository root**) or `--InitAllRepoItems`, not a second VS bool.
 
-| Choice | `Properties/NugetAssets/License.txt` | NuGet |
+| Choice | Project `Properties/NugetAssets/License.txt` | NuGet |
 | --- | --- | --- |
-| `MIT` (CLI/VS default) | MIT text on disk, not packed | `PackageLicenseExpression` `MIT` |
-| `BSD3Clause` | BSD 3-Clause text on disk, not packed | `PackageLicenseExpression` `BSD-3-Clause` |
-| `Apache2` | Apache 2.0 text on disk, not packed | `PackageLicenseExpression` `Apache-2.0` |
-| `Custom` | copyright notice only; packed | `PackageLicenseFile` `License.txt` |
+| `MIT` (CLI/VS default) | none | `PackageLicenseExpression` `MIT` |
+| `BSD3Clause` | none | `PackageLicenseExpression` `BSD-3-Clause` |
+| `Apache2` | none | `PackageLicenseExpression` `Apache-2.0` |
+| `Custom` | generated and packed | `PackageLicenseFile` `License.txt` |
 
 Do not set `PackageLicenseFile` together with an expression (NU5033). The glob excludes `License.txt` except for `Custom`.
 
-Seeds live under `TemplateAssets/Licenses/` (`MIT.txt`, `BSD3Clause.txt`, `Apache2.txt`, `Custom.txt`). Extra sources copy the chosen seed to `src/prj/{Name}/Properties/NugetAssets/License.txt` on every create, and to repository-root `LICENSE` only when `WriteRepoLicense` is true. Do not leave a mega-file under `src/prj/__SourceName__/Properties/NugetAssets/`. DocShell extra sources must `exclude` `Licenses/**` (same as `CodeStyle/**` and `Versioning/**`). Each seed may use a shallow `//#if (PackageCopyrightHolderIsSet)` / `//#else` / `//#endif`. Do not put `ProjectLicense` `#if` in the seed: extra sources pick the file.
+Seeds live under `TemplateAssets/Licenses/` (`MIT.txt`, `BSD3Clause.txt`, `Apache2.txt`, `Custom.txt`). Extra sources copy only the `Custom` seed to `src/prj/{Name}/Properties/NugetAssets/License.txt`; standard choices create no project license file. The separate root `LICENSE` source copies the selected seed for every choice when `WriteRepoLicense` is true. Do not leave a mega-file under `src/prj/__SourceName__/Properties/NugetAssets/`. DocShell extra sources must `exclude` `Licenses/**` (same as `CodeStyle/**` and `Versioning/**`). Each seed may use a shallow `//#if (PackageCopyrightHolderIsSet)` / `//#else` / `//#endif`. Do not put `ProjectLicense` `#if` in the seed: extra sources pick the file.
 
 `RepoLicense` is off on CLI unless listed in `--InitRepoItems` or `--InitAllRepoItems` is on. Visual Studio includes it in the first-create default. `WriteRepoLicense` is `(InitRepoItems != None) && (InitAllRepoItems || InitRepoItems == RepoLicense)`. First create only; a later library with `RepoLicense` or `InitAllRepoItems` selected collides (Exit 73), same as root README. `None` excludes it even if leftover checks remain.
 

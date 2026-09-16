@@ -432,8 +432,7 @@
       "value": "(DocumentationTemplate == \"Repository\") && (DocumentationTemplate != \"None\")"
     },
     // Project / NuGet license. Single choice. MIT first and default.
-    // Standard licenses: PackageLicenseExpression; License.txt on disk only
-    // (not packed — NU5033 if combined with PackageLicenseFile).
+    // Standard licenses: PackageLicenseExpression; no project License.txt.
     // Custom: copyright-only License.txt packed as PackageLicenseFile.
     // Repo root LICENSE is InitRepoItems RepoLicense or InitAllRepoItems, not this dropdown.
     "ProjectLicense": {
@@ -441,22 +440,22 @@
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "MIT",
-      "description": "License for the analyzer package. Default MIT. Standards set PackageLicenseExpression. Custom packs License.txt. The LICENSE file at repository root copies this license.",
+      "description": "License for the analyzer package. Default MIT. Standards set PackageLicenseExpression and do not create a project License.txt. Custom creates and packs License.txt. The LICENSE file at repository root copies this license.",
       "displayName": "Project license",
       "choices": [
         {
           "choice": "MIT",
-          "description": "MIT. PackageLicenseExpression MIT. License.txt on disk only.",
+          "description": "MIT. PackageLicenseExpression MIT. No project License.txt.",
           "displayName": "MIT"
         },
         {
           "choice": "BSD3Clause",
-          "description": "BSD 3-Clause. PackageLicenseExpression BSD-3-Clause. License.txt on disk only.",
+          "description": "BSD 3-Clause. PackageLicenseExpression BSD-3-Clause. No project License.txt.",
           "displayName": "BSD 3-Clause"
         },
         {
           "choice": "Apache2",
-          "description": "Apache 2.0. PackageLicenseExpression Apache-2.0. License.txt on disk only.",
+          "description": "Apache 2.0. PackageLicenseExpression Apache-2.0. No project License.txt.",
           "displayName": "Apache 2.0"
         },
         {
@@ -889,63 +888,6 @@
         {
           "rename": {
             ".project.editor.globalconfig.strict": ".project.editor.globalconfig"
-          }
-        }
-      ]
-    },
-    {
-      "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(ProjectLicense == \"MIT\")",
-      "modifiers": [
-        {
-          "exclude": [
-            "BSD3Clause.txt",
-            "Apache2.txt",
-            "Custom.txt"
-          ]
-        },
-        {
-          "rename": {
-            "MIT.txt": "License.txt"
-          }
-        }
-      ]
-    },
-    {
-      "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(ProjectLicense == \"BSD3Clause\")",
-      "modifiers": [
-        {
-          "exclude": [
-            "MIT.txt",
-            "Apache2.txt",
-            "Custom.txt"
-          ]
-        },
-        {
-          "rename": {
-            "BSD3Clause.txt": "License.txt"
-          }
-        }
-      ]
-    },
-    {
-      "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(ProjectLicense == \"Apache2\")",
-      "modifiers": [
-        {
-          "exclude": [
-            "MIT.txt",
-            "BSD3Clause.txt",
-            "Custom.txt"
-          ]
-        },
-        {
-          "rename": {
-            "Apache2.txt": "License.txt"
           }
         }
       ]

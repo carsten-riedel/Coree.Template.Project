@@ -39,7 +39,8 @@ The `.slnx` and this readme live in this folder next to the packable library. Op
 ./Directory.Solution.props  optional empty solution MSBuild landing file
 ./Directory.Solution.targets
 <!--#endif -->
-../../prj/__SourceName__/    packable class library
+../../prj/__SourceName__/    packable project-template package
+../../prj/__SourceName__/Templates/  project-template folders
 <!--#if (DirectoryMsBuildFiles) -->
 ../../prj/__SourceName__/Directory.Build.props  optional empty library MSBuild landing file
 ../../prj/__SourceName__/Directory.Build.targets
@@ -49,6 +50,7 @@ The `.slnx` and this readme live in this folder next to the packable library. Op
 <!--#endif -->
 <!--#else -->
 ./                         you are here (this readme + __SourceName__.slnx + __SourceName__.csproj)
+./Templates/               project-template folders
 <!--#if (DirectoryMsBuildFiles) -->
 ./Directory.Solution.props  optional empty solution MSBuild landing file
 ./Directory.Solution.targets

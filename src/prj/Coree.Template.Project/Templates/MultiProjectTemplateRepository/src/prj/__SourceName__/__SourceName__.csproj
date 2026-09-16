@@ -40,10 +40,23 @@
   <!-- Packaging configuration -->
   <!-- EnablePackageValidation: TFM/runtime holes on pack. No baseline at generate; set PackageValidationBaselineVersion after the first nuget.org publish. -->
   <PropertyGroup>
+    <IncludeBuildOutput>False</IncludeBuildOutput>
+    <IncludeSource>False</IncludeSource>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <EnableDefaultItems>False</EnableDefaultItems>
     <IsPackable>true</IsPackable>
     <IsPublishable>false</IsPublishable>
     <PackAsTool>false</PackAsTool>
     <EnablePackageValidation>true</EnablePackageValidation>
+    <IsShipping>false</IsShipping>
+    <NoWarn>2008;NU5105</NoWarn>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <SuppressDependenciesWhenPacking>True</SuppressDependenciesWhenPacking>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <PackageType>Template</PackageType>
+    <!-- Suppress creation of contentFiles directory -->
+    <ContentTargetFolders>.\</ContentTargetFolders>
   </PropertyGroup>
 
   <!--#if (UseNerdbankGitVersioning) -->
@@ -121,16 +134,21 @@
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
-  <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes). Disk matches Solution Explorer. -->
-  <!-- Standard licenses: License.txt stays on disk (PackageLicenseExpression). -->
-  <!-- Custom: pack License.txt as PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
+  <!-- Package specs -->
+  <!-- NuGet template layout. Exclude bin/obj/.vs (VS can create those if an slnx is opened)
+       and maintainer markdown under .template.config (not template content, not shipped). -->
   <ItemGroup>
+    <None Include="$(MSBuildProjectDirectory)\Templates\**\*" Exclude="$(MSBuildProjectDirectory)\Templates\**\**\bin\**;$(MSBuildProjectDirectory)\Templates\**\**\obj\**;$(MSBuildProjectDirectory)\Templates\**\**\.vs\**;$(MSBuildProjectDirectory)\Templates\**\.template.config\**\*.md;$(MSBuildProjectDirectory)\Templates\.gitkeep" Pack="true" PackagePath="" />
+    <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes). Disk matches Solution Explorer. -->
     <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" />
+    <!-- License.txt is generated only for Custom; the wildcard excludes it so the explicit PackageLicenseFile item controls packing. -->
     <!--#if (ProjectLicense == "Custom") -->
     <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" Pack="true" PackagePath="" />
     <!--#endif -->
   </ItemGroup>
 
+  <!-- Standard licenses use PackageLicenseExpression and create no License.txt. -->
+  <!-- Custom: pack License.txt as PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
   <PropertyGroup>
     <PackageOutputPath Condition=" '$(PackageOutputPath)' == '' ">$(MSBuildProjectDirectory)\bin\Pack</PackageOutputPath>
   </PropertyGroup>

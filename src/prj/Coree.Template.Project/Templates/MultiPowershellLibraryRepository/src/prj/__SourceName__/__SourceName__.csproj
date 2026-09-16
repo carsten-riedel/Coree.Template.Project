@@ -170,7 +170,7 @@
   </PropertyGroup>
 
   <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes). Disk matches Solution Explorer. -->
-  <!-- Standard licenses: License.txt stays on disk (PackageLicenseExpression) and is staged into the Gallery nupkg. -->
+  <!-- Standard licenses use PackageLicenseExpression and create no License.txt. -->
   <!-- Custom: License.txt is PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
   <!-- PackAsPowerShellModule packs the staged module tree so the nupkg matches Import-Module, including a stamped manifest. -->
   <ItemGroup>

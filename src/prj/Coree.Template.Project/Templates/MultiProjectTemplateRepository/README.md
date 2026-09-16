@@ -20,7 +20,8 @@ docs/                      offline documentation template (this repository)
 <!--#if (PlaceSolution == "SlnFolder") -->
 src/sln/__SourceName__/      this library's .slnx and notes
 <!--#elseif (PlaceSolution == "BesideCsproj") -->
-src/prj/__SourceName__/      packable class library, .slnx, and notes
+src/prj/__SourceName__/      packable project-template package, .slnx, and notes
+src/prj/__SourceName__/Templates/  project-template folders
 <!--#else -->
 <!--#if (HostIdentifier == "vs") -->
 __SourceName__.generated.slnx  solution
@@ -30,7 +31,8 @@ __SourceName__.slnx          solution
 src/sln/__SourceName__/      optional notes / cross-project files
 <!--#endif -->
 <!--#if (PlaceSolution != "BesideCsproj") -->
-src/prj/__SourceName__/      packable class library
+src/prj/__SourceName__/      packable project-template package
+src/prj/__SourceName__/Templates/  project-template folders
 <!--#endif -->
 src/prj/__SourceName__/Properties/Build/  MSBuild targets (not source)
 src/prj/__SourceName__/Properties/NugetAssets/  nupkg assets (readme, icon, notes)

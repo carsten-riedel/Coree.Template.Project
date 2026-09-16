@@ -173,7 +173,7 @@
   </PropertyGroup>
 
   <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes). Disk matches Solution Explorer. -->
-  <!-- Standard licenses: License.txt stays on disk (PackageLicenseExpression). -->
+  <!-- Standard licenses use PackageLicenseExpression and create no License.txt. -->
   <!-- Custom: pack License.txt as PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
   <ItemGroup>
     <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" />

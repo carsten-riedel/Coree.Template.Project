@@ -544,22 +544,22 @@
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "MIT",
-      "description": "License for the binary PowerShell module. The selected License.txt is staged with the module. The optional repository-root LICENSE copies the same license.",
+      "description": "License for the binary PowerShell module. Standard choices use PackageLicenseExpression and create no project License.txt. Custom creates and stages License.txt as PackageLicenseFile. The optional repository-root LICENSE copies the same license.",
       "displayName": "Project license",
       "choices": [
         {
           "choice": "MIT",
-          "description": "MIT. Writes License.txt into the module assets.",
+          "description": "MIT. PackageLicenseExpression MIT. No project License.txt.",
           "displayName": "MIT"
         },
         {
           "choice": "BSD3Clause",
-          "description": "BSD 3-Clause. Writes License.txt into the module assets.",
+          "description": "BSD 3-Clause. PackageLicenseExpression BSD-3-Clause. No project License.txt.",
           "displayName": "BSD 3-Clause"
         },
         {
           "choice": "Apache2",
-          "description": "Apache 2.0. Writes License.txt into the module assets.",
+          "description": "Apache 2.0. PackageLicenseExpression Apache-2.0. No project License.txt.",
           "displayName": "Apache 2.0"
         },
         {
@@ -1017,63 +1017,6 @@
         {
           "rename": {
             ".project.editor.globalconfig.strict": ".project.editor.globalconfig"
-          }
-        }
-      ]
-    },
-    {
-      "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(ProjectLicense == \"MIT\")",
-      "modifiers": [
-        {
-          "exclude": [
-            "BSD3Clause.txt",
-            "Apache2.txt",
-            "Custom.txt"
-          ]
-        },
-        {
-          "rename": {
-            "MIT.txt": "License.txt"
-          }
-        }
-      ]
-    },
-    {
-      "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(ProjectLicense == \"BSD3Clause\")",
-      "modifiers": [
-        {
-          "exclude": [
-            "MIT.txt",
-            "Apache2.txt",
-            "Custom.txt"
-          ]
-        },
-        {
-          "rename": {
-            "BSD3Clause.txt": "License.txt"
-          }
-        }
-      ]
-    },
-    {
-      "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
-      "condition": "(ProjectLicense == \"Apache2\")",
-      "modifiers": [
-        {
-          "exclude": [
-            "MIT.txt",
-            "BSD3Clause.txt",
-            "Custom.txt"
-          ]
-        },
-        {
-          "rename": {
-            "Apache2.txt": "License.txt"
           }
         }
       ]

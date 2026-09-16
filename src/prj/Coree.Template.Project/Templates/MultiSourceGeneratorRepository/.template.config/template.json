@@ -38,16 +38,16 @@
       "binding": "host:HostIdentifier",
       "defaultValue": "dotnetcli"
     },
-    // Single-select DebugHost TFM (net8.0 / net9.0 / net10.0). Tests and the
-    // optional benchmark use the same value. The source-generator is always netstandard2.0.
+    // Single-select DebugHost and test TFM (net8.0 / net9.0 / net10.0). The optional
+    // benchmark uses the same value. The source-generator is always netstandard2.0.
     // First parameter after HostIdentifier so Visual Studio lists it at the top.
     "TargetFrameworks": {
       "type": "parameter",
-      "description": "DebugHost target framework (.NET 8, 9, or 10). Tests and the optional benchmark use the same TFM. The source-generator package always targets netstandard2.0.",
+      "description": "Target framework used by the DebugHost, tests, and optional benchmark. The source-generator package always targets .NET Standard 2.0.",
       "datatype": "choice",
       "allowMultipleValues": false,
       "enableQuotelessLiterals": true,
-      "displayName": "DebugHost target framework",
+      "displayName": "DebugHost and test target framework",
       "choices": [
         {
           "choice": "net8.0",

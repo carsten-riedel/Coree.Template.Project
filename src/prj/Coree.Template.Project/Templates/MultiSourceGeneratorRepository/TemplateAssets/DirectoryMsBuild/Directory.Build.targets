@@ -6,7 +6,7 @@
 
     Add Target elements here after create if you want them out of the csproj.
     The source-generator project is a stock SDK project (`Project Sdk="Microsoft.NET.Sdk"`).
-    Keep source-generator pack layout in Properties/Build/PackAsAnalyzer.targets, not here.
+    Keep source-generator pack layout in Properties/Build/PackAsSourceGenerator.targets, not here.
 
     The template does not emit targets into this file vs the csproj with
     generate-time #if. Splitting them at create is theoretically possible and

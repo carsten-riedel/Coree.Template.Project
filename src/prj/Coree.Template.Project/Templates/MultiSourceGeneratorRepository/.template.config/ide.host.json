@@ -7,10 +7,10 @@
       "defaultValue": "net10.0",
       "persistenceScope": "none",
       "name": {
-        "text": "DebugHost target framework"
+        "text": "DebugHost and test target framework"
       },
       "description": {
-        "text": "One framework for DebugHost: .NET 8, 9, or 10. Tests and the optional benchmark use the same TFM. The source-generator package always targets netstandard2.0."
+        "text": "Target framework used by the DebugHost, tests, and optional benchmark. The source-generator package always targets .NET Standard 2.0."
       }
     },
     {

@@ -5,9 +5,9 @@
     This target runs during pack of netstandard2.0.
   -->
   <PropertyGroup>
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);PackAsAnalyzer</TargetsForTfmSpecificContentInPackage>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);PackAsSourceGenerator</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
-  <Target Name="PackAsAnalyzer">
+  <Target Name="PackAsSourceGenerator">
     <ItemGroup>
       <TfmSpecificPackageFile Include="$(TargetPath)" PackagePath="analyzers/dotnet/cs" />
       <TfmSpecificPackageFile Include="$(TargetDir)$(TargetName).xml" PackagePath="analyzers/dotnet/cs" Condition="Exists('$(TargetDir)$(TargetName).xml')" />

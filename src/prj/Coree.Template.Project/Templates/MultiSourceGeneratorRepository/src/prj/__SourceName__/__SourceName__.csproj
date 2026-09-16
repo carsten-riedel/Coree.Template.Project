@@ -249,6 +249,6 @@
   <!--#if (PublicApiAnalyzers) -->
   <Import Project="Properties/Build/InitializePublicApi.targets" />
   <!--#endif -->
-  <Import Project="Properties/Build/PackAsAnalyzer.targets" />
+  <Import Project="Properties/Build/PackAsSourceGenerator.targets" />
 
 </Project>

@@ -4,7 +4,7 @@
 This folder is the per-package area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` lives here; keep the folder while that is true. You can still add extra solution items here.
 <!--#elseif (PlaceSolution == "BesideCsproj") -->
-This folder is the packable analyzer package. The `.slnx` and this readme sit next to the `.csproj`. Tests, DebugHost, and the optional benchmark stay sibling projects under `src/prj/`. There is no `src/sln/` tree for this package.
+This folder is the packable source-generator package. The `.slnx` and this readme sit next to the `.csproj`. Tests, DebugHost, and the optional benchmark stay sibling projects under `src/prj/`. There is no `src/sln/` tree for this package.
 <!--#else -->
 This folder is the per-package area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` is written elsewhere (`PlaceSolution`). Use this folder for shared notes or extra solution items, or delete it if you do not need it.
@@ -32,7 +32,7 @@ The solution file lives at the repository root. Open a terminal there for `dotne
 <!--#if (PlaceSolution == "SlnFolder") -->
 The `.slnx` and this readme live in this folder. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other packages keep their own `.slnx` under `src/sln/<name>/`, so `dotnet` does not ask you to specify a solution.
 <!--#else -->
-The `.slnx` and this readme live in this folder next to the packable analyzer. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other packages keep their own `.slnx` under `src/prj/<name>/`, so `dotnet` does not ask you to specify a solution.
+The `.slnx` and this readme live in this folder next to the packable source-generator. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other packages keep their own `.slnx` under `src/prj/<name>/`, so `dotnet` does not ask you to specify a solution.
 <!--#endif -->
 
 ```text
@@ -45,9 +45,9 @@ The `.slnx` and this readme live in this folder next to the packable analyzer. O
 <!--#if (WriteSrcGlobalJson) -->
 ../../global.json            .NET SDK pin (DebugHost TFM)
 <!--#endif -->
-../../prj/__SourceName__/    packable analyzer package (netstandard2.0)
+../../prj/__SourceName__/    packable source-generator package (netstandard2.0)
 <!--#if (DirectoryMsBuildFiles) -->
-../../prj/__SourceName__/Directory.Build.props  optional empty analyzer MSBuild landing file
+../../prj/__SourceName__/Directory.Build.props  optional empty source-generator MSBuild landing file
 ../../prj/__SourceName__/Directory.Build.targets
 <!--#endif -->
 <!--#if (DotNetToolManifest) -->
@@ -63,7 +63,7 @@ The `.slnx` and this readme live in this folder next to the packable analyzer. O
 <!--#if (DirectoryMsBuildFiles) -->
 ./Directory.Solution.props  optional empty solution MSBuild landing file
 ./Directory.Solution.targets
-./Directory.Build.props     optional empty analyzer MSBuild landing file
+./Directory.Build.props     optional empty source-generator MSBuild landing file
 ./Directory.Build.targets
 <!--#endif -->
 <!--#if (WriteSrcGlobalJson) -->
@@ -116,7 +116,7 @@ After a test run, the links below point to generated reports for the test host T
 <!--#endif -->
 
 <!--#if (CoverletMSBuild == true) -->
-Coverlet measures only the analyzer assembly (`[__SourceName__]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
+Coverlet measures only the source-generator assembly (`[__SourceName__]*`) and fails `dotnet test` if line, branch, or method coverage is under 100%.
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
 <!--#if (PlaceSolution == "SlnFolder") -->
@@ -132,27 +132,27 @@ ReportGenerator writes a summary under `../__SourceName__.Tests/ReportGeneratorO
 dotnet pack
 ```
 
-Creates one `.nupkg` in `src/prj/__SourceName__/bin/Pack/` with the analyzer under `analyzers/dotnet/cs` (not `lib/`) and `__SourceName__.props` under `build/` and `buildTransitive/` (`EmDashAnalyzerSeverity`, `SmartQuotesAnalyzerSeverity`, `EmDashAnalyzerIncludes`, `EmDashAnalyzerExcludes`, `SmartQuotesAnalyzerIncludes`, `SmartQuotesAnalyzerExcludes`). Test, DebugHost, and optional benchmark projects are not packed.
+Creates one `.nupkg` in `src/prj/__SourceName__/bin/Pack/` with the source-generator under `analyzers/dotnet/cs` (not `lib/`) and `__SourceName__.props` under `build/` and `buildTransitive/` (`EmDashAnalyzerSeverity`, `SmartQuotesAnalyzerSeverity`, `EmDashAnalyzerIncludes`, `EmDashAnalyzerExcludes`, `SmartQuotesAnalyzerIncludes`, `SmartQuotesAnalyzerExcludes`). Test, DebugHost, and optional benchmark projects are not packed.
 <!--#if (NuGetAuditHighCriticalAsErrors) -->
 
-Restore fails this analyzer package on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that package’s packages (txt/json) and is still info-only.
+Restore fails this source-generator package on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that package’s packages (txt/json) and is still info-only.
 <!--#endif -->
 <!--#if (PublicApiAnalyzers) -->
 
 ## Public API baseline
 
-The analyzer project uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first real `dotnet build` writes `src/prj/__SourceName__/Properties/PublicAPI/PublicAPI.Shipped.txt` and `PublicAPI.Unshipped.txt` if they are missing, then records the current public surface. Commit those files. Later public additions belong in `PublicAPI.Unshipped.txt` (analyzer RS0016 / `dotnet format analyzers` with `--diagnostics RS0016`).
+The source-generator project uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first real `dotnet build` writes `src/prj/__SourceName__/Properties/PublicAPI/PublicAPI.Shipped.txt` and `PublicAPI.Unshipped.txt` if they are missing, then records the current public surface. Commit those files. Later public additions belong in `PublicAPI.Unshipped.txt` (analyzer RS0016 / `dotnet format analyzers` with `--diagnostics RS0016`).
 <!--#endif -->
 <!--#if (WritePackageDocTemplate) -->
 
 ## Package documentation template
 
-`src/prj/__SourceName__/Properties/NugetAssets/docs/DocShell.html` is the offline documentation seed. It packs with the nupkg (`docs/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this analyzer. Repository-root `docs/` is a separate site if present.
+`src/prj/__SourceName__/Properties/NugetAssets/docs/DocShell.html` is the offline documentation seed. It packs with the nupkg (`docs/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this source-generator. Repository-root `docs/` is a separate site if present.
 <!--#endif -->
 
 ## Publish
 
-The analyzer package sets `IsPublishable` to `false`. Distribution is `dotnet pack`. To write output to `src/prj/__SourceName__/bin/Publish/` for a one-off inspect, set `IsPublishable` to `true` and run:
+The source-generator package sets `IsPublishable` to `false`. Distribution is `dotnet pack`. To write output to `src/prj/__SourceName__/bin/Publish/` for a one-off inspect, set `IsPublishable` to `true` and run:
 
 ```bash
 dotnet publish

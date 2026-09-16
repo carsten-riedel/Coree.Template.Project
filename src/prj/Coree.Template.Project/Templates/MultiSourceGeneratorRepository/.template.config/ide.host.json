@@ -10,7 +10,7 @@
         "text": "DebugHost target framework"
       },
       "description": {
-        "text": "One framework for DebugHost: .NET 8, 9, or 10. Tests and the optional benchmark use the same TFM. The analyzer package always targets netstandard2.0."
+        "text": "One framework for DebugHost: .NET 8, 9, or 10. Tests and the optional benchmark use the same TFM. The source-generator package always targets netstandard2.0."
       }
     },
     {
@@ -22,7 +22,7 @@
         "text": "Repository root items"
       },
       "description": {
-        "text": "Root files for the first create, including LICENSE from the project license and a slim .gitignore. src/global.json is optional and unchecked by default. version.json is not a checkbox here; choose This repository on a first create to add the root file. Visual Studio requires at least one value; choose None when adding another analyzer package to the same repository."
+        "text": "Root files for the first create, including LICENSE from the project license and a slim .gitignore. src/global.json is optional and unchecked by default. version.json is not a checkbox here; choose This repository on a first create to add the root file. Visual Studio requires at least one value; choose None when adding another source-generator package to the same repository."
       }
     },
     {
@@ -38,7 +38,7 @@
         "text": "Solution file location"
       },
       "description": {
-        "text": "Where this analyzer's .slnx is written. Default src/sln/{name}/ with the handbook beside that file. Other locations: repository root (src/sln/{name}/ stays as notes), or src/prj/{name}/ next to the analyzer csproj (slnx and handbook; no src/sln/{name}/). Several .slnx files in the same folder make `dotnet` require an explicit path (MSB1011). Visual Studio also creates a root .slnx; close Visual Studio, open the template solution, and delete the extra root .slnx."
+        "text": "Where this source-generator's .slnx is written. Default src/sln/{name}/ with the handbook beside that file. Other locations: repository root (src/sln/{name}/ stays as notes), or src/prj/{name}/ next to the source-generator csproj (slnx and handbook; no src/sln/{name}/). Several .slnx files in the same folder make `dotnet` require an explicit path (MSB1011). Visual Studio also creates a root .slnx; close Visual Studio, open the template solution, and delete the extra root .slnx."
       }
     },
     {
@@ -50,7 +50,7 @@
         "text": "C# project options"
       },
       "description": {
-        "text": "Checked values write explicit C# and debug properties on the analyzer package, tests, DebugHost, and benchmark. XML documentation is analyzer-project-only. Uncheck one to write the alternative."
+        "text": "Checked values write explicit C# and debug properties on the source-generator package, tests, DebugHost, and benchmark. XML documentation is source-generator-project-only. Uncheck one to write the alternative."
       }
     },
     {
@@ -74,7 +74,7 @@
         "text": "Nerdbank.GitVersioning"
       },
       "description": {
-        "text": "Default is This analyzer (Properties/version.json) on every create. This repository writes root version.json on a first create; later packages keep This repository and choose None for root items. Off keeps VersionPrefix in the analyzer project."
+        "text": "Default is This source-generator (Properties/version.json) on every create. This repository writes root version.json on a first create; later packages keep This repository and choose None for root items. Off keeps VersionPrefix in the source-generator project."
       }
     },
     {
@@ -85,7 +85,7 @@
         "text": "Public API analyzers"
       },
       "description": {
-        "text": "Adds Microsoft.CodeAnalysis.PublicApiAnalyzers to this analyzer project. The first build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected."
+        "text": "Adds Microsoft.CodeAnalysis.PublicApiAnalyzers to this source-generator project. The first build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected."
       }
     },
     {
@@ -97,7 +97,7 @@
         "text": "Documentation template"
       },
       "description": {
-        "text": "Optional DocShell.html seed. NuGet package docs go under this analyzer's Properties/NugetAssets/docs and pack with the nupkg. Repository docs go under docs/ at the repo root (first create only). Choose None when adding another package unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
+        "text": "Optional DocShell.html seed. NuGet package docs go under this source-generator's Properties/NugetAssets/docs and pack with the nupkg. Repository docs go under docs/ at the repo root (first create only). Choose None when adding another package unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
       }
     },
     {
@@ -118,7 +118,7 @@
       "defaultValue": "Strict",
       "persistenceScope": "none",
       "name": {
-        "text": "Code style rules for analyzer project"
+        "text": "Code style rules for source-generator project"
       },
       "description": {
         "text": "Single choice. Default is Strict: naming, XML docs, nullable, unused usings, and reserved identifiers (CA1716) fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected."
@@ -133,7 +133,7 @@
         "text": "Code analysis mode"
       },
       "description": {
-        "text": "SDK CA rules on the analyzer project only. Default Recommended. Minimum is fewer warnings. All is almost every CA rule. Separate from code style Strict and from Public API analyzers."
+        "text": "SDK CA rules on the source-generator project only. Default Recommended. Minimum is fewer warnings. All is almost every CA rule. Separate from code style Strict and from Public API analyzers."
       }
     },
     {
@@ -145,7 +145,7 @@
         "text": "Treat high/critical NuGet vulnerabilities as errors"
       },
       "description": {
-        "text": "Default on. Restore fails this analyzer package on high (NU1903) and critical (NU1904) vulnerable packages. Low and moderate stay warnings. Uncheck for an EOL or backport graph. Test and benchmark projects are not affected. NugetReport next to the tests lists that package and is still info-only."
+        "text": "Default on. Restore fails this source-generator package on high (NU1903) and critical (NU1904) vulnerable packages. Low and moderate stay warnings. Uncheck for an EOL or backport graph. Test and benchmark projects are not affected. NugetReport next to the tests lists that package and is still info-only."
       }
     },
     {
@@ -172,7 +172,7 @@
         "text": "Empty Directory.Build and Directory.Solution files"
       },
       "description": {
-        "text": "Default off. Writes empty Directory.Build.props and Directory.Build.targets beside this analyzer project, and Directory.Solution.props and Directory.Solution.targets beside this package's .slnx. Landing files for extra MSBuild. Tests and benchmark are not affected. No Directory.Packages.props."
+        "text": "Default off. Writes empty Directory.Build.props and Directory.Build.targets beside this source-generator project, and Directory.Solution.props and Directory.Solution.targets beside this package's .slnx. Landing files for extra MSBuild. Tests and benchmark are not affected. No Directory.Packages.props."
       }
     },
     {
@@ -184,7 +184,7 @@
         "text": "Empty local dotnet-tools.json"
       },
       "description": {
-        "text": "Default on. Writes an empty .config/dotnet-tools.json beside this analyzer project (no tools). Landing file for dotnet tool install --local. Uncheck to skip. Tests, DebugHost, and benchmark are not affected. Does not restore tools on build."
+        "text": "Default on. Writes an empty .config/dotnet-tools.json beside this source-generator project (no tools). Landing file for dotnet tool install --local. Uncheck to skip. Tests, DebugHost, and benchmark are not affected. Does not restore tools on build."
       }
     }
   ]

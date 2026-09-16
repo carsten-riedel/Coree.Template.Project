@@ -2,23 +2,23 @@
   "$schema": "http://json.schemastore.org/template",
   "author": "Carsten Riedel",
   // Opts Visual Studio into category display in the New Project dialog
-  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "Analyzer", "Roslyn", "NuGet", "Test", "Solution", "Repository", "Multi-project", "Coree" ],
-  "identity": "CoreeTemplatesProjectMultiAnalyzerRepository",
+  "classifications": [ "Common", "dotnet", "Windows", "Linux", "macOS", "SourceGenerator", "Roslyn", "NuGet", "Test", "Solution", "Repository", "Multi-project", "Coree" ],
+  "identity": "CoreeTemplatesProjectMultiSourceGeneratorRepository",
   // Displayname is used in the New Project dialog and in the dotnet new list output.
-  "name": ".NET multi-analyzer repository",
-  "description": "Repository of one or more independently packable Roslyn analyzer packages (NuGet). Same combo and init system as the multi-library repository. Analyzer targets netstandard2.0 and packs under analyzers/dotnet/cs. Tests, Coverlet coverage, and a Visual Studio DebugHost (DebugRoslynComponent) are included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, and documentation template.",
-  "shortName": "multianalyzerrepo-coree",
+  "name": ".NET multi-source-generator repository",
+  "description": "Repository of one or more independently packable Roslyn source-generator packages (NuGet). Same combo and init system as the multi-library repository. Source generators target netstandard2.0 and pack under analyzers/dotnet/cs. Tests, Coverlet coverage, and a Visual Studio DebugHost (DebugRoslynComponent) are included; optional ReportGenerator, BenchmarkDotNet, Nerdbank.GitVersioning, Public API analyzers, and documentation template.",
+  "shortName": "multisourcegeneratorrepo-coree",
   // Host metadata: libraries this template uses that the author does not own.
   // After create, CLI prints this URL. The markdown lives next to this file;
   // .template.config *.md is not packed and is not generated into the repo.
-  "thirdPartyNotices": "https://github.com/carsten-riedel/Coree.Template.Project/blob/main/src/prj/Coree.Template.Project/Templates/MultiAnalyzerRepository/.template.config/THIRD-PARTY-NOTICES.md",
+  "thirdPartyNotices": "https://github.com/carsten-riedel/Coree.Template.Project/blob/main/src/prj/Coree.Template.Project/Templates/MultiSourceGeneratorRepository/.template.config/THIRD-PARTY-NOTICES.md",
   "tags": {
     "language": "C#",
     "type": "solution",
     // Opts Visual Studio into its solution-template UI instead of the project-template UI.
     "editorTreatAs": "solution"
   },
-  "defaultName": "Organization.Domain.Analyzer", // Organization.Domain.Functionality
+  "defaultName": "Organization.Domain.SourceGenerator", // Organization.Domain.Functionality
   "sourceName": "__SourceName__", // Folders, csproj, namespace. Replaced by --name.
   // Visual Studio creates the outer solution directory; true would add another name directory.
   "preferNameDirectory": false,
@@ -39,11 +39,11 @@
       "defaultValue": "dotnetcli"
     },
     // Single-select DebugHost TFM (net8.0 / net9.0 / net10.0). Tests and the
-    // optional benchmark use the same value. The analyzer is always netstandard2.0.
+    // optional benchmark use the same value. The source-generator is always netstandard2.0.
     // First parameter after HostIdentifier so Visual Studio lists it at the top.
     "TargetFrameworks": {
       "type": "parameter",
-      "description": "DebugHost target framework (.NET 8, 9, or 10). Tests and the optional benchmark use the same TFM. The analyzer package always targets netstandard2.0.",
+      "description": "DebugHost target framework (.NET 8, 9, or 10). Tests and the optional benchmark use the same TFM. The source-generator package always targets netstandard2.0.",
       "datatype": "choice",
       "allowMultipleValues": false,
       "enableQuotelessLiterals": true,
@@ -152,7 +152,7 @@
       "choices": [
         {
           "choice": "None",
-          "description": "Do not add first-create files. Use this in Visual Studio when adding another analyzer package to an existing repository.",
+          "description": "Do not add first-create files. Use this in Visual Studio when adding another source-generator package to an existing repository.",
           "displayName": "None"
         },
         {
@@ -182,7 +182,7 @@
         },
         {
           "choice": "SrcGlobalJson",
-          "description": "Add src/global.json pinning the .NET SDK to this create's DebugHost target framework (8.0.0, 9.0.0, or 10.0.0; rollForward latestFeature). Optional; off by default; not part of --InitAllRepoItems. First create only. Walk-up from folders under src/. Does not pin commands run at the repository root. The analyzer package stays netstandard2.0.",
+          "description": "Add src/global.json pinning the .NET SDK to this create's DebugHost target framework (8.0.0, 9.0.0, or 10.0.0; rollForward latestFeature). Optional; off by default; not part of --InitAllRepoItems. First create only. Walk-up from folders under src/. Does not pin commands run at the repository root. The source-generator package stays netstandard2.0.",
           "displayName": "src/global.json"
         }
       ]
@@ -204,7 +204,7 @@
     // SlnFolder (default): src/sln/__SourceName__/__SourceName__.slnx plus
     // handbook Readme.md — one folder per package so `dotnet` there does not
     // see sibling .slnx files.
-    // BesideCsproj: src/prj/__SourceName__/ next to the packable analyzer
+    // BesideCsproj: src/prj/__SourceName__/ next to the packable source-generator
     // csproj (slnx + handbook; tests, DebugHost, and benchmark stay sibling
     // projects under src/prj/). Does not create src/sln/{name}/.
     // RepoRoot: repository root. CLI renames to __SourceName__.slnx; Visual
@@ -218,7 +218,7 @@
       "isRequired": false,
       "defaultValue": "SlnFolder",
       "enableQuotelessLiterals": true,
-      "description": "Where this analyzer's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideCsproj writes the .slnx and handbook next to the analyzer csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
+      "description": "Where this source-generator's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideCsproj writes the .slnx and handbook next to the source-generator csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
       "displayName": "Solution file location",
       "choices": [
         {
@@ -233,7 +233,7 @@
         },
         {
           "choice": "BesideCsproj",
-          "description": "Next to this analyzer's csproj (slnx and handbook). Does not create src/sln/{name}/. Tests, DebugHost, and benchmark stay sibling projects under src/prj/.",
+          "description": "Next to this source-generator's csproj (slnx and handbook). Does not create src/sln/{name}/. Tests, DebugHost, and benchmark stay sibling projects under src/prj/.",
           "displayName": "src/prj/{name}/"
         }
       ]
@@ -250,7 +250,7 @@
     // benchmark (VS combobox, like InitRepoItems). Checked =
     // current product default. Unchecked = the other explicit value.
     // Properties are always written. GenerateDocumentationFile is in this
-    // choice list; only the analyzer project writes it (own PropertyGroup).
+    // choice list; only the source-generator project writes it (own PropertyGroup).
     // Tests/Benchmark have no XML docs surface. No None: CLI/VS default is
     // the five product values; Visual Studio keeps at least one checked.
     // Omit the switch on CLI.
@@ -261,7 +261,7 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded|GenerateDocumentationFile",
-      "description": "C# and debug settings for the analyzer package, tests, DebugHost, and benchmark. Uncheck an item to write the alternative value.",
+      "description": "C# and debug settings for the source-generator package, tests, DebugHost, and benchmark. Uncheck an item to write the alternative value.",
       "displayName": "C# project options",
       "choices": [
         {
@@ -388,7 +388,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add Microsoft.CodeAnalysis.PublicApiAnalyzers to the analyzer project. The first real build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected.",
+      "description": "Add Microsoft.CodeAnalysis.PublicApiAnalyzers to the source-generator project. The first real build writes Properties/PublicAPI baseline files if they are missing. Test and benchmark projects are not affected.",
       "displayName": "Public API analyzers"
     },
     // Multi-choice. Default empty/None. Same DocShell.html seed, two
@@ -441,7 +441,7 @@
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "MIT",
-      "description": "License for the analyzer package. Default MIT. Standards set PackageLicenseExpression. Custom packs License.txt. The LICENSE file at repository root copies this license.",
+      "description": "License for the source-generator package. Default MIT. Standards set PackageLicenseExpression. Custom packs License.txt. The LICENSE file at repository root copies this license.",
       "displayName": "Project license",
       "choices": [
         {
@@ -481,12 +481,12 @@
       "isRequired": false,
       "defaultValue": "Strict",
       "enableQuotelessLiterals": true,
-      "description": "Editor and analyzer rules beside the analyzer project, applied in the IDE and on build. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected.",
-      "displayName": "Code style rules for analyzer project",
+      "description": "Editor and analyzer rules beside the source-generator project, applied in the IDE and on build. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected.",
+      "displayName": "Code style rules for source-generator project",
       "choices": [
         {
           "choice": "Strict",
-          "description": "Same style dump as Default, plus naming/XML-doc/nullable/unused-using errors for a packable analyzer. Default. Needs XML docs and nullable on in C# project options.",
+          "description": "Same style dump as Default, plus naming/XML-doc/nullable/unused-using errors for a packable source-generator. Default. Needs XML docs and nullable on in C# project options.",
           "displayName": "Strict (public release errors)"
         },
         {
@@ -522,7 +522,7 @@
       "defaultValue": "Recommended",
       "enableQuotelessLiterals": true,
       "replaces": "__AnalysisMode__",
-      "description": "SDK code-analysis mode for the analyzer project (CA rules). Default Recommended. Minimum is fewer warnings. All is almost every CA rule as a warning. Test and benchmark projects are not affected.",
+      "description": "SDK code-analysis mode for the source-generator project (CA rules). Default Recommended. Minimum is fewer warnings. All is almost every CA rule as a warning. Test and benchmark projects are not affected.",
       "displayName": "Code analysis mode",
       "choices": [
         {
@@ -550,7 +550,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "description": "Treat high and critical NuGet vulnerability warnings (NU1903, NU1904) as restore errors on the analyzer package. Default on. Low and moderate stay warnings. Turn off for an EOL or backport graph that cannot be cleaned. Test and benchmark projects are not affected. Does not change NuGetAudit (already on) or the test-project vulnerable report.",
+      "description": "Treat high and critical NuGet vulnerability warnings (NU1903, NU1904) as restore errors on the source-generator package. Default on. Low and moderate stay warnings. Turn off for an EOL or backport graph that cannot be cleaned. Test and benchmark projects are not affected. Does not change NuGetAudit (already on) or the test-project vulnerable report.",
       "displayName": "Treat high/critical NuGet vulnerabilities as errors"
     },
     // Test-project coverage. Single choice because ReportGenerator consumes
@@ -564,7 +564,7 @@
       "isRequired": false,
       "defaultValue": "Coverlet",
       "enableQuotelessLiterals": true,
-      "description": "Test coverage on the test project. Default is Coverlet: dotnet test fails if the analyzer assembly is under 100% line/branch/method coverage. Lower Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. The analyzer project is not affected.",
+      "description": "Test coverage on the test project. Default is Coverlet: dotnet test fails if the source-generator assembly is under 100% line/branch/method coverage. Lower Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. The source-generator project is not affected.",
       "displayName": "Test coverage",
       "choices": [
         {
@@ -600,7 +600,7 @@
       "description": "Add an optional BenchmarkDotNet console project.",
       "displayName": "Add optional BenchmarkDotNet console project"
     },
-    // Opt-in empty Directory.Build.props/.targets next to this analyzer csproj
+    // Opt-in empty Directory.Build.props/.targets next to this source-generator csproj
     // and Directory.Solution.props/.targets next to this package's .slnx
     // (src/sln/{name}/, repo root, or src/prj/{name}/ — follows PlaceSolution).
     // Combo-safe when the .slnx is not stacked in one shared directory.
@@ -610,10 +610,10 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add empty Directory.Build.props and Directory.Build.targets beside this analyzer project, and Directory.Solution.props and Directory.Solution.targets beside this package's .slnx (follows PlaceSolution). Landing files for extra MSBuild you do not want in the csproj. Test and benchmark projects are not affected. Default off.",
+      "description": "Add empty Directory.Build.props and Directory.Build.targets beside this source-generator project, and Directory.Solution.props and Directory.Solution.targets beside this package's .slnx (follows PlaceSolution). Landing files for extra MSBuild you do not want in the csproj. Test and benchmark projects are not affected. Default off.",
       "displayName": "Empty Directory.Build and Directory.Solution MSBuild files"
     },
-    // Empty local tool manifest beside this analyzer csproj. Default on.
+    // Empty local tool manifest beside this source-generator csproj. Default on.
     // Combo-safe: path includes the package name. Not Init. No tools pinned
     // and no tool restore on build. Tests, DebugHost, and benchmark are not
     // in this switch.
@@ -621,7 +621,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "description": "Add an empty .config/dotnet-tools.json beside this analyzer project (no tools). Landing file for dotnet tool install --local. Default on. Every create; paths do not collide. Test, DebugHost, and benchmark projects are not affected. Does not restore tools on build.",
+      "description": "Add an empty .config/dotnet-tools.json beside this source-generator project (no tools). Landing file for dotnet tool install --local. Default on. Every create; paths do not collide. Test, DebugHost, and benchmark projects are not affected. Does not restore tools on build.",
       "displayName": "Empty local dotnet-tools.json"
     }
   },
@@ -1156,7 +1156,7 @@
         "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
         "manualInstructions": [
           {
-            "text": "Close Visual Studio, open the .slnx next to the analyzer project under src/prj/, and delete the extra .slnx Visual Studio created in the repository root."
+            "text": "Close Visual Studio, open the .slnx next to the source-generator project under src/prj/, and delete the extra .slnx Visual Studio created in the repository root."
           }
         ],
         "continueOnError": true

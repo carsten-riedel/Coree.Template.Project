@@ -12,12 +12,12 @@ Walk the whole repository, including libraries added after the first `dotnet new
 6. Public surface has no leftover template samples (`EmDashAnalyzer`, `SmartQuotesAnalyzer`, DebugHost em dash / typographic quote literals, tests that do not assert the product, copyright lines that still lie).
 7. Package version is a conscious first publish (including whether `0.1` and a prerelease suffix are still correct).
 <!--#if (PlaceSolution == "BesideCsproj") -->
-8. Solution notes in `src/prj/*/Readme.md` match the beside-csproj layout (`.slnx` next to the packable analyzer, no `src/sln/` tree) and any host-specific leftover instructions.
+8. Solution notes in `src/prj/*/Readme.md` match the beside-csproj layout (`.slnx` next to the packable source-generator, no `src/sln/` tree) and any host-specific leftover instructions.
 <!--#else -->
 8. Solution notes under `src/sln/*/Readme.md` match where each `.slnx` actually is (`SlnFolder` or `RepoRoot`) and any host-specific leftover instructions. That folder is for solution-level or cross-project files; delete it only when the `.slnx` is not there and you do not need the notes.
 <!--#endif -->
 9. `dotnet pack` of each packable library succeeds, and the NuGet readme is inside the `.nupkg`.
 10. If `DocShell.html` is present, bootstrap that documentation root and then write a short real site. Infer the kind of documentation from the location; do not mix them. If none of these files exist, skip this item.
-    - `src/prj/<name>/Properties/NugetAssets/docs/DocShell.html` is **package** documentation for that analyzer (install, diagnostics, pack/consume). Follow the template's initial bootstrap, then replace the minimal `index.html` with a short package guide from the actual code. Keep later packages' package docs in their own `Properties/NugetAssets/docs` tree.
-    - `docs/DocShell.html` at the repository root is **repository** documentation (how this analyzer-package repo is composed, how to add another package, layout). Bootstrap that tree independently. Do not copy one package's API into the repository site.
+    - `src/prj/<name>/Properties/NugetAssets/docs/DocShell.html` is **package** documentation for that source-generator (install, diagnostics, pack/consume). Follow the template's initial bootstrap, then replace the minimal `index.html` with a short package guide from the actual code. Keep later packages' package docs in their own `Properties/NugetAssets/docs` tree.
+    - `docs/DocShell.html` at the repository root is **repository** documentation (how this source-generator-package repo is composed, how to add another package, layout). Bootstrap that tree independently. Do not copy one package's API into the repository site.
 11. This file is deleted. Later chats should read the libraries and the real package docs, not this checkpoint.

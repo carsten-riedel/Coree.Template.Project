@@ -138,7 +138,7 @@
   <!-- NuGet template layout. Exclude bin/obj/.vs (VS can create those if an slnx is opened)
        and maintainer markdown under .template.config (not template content, not shipped). -->
   <ItemGroup>
-    <None Include="$(MSBuildProjectDirectory)\Templates\**\*" Exclude="$(MSBuildProjectDirectory)\Templates\**\**\bin\**;$(MSBuildProjectDirectory)\Templates\**\**\obj\**;$(MSBuildProjectDirectory)\Templates\**\**\.vs\**;$(MSBuildProjectDirectory)\Templates\**\.template.config\**\*.md;$(MSBuildProjectDirectory)\Templates\.gitkeep" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\Templates\**\*" Exclude="$(MSBuildProjectDirectory)\Templates\**\**\bin\**;$(MSBuildProjectDirectory)\Templates\**\**\obj\**;$(MSBuildProjectDirectory)\Templates\**\**\.vs\**;$(MSBuildProjectDirectory)\Templates\**\.template.config\**\*.md" Pack="true" PackagePath="" />
     <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes). Disk matches Solution Explorer. -->
     <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" />
     <!-- License.txt is generated only for Custom; the wildcard excludes it so the explicit PackageLicenseFile item controls packing. -->

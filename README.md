@@ -1,12 +1,22 @@
 # Coree.Template.Project
 
-**Composable .NET project templates that work just as well for a single project as for a growing multi-project repository.**
+**Composable .NET project templates for humans and AI coding agents.**
 
-Start with one library, analyzer, source generator, MSBuild task, console app, WPF app, WinForms app, PowerShell module, or project template.
+**Define the boundaries once. Build freely within them.**
 
-When you need another one later, add it to the same repository with another `dotnet new` command.
+Coree.Template.Project creates an opinionated, deterministic project frame around your .NET code: repository layout, project boundaries, testing, packaging, publishing, tooling, and common infrastructure.
 
-No migration. No repository restructuring. No framework dependency.
+The implementation inside that frame remains yours.
+
+Start with one library, analyzer, source generator, MSBuild task, console application, WPF application, WinForms application, PowerShell module, or project template.
+
+If the repository grows later, add another component with the same `dotnet new` command.
+
+No migration.
+No repository restructuring.
+No framework dependency.
+
+**Deterministic structure. Flexible implementation.**
 
 ---
 
@@ -28,9 +38,17 @@ dotnet new multilibraryrepo-coree \
     --InitAllRepoItems
 ```
 
-That's already a perfectly valid **single-project repository**.
+That's already a complete **single-project repository**.
 
-If the project grows later, add another library:
+Build it using the normal .NET CLI:
+
+```bash
+dotnet build
+dotnet test
+dotnet pack
+```
+
+If you need another library later:
 
 ```bash
 dotnet new multilibraryrepo-coree \
@@ -54,13 +72,101 @@ The same template handles both cases:
 
 ---
 
-# Why the Multi templates?
+# Why define the frame?
 
-Most project templates make an early assumption:
+Starting a project involves many decisions that are usually unrelated to the actual problem you want to solve.
 
-> Is this going to be a single-project repository or a multi-project repository?
+Where do projects live?
 
-Coree's Multi templates avoid that decision.
+Where do tests live?
+
+How are packages built?
+
+How is publishing configured?
+
+How are repository-wide files organized?
+
+How should another project be added six months later?
+
+Coree.Template.Project turns those recurring decisions into a reusable template.
+
+The template defines the **boundaries**.
+
+Inside those boundaries, you remain free to implement the application however you want.
+
+```text
+Template responsibility
+│
+├── Repository structure
+├── Project boundaries
+├── Test structure
+├── Packaging
+├── Publishing
+├── Tooling
+├── Common metadata
+└── Repeatable project creation
+        │
+        ▼
+Your responsibility
+│
+└── The actual software
+```
+
+This is especially useful when working with AI coding agents.
+
+---
+
+# AI-assisted development
+
+A coding agent should not have to reinvent your repository every time it starts a project.
+
+Without a predefined structure, you might ask an agent:
+
+```text
+Create a .NET solution with a library, test project,
+NuGet packaging, code coverage, versioning,
+publishing configuration, repository files,
+and a sensible directory structure.
+```
+
+The result depends on the prompt, the agent, and the decisions it makes at that moment.
+
+With Coree.Template.Project, the structural part becomes a command:
+
+```bash
+dotnet new multilibraryrepo-coree \
+    --Author "Your Name" \
+    --output "./MyProject" \
+    --name "MyProject" \
+    --InitAllRepoItems
+```
+
+Then the agent can work on the actual task:
+
+```text
+Implement the domain model and persistence layer
+inside the generated repository.
+```
+
+The template creates the frame.
+
+The agent works inside it.
+
+This means less context is spent recreating boilerplate and fewer architectural decisions have to be rediscovered for every project.
+
+It also gives different coding agents the same starting point.
+
+Whether the implementation is written by a human, an AI agent, or both, the surrounding project structure remains consistent.
+
+**Prompts can vary. The project boundaries do not have to.**
+
+---
+
+# Designed to grow
+
+The Multi templates do not require a multi-project repository.
+
+They are designed so that a repository containing one component and a repository containing many components follow the same structure.
 
 You can start with:
 
@@ -77,7 +183,9 @@ MyCompany.Core/
 
 and stop there forever.
 
-Or, when the repository grows:
+That is a perfectly valid use case.
+
+If the repository grows:
 
 ```text
 MyCompany.Core/
@@ -102,9 +210,11 @@ MyCompany.Core/
             └── MyCompany.Inventory.slnx
 ```
 
+the repository does not need to be redesigned.
+
 Each component remains independently buildable, testable, packable, or publishable.
 
-The repository structure does not need to change when the project grows.
+The structure already had room for growth.
 
 ---
 
@@ -112,12 +222,14 @@ The repository structure does not need to change when the project grows.
 
 The **Multi templates are the current generation of Coree.Template.Project**.
 
-Despite the name, they are intended for both:
+Despite the name, they support both:
 
 * single-project repositories
 * repositories containing multiple independent projects
 
-Start with one. Add more only when you need them.
+Start with one.
+
+Add more only when you need them.
 
 | Template                    | Short name                       | Use case                       |
 | --------------------------- | -------------------------------- | ------------------------------ |
@@ -145,17 +257,9 @@ dotnet new multilibraryrepo-coree \
     --InitAllRepoItems
 ```
 
-Build it normally:
+If that is all the repository ever needs, you're done.
 
-```bash
-dotnet build
-dotnet test
-dotnet pack
-```
-
-If you never need another library, you're done.
-
-If you do:
+If another library becomes necessary later:
 
 ```bash
 dotnet new multilibraryrepo-coree \
@@ -164,7 +268,11 @@ dotnet new multilibraryrepo-coree \
     --name "MyCompany.Extensions"
 ```
 
-The additional project is integrated into the existing repository structure without turning the repository into a different kind of project.
+The new component follows the same established repository boundaries.
+
+A human does not have to recreate them.
+
+An AI agent does not have to infer them.
 
 ---
 
@@ -180,9 +288,7 @@ dotnet new multianalyzerrepo-coree \
     --InitAllRepoItems
 ```
 
-That repository can stay exactly like that.
-
-Or add another analyzer later:
+Add another later:
 
 ```bash
 dotnet new multianalyzerrepo-coree \
@@ -191,7 +297,7 @@ dotnet new multianalyzerrepo-coree \
     --name "MyCompany.Analyzers.Performance"
 ```
 
-Generated analyzer projects include the infrastructure required for analyzer development, testing, packaging, and debugging.
+Generated analyzer projects provide the surrounding structure for analyzer development, testing, packaging, and debugging.
 
 ---
 
@@ -207,7 +313,7 @@ dotnet new multisourcegeneratorrepo-coree \
     --InitAllRepoItems
 ```
 
-Add another only if the repository needs one:
+Add another when required:
 
 ```bash
 dotnet new multisourcegeneratorrepo-coree \
@@ -216,7 +322,7 @@ dotnet new multisourcegeneratorrepo-coree \
     --name "MyCompany.Generators.Mapping"
 ```
 
-The repository is usable from the first generator onward.
+The repository structure stays consistent as generators are added.
 
 ---
 
@@ -232,7 +338,7 @@ dotnet new multimsbuildrepo-coree \
     --InitAllRepoItems
 ```
 
-Later, another independently packaged build component can be added to the same repository:
+Add another component later:
 
 ```bash
 dotnet new multimsbuildrepo-coree \
@@ -241,13 +347,13 @@ dotnet new multimsbuildrepo-coree \
     --name "MyCompany.Build.Packaging"
 ```
 
-The generated structure includes the infrastructure needed for MSBuild task development, packaging, testing, and consumer-based debugging.
+The generated structure provides a consistent frame for MSBuild task development, packaging, testing, and consumer-based debugging.
 
 ---
 
 # Console application repositories
 
-Create one console application:
+Create one application:
 
 ```bash
 dotnet new multiconsolerepo-coree \
@@ -257,7 +363,7 @@ dotnet new multiconsolerepo-coree \
     --InitAllRepoItems
 ```
 
-If you later need another tool:
+Add another tool later:
 
 ```bash
 dotnet new multiconsolerepo-coree \
@@ -266,15 +372,13 @@ dotnet new multiconsolerepo-coree \
     --name "MyCompany.Tools.Migrate"
 ```
 
-Console projects can support different publishing models, including framework-dependent, framework-included, single-file, and ReadyToRun deployments.
+Console projects can support framework-dependent, framework-included, single-file, and ReadyToRun publishing scenarios.
 
 They can also be configured for distribution as .NET tools.
 
 ---
 
 # WPF repositories
-
-Create a single WPF application:
 
 ```bash
 dotnet new multiwpfrepo-coree \
@@ -292,8 +396,6 @@ Additional applications can be added later without changing the repository struc
 
 # WinForms repositories
 
-Create a single WinForms application:
-
 ```bash
 dotnet new multiwinformsrepo-coree \
     --Author "Your Name" \
@@ -310,8 +412,6 @@ The same repository can later contain additional independently publishable WinFo
 
 # PowerShell module repositories
 
-Create a single binary PowerShell module:
-
 ```bash
 dotnet new multipowershellrepo-coree \
     --Author "Your Name" \
@@ -320,15 +420,15 @@ dotnet new multipowershellrepo-coree \
     --InitAllRepoItems
 ```
 
-More modules can be added to the same repository later if required.
+More modules can be added later while keeping the same repository conventions.
 
 ---
 
 # Project-template repositories
 
-Coree.Template.Project can also generate repositories that contain other `dotnet new` template packages.
+Coree.Template.Project can also generate repositories whose output is itself a `dotnet new` template package.
 
-Create the first template package:
+Create the first template:
 
 ```bash
 dotnet new multiprojecttemplaterepo-coree \
@@ -347,7 +447,7 @@ dotnet new multiprojecttemplaterepo-coree \
     --name "MyCompany.Templates.Library"
 ```
 
-Each can be packed and distributed as a normal NuGet .NET Template Package.
+Each generated template package can be packed through the normal .NET toolchain:
 
 ```bash
 dotnet pack
@@ -355,22 +455,23 @@ dotnet pack
 
 ---
 
-# What gets generated?
+# What does the template own?
 
-Coree templates are deliberately more complete than the minimal templates included with the .NET SDK.
+Coree.Template.Project is intentionally opinionated about the **frame**, not about your application logic.
 
-Depending on the selected template, generated repositories can provide infrastructure for:
+Depending on the template, that frame can include:
 
-| Capability             | Support               |
+| Area                   | Support               |
 | ---------------------- | --------------------- |
-| Standard .NET projects | ✓                     |
+| Repository layout      | ✓                     |
+| Project boundaries     | ✓                     |
 | `.slnx` solutions      | ✓                     |
+| Testing structure      | ✓                     |
 | NuGet packaging        | ✓                     |
 | Package metadata       | ✓                     |
-| Tests                  | ✓                     |
 | Code coverage          | ✓                     |
-| Local .NET tools       | ✓                     |
 | Repository-level files | ✓                     |
+| Local .NET tools       | ✓                     |
 | Git versioning         | Optional              |
 | Documentation          | Template dependent    |
 | Benchmarks             | Template dependent    |
@@ -379,44 +480,36 @@ Depending on the selected template, generated repositories can provide infrastru
 | Single-file publishing | Application templates |
 | ReadyToRun             | Application templates |
 
-The generated result remains normal .NET/MSBuild infrastructure.
+The generated output remains normal .NET and MSBuild infrastructure.
 
-There is no Coree runtime your application must depend on.
+There is no Coree runtime required by the generated application.
 
 ---
 
-# Designed to grow
+# What does the template not own?
 
-The main idea behind the current templates is simple:
+The template does not decide your:
 
-```text
-Day 1
+* domain model
+* business logic
+* application architecture
+* algorithms
+* persistence strategy
+* UI design
+* public API
+* coding style beyond the generated frame
 
-Repository
-└── Project A
-```
+Those decisions remain with the developer or coding agent.
 
-does not need a different architecture than:
+This distinction is intentional.
 
-```text
-Day 500
-
-Repository
-├── Project A
-├── Project B
-├── Project C
-└── Project D
-```
-
-A repository should be able to grow without first having to predict how large it will become.
-
-That is why the Multi templates are also the recommended templates for **single-project repositories**.
+**The template constrains the repetitive structure so that implementation can remain flexible.**
 
 ---
 
 # Repository initialization
 
-The first invocation can initialize the repository-level files:
+The first invocation can initialize repository-wide files:
 
 ```bash
 dotnet new multilibraryrepo-coree \
@@ -426,7 +519,7 @@ dotnet new multilibraryrepo-coree \
     --InitAllRepoItems
 ```
 
-Subsequent invocations add projects to the existing repository:
+Later invocations add components to the existing repository:
 
 ```bash
 dotnet new multilibraryrepo-coree \
@@ -435,15 +528,13 @@ dotnet new multilibraryrepo-coree \
     --name "MySecondLibrary"
 ```
 
-This distinction allows the same template to handle both repository creation and repository expansion.
+The same operation works whether it is performed manually or by an automated coding agent.
 
 ---
 
 # Template options
 
-All supported options are exposed through the standard .NET template CLI.
-
-For example:
+Every template exposes its options through the standard .NET template CLI.
 
 ```bash
 dotnet new multilibraryrepo-coree --help
@@ -461,13 +552,15 @@ dotnet new multisourcegeneratorrepo-coree --help
 dotnet new multiconsolerepo-coree --help
 ```
 
-The output of `--help` always reflects the version currently installed on your machine.
+Using `--help` ensures that the available options match the exact version installed on the machine.
+
+This also makes the templates straightforward for tools and coding agents to inspect without requiring custom documentation formats or APIs.
 
 ---
 
 # Legacy templates
 
-Coree.Template.Project also contains older first-generation templates such as:
+Coree.Template.Project still contains first-generation templates such as:
 
 ```text
 classlib-coree
@@ -477,60 +570,65 @@ wpfapp-coree
 projecttemplate-coree
 ```
 
-These templates predate the current composable repository architecture.
+These predate the current composable repository architecture.
 
-They remain available for compatibility during the transition, but the **Multi templates are their intended successors**.
+They remain available during the transition, but the **Multi templates are their intended successors**.
 
 For new projects, prefer the corresponding Multi template.
 
-The goal is for the Multi templates to replace the older templates while still supporting the simple use case that those templates originally covered.
-
-In other words:
+The Multi templates preserve the simple single-project use case while allowing the same repository to grow later.
 
 ```text
-old single template
-        ↓
-new Multi template
-        ↓
-works for one project
-        +
-can grow to many projects
+Single project
+     │
+     │ same template
+     ▼
+Single project + another component
+     │
+     │ same structure
+     ▼
+Larger repository
 ```
 
-Existing users therefore do not need to adopt a multi-project workflow just because the replacement template is called `multi...`.
+There is no separate migration from a "single" template to a "multi" template.
 
 ---
 
 # Philosophy
 
-Coree.Template.Project is opinionated about project **infrastructure**, not application architecture.
+A good project template should do more than copy a few files.
 
-The templates try to remove repetitive setup around:
+It should define the repetitive boundaries once.
 
-* repository structure
-* testing
-* packaging
-* publishing
-* debugging
-* documentation
-* versioning
-* common tooling
+Humans should not need to rebuild those boundaries for every repository.
 
-while leaving the generated .NET projects under your control.
+AI coding agents should not need to spend context and reasoning recreating them either.
 
-There is no framework lock-in.
+Coree.Template.Project therefore separates two concerns:
 
-There is no custom project format.
+```text
+Deterministic frame
+        +
+Flexible implementation
+```
 
-There is no requirement to keep using Coree.Template.Project after generation.
+The template establishes the frame.
 
-The output is yours.
+Humans and AI build within it.
+
+If the project grows, the frame grows with it.
+
+After generation, the repository is still yours.
 
 Change it.
 
-Delete parts you do not need.
+Remove parts you do not need.
 
-Add whatever your project requires.
+Extend it.
+
+Or never invoke Coree.Template.Project again.
+
+There is no framework lock-in.
 
 ---
 
@@ -544,21 +642,21 @@ Then install Coree.Template.Project:
 dotnet new install Coree.Template.Project
 ```
 
-Individual template families may have additional platform requirements.
+Individual template families can have additional platform requirements.
 
-| Template             | Platform                                                |
-| -------------------- | ------------------------------------------------------- |
-| Libraries            | Cross-platform                                          |
-| Analyzers            | Cross-platform                                          |
-| Source generators    | Cross-platform                                          |
-| MSBuild tasks        | Cross-platform where supported by the generated project |
-| Console applications | Cross-platform                                          |
-| Project templates    | Cross-platform                                          |
-| WPF                  | Windows                                                 |
-| WinForms             | Windows                                                 |
-| PowerShell modules   | Depends on generated target/host                        |
+| Template             | Platform                       |
+| -------------------- | ------------------------------ |
+| Libraries            | Cross-platform                 |
+| Analyzers            | Cross-platform                 |
+| Source generators    | Cross-platform                 |
+| MSBuild tasks        | Cross-platform where supported |
+| Console applications | Cross-platform                 |
+| Project templates    | Cross-platform                 |
+| WPF                  | Windows                        |
+| WinForms             | Windows                        |
+| PowerShell modules   | Depends on target and host     |
 
-For exact requirements and available options:
+For exact template options:
 
 ```bash
 dotnet new <template> --help
@@ -591,15 +689,13 @@ git clone https://github.com/carsten-riedel/Coree.Template.Project.git
 cd Coree.Template.Project
 ```
 
-The repository contains tooling for building and testing the template package locally.
-
-On Windows:
+On Windows, the repository contains tooling for building and installing the current package locally:
 
 ```powershell
 .\Test-LocalTemplatePackage.ps1
 ```
 
-Development-environment setup and contributor-specific instructions should live separately from the normal user installation flow.
+Detailed development-machine setup belongs outside the normal user installation flow.
 
 ---
 
@@ -620,7 +716,7 @@ Coree.Template.Project is licensed under the [MIT License](LICENSE).
 
 ---
 
-## Start with one
+## Start with the frame
 
 ```bash
 dotnet new install Coree.Template.Project
@@ -632,6 +728,4 @@ dotnet new multilibraryrepo-coree \
     --InitAllRepoItems
 ```
 
-If it stays one project, that's fine.
-
-If it grows to twenty, that's fine too.
+Then build the software inside it.

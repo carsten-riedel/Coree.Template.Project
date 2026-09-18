@@ -35,17 +35,20 @@ The DebugHost is intentionally separate from tests. F5 invokes the outer module 
 
 ## Module layout
 
-`Properties/NugetMetadata/` is the source package root, same folder as the other multi templates:
+`PowerShellModule/` is the authored module surface:
 
 - `{Name}.psd1` is the Gallery manifest.
 - `{Name}.psm1` selects the best compatible binary for the current host.
-- `Readme.md`, `PackageReleaseNotes.txt`, optional icon, and optional docs belong to the module distribution. `License.txt` belongs to the module distribution only for `ProjectLicense=Custom`.
 
-`Properties/Build/StagePowerShellModule.targets` stages a complete importable tree under `bin/Module/<Configuration>/{Name}/`, with one subfolder per selected TFM. It copies only the module assembly automatically. Product runtime dependencies must be added explicitly as `PowerShellModuleDependency`; PowerShell host assemblies must never be copied into the module.
+`Properties/NugetMetadata/` is display/package metadata, same role as the other multi templates: `Readme.md`, `PackageReleaseNotes.txt`, optional icon, and optional docs. `License.txt` belongs here only for `ProjectLicense=Custom`. Pack stamps `PackageReleaseNotes.txt` into the staged manifest; it is not shipped as a loose module file.
+
+`Properties/Build/` is authoring MSBuild (`StagePowerShellModule` then `PackAsPowerShellModule` last). All three folders use their real on-disk locations so Explorer and Solution Explorer match; do not `Link` them elsewhere.
+
+`Properties/Build/StagePowerShellModule.targets` stages a complete importable tree under `bin/Module/<Configuration>/{Name}/`, with one subfolder per selected TFM. It copies `PowerShellModule/`, `Properties/NugetMetadata/` except `PackageReleaseNotes.txt`, and the module assembly. Product runtime dependencies must be added explicitly as `PowerShellModuleDependency`; PowerShell host assemblies must never be copied into the module.
 
 `ProjectLicense` standard choices use `PackageLicenseExpression` and create no project or staged `License.txt`. `Custom` creates and stages `License.txt` as `PackageLicenseFile`. `RepoLicense` remains independent: when selected, its source seed is copied to the repository-root `LICENSE`, including for MIT/BSD/Apache expression choices.
 
-The class-library NuGet pack/publish override, Web SDK option, and generic package-boundary guide were removed because they model the wrong product. `dotnet pack -c Release` is the Gallery package command: `IsPackable` is true, `IncludeBuildOutput` is false, and `PackAsPowerShellModule.targets` adds the staged host TFM folders next to `Properties/NugetMetadata/` at the nupkg root. Do not reintroduce normal SDK `lib/<tfm>/` pack output as the distributable artifact. `Publish-PSResource` remains optional for a Gallery-side publish of that same module tree.
+The class-library NuGet pack/publish override, Web SDK option, and generic package-boundary guide were removed because they model the wrong product. `dotnet pack -c Release` is the Gallery package command: `IsPackable` is true, `IncludeBuildOutput` is false, and `PackAsPowerShellModule.targets` packs that staged module tree at the nupkg root (manifest and loader at root, selected TFM folders beside them). Do not reintroduce normal SDK `lib/<tfm>/` pack output as the distributable artifact. `Publish-PSResource` remains optional for a Gallery-side publish of that same module tree.
 
 ## Template mechanics
 

@@ -6,8 +6,12 @@
     <TargetFrameworks>__TargetFrameworks__</TargetFrameworks>
   </PropertyGroup>
 
-  <!-- Staged importable module tree. Pack adds selected TFM folders from here; host SMA is never copied. -->
+  <!-- PowerShellModule/ contains authored module files. NugetMetadata/ contains package-facing metadata and documentation. -->
+  <!-- Build combines both sources into an importable module tree; pack adds selected TFM folders there. Host SMA is never copied. -->
   <PropertyGroup>
+    <PowerShellModuleSourcePath>$(MSBuildProjectDirectory)\PowerShellModule</PowerShellModuleSourcePath>
+    <PowerShellModuleMetadataPath>$(MSBuildProjectDirectory)\Properties\NugetMetadata</PowerShellModuleMetadataPath>
+    <PowerShellModuleReleaseNotesPath>$(PowerShellModuleMetadataPath)\PackageReleaseNotes.txt</PowerShellModuleReleaseNotesPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <PowerShellModuleOutputPath>$(MSBuildProjectDirectory)\bin\Module\$(Configuration)\__SourceName__</PowerShellModuleOutputPath>
   </PropertyGroup>
@@ -165,16 +169,18 @@
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <!--#endif -->
     <PackageIcon>Icon-128x128.png</PackageIcon>
-    <!-- Keep multiline release notes outside the project XML; pack also uses this source to stamp PSData.ReleaseNotes. -->
-    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetMetadata\PackageReleaseNotes.txt"))</PackageReleaseNotes>
+    <!-- Keep multiline release notes outside the project XML. Pack reads this one source for NuGet metadata and PSData.ReleaseNotes. -->
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(PowerShellModuleReleaseNotesPath)"))</PackageReleaseNotes>
   </PropertyGroup>
 
-  <!-- Keep NugetMetadata visible in Solution Explorer. PackageReleaseNotes.txt is consumed for package metadata and the stamped module manifest. -->
+  <!-- Keep NugetMetadata visible in Solution Explorer. PackageReleaseNotes.txt is consumed but deliberately not shipped as a loose module file. -->
+  <!-- PowerShellModule/*.psd1 and *.psm1 are normal project sources and remain visible at their real on-disk location. -->
   <!-- Standard licenses use PackageLicenseExpression and create no License.txt. -->
   <!-- Custom: License.txt is PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
   <!-- PackAsPowerShellModule packs the staged module tree so the nupkg matches Import-Module, including a stamped manifest. -->
   <ItemGroup>
-    <None Include="$(MSBuildProjectDirectory)\Properties\NugetMetadata\**\*" />
+    <None Include="$(PowerShellModuleSourcePath)\**\*" />
+    <None Include="$(PowerShellModuleMetadataPath)\**\*" />
   </ItemGroup>
 
   <PropertyGroup>

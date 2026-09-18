@@ -48,7 +48,7 @@
     <None Remove=".gitignore" />
   </ItemGroup>
 
-  <!-- Load the already-built task DLL. PackageReference consumers use Properties/NugetMetadata/build instead. -->
+  <!-- Load the already-built task DLL. PackageReference consumers use the files packed from MSBuildTaskPackage/ into build/. -->
   <PropertyGroup>
     <_TaskAssemblyFile>$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', '__SourceName__', 'bin', '$(Configuration)', 'netstandard2.0', '__SourceName__.dll'))</_TaskAssemblyFile>
   </PropertyGroup>

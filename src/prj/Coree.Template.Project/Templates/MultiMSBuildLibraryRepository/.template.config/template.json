@@ -38,6 +38,15 @@
       "binding": "host:HostIdentifier",
       "defaultValue": "dotnetcli"
     },
+    // MSBuild target names cannot contain dots. Keep the package/project name
+    // for files, namespaces, task types, and package identity; normalize only
+    // the private target-name prefix used by the consumer .targets file.
+    "MSBuildTargetPrefix": {
+      "type": "derived",
+      "valueSource": "name",
+      "valueTransform": "RemoveDots",
+      "replaces": "__MSBuildTargetPrefix__"
+    },
     // One multi-choice instead of N root bools (VS stays one group, like TFMs).
     // CLI default is empty: later libraries omit both switches, no root collisions.
     // Visual Studio does not allow an empty multi-choice (at least one value).
@@ -615,6 +624,13 @@
       "defaultValue": "true",
       "description": "Add an empty .config/dotnet-tools.json beside this library project (no tools). Landing file for dotnet tool install --local. Default on. Every create; paths do not collide. Test, DebugHost, and benchmark projects are not affected. Does not restore tools on build.",
       "displayName": "Empty local dotnet-tools.json"
+    }
+  },
+  "forms": {
+    "RemoveDots": {
+      "identifier": "replace",
+      "pattern": "\\.",
+      "replacement": ""
     }
   },
   // Registers XML-style conditionals for extensions that hosts do not always

@@ -36,7 +36,8 @@ docs/                                   repository documentation seed
 src/global.json                         SDK pin required by the selected PowerShell targets
 <!--#endif -->
 src/prj/__SourceName__/                 binary module project and cmdlets
-src/prj/__SourceName__/Properties/NugetMetadata/  NuGet/module metadata plus module files (readme, icon, notes, manifest, loader)
+src/prj/__SourceName__/PowerShellModule/          authored module manifest and host-selecting loader
+src/prj/__SourceName__/Properties/NugetMetadata/  package metadata and documentation sources (readme, icon, release notes)
 src/prj/__SourceName__.Tests/           unit tests plus real PowerShell host tests
 src/prj/__SourceName__.DebugHost/       F5 profiles for powershell.exe and pwsh.exe
 <!--#if (BenchmarkProject == true) -->

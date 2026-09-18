@@ -73,6 +73,7 @@
   <!-- DevelopmentDependency: consumers get UsingTask at restore; the package does not flow further. -->
   <!-- IsTool is not used: it stuffed the DLL under tools/ and needed NU5102. PackAsMsBuildTask writes tasks/. -->
   <PropertyGroup>
+    <MSBuildTaskPackageSourcePath>$(MSBuildProjectDirectory)\MSBuildTaskPackage</MSBuildTaskPackageSourcePath>
     <IsPackable>true</IsPackable>
     <IsPublishable>false</IsPublishable>
     <PublishRelease>true</PublishRelease>
@@ -167,9 +168,9 @@
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetMetadata\PackageReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
-  <!-- NuGet package metadata from Properties/NugetMetadata is packed as package content; consumer build files remain here for now. PackageReleaseNotes.txt is consumed for PackageReleaseNotes and is not packed as a loose file. -->
+  <!-- NuGet package metadata from Properties/NugetMetadata is packed as package content. PackageReleaseNotes.txt is consumed for PackageReleaseNotes and is not packed as a loose file. -->
   <!-- Standard licenses use PackageLicenseExpression and create no License.txt. -->
-  <!-- Custom: pack License.txt as PackageLicenseFile. PackagePath empty: nupkg root / docs/ / build/, not Properties/. -->
+  <!-- Custom: pack License.txt as PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
   <ItemGroup>
     <None Include="$(MSBuildProjectDirectory)\Properties\NugetMetadata\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\Properties\NugetMetadata\License.txt;$(MSBuildProjectDirectory)\Properties\NugetMetadata\PackageReleaseNotes.txt" />
     <!--#if (ProjectLicense == "Custom") -->

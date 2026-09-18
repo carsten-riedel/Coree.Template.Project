@@ -70,6 +70,7 @@
   <!-- Packaging: analyzer nupkg (analyzers/dotnet/cs), not a lib/ class library. -->
   <!-- EnablePackageValidation looks for lib/ TFMs; this package has none. NU5128 is that missing lib group. -->
   <PropertyGroup>
+    <AnalyzerPackageSourcePath>$(MSBuildProjectDirectory)\AnalyzerPackage</AnalyzerPackageSourcePath>
     <IsPackable>true</IsPackable>
     <IsPublishable>false</IsPublishable>
     <PublishRelease>true</PublishRelease>

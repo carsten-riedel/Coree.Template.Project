@@ -14,7 +14,7 @@ namespace __SourceName__
         {
             foreach (System.Collections.DictionaryEntry variable in System.Environment.GetEnvironmentVariables())
             {
-                Log.LogMessage(MessageImportance.High, "Env: " + variable.Key + " = " + variable.Value);
+                Log.LogMessage(MessageImportance.High, "Env: {0} = {1}", variable.Key, variable.Value);
             }
 
             return true;

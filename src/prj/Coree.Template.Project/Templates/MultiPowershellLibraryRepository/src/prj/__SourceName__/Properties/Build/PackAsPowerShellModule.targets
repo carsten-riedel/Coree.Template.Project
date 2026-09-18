@@ -9,9 +9,7 @@
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
   </PropertyGroup>
 
-  <UsingTask TaskName="StampPowerShellModuleManifest"
-             TaskFactory="RoslynCodeTaskFactory"
-             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+  <UsingTask TaskName="StampPowerShellModuleManifest" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
     <ParameterGroup>
       <ManifestPath ParameterType="System.String" Required="true" />
       <GalleryPackageVersion ParameterType="System.String" Required="true" />
@@ -49,16 +47,19 @@
         {
           var notes = File.ReadAllText(ReleaseNotesPath).TrimEnd('\r', '\n');
           var assignment = "ReleaseNotes = @'" + Environment.NewLine + notes + Environment.NewLine + "'@";
-          text = Regex.Replace(text, @"(?m)^(\s*)ReleaseNotes\s*=\s*'[^']*'", "${1}" + assignment);
+          // Accept both the authored one-line placeholder and a here-string from an earlier
+          // pack --no-build. This keeps repeated packs idempotent when only metadata changes.
+          text = Regex.Replace(
+            text,
+            @"(?ms)^([ \t]*)ReleaseNotes[ \t]*=[ \t]*(?:'[^'\r\n]*'|@'\r?\n.*?^'@)",
+            "${1}" + assignment);
         }
         File.WriteAllText(ManifestPath, text);
       ]]></Code>
     </Task>
   </UsingTask>
 
-  <UsingTask TaskName="AssignRelativePackagePaths"
-             TaskFactory="RoslynCodeTaskFactory"
-             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+  <UsingTask TaskName="AssignRelativePackagePaths" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
     <ParameterGroup>
       <Root ParameterType="System.String" Required="true" />
       <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
@@ -111,12 +112,8 @@ public class AssignRelativePackagePaths : Task
   </UsingTask>
 
   <!-- Outer pack only. The nupkg is the same tree DebugHost imports from bin/Module. -->
-  <Target Name="IncludeStagedPowerShellModuleInPackage"
-          BeforeTargets="_GetPackageFiles"
-          DependsOnTargets="GetBuildVersion"
-          Condition="'$(IsPackable)' == 'true' And '$(TargetFramework)' == ''">
-    <Error Condition="!Exists('$(PowerShellModuleOutputPath)')"
-           Text="Staged PowerShell module is missing at $(PowerShellModuleOutputPath). Pack requires a build of the selected host targets." />
+  <Target Name="IncludeStagedPowerShellModuleInPackage" BeforeTargets="_GetPackageFiles" DependsOnTargets="GetBuildVersion" Condition="'$(IsPackable)' == 'true' And '$(TargetFramework)' == ''">
+    <Error Condition="!Exists('$(PowerShellModuleOutputPath)')" Text="Staged PowerShell module is missing at $(PowerShellModuleOutputPath). Pack requires a build of the selected host targets." />
     <ItemGroup>
       <_StagedModuleManifest Include="$(PowerShellModuleOutputPath)\*.psd1" />
       <_StagedPackFile Include="$(PowerShellModuleOutputPath)\**\*" />
@@ -126,9 +123,8 @@ public class AssignRelativePackagePaths : Task
       <_GalleryStampVersion>$(NuGetPackageVersion)</_GalleryStampVersion>
       <_GalleryStampVersion Condition="'$(_GalleryStampVersion)' == ''">$(PackageVersion)</_GalleryStampVersion>
     </PropertyGroup>
-    <StampPowerShellModuleManifest ManifestPath="%(_StagedModuleManifest.FullPath)"
-                                   GalleryPackageVersion="$(_GalleryStampVersion)"
-                                   ReleaseNotesPath="$(PowerShellModuleOutputPath)\PackageReleaseNotes.txt" />
+    <!-- Stamp only the staged manifest. The authored manifest and release-notes source remain unchanged. -->
+    <StampPowerShellModuleManifest ManifestPath="%(_StagedModuleManifest.FullPath)" GalleryPackageVersion="$(_GalleryStampVersion)" ReleaseNotesPath="$(PowerShellModuleReleaseNotesPath)" />
     <AssignRelativePackagePaths Root="$(PowerShellModuleOutputPath)" Files="@(_StagedPackFile)">
       <Output TaskParameter="Packed" ItemName="_GalleryPackFile" />
     </AssignRelativePackagePaths>

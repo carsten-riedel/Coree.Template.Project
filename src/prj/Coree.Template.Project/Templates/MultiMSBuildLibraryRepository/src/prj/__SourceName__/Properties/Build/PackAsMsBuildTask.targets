@@ -3,7 +3,7 @@
     Official MSBuild task nupkg layout
     (https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation):
 
-    build/            auto-imported props/targets (NugetMetadata glob)
+    build/            auto-imported props/targets from MSBuildTaskPackage/
     tasks/<tfm>/      task assembly, private runtime dependencies, deps.json
     not lib/
 
@@ -18,6 +18,13 @@
     <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);PackTaskRuntimeDependencies</TargetsForTfmSpecificBuildOutput>
   </PropertyGroup>
+
+  <!-- Author consumer imports as normal project files, then map them to NuGet's required build/ folder. -->
+  <ItemGroup>
+    <None Remove="$(MSBuildTaskPackageSourcePath)\__SourceName__.props;$(MSBuildTaskPackageSourcePath)\__SourceName__.targets" />
+    <None Include="$(MSBuildTaskPackageSourcePath)\__SourceName__.props" Pack="true" PackagePath="build\" />
+    <None Include="$(MSBuildTaskPackageSourcePath)\__SourceName__.targets" Pack="true" PackagePath="build\" />
+  </ItemGroup>
 
   <Target Name="PackTaskRuntimeDependencies" DependsOnTargets="ResolveReferences">
     <ItemGroup>

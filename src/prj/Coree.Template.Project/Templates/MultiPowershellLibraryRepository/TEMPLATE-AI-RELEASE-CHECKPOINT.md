@@ -5,7 +5,7 @@ Complete this once before the first PowerShell Gallery publish, then delete it.
 1. The root README and each module readme describe the actual commands, supported PowerShell hosts, and installation path.
 2. Every selected target is intentional. Do not ship redundant binaries merely because the template offered them; prefer either the portable cross-edition build or the host-specific builds needed by the product.
 3. The staged module imports successfully in every advertised host (`powershell.exe` and/or the matching `pwsh` release), and its exported commands behave as documented.
-4. `Properties/NugetMetadata/__SourceName__.psd1` has accurate description, tags, project URI, license URI, prerelease metadata, exports, compatible editions, and minimum PowerShell version.
+4. `PowerShellModule/__SourceName__.psd1` has accurate description, tags, project URI, license URI, prerelease metadata, exports, compatible editions, and minimum PowerShell version.
 5. Manifest `ModuleVersion`, assembly version, Nerdbank.GitVersioning output, release notes, and the eventual Gallery package version agree.
 6. `Properties/NugetMetadata/License.txt`, the optional repository-root `LICENSE`, and published license metadata agree. Replace the scaffold icon if it should not ship.
 7. Remove or replace `Get-SampleValue`, its formatter, tests, benchmark, and debug invocation with real product behavior.

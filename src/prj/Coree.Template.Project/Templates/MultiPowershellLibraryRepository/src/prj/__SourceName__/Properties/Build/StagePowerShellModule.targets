@@ -1,30 +1,24 @@
 <Project>
 
   <!-- Clear stale target folders before a normal multi-target build. -->
-  <Target Name="PreparePowerShellModuleOutput"
-          BeforeTargets="DispatchToInnerBuilds"
-          Condition="'$(IsCrossTargetingBuild)' == 'true'">
+  <Target Name="PreparePowerShellModuleOutput" BeforeTargets="DispatchToInnerBuilds" Condition="'$(IsCrossTargetingBuild)' == 'true'">
     <RemoveDir Directories="$(PowerShellModuleOutputPath)" />
   </Target>
 
   <!-- Build output is a complete importable module tree, not a NuGet library layout. -->
-  <Target Name="StagePowerShellModule"
-          AfterTargets="Build"
-          Condition="'$(TargetFramework)' != ''">
+  <!-- Authored module files and package-facing assets have separate source locations but share the module root after staging. -->
+  <Target Name="StagePowerShellModule" AfterTargets="Build" Condition="'$(TargetFramework)' != ''">
     <ItemGroup>
-      <_PowerShellModuleAsset Include="$(MSBuildProjectDirectory)\Properties\NugetMetadata\**\*" />
+      <_PowerShellModuleAsset Include="$(PowerShellModuleSourcePath)\**\*" />
+      <!-- Release notes are input metadata: pack stamps them into the manifest instead of shipping this source file. -->
+      <_PowerShellModuleAsset Include="$(PowerShellModuleMetadataPath)\**\*" Exclude="$(PowerShellModuleReleaseNotesPath)" />
     </ItemGroup>
     <MakeDir Directories="$(PowerShellModuleOutputPath)\$(TargetFramework)" />
     <Copy SourceFiles="@(_PowerShellModuleAsset)"
           DestinationFiles="@(_PowerShellModuleAsset->'$(PowerShellModuleOutputPath)\%(RecursiveDir)%(Filename)%(Extension)')"
           SkipUnchangedFiles="true" />
-    <Copy SourceFiles="$(TargetPath)"
-          DestinationFolder="$(PowerShellModuleOutputPath)\$(TargetFramework)"
-          SkipUnchangedFiles="true" />
-    <Copy SourceFiles="@(PowerShellModuleDependency)"
-          DestinationFolder="$(PowerShellModuleOutputPath)\$(TargetFramework)"
-          SkipUnchangedFiles="true"
-          Condition="'@(PowerShellModuleDependency)' != ''" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(PowerShellModuleOutputPath)\$(TargetFramework)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(PowerShellModuleDependency)" DestinationFolder="$(PowerShellModuleOutputPath)\$(TargetFramework)" SkipUnchangedFiles="true" Condition="'@(PowerShellModuleDependency)' != ''" />
     <Message Text="Staged PowerShell module: $(PowerShellModuleOutputPath)" Importance="high" />
   </Target>
 

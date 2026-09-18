@@ -35,8 +35,9 @@ src/sln/__SourceName__/      optional notes / cross-project files
 <!--#if (PlaceSolution != "BesideCsproj") -->
 src/prj/__SourceName__/      packable MSBuild task library
 <!--#endif -->
+src/prj/__SourceName__/MSBuildTaskPackage/  consumer props/targets (packed to build/)
 src/prj/__SourceName__/Properties/Build/  MSBuild targets (not source)
-src/prj/__SourceName__/Properties/NugetMetadata/  NuGet metadata plus consumer build files (readme, icon, notes, build props/targets)
+src/prj/__SourceName__/Properties/NugetMetadata/  NuGet metadata (readme, icon, notes)
 <!--#if (DotNetToolManifest) -->
 src/prj/__SourceName__/.config/dotnet-tools.json  empty local tool manifest
 <!--#endif -->

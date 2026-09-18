@@ -165,16 +165,16 @@
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <!--#endif -->
     <PackageIcon>Icon-128x128.png</PackageIcon>
-    <!-- Same file as PSData.ReleaseNotes after pack. Nuspec for NuGet; Gallery page uses the stamped psd1. -->
-    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
+    <!-- Keep multiline release notes outside the project XML; pack also uses this source to stamp PSData.ReleaseNotes. -->
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetMetadata\PackageReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
-  <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes). Disk matches Solution Explorer. -->
+  <!-- Keep NugetMetadata visible in Solution Explorer. PackageReleaseNotes.txt is consumed for package metadata and the stamped module manifest. -->
   <!-- Standard licenses use PackageLicenseExpression and create no License.txt. -->
   <!-- Custom: License.txt is PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
   <!-- PackAsPowerShellModule packs the staged module tree so the nupkg matches Import-Module, including a stamped manifest. -->
   <ItemGroup>
-    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*" />
+    <None Include="$(MSBuildProjectDirectory)\Properties\NugetMetadata\**\*" />
   </ItemGroup>
 
   <PropertyGroup>

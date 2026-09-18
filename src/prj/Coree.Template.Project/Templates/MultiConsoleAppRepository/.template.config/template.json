@@ -255,12 +255,12 @@
     // with an empty Condition so the csproj line is the override point.
     // Off (--PackAsNuGetTool false): publish stays the only distribution path.
     // Assembly identity (Authors/Company/Copyright/Description) always.
-    // NuGet-only properties and Properties/NugetAssets/ only when on.
+    // NuGet-only properties and Properties/NugetMetadata/ only when on.
     "PackAsNuGetTool": {
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "description": "Additionally pack this console app as a NuGet tool (IsPackable and PackAsTool). Default on. Publish stays available. The command name is ToolCommandName in the csproj (project name, overridable). Writes Properties/NugetAssets and NuGet-only csproj properties. Authors, company, copyright, and description stay either way. Turn off for publish-only (no nupkg assets). Test and benchmark projects are not affected.",
+      "description": "Additionally pack this console app as a NuGet tool (IsPackable and PackAsTool). Default on. Publish stays available. The command name is ToolCommandName in the csproj (project name, overridable). Writes Properties/NugetMetadata and NuGet-only csproj properties. Authors, company, copyright, and description stay either way. Turn off for publish-only (no nupkg assets). Test and benchmark projects are not affected.",
       "displayName": "Additional pack as NuGet tool"
     },
     // One multi-choice for C# / debug in the console app, tests, and
@@ -494,7 +494,7 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "",
-      "description": "Optional offline documentation template (DocShell.html). Package writes it under this app's Properties/NugetAssets/docs (packed with the nupkg; requires Additional pack as NuGet tool). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
+      "description": "Optional offline documentation template (DocShell.html). Package writes it under this app's Properties/NugetMetadata/docs (packed with the nupkg; requires Additional pack as NuGet tool). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
       "displayName": "Documentation template",
       "choices": [
         {
@@ -504,8 +504,8 @@
         },
         {
           "choice": "Package",
-          "description": "Add DocShell.html under this app's Properties/NugetAssets/docs. Requires Additional pack as NuGet tool. Every create; paths do not collide. Packed with the nupkg.",
-          "displayName": "NuGet package docs (Properties/NugetAssets/docs)"
+          "description": "Add DocShell.html under this app's Properties/NugetMetadata/docs. Requires Additional pack as NuGet tool. Every create; paths do not collide. Packed with the nupkg.",
+          "displayName": "NuGet package docs (Properties/NugetMetadata/docs)"
         },
         {
           "choice": "Repository",
@@ -868,7 +868,7 @@
         {
           "condition": "(PackAsNuGetTool == false)",
           "exclude": [
-            "src/prj/__SourceName__/Properties/NugetAssets/**"
+            "src/prj/__SourceName__/Properties/NugetMetadata/**"
           ]
         },
         {
@@ -945,7 +945,7 @@
     },
     {
       "source": "./TemplateAssets/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/docs/",
+      "target": "./src/prj/__SourceName__/Properties/NugetMetadata/docs/",
       "condition": "WritePackageDocTemplate",
       "modifiers": [
         {
@@ -1011,7 +1011,7 @@
     },
     {
       "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
+      "target": "./src/prj/__SourceName__/Properties/NugetMetadata/",
       "condition": "(PackAsNuGetTool && (ProjectLicense == \"Custom\"))",
       "modifiers": [
         {

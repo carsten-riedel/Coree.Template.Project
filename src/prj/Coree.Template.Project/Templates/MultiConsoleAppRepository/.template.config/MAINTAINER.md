@@ -24,7 +24,7 @@ Create a new project shows one icon per template. Two files can supply it; they 
 | --- | --- | --- |
 | Template package | `src/prj/Coree.Template.Project/Properties/NugetAssets/Icon.png` (`PackageIcon` on `Coree.Template.Project.csproj`) | NuGet listing **and** the VS picker when this template does not declare its own icon. |
 | This template | `.template.config/icon.png`, optional `ide.host.json` `"icon": "icon.png"` | VS picker for **this** template only. Overrides the package icon. |
-| Generated app | `src/prj/{Name}/Properties/NugetAssets/Icon-128x128.png` | The **consumer** nupkg after `dotnet pack`. Not the template picker. |
+| Generated app | `src/prj/{Name}/Properties/NugetMetadata/Icon-128x128.png` | The **consumer** nupkg after `dotnet pack`. Not the template picker. |
 
 Verified in Visual Studio (Create a new project, Recent project templates): a template with `.template.config/icon.png` showed that image; sibling Coree templates without one showed the package icon. Leave this template’s picker icon **undefined** so the package icon is used. Ship per-template picker icons later; do not copy `Icon-128x128.png` here as a stand-in.
 
@@ -105,7 +105,7 @@ dotnet new multiconsolerepo-coree --Author "abcd" --name "Organization.Domain.Ap
 
 Each `--output` is its own first create.
 
-After the first call in the default combo the repo root has `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.gitignore`, and `LICENSE`. Each app gets `Properties/version.json` and `Properties/NugetAssets/`. Calls 2 and 3 add `src/prj` / `src/sln` trees only. Passing `--InitAllRepoItems` or `--InitRepoItems Readme` again into the same folder is Exit 73 (collision); `--force` would overwrite. `--InitRepoItems SrcGlobalJson` is a separate first-create opt-in (`src/global.json`, default off).
+After the first call in the default combo the repo root has `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.gitignore`, and `LICENSE`. Each app gets `Properties/version.json` and `Properties/NugetMetadata/`. Calls 2 and 3 add `src/prj` / `src/sln` trees only. Passing `--InitAllRepoItems` or `--InitRepoItems Readme` again into the same folder is Exit 73 (collision); `--force` would overwrite. `--InitRepoItems SrcGlobalJson` is a separate first-create opt-in (`src/global.json`, default off).
 
 `--InitAllRepoItems` is the CLI first-create set (same five files as Visual Studio). It does **not** add `version.json` or `src/global.json`. `--InitRepoItems` picks individual files. Values are separated by **spaces**. Repeating `--InitRepoItems` per value also works. A quoted `Readme|AIReleaseCheckpoint|GitAttributes|GitIgnore|RepoLicense` string is **not** valid CLI input on current `dotnet new`; `|` is only the host default separator in `ide.host.json`.
 
@@ -170,7 +170,7 @@ This template does not stamp `ChoosingPackageBoundaries.md` (library-repo decisi
 
 ## AI-supported release checkpoint
 
-The generated product still contains placeholders that can only become true **after implementation** — especially empty `<Description>` and, when `PackAsNuGetTool` is on, empty `src/prj/*/Properties/NugetAssets/Readme.md`. A human or an LLM can fill those from the code. That is a **gate before the first publish**, not a generate-time script and not standing agent rules.
+The generated product still contains placeholders that can only become true **after implementation** — especially empty `<Description>` and, when `PackAsNuGetTool` is on, empty `src/prj/*/Properties/NugetMetadata/Readme.md`. A human or an LLM can fill those from the code. That is a **gate before the first publish**, not a generate-time script and not standing agent rules.
 
 **Not:** run-once / post-bootstrap right after `dotnet new`. The app may still be `Program`.  
 **Not:** a forever queue in the GitHub `README.md`. That file is the customer landing page.  
@@ -220,11 +220,11 @@ Analog of `dotnet new console --use-program-main` (explicit `Program` + `args`),
 
 Single choice (dropdown, not a checkbox group). Project + (when packing) NuGet. Repository-root `LICENSE` is `InitRepoItems` choice `RepoLicense` (UI: **LICENSE file at repository root**) or `--InitAllRepoItems`, not a second VS bool.
 
-When **`PackAsNuGetTool` is off**, this dropdown only feeds repository-root `LICENSE` (`WriteRepoLicense`). No `Properties/NugetAssets/License.txt` and no `PackageLicenseExpression` / `PackageLicenseFile`.
+When **`PackAsNuGetTool` is off**, this dropdown only feeds repository-root `LICENSE` (`WriteRepoLicense`). No `Properties/NugetMetadata/License.txt` and no `PackageLicenseExpression` / `PackageLicenseFile`.
 
 When **on**:
 
-| Choice | Project `Properties/NugetAssets/License.txt` | NuGet |
+| Choice | Project `Properties/NugetMetadata/License.txt` | NuGet |
 | --- | --- | --- |
 | `MIT` (CLI/VS default) | none | `PackageLicenseExpression` `MIT` |
 | `BSD3Clause` | none | `PackageLicenseExpression` `BSD-3-Clause` |
@@ -233,7 +233,7 @@ When **on**:
 
 Do not set `PackageLicenseFile` together with an expression (NU5033). The glob excludes `License.txt` except for `Custom`.
 
-Seeds live under `TemplateAssets/Licenses/` (`MIT.txt`, `BSD3Clause.txt`, `Apache2.txt`, `Custom.txt`). When `PackAsNuGetTool` is on, extra sources copy only the `Custom` seed to `src/prj/{Name}/Properties/NugetAssets/License.txt`; standard choices create no project license file. The separate root `LICENSE` source copies the selected seed for every choice when `WriteRepoLicense` is true. With `PackAsNuGetTool` off, no project NuGet assets or license metadata are generated. Do not leave a mega-file under `src/prj/__SourceName__/Properties/NugetAssets/`. DocShell extra sources must `exclude` `Licenses/**` (same as `CodeStyle/**` and `Versioning/**`). Each seed may use a shallow `//#if (PackageCopyrightHolderIsSet)` / `//#else` / `//#endif`. Do not put `ProjectLicense` `#if` in the seed: extra sources pick the file.
+Seeds live under `TemplateAssets/Licenses/` (`MIT.txt`, `BSD3Clause.txt`, `Apache2.txt`, `Custom.txt`). When `PackAsNuGetTool` is on, extra sources copy only the `Custom` seed to `src/prj/{Name}/Properties/NugetMetadata/License.txt`; standard choices create no project license file. The separate root `LICENSE` source copies the selected seed for every choice when `WriteRepoLicense` is true. With `PackAsNuGetTool` off, no project NuGet assets or license metadata are generated. Do not leave a mega-file under `src/prj/__SourceName__/Properties/NugetMetadata/`. DocShell extra sources must `exclude` `Licenses/**` (same as `CodeStyle/**` and `Versioning/**`). Each seed may use a shallow `//#if (PackageCopyrightHolderIsSet)` / `//#else` / `//#endif`. Do not put `ProjectLicense` `#if` in the seed: extra sources pick the file.
 
 `RepoLicense` is off on CLI unless listed in `--InitRepoItems` or `--InitAllRepoItems` is on. Visual Studio includes it in the first-create default. `WriteRepoLicense` is `(InitRepoItems != None) && (InitAllRepoItems || InitRepoItems == RepoLicense)`. First create only; a later app with `RepoLicense` or `InitAllRepoItems` selected collides (Exit 73), same as root README. `None` excludes it even if leftover checks remain.
 
@@ -424,7 +424,7 @@ Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Doc
 
 | Choice | Path | When | Combo later app |
 | --- | --- | --- | --- |
-| `Package` | `src/prj/{Name}/Properties/NugetAssets/docs/DocShell.html` | every create **and** `PackAsNuGetTool` (`WritePackageDocTemplate`) | pass `Package` again (no-op if pack-as-tool is off) |
+| `Package` | `src/prj/{Name}/Properties/NugetMetadata/docs/DocShell.html` | every create **and** `PackAsNuGetTool` (`WritePackageDocTemplate`) | pass `Package` again (no-op if pack-as-tool is off) |
 | `Repository` | `docs/DocShell.html` | first create | omit `Repository` (Exit 73 if stamped again) |
 | `None` | nothing | — | wins over the other choices |
 
@@ -438,11 +438,11 @@ dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
 # dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out --DocumentationTemplate Repository
 ```
 
-`Properties/NugetAssets/docs` is packed with the nupkg (`PackagePath` empty, so `docs/` inside the package, not `Properties/`). Repo-root `docs/` is not packed. `WritePackageDocTemplate` is `(PackAsNuGetTool) && Package && not None`. The checkpoint infers package vs repository documentation from `Properties/NugetAssets/docs` vs repo-root `docs/`; it does not name this switch.
+`Properties/NugetMetadata/docs` is packed with the nupkg (`PackagePath` empty, so `docs/` inside the package, not `Properties/`). Repo-root `docs/` is not packed. `WritePackageDocTemplate` is `(PackAsNuGetTool) && Package && not None`. The checkpoint infers package vs repository documentation from `Properties/NugetMetadata/docs` vs repo-root `docs/`; it does not name this switch.
 
 ## Project roles and Git ignores
 
-The console app is publishable. `PackAsNuGetTool` (bool, default **true**) is the additional NuGet-tool pack. On: `IsPackable` and `PackAsTool` true; `ToolCommandName` is `__SourceName__` with `Condition="'$(ToolCommandName)' == ''"` so the csproj line (or `-p:ToolCommandName`) is the override; NugetAssets files and pack ItemGroup; `EnablePackageValidation`. Off (`--PackAsNuGetTool false`): `IsPackable` false, `PackAsTool` false, no `ToolCommandName`, no NuGet-only csproj properties, no `Properties/NugetAssets/` (primary exclude plus license extra sources off). Authors, Company, Copyright, and Description stay (assembly). Do not add a wizard string for the command. `IsPublishable` is `true` so `PublishDefaultFramework` runs on bare `dotnet publish`. `Properties/Build/` is MSBuild (`ImportSdkTargets` last). `Properties/NugetAssets/` is nupkg assets (readme, icon, notes, optional `docs/`). Both folders are on disk under `Properties/` so Explorer and Solution Explorer match; they are not source. Do not keep them at the project root and `Link` them. `.project.editor.globalconfig`, `.config/dotnet-tools.json`, and `Directory.Build.*` stay next to the csproj. `Properties/AssemblyInfo.cs` grants `InternalsVisibleTo` the test assembly (`__SourceName__.Tests`) and the optional benchmark (`__SourceName__.Benchmark`). The entry point is `internal` (`Program`); tests and benchmark call `Main` as a method. The test project’s root `AssemblyInfo.cs` is only MSTest `Parallelize`. Tests and the optional BenchmarkDotNet executable explicitly set `IsPackable` and `IsPublishable` to `false`, including when automation calls each `.csproj` directly. The benchmark keeps one target framework (the highest selected) and runs with `dotnet run -c Release`. Versioning default is Nerdbank **Project** (`Properties/version.json`). Tests and benchmark are not packable. **`--NerdbankGitVersioning`** `Off` is VersionPrefix; `Repo` is the shared root file.
+The console app is publishable. `PackAsNuGetTool` (bool, default **true**) is the additional NuGet-tool pack. On: `IsPackable` and `PackAsTool` true; `ToolCommandName` is `__SourceName__` with `Condition="'$(ToolCommandName)' == ''"` so the csproj line (or `-p:ToolCommandName`) is the override; NugetMetadata files and pack ItemGroup; `EnablePackageValidation`. Off (`--PackAsNuGetTool false`): `IsPackable` false, `PackAsTool` false, no `ToolCommandName`, no NuGet-only csproj properties, no `Properties/NugetMetadata/` (primary exclude plus license extra sources off). Authors, Company, Copyright, and Description stay (assembly). Do not add a wizard string for the command. `IsPublishable` is `true` so `PublishDefaultFramework` runs on bare `dotnet publish`. `Properties/Build/` is MSBuild (`ImportSdkTargets` last). `Properties/NugetMetadata/` is nupkg assets (readme, icon, notes, optional `docs/`). Both folders are on disk under `Properties/` so Explorer and Solution Explorer match; they are not source. Do not keep them at the project root and `Link` them. `.project.editor.globalconfig`, `.config/dotnet-tools.json`, and `Directory.Build.*` stay next to the csproj. `Properties/AssemblyInfo.cs` grants `InternalsVisibleTo` the test assembly (`__SourceName__.Tests`) and the optional benchmark (`__SourceName__.Benchmark`). The entry point is `internal` (`Program`); tests and benchmark call `Main` as a method. The test project’s root `AssemblyInfo.cs` is only MSTest `Parallelize`. Tests and the optional BenchmarkDotNet executable explicitly set `IsPackable` and `IsPublishable` to `false`, including when automation calls each `.csproj` directly. The benchmark keeps one target framework (the highest selected) and runs with `dotnet run -c Release`. Versioning default is Nerdbank **Project** (`Properties/version.json`). Tests and benchmark are not packable. **`--NerdbankGitVersioning`** `Off` is VersionPrefix; `Repo` is the shared root file.
 
 **Test project layout.** Mini-scopes in this order: general TFMs, language/debug (from `CSharpProjectOptions`), packaging, test configuration (`TestTfmsInParallel` + MSTest logger), Coverlet `#if` block, ReportGenerator `#if` block, NugetReport + `WriteNugetReport`, `.gitignore` hide, `ProjectReference`, then **External dependencies** `PackageReference`s last. Coverage is **`--TestCoverage`**: `Coverlet` (default), `CoverletAndReport`, `None`. Do not restore independent Coverlet/ReportGenerator bools: ReportGenerator consumes `@(CoverletReport)`. Coverlet is `coverlet.msbuild` + `CollectCoverage=true`; that **does** run on `dotnet test` (VSTest path, SDK 10), including Linux/WSL (`dotnet` ships MSBuild). The Coverlet `#if` also writes `Include` `[__SourceName__]*` (sourceName → the console app assembly only) and `Threshold` `100` / `line,branch,method` / `total`. Those are generate-time properties, not wizard fields: Visual Studio cannot show extra inputs only when Coverlet is selected. `--TestCoverage None` omits the whole PropertyGroup. Lower the threshold in the test csproj when 100% is not yet the gate. The scaffold `Program.Main` is covered so a first `dotnet test` still passes. Report/logger/NugetReport paths use `$([MSBuild]::NormalizeDirectory(...))` so Linux does not create a folder named `ReportGeneratorOutput\net10.0`.
 
@@ -495,7 +495,7 @@ dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
 - **`HostIdentifier` / `IsCliHost`**: bind + computed; used for that rename and for VS-only post-actions.
 - **`Author`**: required. CLI `--Author`.
 - **`<Description>`**: not a template parameter. Generate leaves an empty CDATA block for multiline gallery text; the checkpoint fills it (assistant-supported).
-- **`PackAsNuGetTool`**: bool, default `true`. UI **Additional pack as NuGet tool**. CLI `--PackAsNuGetTool`. Omit the switch → on. `--PackAsNuGetTool false` is publish-only (no NugetAssets). Combo-safe. On: `IsPackable` / `PackAsTool` / `ToolCommandName`, NuGet-only properties, `Properties/NugetAssets/`, pack ItemGroup, `EnablePackageValidation`. Authors/Company/Copyright/Description always. Not `DotNetToolManifest` (local empty tools.json).
+- **`PackAsNuGetTool`**: bool, default `true`. UI **Additional pack as NuGet tool**. CLI `--PackAsNuGetTool`. Omit the switch → on. `--PackAsNuGetTool false` is publish-only (no NugetMetadata). Combo-safe. On: `IsPackable` / `PackAsTool` / `ToolCommandName`, NuGet-only properties, `Properties/NugetMetadata/`, pack ItemGroup, `EnablePackageValidation`. Authors/Company/Copyright/Description always. Not `DotNetToolManifest` (local empty tools.json).
 - **`EnablePackageValidation`**: not a symbol. Written only when `PackAsNuGetTool` is on (before `ImportSdkTargets`). No `PackageValidationBaselineVersion` at generate.
 - **`TestCoverage`**: single choice, default `Coverlet`. Replaces the two independent Coverlet/ReportGenerator bools. Coverage stats on `dotnet test` are opt-out; ReportGenerator is opt-in (`CoverletAndReport`). There is no Report-without-Coverlet. `--TestCoverage None` drops Coverlet too. Computed `CoverletMSBuild` / `ReportGenerator` drive the test csproj and sln-readme `#if`s.
 - **`DirectoryMsBuildFiles`**: see section above. Default `false`. Empty `Directory.Build.*` beside the console app and `Directory.Solution.*` beside this `.slnx`. No `Directory.Packages.props`.

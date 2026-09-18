@@ -105,7 +105,7 @@ The module assembly uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first 
 
 ## Module documentation seed
 
-`src/prj/__SourceName__/Properties/NugetAssets/docs/DocShell.html` stages with this module. Replace the seed with documentation for the exported commands and supported PowerShell hosts.
+`src/prj/__SourceName__/Properties/NugetMetadata/docs/DocShell.html` stages with this module. Replace the seed with documentation for the exported commands and supported PowerShell hosts.
 <!--#endif -->
 <!--#if (BenchmarkProject == true) -->
 

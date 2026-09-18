@@ -80,7 +80,7 @@ The `.slnx` and this readme live in this folder next to the packable source-gene
 <!--#endif -->
 ```
 
-Package metadata, license, icon, and release notes live in `src/prj/__SourceName__/Properties/NugetAssets/`.
+Package metadata, license, icon, and release notes live in `src/prj/__SourceName__/Properties/NugetMetadata/`.
 
 `--tl:off` is optional. Without it the CLI shows the compact terminal logger. Add `--tl:off` for the classic per-project log. The commands work either way.
 
@@ -147,7 +147,7 @@ The source-generator project uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. T
 
 ## Package documentation template
 
-`src/prj/__SourceName__/Properties/NugetAssets/docs/DocShell.html` is the offline documentation seed. It packs with the nupkg (`docs/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this source-generator. Repository-root `docs/` is a separate site if present.
+`src/prj/__SourceName__/Properties/NugetMetadata/docs/DocShell.html` is the offline documentation seed. It packs with the nupkg (`docs/` inside the package). Bootstrap the site from that file (vendor the local css/js/licenses next to it), then write package documentation for this source-generator. Repository-root `docs/` is a separate site if present.
 <!--#endif -->
 
 ## Publish

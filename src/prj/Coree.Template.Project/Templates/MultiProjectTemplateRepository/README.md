@@ -35,7 +35,7 @@ src/prj/__SourceName__/      packable project-template package
 src/prj/__SourceName__/Templates/  project-template folders
 <!--#endif -->
 src/prj/__SourceName__/Properties/Build/  MSBuild targets (not source)
-src/prj/__SourceName__/Properties/NugetAssets/  nupkg assets (readme, icon, notes)
+src/prj/__SourceName__/Properties/NugetMetadata/  NuGet metadata (readme, icon, notes)
 <!--#if (DotNetToolManifest) -->
 src/prj/__SourceName__/.config/dotnet-tools.json  empty local tool manifest
 <!--#endif -->

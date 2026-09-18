@@ -3,7 +3,7 @@
     Official MSBuild task nupkg layout
     (https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation):
 
-    build/            auto-imported props/targets (NugetAssets glob)
+    build/            auto-imported props/targets (NugetMetadata glob)
     tasks/<tfm>/      task assembly, private runtime dependencies, deps.json
     not lib/
 

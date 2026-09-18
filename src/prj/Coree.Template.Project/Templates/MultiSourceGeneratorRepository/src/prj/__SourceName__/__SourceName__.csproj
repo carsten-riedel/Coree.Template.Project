@@ -163,16 +163,17 @@
     <PackageLicenseFile>License.txt</PackageLicenseFile>
     <!--#endif -->
     <PackageIcon>Icon-128x128.png</PackageIcon>
-    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetAssets\ReleaseNotes.txt"))</PackageReleaseNotes>
+    <!-- Read multiline release notes from a separate source file so this project file stays compact. -->
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)\Properties\NugetMetadata\PackageReleaseNotes.txt"))</PackageReleaseNotes>
   </PropertyGroup>
 
-  <!-- Extra nupkg files from Properties/NugetAssets/ (readme, icon, release notes). Disk matches Solution Explorer. -->
+  <!-- NuGet package metadata from Properties/NugetMetadata is packed as package content. PackageReleaseNotes.txt is consumed for PackageReleaseNotes and is not packed as a loose file. -->
   <!-- Standard licenses use PackageLicenseExpression and create no License.txt. -->
   <!-- Custom: pack License.txt as PackageLicenseFile. PackagePath empty: nupkg root / docs/, not Properties/. -->
   <ItemGroup>
-    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" />
+    <None Include="$(MSBuildProjectDirectory)\Properties\NugetMetadata\**\*" Pack="true" PackagePath="" Exclude="$(MSBuildProjectDirectory)\Properties\NugetMetadata\License.txt;$(MSBuildProjectDirectory)\Properties\NugetMetadata\PackageReleaseNotes.txt" />
     <!--#if (ProjectLicense == "Custom") -->
-    <None Include="$(MSBuildProjectDirectory)\Properties\NugetAssets\License.txt" Pack="true" PackagePath="" />
+    <None Include="$(MSBuildProjectDirectory)\Properties\NugetMetadata\License.txt" Pack="true" PackagePath="" />
     <!--#endif -->
   </ItemGroup>
 

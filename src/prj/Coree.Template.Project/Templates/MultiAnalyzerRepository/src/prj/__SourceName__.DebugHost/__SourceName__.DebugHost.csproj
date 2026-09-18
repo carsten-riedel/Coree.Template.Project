@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <!-- Same props the nupkg imports for PackageReference consumers. -->
-  <Import Project="..\__SourceName__\Build\__SourceName__.props" />
+  <Import Project="..\__SourceName__\Properties\Build\__SourceName__.props" />
 
   <!-- Startable console and compile target for the analyzer DebugRoslynComponent profile. Not packed. -->
   <PropertyGroup>

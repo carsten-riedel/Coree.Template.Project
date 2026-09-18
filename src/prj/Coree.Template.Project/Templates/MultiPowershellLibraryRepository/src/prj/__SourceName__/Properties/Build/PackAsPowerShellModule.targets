@@ -128,7 +128,7 @@ public class AssignRelativePackagePaths : Task
     </PropertyGroup>
     <StampPowerShellModuleManifest ManifestPath="%(_StagedModuleManifest.FullPath)"
                                    GalleryPackageVersion="$(_GalleryStampVersion)"
-                                   ReleaseNotesPath="$(PowerShellModuleOutputPath)\ReleaseNotes.txt" />
+                                   ReleaseNotesPath="$(PowerShellModuleOutputPath)\PackageReleaseNotes.txt" />
     <AssignRelativePackagePaths Root="$(PowerShellModuleOutputPath)" Files="@(_StagedPackFile)">
       <Output TaskParameter="Packed" ItemName="_GalleryPackFile" />
     </AssignRelativePackagePaths>

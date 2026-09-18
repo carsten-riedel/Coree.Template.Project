@@ -797,11 +797,6 @@
         },
         {
           "exclude": [
-            "src/prj/__SourceName__/Properties/NugetAssets/**"
-          ]
-        },
-        {
-          "exclude": [
             "TemplateAssets/**"
           ]
         },

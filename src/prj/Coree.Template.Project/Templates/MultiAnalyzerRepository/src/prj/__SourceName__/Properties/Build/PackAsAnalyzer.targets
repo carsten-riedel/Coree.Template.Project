@@ -10,7 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="$(MSBuildThisFileDirectory)__SourceName__.props" />
-    <None Include="$(MSBuildThisFileDirectory)__SourceName__.props" Pack="true" PackagePath="build\" Visible="false" />
+    <!-- Show one physical copy in Visual Studio under Properties/Build; the second package projection stays hidden. -->
+    <None Include="$(MSBuildThisFileDirectory)__SourceName__.props" Pack="true" PackagePath="build\" Visible="true" />
     <None Include="$(MSBuildThisFileDirectory)__SourceName__.props" Pack="true" PackagePath="buildTransitive\" Visible="false" />
   </ItemGroup>
   <Target Name="PackAsAnalyzer">

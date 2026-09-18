@@ -66,7 +66,7 @@
         "text": "Additional pack as NuGet tool"
       },
       "description": {
-        "text": "Default on. In addition to publish, pack a NuGet tool nupkg: IsPackable, PackAsTool, Properties/NugetAssets, and NuGet-only csproj properties. ToolCommandName in the csproj is the command after install (project name). Edit that property to override. Uncheck for publish-only (no nupkg assets). Authors, company, copyright, and description stay either way. Test and benchmark projects are not affected."
+        "text": "Default on. In addition to publish, pack a NuGet tool nupkg: IsPackable, PackAsTool, Properties/NugetMetadata, and NuGet-only csproj properties. ToolCommandName in the csproj is the command after install (project name). Edit that property to override. Uncheck for publish-only (no nupkg assets). Authors, company, copyright, and description stay either way. Test and benchmark projects are not affected."
       }
     },
     {
@@ -126,7 +126,7 @@
         "text": "Documentation template"
       },
       "description": {
-        "text": "Optional DocShell.html seed. NuGet package docs go under this app's Properties/NugetAssets/docs and pack with the nupkg (needs Additional pack as NuGet tool). Repository docs go under docs/ at the repo root (first create only). Choose None when adding another console app unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
+        "text": "Optional DocShell.html seed. NuGet package docs go under this app's Properties/NugetMetadata/docs and pack with the nupkg (needs Additional pack as NuGet tool). Repository docs go under docs/ at the repo root (first create only). Choose None when adding another console app unless you only want package docs. Bootstrap and mini docs are a checkpoint task."
       }
     },
     {

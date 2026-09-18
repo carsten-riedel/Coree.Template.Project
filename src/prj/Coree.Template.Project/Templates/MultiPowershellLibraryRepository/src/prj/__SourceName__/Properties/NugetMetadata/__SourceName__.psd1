@@ -33,8 +33,8 @@
 #if (ProjectLicense == "Apache2")
             LicenseUri = 'https://www.apache.org/licenses/LICENSE-2.0'
 #endif
-            # Pack copies NugetAssets/ReleaseNotes.txt here. Gallery UI reads this field, not the nuspec.
-            ReleaseNotes = 'See ReleaseNotes.txt in the module package.'
+            # Pack copies NugetMetadata/PackageReleaseNotes.txt here. Gallery UI reads this field, not the nuspec.
+            ReleaseNotes = 'See PackageReleaseNotes.txt in the module package.'
         }
     }
 }

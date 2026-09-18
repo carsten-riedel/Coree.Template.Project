@@ -283,7 +283,7 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "",
-      "description": "Optional offline documentation template (DocShell.html). Package writes it under this library's Properties/NugetAssets/docs (packed with the nupkg). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
+      "description": "Optional offline documentation template (DocShell.html). Package writes it under this library's Properties/NugetMetadata/docs (packed with the nupkg). Repository writes it under repo-root docs/ (first create only). None writes nothing. Bootstrap and mini docs are a checkpoint task, not generate-time.",
       "displayName": "Documentation template",
       "choices": [
         {
@@ -293,8 +293,8 @@
         },
         {
           "choice": "Package",
-          "description": "Add DocShell.html under this library's Properties/NugetAssets/docs. Every create; paths do not collide. Packed with the nupkg.",
-          "displayName": "NuGet package docs (Properties/NugetAssets/docs)"
+          "description": "Add DocShell.html under this library's Properties/NugetMetadata/docs. Every create; paths do not collide. Packed with the nupkg.",
+          "displayName": "NuGet package docs (Properties/NugetMetadata/docs)"
         },
         {
           "choice": "Repository",
@@ -552,7 +552,7 @@
     },
     {
       "source": "./TemplateAssets/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/docs/",
+      "target": "./src/prj/__SourceName__/Properties/NugetMetadata/docs/",
       "condition": "WritePackageDocTemplate",
       "modifiers": [
         {
@@ -580,7 +580,7 @@
     },
     {
       "source": "./TemplateAssets/Licenses/",
-      "target": "./src/prj/__SourceName__/Properties/NugetAssets/",
+      "target": "./src/prj/__SourceName__/Properties/NugetMetadata/",
       "condition": "(ProjectLicense == \"Custom\")",
       "modifiers": [
         {

@@ -6,10 +6,10 @@ Walk the whole repository, including console apps added after the first `dotnet 
 
 1. The root `README.md` describes this repository as it actually is (capabilities, not leftover template layout). If the root README was never added, skip this item.
 <!--#if (PackAsNuGetTool) -->
-2. Every `src/prj/*/Properties/NugetAssets/Readme.md` describes that app's public surface. Empty or placeholder NuGet readmes are not done.
-3. Every `src/prj/*/Properties/NugetAssets/ReleaseNotes.txt` matches the first release, not scaffold text.
+2. Every `src/prj/*/Properties/NugetMetadata/Readme.md` describes that app's public surface. Empty or placeholder NuGet readmes are not done.
+3. Every `src/prj/*/Properties/NugetMetadata/PackageReleaseNotes.txt` matches the first release, not scaffold text.
 4. Each console app `.csproj` `<Description>` is an empty CDATA block at generate (not a template parameter). Fill it before first pack from that app's public surface; CDATA keeps multiline gallery text. An assistant can draft the blurb from the code. Tags, project URL, and repository URL: match the product, or leave empty only when that emptiness is intentional.
-5. NuGet license metadata matches what you ship: SPDX `PackageLicenseExpression` for MIT / BSD 3-Clause / Apache 2.0, or the packed `Properties/NugetAssets/License.txt` when the license is custom (copyright-only until you add grant terms). If a repository-root `LICENSE` is present, it matches that same license. Replace the icon only if the default asset must not ship.
+5. NuGet license metadata matches what you ship: SPDX `PackageLicenseExpression` for MIT / BSD 3-Clause / Apache 2.0, or the packed `Properties/NugetMetadata/License.txt` when the license is custom (copyright-only until you add grant terms). If a repository-root `LICENSE` is present, it matches that same license. Replace the icon only if the default asset must not ship.
 <!--#else -->
 2. Each console app `.csproj` `<Description>` is an empty CDATA block at generate (not a template parameter). Fill it when the product has a public surface; CDATA keeps multiline text. An assistant can draft the blurb from the code.
 3. Copyright and company on each console app match the product (not leftover template holder text).
@@ -27,6 +27,6 @@ Walk the whole repository, including console apps added after the first `dotnet 
 9. `dotnet publish` of each console app succeeds.
 <!--#endif -->
 10. If `DocShell.html` is present, bootstrap that documentation root and then write a short real site. Infer the kind of documentation from the location; do not mix them. If none of these files exist, skip this item.
-    - `src/prj/<name>/Properties/NugetAssets/docs/DocShell.html` is **package** documentation for that app (install, public surface, pack/consume). Follow the template's initial bootstrap, then replace the minimal `index.html` with a short package guide from the actual code. Keep later apps' package docs in their own `Properties/NugetAssets/docs` tree.
+    - `src/prj/<name>/Properties/NugetMetadata/docs/DocShell.html` is **package** documentation for that app (install, public surface, pack/consume). Follow the template's initial bootstrap, then replace the minimal `index.html` with a short package guide from the actual code. Keep later apps' package docs in their own `Properties/NugetMetadata/docs` tree.
     - `docs/DocShell.html` at the repository root is **repository** documentation (how this multi-console repo is composed, how to add another app, layout). Bootstrap that tree independently. Do not copy one app's API into the repository site.
 11. This file is deleted. Later chats should read the apps and the real docs, not this checkpoint.

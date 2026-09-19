@@ -272,11 +272,16 @@
         <Style TargetType="{x:Type MenuItem}">
             <Setter Property="Background" Value= "{StaticResource PrimaryHueDarkForegroundBrush}" />
             <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkBrush}" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Foreground" Value="LightGray"/>
                 </Trigger>
-                 <Trigger Property="IsMouseOver" Value="true">
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property = "Background" Value="{StaticResource PrimaryHueMidBrush}"/>
+                    <Setter Property = "Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}"/>
+                </Trigger>
+                <Trigger Property="IsHighlighted" Value="true">
                     <Setter Property = "Background" Value="{StaticResource PrimaryHueMidBrush}"/>
                     <Setter Property = "Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}"/>
                 </Trigger>

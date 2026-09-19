@@ -1,8 +1,21 @@
 # __SourceName__
 
 .NET multi-WPF repository. The GitHub landing page is this file.
+
+## Program samples
+
+Choose one application seed with `--ProgramSample` when creating each WPF application:
+
+- `MinimalClassic` (default) is the minimal WPF skeleton with `App.xaml` and `MainWindow`.
+- `MahAppsMvvm` is a hosted MVVM application with CommunityToolkit.Mvvm, MahApps, Material Design, configuration reload, localization, SQLite, and matching tests and benchmark.
+
+The selected sample is a cohesive application choice; DI, MVVM, SQLite, fonts, and individual app features are not separate switches.
+The `ProgramSample` choice is the current replacement for the former single WPF sample/readme layout in multi-app repositories. The legacy `wpfapp-coree` template (`Templates/WpfApp`) remains available and unchanged.
+
 <!--#if (ProgramSample == "MahAppsMvvm") -->
-The selected `MahAppsMvvm` sample is a hosted MVVM application with MahApps, Material Design, configuration reload, localization, and SQLite. These capabilities are one cohesive sample rather than separate template switches.
+This application was generated from `MahAppsMvvm`.
+<!--#else -->
+This application was generated from the default `MinimalClassic` sample.
 <!--#endif -->
 <!--#if (PlaceSolution == "SlnFolder") -->
 Each app's `.slnx` and notes live under `src/sln/__SourceName__/`. CLI commands for this app start in that folder.

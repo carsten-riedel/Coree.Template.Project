@@ -388,7 +388,25 @@ dotnet new multiwpfrepo-coree \
     --InitAllRepoItems
 ```
 
-Additional applications can be added later without changing the repository structure.
+The WPF repository has one cohesive application seed selected with `--ProgramSample`:
+
+- `MinimalClassic` (default): a minimal WPF skeleton with `App.xaml` and `MainWindow`.
+- `MahAppsMvvm`: a hosted MVVM application with CommunityToolkit.Mvvm, MahApps, Material Design, configuration, localization, SQLite, and matching tests and benchmark.
+
+For the second sample, create the repository with:
+
+```bash
+dotnet new multiwpfrepo-coree \
+    --Author "Your Name" \
+    --output "./MyCompany.Desktop" \
+    --name "MyCompany.Desktop" \
+    --ProgramSample MahAppsMvvm \
+    --InitAllRepoItems
+```
+
+`ProgramSample` is the current replacement for the former single WPF sample/readme layout in multi-app repositories. The legacy `wpfapp-coree` template in `Templates/WpfApp` remains available and unchanged. The MahApps sample is intentionally one fixed feature set; DI, MVVM, SQLite, fonts, and individual app switches are not separate parameters.
+
+Additional applications can be added later without changing the repository structure; each application can choose its own program sample.
 
 **Windows only.**
 

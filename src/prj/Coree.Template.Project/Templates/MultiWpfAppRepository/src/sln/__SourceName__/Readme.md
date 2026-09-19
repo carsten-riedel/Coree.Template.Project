@@ -21,6 +21,18 @@ Visual Studio created an extra `.slnx` in the repository root. Close this soluti
 
 Visual Studio created a conventional root `.slnx`. Open `__SourceName__.generated.slnx` in the repository root for the template layout (includes `sln`). Delete the extra conventional `.slnx` if you do not need it.
 <!--#endif -->
+
+## Program sample
+
+This WPF application was created with the `--ProgramSample` choice:
+
+<!--#if (ProgramSample == "MahAppsMvvm") -->
+`MahAppsMvvm` is the hosted MVVM sample with CommunityToolkit.Mvvm, MahApps, Material Design, configuration reload, localization, SQLite, and matching tests and benchmark.
+<!--#else -->
+`MinimalClassic` is the default minimal WPF sample with `App.xaml` and `MainWindow`.
+<!--#endif -->
+
+`ProgramSample` is the current replacement for the former single WPF sample/readme layout in multi-app repositories. The legacy `wpfapp-coree` template (`Templates/WpfApp`) remains available and unchanged.
 <!--#if (PlaceSolution == "RepoRoot") -->
 
 The solution file lives at the repository root. Open a terminal there for `dotnet restore`, `dotnet build`, `dotnet test`, and `dotnet publish`. If more than one `.slnx` sits in that directory, pass the solution path to `dotnet`.

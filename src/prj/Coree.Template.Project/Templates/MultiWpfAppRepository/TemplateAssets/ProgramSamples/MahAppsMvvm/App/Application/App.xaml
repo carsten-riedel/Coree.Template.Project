@@ -268,11 +268,47 @@
             </Setter>
         </Style>
 
+        <!-- Top-level menu headers -->
+        <ControlTemplate x:Key="{x:Static MenuItem.TopLevelHeaderTemplateKey}" TargetType="{x:Type MenuItem}">
+            <Grid SnapsToDevicePixels="True">
+                <Border x:Name="HeaderBorder" Background="{TemplateBinding Background}">
+                    <ContentPresenter Margin="{TemplateBinding Padding}"
+                                      ContentSource="Header"
+                                      RecognizesAccessKey="True"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                </Border>
+                <Popup x:Name="PART_Popup"
+                       AllowsTransparency="True"
+                       Focusable="False"
+                       IsOpen="{TemplateBinding IsSubmenuOpen}"
+                       Placement="Bottom"
+                       PlacementTarget="{Binding ElementName=HeaderBorder}"
+                       PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}">
+                    <Border Background="{StaticResource PrimaryHueDarkForegroundBrush}"
+                            BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
+                            BorderThickness="1"
+                            Padding="2">
+                        <ScrollViewer CanContentScroll="True">
+                            <StackPanel Grid.IsSharedSizeScope="True"
+                                        IsItemsHost="True"
+                                        KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </ScrollViewer>
+                    </Border>
+                </Popup>
+            </Grid>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsSuspendingPopupAnimation" Value="True">
+                    <Setter TargetName="PART_Popup" Property="PopupAnimation" Value="None" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
         <!-- Outer menu items -->
         <Style TargetType="{x:Type MenuItem}">
             <Setter Property="Background" Value= "{StaticResource PrimaryHueDarkForegroundBrush}" />
             <Setter Property="Foreground" Value="{StaticResource  PrimaryHueDarkBrush}" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Padding" Value="4,1" />
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Foreground" Value="LightGray"/>

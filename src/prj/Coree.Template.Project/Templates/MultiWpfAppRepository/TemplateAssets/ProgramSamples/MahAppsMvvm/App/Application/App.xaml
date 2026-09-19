@@ -81,6 +81,7 @@
             <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{StaticResource Primary700}" />
             <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{StaticResource Primary700Foreground}"  />
             <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary900}" />
+            <SolidColorBrush x:Key="PrimaryHueDarkInactiveBrush" Color="{StaticResource Primary900}" Opacity="0.42" />
             <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary900Foreground}"  />
             
             <!-- MahApps Brushes -->
@@ -117,6 +118,7 @@
             <Style x:Key="CustomTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueDarkInactiveBrush}"/>
                 <Setter Property="materialDesign:HintAssist.Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
                 <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="{DynamicResource PrimaryHueDarkBrush}"/>
                 <Setter Property="FontWeight" Value="Medium"/>

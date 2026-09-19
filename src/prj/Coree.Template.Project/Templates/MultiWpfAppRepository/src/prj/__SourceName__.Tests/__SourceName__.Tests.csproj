@@ -58,7 +58,11 @@
     <Include>[__SourceName__]*</Include>
     <!-- App.g.cs Main calls Run() (message loop). Markup compile also emits #line into .xaml. -->
     <!-- GeneratedCodeAttribute matches PresentationBuildTasks (App.g.cs / MainWindow.g.cs). -->
+    <!--#if (ProgramSample == "MahAppsMvvm") -->
+    <ExcludeByFile>**/*.g.cs,**/*.xaml,**/Application/App.xaml.cs,**/Views/*.xaml.cs</ExcludeByFile>
+    <!--#else -->
     <ExcludeByFile>**/*.g.cs,**/*.xaml</ExcludeByFile>
+    <!--#endif -->
     <ExcludeByAttribute>GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
     <!-- Coverlet Cecil must resolve PresentationFramework (coverlet#1713 / KnownIssues). No test RID. -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -79,7 +83,7 @@
   </Target>
   <!--#endif -->
 
-  <!-- Package inventory of the console app, not this test project. -->
+  <!-- Package inventory of the WPF app, not this test project. -->
   <PropertyGroup>
     <NugetReportDir Condition=" '$(NugetReportDir)' == '' ">$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)', 'NugetReport'))</NugetReportDir>
     <NugetReportProject Condition=" '$(NugetReportProject)' == '' ">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', '__SourceName__', '__SourceName__.csproj'))</NugetReportProject>

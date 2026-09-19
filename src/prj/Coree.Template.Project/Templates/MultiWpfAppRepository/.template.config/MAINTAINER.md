@@ -29,7 +29,7 @@ Verified in Visual Studio (Create a new project, Recent project templates): a te
 
 ## Intended usage
 
-The template bootstraps a **repository layout** for one or more publishable console apps (1:n split of a too-large app). It does not `git init`. Same `--output` = combo repo; different `--output` = separate repos.
+The template bootstraps a **repository layout** for one or more publishable WPF apps (1:n split of a too-large app). It does not `git init`. Same `--output` = combo repo; different `--output` = separate repos.
 
 `Author` is required on every create. Everyday CLI is author, name, output; root files only on the first create into an empty folder.
 
@@ -194,7 +194,7 @@ One multi-choice (`allowMultipleValues`), same VS checkbox combobox as TFMs and 
 | `LangLatest` | `latest` | `default` (TFM C# version; valid compiler value) |
 | `DebugEmbedded` | `embedded` | `none` |
 
-Language/debug values are **always written** (no omitted PropertyGroup) into the console app, tests, and benchmark csproj. There is no XML documentation file switch.
+Language/debug values are **always written** (no omitted PropertyGroup) into the WPF app, tests, and benchmark csproj. There is no XML documentation file switch.
 
 No `None`. CLI and VS default is the four language/debug values. Visual Studio cannot leave a multi-choice empty; at least one box stays checked. CLI: omit the switch, or pass values with **spaces** (`--CSharpProjectOptions Nullable LangLatest DebugEmbedded`). `|` is only the host default separator.
 
@@ -202,17 +202,20 @@ Benchmark previously hardcoded `ImplicitUsings` enable. It now follows the switc
 
 ## `ProgramSample`
 
-Single choice, default **`MinimalClassic`**. UI label **Program sample**. CLI long name **`--ProgramSample`**. Empty CLI `shortName`. Combo-safe (each app has its own files). One choice for now; later samples are added under `ProgramSamples` when they exist.
+Single choice, default **`MinimalClassic`**. UI label **Program sample**. CLI long name **`--ProgramSample`**. Empty CLI `shortName`. Combo-safe (each app has its own files). `MahAppsMvvm` is an opt-in second sample; it does not change the default generated app.
 
 Seeds live under `TemplateAssets/ProgramSamples/{choice}/App|Tests|Benchmark/`. Extra sources copy each folder onto the matching stub project (`App/` → `src/prj/{Name}/`, `Tests/` → tests, `Benchmark/` → benchmark). Later sample files drop into those folders without a per-file rename. `Benchmark/` is copied only when `BenchmarkProject` is on. DocShell extra sources must `exclude` `ProgramSamples/**` as well as `Versioning/**`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`. Do not leave `App.xaml` / `MainWindow.xaml` under `src/prj/__SourceName__/`. The stub csproj stays one file (`WinExe`, `UseWPF`); sample-specific package references can be `#if` there.
 
 `MinimalClassic` is the Visual Studio WPF skeleton: `App.xaml` (`StartupUri="MainWindow.xaml"`), empty `App` code-behind, `MainWindow.xaml` / `MainWindow.xaml.cs`, and root `AssemblyInfo.cs` (`ThemeInfo`). There is no `Program.cs`; PresentationBuildTasks emit `[STAThread] Main` in `App.g.cs`. Generate-time `#if (CSharpProjectOptions == "DisableImplicitUsings")` adds the `System.Windows` usings those names need. When implicit usings are on, those lines are omitted. Unused VS scaffold usings (`System.Configuration`, `System.Windows.Controls`, …) are not kept (Strict / IDE0005). No `KeepScaffoldUnusedUsings` here.
 
+`MahAppsMvvm` is one cohesive sample, not a set of feature switches. It includes Hosting/DI, CommunityToolkit.Mvvm, MahApps with Material Design, configuration reload, localization, SQLite, profile optimization, and single-instance handling. Its conditional app-project block owns the package references, application definition, manifest/icon/resources, copied settings/database, and RESX metadata. It intentionally contains no bundled Source Code Pro files or font resources. The Material Design v5 resource dictionary is `MaterialDesign2.Defaults.xaml`; removed `ShadowAssist` setters are not restored.
+
 | Choice | App | Tests | Benchmark |
 | --- | --- | --- | --- |
 | `MinimalClassic` | VS MainWindow app (generated `App.Main` does not return a code) | Construct `MainWindow`; do not call `App.Main` (message loop) | Construct `MainWindow` and read `Title` |
+| `MahAppsMvvm` | Hosted MVVM navigation app with Material Design, localization, and SQLite | ViewModel, configuration reload, navigation, extension, and SQLite behavior | `EmptyIfNull` without constructing WPF UI |
 
-Coverlet still gates 100% on the app assembly. `ExcludeByFile` skips `**/*.g.cs` and `**/*.xaml`: WPF markup compile writes `App.g.cs` / `MainWindow.g.cs` with `#line` back into the XAML (Coverlet then attributes hits to `.xaml`, so a `*.g.cs`-only filter is not enough). `ExcludeByAttribute` `GeneratedCodeAttribute,CompilerGeneratedAttribute` matches PresentationBuildTasks (`GeneratedCodeAttribute`, unlike WinForms `ApplicationConfiguration` which is only `[CompilerGenerated]`). Do not `ExcludeByFile` `MainWindow.xaml.cs`: Coverlet then drops the whole `MainWindow` partial type. The test covers `MainWindow` construction. WPF `Window` construction requires STA (`The calling thread must be STA`). Use MSTest `[STATestMethod]` (v3.6+, Windows) so the test runs on an STA thread in-process. Do not use VSTest `ExecutionThreadApartmentState` (unsupported on .NET Core testhost). Coverlet records IL hits in the testhost process, including that STA worker. Do not call generated `App.Main` (`Application.Run`). `new MainWindow()` plus `Title` does not show the window. The Coverlet block also sets `CopyLocalLockFileAssemblies` and `PreserveCompilationContext` so Cecil can resolve `PresentationFramework` (coverlet#1713 / KnownIssues); tests stay RID-less. The optional benchmark runner `Program.cs` is `[STAThread]` so Window construction can run.
+Coverlet still gates 100% on the app assembly. `ExcludeByFile` skips `**/*.g.cs` and `**/*.xaml`: WPF markup compile writes generated files with `#line` back into the XAML, so a `*.g.cs`-only filter is not enough. `ExcludeByAttribute` `GeneratedCodeAttribute,CompilerGeneratedAttribute` matches PresentationBuildTasks and source generators. `MinimalClassic` keeps its code-behind covered by constructing `MainWindow` on an MSTest `[STATestMethod]`. `MahAppsMvvm` additionally excludes `Application/App.xaml.cs` and `Views/*.xaml.cs`, because startup, the WPF message loop, shell launching, and view event plumbing are runtime integration surfaces; its ViewModels and extension code remain at the 100% line/branch/method gate. The Coverlet block also sets `CopyLocalLockFileAssemblies` and `PreserveCompilationContext` so Cecil can resolve `PresentationFramework` (coverlet#1713 / KnownIssues); tests stay RID-less.
 
 ## `ProjectLicense`
 
@@ -367,7 +370,7 @@ Keep the same `--NerdbankGitVersioning` value on every app in one `--output`. Ro
 
 ## `ProjectEditorGlobalConfig`
 
-App-only single choice, default **`Strict`**. UI label **Code style rules for console app project** (console app project only; `is_global` is the analyzer-config technical term). CLI long name **`--ProjectEditorGlobalConfig`**. Stamps `src/prj/{Name}/.project.editor.globalconfig` and wires `GlobalAnalyzerConfigFiles`, `EnforceCodeStyleInBuild`, and `OptimizeImplicitlyTriggeredBuild=false`. `Off` writes nothing. Tests and benchmark do not get the file. Keep the symbol and generated disk name. Do not use a bare "project" label: **C# project options** already applies to app, tests, and benchmark.
+App-only single choice, default **`Strict`**. UI label **Code style rules for WPF app project** (WPF app project only; `is_global` is the analyzer-config technical term). CLI long name **`--ProjectEditorGlobalConfig`**. Stamps `src/prj/{Name}/.project.editor.globalconfig` and wires `GlobalAnalyzerConfigFiles`, `EnforceCodeStyleInBuild`, and `OptimizeImplicitlyTriggeredBuild=false`. `Off` writes nothing. Tests and benchmark do not get the file. Keep the symbol and generated disk name. Do not use a bare "project" label: **C# project options** already applies to app, tests, and benchmark.
 
 Roslyn reads `GlobalAnalyzerConfigFiles` (`Visible="false"`). Visual Studio Solution Explorer uses a separate `None` item with `Link` under `Properties\` so the file is clickable next to `version.json`. `None Remove` first, or the SDK default glob also shows it at the project root. Do not use `AdditionalFiles` or `Content`. Do not set `CopyToOutputDirectory` (`None` already does not copy or pack). Do not replace `GlobalAnalyzerConfigFiles` with the `None` item. Do **not** move the file into `Properties/` on disk: analyzer-config scope follows the directory of the file, so it must stay next to the csproj. `Link` is UI-only.
 
@@ -381,7 +384,7 @@ Do not rename `Default` to Minimal: both seeds are the same full VS style dump. 
 
 `Strict` needs the product C# default `Nullable`. Console `Program.cs` does not keep unused usings for the style dump (`KeepScaffoldUnusedUsings` is library/analyzer only). Needed `using` lines follow `DisableImplicitUsings`.
 
-Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that folder to the console app project, **excludes** the other seed, and **renames** the chosen file to `.project.editor.globalconfig`. Do not leave a seed under `src/prj/__SourceName__/`: DocShell extra sources must `exclude` `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, and `ProgramSamples/**`.
+Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that folder to the WPF app project, **excludes** the other seed, and **renames** the chosen file to `.project.editor.globalconfig`. Do not leave a seed under `src/prj/__SourceName__/`: DocShell extra sources must `exclude` `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, and `ProgramSamples/**`.
 
 `UseProjectEditorGlobalConfig` is `(ProjectEditorGlobalConfig != "Off")`; the csproj `#if` does not need a new branch per dump.
 
@@ -391,9 +394,9 @@ This PropertyGroup/`GlobalAnalyzerConfigFiles` must appear **before** `ImportSdk
 
 ## `AnalysisMode`
 
-App-only single choice, default **`Recommended`**. UI label **Code analysis mode**. CLI long name **`--AnalysisMode`**. Omit the switch → `Recommended`. Writes `<AnalysisMode>` on the console app only (placeholder `__AnalysisMode__`). Tests and benchmark do not get the property. Combo-safe.
+App-only single choice, default **`Recommended`**. UI label **Code analysis mode**. CLI long name **`--AnalysisMode`**. Omit the switch → `Recommended`. Writes `<AnalysisMode>` on the WPF app only (placeholder `__AnalysisMode__`). Tests and benchmark do not get the property. Combo-safe.
 
-This is the SDK **CA** rule set, not code style. Do not merge it into `ProjectEditorGlobalConfig`. Do not add `None` or SDK `Default`: a console app keeps analyzers on; `Minimum` / `Recommended` / `All` are the three product values. Do not add `AnalysisLevel` on the same switch (that pins a SDK rule version). Do not add `EnableNETAnalyzers` `true` noise.
+This is the SDK **CA** rule set, not code style. Do not merge it into `ProjectEditorGlobalConfig`. Do not add `None` or SDK `Default`: a WPF app keeps analyzers on; `Minimum` / `Recommended` / `All` are the three product values. Do not add `AnalysisLevel` on the same switch (that pins a SDK rule version). Do not add `EnableNETAnalyzers` `true` noise.
 
 Warnings only unless the consumer later sets `TreatWarningsAsErrors`. `All` is noisy on `Program`.
 
@@ -426,7 +429,7 @@ The app is publishable, not a NuGet tool. Output is `WinExe` with `UseWPF`. Targ
 
 Do not put `TargetFramework` next to `TargetFrameworks` to avoid `-f`. That was the previous approach: MSBuild saw a single TFM, pack needed `BuildForPack`, and a `net8.0-windows` consumer could not reference the project. `_IsPublishing` on `TargetFramework` still fails when that consumer publishes (the flag is global).
 
-Implementation (do not "simplify" into one always-imported file or back to `<Project Sdk="...">`): `Properties/Build/ImportSdkTargets.targets` always closes `Sdk.targets`; `PublishDefaultFramework.targets` loads only when `IsCrossTargetingBuild` is true. **`ImportSdkTargets` must be the last import in the console app csproj.** That file *is* `Sdk.targets` plus the outer publish dispatch. The SDK reads properties and items while it loads (`EnforceCodeStyleInBuild`, `GlobalAnalyzerConfigFiles`, `AnalysisMode`, publish). Anything after that line is after the SDK and is ignored for those. `Project Sdk="..."` would append `Sdk.targets` after this file and overwrite the Publish override. `SourceControlState.targets` is a `BeforeTargets` hook on `GenerateAssemblyInfo` (SDK 8+ Source Link); it can sit just above the SDK close. `PublishRelease` keeps a direct project `dotnet publish` on Release. Tests may keep `SetTargetFramework`; external consumers must not need it. `<!--#if` in `.targets` is generate-time (`**/*.targets` in `specialCustomOperations`).
+Implementation (do not "simplify" into one always-imported file or back to `<Project Sdk="...">`): `Properties/Build/ImportSdkTargets.targets` always closes `Sdk.targets`; `PublishDefaultFramework.targets` loads only when `IsCrossTargetingBuild` is true. **`ImportSdkTargets` must be the last import in the WPF app csproj.** That file *is* `Sdk.targets` plus the outer publish dispatch. The SDK reads properties and items while it loads (`EnforceCodeStyleInBuild`, `GlobalAnalyzerConfigFiles`, `AnalysisMode`, publish). Anything after that line is after the SDK and is ignored for those. `Project Sdk="..."` would append `Sdk.targets` after this file and overwrite the Publish override. `SourceControlState.targets` is a `BeforeTargets` hook on `GenerateAssemblyInfo` (SDK 8+ Source Link); it can sit just above the SDK close. `PublishRelease` keeps a direct project `dotnet publish` on Release. Tests may keep `SetTargetFramework`; external consumers must not need it. `<!--#if` in `.targets` is generate-time (`**/*.targets` in `specialCustomOperations`).
 
 All three project files remove `.gitignore` from their `None` items so it stays on disk without appearing as a project item. The test ignore also covers generated `NugetReport/` output.
 
@@ -436,9 +439,9 @@ With `PlaceSolution` `SlnFolder` (default), each `src/sln/{Name}/` gets its own 
 
 App + this app's `.slnx` only. Bool, default **false**. UI label **Empty Directory.Build and Directory.Solution files**. CLI long name **`--DirectoryMsBuildFiles`**. Omit the switch → nothing. Combo-safe on `SlnFolder` and `BesideCsproj` (paths include the app name). `RepoRoot` stacks `Directory.Solution.*` at the repository root like stacking `.slnx` files. Not an Init* item and not `Directory.Packages.props` (CPM would not cover sibling tests). Tests and benchmark are not in this switch.
 
-Seeds live under `TemplateAssets/DirectoryMsBuild/`. Extra sources copy `Directory.Build.props` / `.targets` next to the console app csproj, and `Directory.Solution.props` / `.targets` next to this app's `.slnx` (`src/sln/{Name}/` for `SlnFolder`, `src/prj/{Name}/` for `BesideCsproj`, repo root for `RepoRoot` - later app then collides, same as stacking `.slnx` files). DocShell extra sources must `exclude` `Versioning/**` and `DirectoryMsBuild/**`.
+Seeds live under `TemplateAssets/DirectoryMsBuild/`. Extra sources copy `Directory.Build.props` / `.targets` next to the WPF app csproj, and `Directory.Solution.props` / `.targets` next to this app's `.slnx` (`src/sln/{Name}/` for `SlnFolder`, `src/prj/{Name}/` for `BesideCsproj`, repo root for `RepoRoot` - later app then collides, same as stacking `.slnx` files). DocShell extra sources must `exclude` `Versioning/**` and `DirectoryMsBuild/**`.
 
-The files are almost empty `<Project>` stubs with comments. MSBuild auto-imports them from those directories. Do not move `ImportSdkTargets` / analyzer config into them. The template does not `#if` properties into these files vs the csproj (possible, ugly). The console app csproj `None Include`s the two `Directory.Build.*` files with `Link` under `Properties\` (Solution Explorer only). Do **not** move the files into `Properties/` on disk: auto-import follows the directory of the file, same as `.project.editor.globalconfig`. `Directory.Solution.*` stay beside the `.slnx`. When `PlaceSolution` is `BesideCsproj`, the console app csproj also `Link`s those two solution files (same folder as the csproj) so they do not look like stray project items.
+The files are almost empty `<Project>` stubs with comments. MSBuild auto-imports them from those directories. Do not move `ImportSdkTargets` / analyzer config into them. The template does not `#if` properties into these files vs the csproj (possible, ugly). The WPF app csproj `None Include`s the two `Directory.Build.*` files with `Link` under `Properties\` (Solution Explorer only). Do **not** move the files into `Properties/` on disk: auto-import follows the directory of the file, same as `.project.editor.globalconfig`. `Directory.Solution.*` stay beside the `.slnx`. When `PlaceSolution` is `BesideCsproj`, the WPF app csproj also `Link`s those two solution files (same folder as the csproj) so they do not look like stray project items.
 
 ```powershell
 dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems --DirectoryMsBuildFiles
@@ -449,7 +452,7 @@ dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --D
 
 App project only. Bool, default **true**. UI label **Empty local dotnet-tools.json**. CLI long name **`--DotNetToolManifest`**. Omit the switch → empty `src/prj/{Name}/.config/dotnet-tools.json`. `--DotNetToolManifest false` skips it. Combo-safe: path includes the app name. Not Init. `tools` is `{}`; no `dotnet tool restore` on build. Tests and benchmark are not in this switch. `isRoot` is true so a later parent manifest does not merge in. `dotnet tool install --local` from the app folder fills the file. With `SlnFolder`, the handbook CWD (`src/sln/{Name}/`) does not see this manifest. With `BesideCsproj`, the handbook CWD is the app folder and does.
 
-The console app csproj `None Include`s the file with `Link` under `Properties\` (Solution Explorer only). Disk path stays `.config/`.
+The WPF app csproj `None Include`s the file with `Link` under `Properties\` (Solution Explorer only). Disk path stays `.config/`.
 
 ```powershell
 dotnet new multiwpfrepo-coree --Author "abcd" --name "...App1" --output $out --InitAllRepoItems
@@ -461,7 +464,7 @@ dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --D
 - **`ProjectLicense` / `RepoLicense` / `InitAllRepoItems` / `GitIgnore` / `SrcGlobalJson`**: see section above. Default MIT. Root `LICENSE` is the `RepoLicense` item or the CLI all-set (no package license metadata). Root `.gitignore` is `GitIgnore` in that same first-create set. This template does not stamp `ChoosingPackageBoundaries.md`. `src/global.json` is `SrcGlobalJson`: opt-in, default off, not in `--InitAllRepoItems`.
 - **`NerdbankGitVersioning` / `WriteRepoVersionJson`**: see section above. Default `Project`. Root `version.json` is first-create only (`Repo` plus Init).
 - **`CSharpProjectOptions`**: see section above. Do not split back into per-property dropdowns.
-- **`ProjectEditorGlobalConfig`**: see section above. Default `Strict`. `Default` is suggestions-only. Seeds in `TemplateAssets/CodeStyle/`; generated disk name stays `.project.editor.globalconfig`. Csproj wire-up on the console app only, before `ImportSdkTargets`.
+- **`ProjectEditorGlobalConfig`**: see section above. Default `Strict`. `Default` is suggestions-only. Seeds in `TemplateAssets/CodeStyle/`; generated disk name stays `.project.editor.globalconfig`. Csproj wire-up on the WPF app only, before `ImportSdkTargets`.
 - **`AnalysisMode`**: see section above. Default `Recommended`. App only. CA warnings, not build errors.
 - **`DocumentationTemplate` / `WriteRepoDocTemplate`**: see section above. Default empty/`None`. Repository `docs/` only. Seed only; not the vendored site.
 - **`PlaceSolution`**: single choice, default `SlnFolder` → `src/sln/__SourceName__/__SourceName__.slnx` plus handbook `Readme.md` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). `RepoRoot` on CLI renames to a root `.slnx`; `RepoRoot` in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS's conventional root `.slnx`. `RepoRoot` still writes `src/sln/{Name}/Readme.md` as notes and stacks every app's `.slnx` in one directory. `BesideCsproj` writes `src/prj/{Name}/{Name}.slnx` and the handbook next to the app csproj and does not create `src/sln/{Name}/`. The `.slnx` virtual folder `/sln/{Name}/` is omitted for `BesideCsproj`; `Readme.md` is a solution item beside the file.
@@ -471,6 +474,6 @@ dotnet new multiwpfrepo-coree --Author "abcd" --name "...App2" --output $out --D
 - **`TargetFrameworks`**: Windows TFMs only (`net8.0-windows` / `net9.0-windows` / `net10.0-windows`). Default `net8.0-windows|net10.0-windows`. Joined into `__TargetFrameworks__` on the app and tests; highest selected is `__TargetFramework__` for benchmark and bare publish. Do not restore portable `net8.0` choices here.
 - **Publish RID**: not a symbol. Always `win-x64` while `_IsPublishing`. No VS/CLI picker. Tests and benchmark stay RID-less.
 - **`TestCoverage`**: single choice, default `Coverlet`. Replaces the two independent Coverlet/ReportGenerator bools. Coverage stats on `dotnet test` are opt-out; ReportGenerator is opt-in (`CoverletAndReport`). There is no Report-without-Coverlet. `--TestCoverage None` drops Coverlet too. Computed `CoverletMSBuild` / `ReportGenerator` drive the test csproj and sln-readme `#if`s.
-- **`DirectoryMsBuildFiles`**: see section above. Default `false`. Empty `Directory.Build.*` beside the console app and `Directory.Solution.*` beside this `.slnx`. No `Directory.Packages.props`.
+- **`DirectoryMsBuildFiles`**: see section above. Default `false`. Empty `Directory.Build.*` beside the WPF app and `Directory.Solution.*` beside this `.slnx`. No `Directory.Packages.props`.
 - **`DotNetToolManifest`**: see section above. Default `true`. Empty `src/prj/{Name}/.config/dotnet-tools.json`. `--DotNetToolManifest false` skips it.
 - Conditionals in `.md` / `.slnx` / `.targets` use `<!--#if` on their own lines (`specialCustomOperations`, `wholeLine`). `.txt` and the renamed root `LICENSE` use `//#if`. License seeds under `TemplateAssets/Licenses/` may use a shallow copyright `//#if` / `//#else`; extra sources pick the file so there is no `ProjectLicense` `#if` in the text. This template does not use `UseWebSdk`; `ImportSdkTargets.targets` always closes `Microsoft.NET.Sdk`.

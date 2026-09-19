@@ -14,6 +14,14 @@ Libraries this template uses that are not owned or provided by the template auth
 - [ReportGenerator](https://github.com/danielpalme/ReportGenerator) (Apache-2.0)
 - [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) (MIT)
 
+## MahAppsMvvm program sample
+
+- [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) (MIT)
+- [MahApps.Metro](https://github.com/MahApps/MahApps.Metro) (MIT)
+- [MaterialDesignInXamlToolkit / MaterialDesignThemes.MahApps](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit) (MIT)
+- [Microsoft.Data.Sqlite](https://github.com/dotnet/efcore) (MIT)
+- [Microsoft.Extensions.Hosting](https://github.com/dotnet/runtime) (MIT)
+
 ## Documentation template (DocShell)
 
 When the documentation template is selected, DocShell specifies these libraries (vendored at bootstrap, not inside the template package):

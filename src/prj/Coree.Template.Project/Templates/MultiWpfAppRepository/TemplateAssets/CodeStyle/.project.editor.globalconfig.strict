@@ -88,7 +88,7 @@ dotnet_style_allow_statement_immediately_after_block_experimental = true
 #### C# Coding Conventions ####
 
 # var preferences
-# Explicit types in a console app; style only, not a build error.
+# Explicit types in a WPF app; style only, not a build error.
 csharp_style_var_elsewhere = false
 csharp_style_var_for_built_in_types = false
 csharp_style_var_when_type_is_apparent = false
@@ -252,7 +252,7 @@ dotnet_naming_style.begins_with_i.required_suffix =
 dotnet_naming_style.begins_with_i.word_separator = 
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
-#### Console app diagnostics ####
+#### WPF app diagnostics ####
 
 # Build gates. Style rules above stay suggestions.
 # Needs Nullable from the csproj.

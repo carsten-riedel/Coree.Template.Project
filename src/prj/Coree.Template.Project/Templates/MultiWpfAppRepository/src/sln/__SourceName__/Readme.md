@@ -4,7 +4,7 @@
 This folder is the per-app area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` lives here; keep the folder while that is true. You can still add extra solution items here.
 <!--#elseif (PlaceSolution == "BesideCsproj") -->
-This folder is the console app. The `.slnx` and this readme sit next to the `.csproj`. Tests and the optional benchmark stay sibling projects under `src/prj/`. There is no `src/sln/` tree for this app.
+This folder is the WPF app. The `.slnx` and this readme sit next to the `.csproj`. Tests and the optional benchmark stay sibling projects under `src/prj/`. There is no `src/sln/` tree for this app.
 <!--#else -->
 This folder is the per-app area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` is written elsewhere (`PlaceSolution`). Use this folder for shared notes or extra solution items, or delete it if you do not need it.
@@ -32,7 +32,7 @@ The solution file lives at the repository root. Open a terminal there for `dotne
 <!--#if (PlaceSolution == "SlnFolder") -->
 The `.slnx` and this readme live in this folder. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other apps keep their own `.slnx` under `src/sln/<name>/`, so `dotnet` does not ask you to specify a solution.
 <!--#else -->
-The `.slnx` and this readme live in this folder next to the console app. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other apps keep their own `.slnx` under `src/prj/<name>/`, so `dotnet` does not ask you to specify a solution.
+The `.slnx` and this readme live in this folder next to the WPF app. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other apps keep their own `.slnx` under `src/prj/<name>/`, so `dotnet` does not ask you to specify a solution.
 <!--#endif -->
 
 ```text
@@ -45,9 +45,9 @@ The `.slnx` and this readme live in this folder next to the console app. Open a 
 <!--#if (WriteSrcGlobalJson) -->
 ../../global.json            .NET SDK pin (highest selected TFM)
 <!--#endif -->
-../../prj/__SourceName__/    console app
+../../prj/__SourceName__/    WPF app
 <!--#if (DirectoryMsBuildFiles) -->
-../../prj/__SourceName__/Directory.Build.props  optional empty console app MSBuild landing file
+../../prj/__SourceName__/Directory.Build.props  optional empty WPF app MSBuild landing file
 ../../prj/__SourceName__/Directory.Build.targets
 <!--#endif -->
 <!--#if (DotNetToolManifest) -->
@@ -62,7 +62,7 @@ The `.slnx` and this readme live in this folder next to the console app. Open a 
 <!--#if (DirectoryMsBuildFiles) -->
 ./Directory.Solution.props  optional empty solution MSBuild landing file
 ./Directory.Solution.targets
-./Directory.Build.props     optional empty console app MSBuild landing file
+./Directory.Build.props     optional empty WPF app MSBuild landing file
 ./Directory.Build.targets
 <!--#endif -->
 <!--#if (WriteSrcGlobalJson) -->
@@ -114,7 +114,11 @@ After a test run, the links below point to generated reports. Each selected targ
 <!--#endif -->
 
 <!--#if (CoverletMSBuild == true) -->
+<!--#if (ProgramSample == "MahAppsMvvm") -->
+Coverlet measures the testable application code (`[__SourceName__]*`), skips generated `*.g.cs` / `*.xaml`, and excludes WPF startup plus view code-behind. ViewModels and extensions remain gated at 100% line, branch, and method coverage.
+<!--#else -->
 Coverlet measures the app (`[__SourceName__]*`), skips generated `*.g.cs` / `*.xaml` (WPF `App.Main` and markup compile), and fails `dotnet test` if line, branch, or method coverage is under 100% on the rest.
+<!--#endif -->
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
 <!--#if (PlaceSolution == "SlnFolder") -->

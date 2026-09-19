@@ -1,0 +1,27 @@
+<UserControl x:Class="__SourceName__.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:local="clr-namespace:__SourceName__.Views"
+             xmlns:views="clr-namespace:__SourceName__.Views"
+             mc:Ignorable="d"
+             Padding="10,0,0,0"
+             xmlns:viewmodel="clr-namespace:__SourceName__.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodel:HomeViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+    <Grid>
+        <Button x:Name="button" Style="{StaticResource CustomButtonStyle}"  Content="{Binding Path=ButtonText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Command="{Binding  SetTitleSourceStringCommand}" HorizontalAlignment="Left" Height="40" Margin="10,0,0,0" VerticalAlignment="Top" Width="180"/>
+        <TextBox x:Name="textBox" Style="{StaticResource CustomTextBoxStyle}"  HorizontalAlignment="Left" Height="40" Margin="10,45,0,0"  Text="{Binding Path=TitleSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="180"
+                     materialDesign:HintAssist.Hint="{Binding Path=Hint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     materialDesign:HintAssist.HelperText="{Binding Path=Helper, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+         >
+            <TextBox.InputBindings>
+                <KeyBinding Command="{Binding Path=EnterKeyDownCommand}" Key="Enter" Modifiers="" />
+            </TextBox.InputBindings>
+        </TextBox>
+    </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -69,7 +69,7 @@ namespace __SourceName__.ResourceDesigner
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to ResourceDesigner fallback.
+        ///   Looks up a localized string similar to Goto source code.
         /// </summary>
         internal static string CurrentUICultureSpecificString
         {

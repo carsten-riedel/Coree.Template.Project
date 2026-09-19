@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 
 using Microsoft.Data.Sqlite;
@@ -51,6 +52,23 @@ namespace __SourceName__.Tests
             configuration.Reload();
 
             Assert.AreEqual("Reloaded value", windowViewModel.StatusBar);
+        }
+
+        [TestMethod]
+        public void Neutral_resources_fall_back_to_english()
+        {
+            try
+            {
+                ResourceDesigner.Resource.Culture = CultureInfo.GetCultureInfo("en-US");
+                Assert.AreEqual("Goto source code", ResourceDesigner.Resource.CurrentUICultureSpecificString);
+
+                ResourceDesigner.Resource.Culture = CultureInfo.GetCultureInfo("ja-JP");
+                Assert.AreEqual("Goto source code", ResourceDesigner.Resource.CurrentUICultureSpecificString);
+            }
+            finally
+            {
+                ResourceDesigner.Resource.Culture = null;
+            }
         }
 
         [TestMethod]

@@ -24,7 +24,7 @@ Code reuse asks whether implementations should be shared. Independent versioning
 
 The following describes ordinary `PackageReference` restore. A direct dependency is declared by the consuming project; a transitive dependency is reached through another package. All reachable dependencies form its dependency closure.
 
-NuGet selects one version per package ID in each target framework's resolved graph, not a private version for each caller. With ordinary non-floating constraints, it prefers the lowest applicable version; cousin dependency paths are reconciled against their requirements. Floating references select the highest matching version. Direct-dependency-wins can override a transitive requirement, including causing a downgrade diagnostic. Restore therefore is not simply “highest version wins.” See [NuGet dependency resolution](https://learn.microsoft.com/en-us/nuget/concepts/dependency-resolution).
+NuGet selects one version per package ID in each target framework's resolved graph, not a private version for each caller. With ordinary non-floating constraints, it prefers the lowest applicable version; cousin dependency paths are reconciled against their requirements. Floating references select the highest matching version. Direct-dependency-wins can override a transitive requirement, including causing a downgrade diagnostic. Restore therefore is not simply "highest version wins." See [NuGet dependency resolution](https://learn.microsoft.com/en-us/nuget/concepts/dependency-resolution).
 
 ### A diamond means two paths to the same package
 
@@ -58,7 +58,7 @@ Distinguish three questions: can existing source compile, can previously compile
 
 ### Locate the failure before changing the boundary
 
-The same diamond can work correctly, fail during restore, or fail only when an application runs. This diagnostic flow separates those outcomes. Arrows mean “continue this check,” not package dependencies; the checks summarize distinct obligations rather than a literal build pipeline.
+The same diamond can work correctly, fail during restore, or fail only when an application runs. This diagnostic flow separates those outcomes. Arrows mean "continue this check," not package dependencies; the checks summarize distinct obligations rather than a literal build pipeline.
 
 ```mermaid
 flowchart TD
@@ -119,11 +119,11 @@ An unused feature's dependency may still require restoration, inventory, or serv
 
 `Parcel.Codec` provides an encoder, decoder, and format options. Applications commonly use them together, and changes must preserve the same framing, checksums, and interpretation of options.
 
-The box below is one published package; the inner boxes are implementation responsibilities, not separate NuGet identities. Containment means “ships together.” There are no dependency arrows in this visual.
+The box below is one published package; the inner boxes are implementation responsibilities, not separate NuGet identities. Containment means "ships together." There are no dependency arrows in this visual.
 
 ```mermaid
 flowchart TB
-    subgraph codec["Parcel.Codec — one package version"]
+    subgraph codec["Parcel.Codec - one package version"]
         direction LR
         encoder["Encoder"]
         decoder["Decoder"]
@@ -139,7 +139,7 @@ The opposing case strengthens if credible consumers need a lightweight reader wi
 
 `Ledger.Model` represents ledger entries for desktop tools, command-line programs, and servers. Some applications persist those entries using the independently useful `Vault.Client`, which brings a remote-service SDK and its servicing requirements.
 
-Two consumer paths make the benefit visible. The desktop tool selects only the model; the server selects the integration and therefore accepts both underlying packages. All arrows are required dependencies once that path is selected. “Optional” describes the application's choice of integration, not an optional dependency inside `Ledger.Vault`.
+Two consumer paths make the benefit visible. The desktop tool selects only the model; the server selects the integration and therefore accepts both underlying packages. All arrows are required dependencies once that path is selected. "Optional" describes the application's choice of integration, not an optional dependency inside `Ledger.Vault`.
 
 ```mermaid
 flowchart LR

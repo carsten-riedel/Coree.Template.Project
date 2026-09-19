@@ -6,7 +6,7 @@
 
     Add PropertyGroups here after create if you want them out of the csproj.
     Keep SDK-close, GlobalAnalyzerConfigFiles, AnalysisMode, and pack
-    validation in the csproj / Build/*.targets — those must load in that order.
+    validation in the csproj / Build/*.targets - those must load in that order.
 
     The template does not emit properties into this file vs the csproj with
     generate-time #if. Sending each property to one disk file or the other

@@ -59,7 +59,7 @@ MyTemplate/
 
 `ide.host.json` and `dotnetcli.host.json` do not rewrite content by themselves. They change **which symbol values** the host supplies. Those values do change the tree.
 
-**Icons are three surfaces**, if you use them: pack `PackageIcon` (NuGet listing and VS picker fallback), `.template.config/icon.png` (this template’s picker; overrides the pack), generated project icon (consumer nupkg). Leaving the template icon absent is possible; the pack icon then shows for every template in the pack.
+**Icons are three surfaces**, if you use them: pack `PackageIcon` (NuGet listing and VS picker fallback), `.template.config/icon.png` (this template's picker; overrides the pack), generated project icon (consumer nupkg). Leaving the template icon absent is possible; the pack icon then shows for every template in the pack.
 
 **Outer folder.** Visual Studio already creates a folder for a solution template. `preferNameDirectory: true` then yields `Name/Name/…`; `false` yields `Name/…`. From the CLI into an empty directory, `true` often keeps a project template from dumping files into the current directory. Same boolean, host-sensitive.
 
@@ -519,7 +519,7 @@ A `.gitignore` you do want on disk can still be globbed into the project as a `N
 
 **CLI-only “all of that set”.** A bool (`InitAll`) is possible. `ide.host.json` `"isVisible": false` hides it. An `All` checkbox next to `None` in the same group can be ticked together; hiding the bool avoids that.
 
-**Persistence.** `persistenceScope: none` on symbols whose default is a first-create set. Otherwise the next New Project dialog inherits yesterday’s None or subset.
+**Persistence.** `persistenceScope: none` on symbols whose default is a first-create set. Otherwise the next New Project dialog inherits yesterday's None or subset.
 
 **Aliases.** CLI invents `-P` from `--PackageAuthor`. `dotnetcli.host.json` `"shortName": ""` turns that off per symbol.
 
@@ -527,7 +527,7 @@ A `.gitignore` you do want on disk can still be globbed into the project as a `N
 
 **Visual Studio ticks.** The generic multi-choice combo (any name other than the built-in `Framework` / `TargetFrameworks` picker) joins `displayName`s with commas for the closed caption, then splits that caption to tick boxes. A comma or pipe in `displayName` shows the right line and leaves every box unchecked; Create can still send the `ide.host.json` default. Hyphens are safe. `Framework` (exact casing) and `TargetFrameworks` use the native TFM control and only understand installed TFM tokens — a custom name whose values happen to look like `net8.0` still gets the generic combo. A pipe `defaultValue` in `template.json` for that combo is the same caption-without-ticks failure; keep `template.json` empty and put the VS set in `ide.host.json`, like Init. List the defaulted choices first as a contiguous prefix if a host snaps to the first item. `isRequired: false` keeps Create enabled when the caption is not a bound selection (`isRequired` is unreliable in VS: [templating#6870](https://github.com/dotnet/templating/issues/6870)).
 
-**Solution file vs Visual Studio’s extra `.slnx`.** VS often writes `{Name}.slnx` at the repo root. Possible responses: stub `{Name}.generated.slnx` and rename to `{Name}.slnx` only when `IsCliHost`; or always place the template solution under `src/sln/{Name}/` and mention the extra root file in a VS-only post-action.
+**Solution file vs Visual Studio's extra `.slnx`.** VS often writes `{Name}.slnx` at the repo root. Possible responses: stub `{Name}.generated.slnx` and rename to `{Name}.slnx` only when `IsCliHost`; or always place the template solution under `src/sln/{Name}/` and mention the extra root file in a VS-only post-action.
 
 **Post-actions.** Open file (`84C0DA21-51C8-4541-9940-6CA19AF04EE6`, `"files": "0"`) and message box (`AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C`) gated on `HostIdentifier == "vs"`.
 
@@ -641,7 +641,7 @@ Seeds under `TemplateAssets/Licenses/`. Default source excludes `TemplateAssets/
 
 ### CLI vs VS solution file at repo root
 
-Stub `MyLibrary.generated.slnx`. Rename to `MyLibrary.slnx` when `IsCliHost` and the file would sit at repo root. VS keeps `.generated` so it does not overwrite the IDE’s `{Name}.slnx`.
+Stub `MyLibrary.generated.slnx`. Rename to `MyLibrary.slnx` when `IsCliHost` and the file would sit at repo root. VS keeps `.generated` so it does not overwrite the IDE's `{Name}.slnx`.
 
 ### Combined choice instead of two bools
 
@@ -693,9 +693,9 @@ dotnet new install "C:\path\to\MyTemplate" --force
 dotnet new my-short-name --name Organization.Domain.Widgets --output $out --PackageAuthor "Ada"
 ```
 
-`--force` replaces the previous install. Create into a throwaway `$out`. `--dry-run` lists files without writing; it will not catch a csproj the SDK ignores, leftover `#if` in an unregistered extension, or Visual Studio’s extra `.slnx`.
+`--force` replaces the previous install. Create into a throwaway `$out`. `--dry-run` lists files without writing; it will not catch a csproj the SDK ignores, leftover `#if` in an unregistered extension, or Visual Studio's extra `.slnx`.
 
-**Pack install** is what Visual Studio actually loads. The IDE caches template packs. Installing only the folder, then opening New Project, is a reliable way to debug yesterday’s nupkg. A working local ritual:
+**Pack install** is what Visual Studio actually loads. The IDE caches template packs. Installing only the folder, then opening New Project, is a reliable way to debug yesterday's nupkg. A working local ritual:
 
 1. Close Visual Studio (`devenv`). If it stays open, the template cache can keep the previous pack.
 2. `dotnet new uninstall <PackageId>` when that id is already installed.

@@ -160,7 +160,7 @@ This preflight is read-only and must leave no files, configuration, downloads, o
 
 1. Keep this file at the documentation root under its original `<template-file>` name.
 2. Create the `assets`, `documentation/css`, `documentation/js`, `vendor/css`, `vendor/css/fonts`, `vendor/js`, and `vendor/licenses` directories shown above. Leave `assets` empty during bootstrap; do not invent sample images.
-3. **Phase 1 — materialize embedded artifacts directly at their final destinations:**
+3. **Phase 1 - materialize embedded artifacts directly at their final destinations:**
    - Copy `<template-file>` to `index.html` and replace only its embedded Markdown with the deliberately minimal content shown below:
 
      ```markdown
@@ -179,7 +179,7 @@ This preflight is read-only and must leave no files, configuration, downloads, o
    - After that comparison, customize only `brand` and `brandIcon` in `documentation/js/documentation.pages.js` when a real project identity is already available. Otherwise retain the neutral identity; never invent one. Keep exactly the two supplied page entries and do not invent online links.
    - Do not put these artifacts in acquisition staging or defer them for a combined copy.
 4. Complete and verify Phase 1 before starting external acquisition.
-5. **Phase 2 — acquire external artifacts with the selected methods:**
+5. **Phase 2 - acquire external artifacts with the selected methods:**
    - Follow the route selected during capability preflight. Do not search outside the target project or create a permanent asset workflow only for this bootstrap.
    - Create one unique system-temporary staging directory outside the target repository for the template license and every disposable vendor acquisition. An established repository asset workflow may use its existing managed locations.
    - Acquire the pinned template license with the permitted download method and the vendor packages with the selected vendor route.
@@ -1154,12 +1154,12 @@ The packaged documentation vendors these unmodified browser distributions for of
 
 | Package | Version | License |
 | --- | --- | --- |
-| Bootstrap | 5.3.8 | MIT — `vendor/licenses/bootstrap.LICENSE.txt` |
-| Bootstrap Icons | 1.13.1 | MIT — `vendor/licenses/bootstrap-icons.LICENSE.txt` |
-| ClipboardJS | 2.0.11 | MIT — `vendor/licenses/clipboard.LICENSE.txt` |
-| Highlight.js | 11.11.1 | BSD-3-Clause — `vendor/licenses/highlight.LICENSE.txt` |
-| Marked | 18.0.6 | MIT — `vendor/licenses/marked.LICENSE.txt` |
-| Mermaid | 11.17.2 | MIT — `vendor/licenses/mermaid.LICENSE.txt` |
+| Bootstrap | 5.3.8 | MIT - `vendor/licenses/bootstrap.LICENSE.txt` |
+| Bootstrap Icons | 1.13.1 | MIT - `vendor/licenses/bootstrap-icons.LICENSE.txt` |
+| ClipboardJS | 2.0.11 | MIT - `vendor/licenses/clipboard.LICENSE.txt` |
+| Highlight.js | 11.11.1 | BSD-3-Clause - `vendor/licenses/highlight.LICENSE.txt` |
+| Marked | 18.0.6 | MIT - `vendor/licenses/marked.LICENSE.txt` |
+| Mermaid | 11.17.2 | MIT - `vendor/licenses/mermaid.LICENSE.txt` |
 
 The project-owned `documentation.*` files remain visibly distinct from these vendored libraries.
 ```

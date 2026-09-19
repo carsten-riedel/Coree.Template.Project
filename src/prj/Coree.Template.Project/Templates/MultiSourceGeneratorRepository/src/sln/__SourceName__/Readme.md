@@ -135,7 +135,7 @@ dotnet pack
 Creates one `.nupkg` in `src/prj/__SourceName__/bin/Pack/` with the source-generator assembly and XML documentation under `analyzers/dotnet/cs` (not `lib/`). Test, DebugHost, and optional benchmark projects are not packed.
 <!--#if (NuGetAuditHighCriticalAsErrors) -->
 
-Restore fails this source-generator package on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that package’s packages (txt/json) and is still info-only.
+Restore fails this source-generator package on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that package's packages (txt/json) and is still info-only.
 <!--#endif -->
 <!--#if (PublicApiAnalyzers) -->
 

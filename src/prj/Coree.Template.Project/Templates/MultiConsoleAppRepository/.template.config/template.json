@@ -22,7 +22,7 @@
   "sourceName": "__SourceName__", // Folders, csproj, namespace. Replaced by --name.
   // Visual Studio creates the outer solution directory; true would add another name directory.
   "preferNameDirectory": false,
-  // Active SDK only (`dotnet --version`). [8.0,) is 8 and later, any feature band — not 8.0.100.
+  // Active SDK only (`dotnet --version`). [8.0,) is 8 and later, any feature band - not 8.0.100.
   // `8.*` would hide the template on SDK 9/10. Unmet: installed but not listed / not instantiated.
   "constraints": {
     "sdk": {
@@ -110,7 +110,7 @@
     },
     // Where the TEMPLATE .slnx is written.
     // SlnFolder (default): src/sln/__SourceName__/__SourceName__.slnx plus
-    // handbook Readme.md — one folder per app so `dotnet` there does not
+    // handbook Readme.md - one folder per app so `dotnet` there does not
     // see sibling .slnx files.
     // BesideCsproj: src/prj/__SourceName__/ next to the packable csproj
     // (slnx + handbook; tests and benchmark stay sibling projects under
@@ -687,7 +687,7 @@
     },
     // Opt-in empty Directory.Build.props/.targets next to this app csproj
     // and Directory.Solution.props/.targets next to this app's .slnx
-    // (src/sln/{name}/, repo root, or src/prj/{name}/ — follows PlaceSolution).
+    // (src/sln/{name}/, repo root, or src/prj/{name}/ - follows PlaceSolution).
     // Combo-safe when the .slnx is not stacked in one shared directory.
     // Not Init. No Directory.Packages.props (CPM would not cover sibling tests).
     // Tests and benchmark are not in this switch. Default off.

@@ -6,7 +6,7 @@
 
     Add PropertyGroups here after create if you want them out of the csproj.
     Keep GlobalAnalyzerConfigFiles, AnalysisMode, and pack layout in the
-    csproj / Build/*.targets — those must load in that order.
+    csproj / Build/*.targets - those must load in that order.
 
     The template does not emit properties into this file vs the csproj with
     generate-time #if. Sending each property to one disk file or the other

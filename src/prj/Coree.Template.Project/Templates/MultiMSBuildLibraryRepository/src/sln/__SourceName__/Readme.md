@@ -135,7 +135,7 @@ dotnet pack
 Creates one `.nupkg` in `src/prj/__SourceName__/bin/Pack/` with the task assembly under `tasks/netstandard2.0/` (not `lib/`) and `__SourceName__.props` / `__SourceName__.targets` under `build/`. PackageReference consumers get those files auto-imported into their csproj: `UsingTask` in `.props`, sample `CoreCompile` property populate (`HomeTask` / `TaskNodeTask`) in `.targets`. Private runtime dependencies and `deps.json` land next to the task DLL when present. Test, DebugHost, and optional benchmark projects are not packed.
 <!--#if (NuGetAuditHighCriticalAsErrors) -->
 
-Restore fails this task package on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that package’s packages (txt/json) and is still info-only.
+Restore fails this task package on high (`NU1903`) and critical (`NU1904`) vulnerable packages. Low and moderate stay warnings. `NugetReport` next to the tests lists that package's packages (txt/json) and is still info-only.
 <!--#endif -->
 <!--#if (PublicApiAnalyzers) -->
 

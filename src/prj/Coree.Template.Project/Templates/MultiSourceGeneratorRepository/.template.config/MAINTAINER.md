@@ -28,7 +28,7 @@ Create a new project shows one icon per template. Two files can supply it; they 
 | This template | `.template.config/icon.png`, optional `ide.host.json` `"icon": "icon.png"` | VS picker for **this** template only. Overrides the package icon. |
 | Generated library | `src/prj/{Name}/Properties/NugetMetadata/Icon-128x128.png` | The **consumer** nupkg after `dotnet pack`. Not the template picker. |
 
-Verified in Visual Studio (Create a new project, Recent project templates): a template with `.template.config/icon.png` showed that image; sibling Coree templates without one showed the package icon. Leave this template’s picker icon **undefined** so the package icon is used. Ship per-template picker icons later; do not copy `Icon-128x128.png` here as a stand-in.
+Verified in Visual Studio (Create a new project, Recent project templates): a template with `.template.config/icon.png` showed that image; sibling Coree templates without one showed the package icon. Leave this template's picker icon **undefined** so the package icon is used. Ship per-template picker icons later; do not copy `Icon-128x128.png` here as a stand-in.
 
 ## Intended usage
 
@@ -71,7 +71,7 @@ Root: `README.md`, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, `.gitattributes`, `.giti
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out
 
-# combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md again)
+# combo error (Exit 73) - Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md again)
 # dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems
 # dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out --InitAllRepoItems
 ```
@@ -81,11 +81,11 @@ Call 1 writes the five root files. Call 2 only adds `src/prj` / `src/sln`. Both 
 **Nerdbank repository, multi-library**
 
 ```powershell
-# combo gut — Call 2 only wires the library; generate does not stamp version.json again
+# combo gut - Call 2 only wires the library; generate does not stamp version.json again
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out --NerdbankGitVersioning Repo
 
-# combo error (Exit 73) — Call 2 also has --InitAllRepoItems (README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json)
+# combo error (Exit 73) - Call 2 also has --InitAllRepoItems (README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json)
 # dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 # dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
@@ -93,7 +93,7 @@ dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGener
 **Nerdbank project folder, multi-library** (this is the omit-the-switch default)
 
 ```powershell
-# combo gut — same as the default combo; `--NerdbankGitVersioning Project` is optional
+# combo gut - same as the default combo; `--NerdbankGitVersioning Project` is optional
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out
 ```
@@ -121,17 +121,17 @@ dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "Organization.D
 
 ## CLI ↔ Visual Studio
 
-The generated first-create product is meant to match. The **switches** cannot be identical, because the hosts do not have the same empty-set, default, or repeat-create rules. Do not “fix” this by making `template.json` `defaultValue` equal the Visual Studio default.
+The generated first-create product is meant to match. The **switches** cannot be identical, because the hosts do not have the same empty-set, default, or repeat-create rules. Do not "fix" this by making `template.json` `defaultValue` equal the Visual Studio default.
 
 ### Why CLI defaults stay empty
 
-A combo repository is two or more `dotnet new` calls into the **same** `--output`. The template engine has **one** CLI default for every call. If `InitRepoItems` defaulted to the five root files, the second package would hit Exit 73 (collision) unless the caller passed `None` or `--force`. Visual Studio’s New Project dialog is a **first create** into an empty folder; it can check the five boxes by default. CLI later-packages omit `--InitAllRepoItems` and `--InitRepoItems`. `NerdbankGitVersioning` defaults to **`Project`** on both hosts (per-package `Properties/version.json`; later creates do not collide). `--NerdbankGitVersioning Repo` does not write the root `version.json` by itself (`WriteRepoVersionJson` does), so a later package can pass `--NerdbankGitVersioning Repo` again without Exit 73.
+A combo repository is two or more `dotnet new` calls into the **same** `--output`. The template engine has **one** CLI default for every call. If `InitRepoItems` defaulted to the five root files, the second package would hit Exit 73 (collision) unless the caller passed `None` or `--force`. Visual Studio's New Project dialog is a **first create** into an empty folder; it can check the five boxes by default. CLI later-packages omit `--InitAllRepoItems` and `--InitRepoItems`. `NerdbankGitVersioning` defaults to **`Project`** on both hosts (per-package `Properties/version.json`; later creates do not collide). `--NerdbankGitVersioning Repo` does not write the root `version.json` by itself (`WriteRepoVersionJson` does), so a later package can pass `--NerdbankGitVersioning Repo` again without Exit 73.
 
 ### CLI → Visual Studio
 
 | CLI | Visual Studio equivalent | Why |
 | --- | --- | --- |
-| `--InitAllRepoItems` | Leave **Repository root items** at the ide.host default (all five files checked) | Bool flag with no value list. The engine cannot treat a bare `--InitRepoItems` as “all”; that is Exit 127. The set is the VS first-create default, not another checkbox in that group. `version.json` and `src/global.json` are not in this set. |
+| `--InitAllRepoItems` | Leave **Repository root items** at the ide.host default (all five files checked) | Bool flag with no value list. The engine cannot treat a bare `--InitRepoItems` as "all"; that is Exit 127. The set is the VS first-create default, not another checkbox in that group. `version.json` and `src/global.json` are not in this set. |
 | `--InitRepoItems Readme …` (spaces) | Uncheck the files you do not want | Individual files. `|` is only legal in `ide.host.json` `defaultValue`, not on current `dotnet new`. |
 | omit both switches | **None** | CLI may leave a multi-choice empty. Visual Studio may not. |
 | `--InitRepoItems None` | **None** | Explicit empty set. Also wins over `--InitAllRepoItems` if both are passed. Everyday CLI later-libraries omit the switches instead. |
@@ -146,7 +146,7 @@ A combo repository is two or more `dotnet new` calls into the **same** `--output
 | Second library: **None** | omit `--InitAllRepoItems` and `--InitRepoItems` | The IDE requires at least one value; leftover checks from persistence would otherwise stamp root files again. `persistenceScope: none` still needs **None** as the empty-set control. CLI empty default is that None. |
 | `InitAllRepoItems` not shown | do not look for it in Additional information | CLI-only. |
 
-`persistenceScope: none` on the VS symbols that have custom defaults: the dialog must not reuse the last create (especially **None** or a subset) as the next “first create”.
+`persistenceScope: none` on the VS symbols that have custom defaults: the dialog must not reuse the last create (especially **None** or a subset) as the next "first create".
 
 Other host-only switch behavior (not root files, same class of reason):
 
@@ -172,19 +172,19 @@ This template does not stamp `ChoosingPackageBoundaries.md` (library-repo decisi
 
 ## AI-supported release checkpoint
 
-The generated product still contains placeholders that can only become true **after implementation** — especially empty `src/prj/*/Properties/NugetMetadata/Readme.md`. A human or an LLM can fill those from the code. That is a **gate before the first publish**, not a generate-time script and not standing agent rules.
+The generated product still contains placeholders that can only become true **after implementation** - especially empty `src/prj/*/Properties/NugetMetadata/Readme.md`. A human or an LLM can fill those from the code. That is a **gate before the first publish**, not a generate-time script and not standing agent rules.
 
 **Not:** run-once / post-bootstrap right after `dotnet new`. The library may still be `Class1`.  
 **Not:** a forever queue in the GitHub `README.md`. That file is the customer landing page.  
-**Not:** a template-stamped `AGENTS.md`. That would collide with the consumer’s own agent file and would outlive the scaffold.
+**Not:** a template-stamped `AGENTS.md`. That would collide with the consumer's own agent file and would outlive the scaffold.
 
 **Yes:** one repo-root file, `TEMPLATE-AI-RELEASE-CHECKPOINT.md`, stamped only when `InitAllRepoItems` is on or `InitRepoItems` includes `AIReleaseCheckpoint` (first create). `TEMPLATE-` marks it as delete-me scaffold; `AI` matches the VS choice. It is a **Template-Checkpoint-Release**: close template residue, then **self-dissolve**. After that, new chats read the libraries and the real NuGet docs. The file is written for a person; an assistant can fill it from the product. It is not a prompt and not standing agent rules.
 
-Why the repo root, not `src/sln/{Name}/`: the first look at a combo repo is the customer surface; one fat checklist can say “update every NuGet readme in this repository” without a per-library marker. Libraries added later are in scope until the file is deleted.
+Why the repo root, not `src/sln/{Name}/`: the first look at a combo repo is the customer surface; one fat checklist can say "update every NuGet readme in this repository" without a per-library marker. Libraries added later are in scope until the file is deleted.
 
-The VS label **AI-supported release checkpoint** names the *job*, not a recurring agent run. The switch does not start a model. Someone later (person or LLM) works that file to 100% observable items, then deletes it. “AI-supported” belongs in the choice display name; it must not read as “edit with AI on every create.”
+The VS label **AI-supported release checkpoint** names the *job*, not a recurring agent run. The switch does not start a model. Someone later (person or LLM) works that file to 100% observable items, then deletes it. "AI-supported" belongs in the choice display name; it must not read as "edit with AI on every create."
 
-The generated file is the contract (ten numbered, checkable items). Do not put free-form “run this shell” instructions in it (prompt injection). Do not mix standing style rules into it — those must not self-delete.
+The generated file is the contract (ten numbered, checkable items). Do not put free-form "run this shell" instructions in it (prompt injection). Do not mix standing style rules into it - those must not self-delete.
 
 ## `CSharpProjectOptions`
 
@@ -230,7 +230,7 @@ Single choice (dropdown), same shape as `ProjectLicense`. CLI long name is **`--
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out --NerdbankGitVersioning Repo
 
-# combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json again)
+# combo error (Exit 73) - Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json again)
 # dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 # dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
@@ -263,7 +263,7 @@ WriteRepoVersionJson      =
 
 `None` wins over InitAll. A second **generate-time** write of root `version.json` is Exit 73. `--NerdbankGitVersioning Repo` without Init does not stamp the file at `dotnet new`. `Properties/Build/NerdbankRepositoryVersion.targets` (imported only for Repo **after generate**) copies `Properties/Build/Nerdbank.version.json` to the repository root **if it does not exist**, before Nerdbank reads it. A later library in the same folder therefore does not collide.
 
-In **template source** those `<!--#if (NerdbankGitVersioning == "Repo") -->` markers are XML comments, so MSBuild always imports the targets. From `src/prj/__SourceName__`, `../../../version.json` is this template folder. The copy no-ops when `../../../.template.config` exists. A `version.json` beside this `MAINTAINER.md` is a failed host stamp — delete it, do not commit.
+In **template source** those `<!--#if (NerdbankGitVersioning == "Repo") -->` markers are XML comments, so MSBuild always imports the targets. From `src/prj/__SourceName__`, `../../../version.json` is this template folder. The copy no-ops when `../../../.template.config` exists. A `version.json` beside this `MAINTAINER.md` is a failed host stamp - delete it, do not commit.
 
 There is no `version.json` checkbox in `InitRepoItems`. Generate-time root file is `WriteRepoVersionJson` (`Repo` plus first-create Init). If that file is still missing, the Repo library writes it once at build (`if not exists`). Later VS library: **None** plus **This repository (root version.json)**.
 
@@ -306,7 +306,7 @@ Seeds live under `TemplateAssets/Versioning/`. `Project/version.json` uses `path
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out
 
-# combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md again)
+# combo error (Exit 73) - Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md again)
 # dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems
 # dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out --InitAllRepoItems
 ```
@@ -323,7 +323,7 @@ dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGener
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out --NerdbankGitVersioning Repo
 
-# combo error (Exit 73) — Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json again)
+# combo error (Exit 73) - Call 2 also has --InitAllRepoItems (tries to write README.md, LICENSE, .gitattributes, .gitignore, TEMPLATE-AI-RELEASE-CHECKPOINT.md, and version.json again)
 # dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 # dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out --InitAllRepoItems --NerdbankGitVersioning Repo
 ```
@@ -336,7 +336,7 @@ dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGener
 **Nerdbank project folder, multi-library** (this is the omit-the-switch default)
 
 ```powershell
-# combo gut — same as the default combo; `--NerdbankGitVersioning Project` is optional
+# combo gut - same as the default combo; `--NerdbankGitVersioning Project` is optional
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out
 ```
@@ -375,7 +375,7 @@ Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that fold
 
 `UseProjectEditorGlobalConfig` is `(ProjectEditorGlobalConfig != "Off")`; the csproj `#if` does not need a new branch per dump.
 
-`EnforceCodeStyleInBuild` is required or IDE naming stays IDE-only (SDK default is false). Compiler diagnostics in Strict (CS1591, CS86xx) fail `dotnet build` without that flag; IDE1006 needs it. `OptimizeImplicitlyTriggeredBuild=false` is required with that same `#if`: Visual Studio skips analyzers on Test Explorer / F5 implicit builds (`IsImplicitlyTriggeredBuild`), so Run Tests can stay green while `dotnet test` fails the same IDE errors. Product assumption is VS MSBuild == `dotnet test` for library style gates. Do not add `EnableNETAnalyzers` / `RunAnalyzers*` `true` noise — those already default true on net8/net10. Coverlet `Threshold` still runs only on `dotnet test` (`coverlet.msbuild`), not Test Explorer.
+`EnforceCodeStyleInBuild` is required or IDE naming stays IDE-only (SDK default is false). Compiler diagnostics in Strict (CS1591, CS86xx) fail `dotnet build` without that flag; IDE1006 needs it. `OptimizeImplicitlyTriggeredBuild=false` is required with that same `#if`: Visual Studio skips analyzers on Test Explorer / F5 implicit builds (`IsImplicitlyTriggeredBuild`), so Run Tests can stay green while `dotnet test` fails the same IDE errors. Product assumption is VS MSBuild == `dotnet test` for library style gates. Do not add `EnableNETAnalyzers` / `RunAnalyzers*` `true` noise - those already default true on net8/net10. Coverlet `Threshold` still runs only on `dotnet test` (`coverlet.msbuild`), not Test Explorer.
 
 This PropertyGroup/`GlobalAnalyzerConfigFiles` lives in the source-generator csproj. The project is a stock SDK project (`Project Sdk="Microsoft.NET.Sdk"`), so Sdk.targets loads last by default. The `None` Link is Solution Explorer only and can sit in the same `#if` block.
 
@@ -393,7 +393,7 @@ The PropertyGroup lives in the source-generator csproj (stock SDK project).
 
 Library-only bool, default **true**. UI label **Treat high/critical NuGet vulnerabilities as errors**. CLI long name **`--NuGetAuditHighCriticalAsErrors`**. Omit the switch → on. `--NuGetAuditHighCriticalAsErrors false` writes nothing. Tests and benchmark are not in this switch. Combo-safe.
 
-SDK restore already runs NuGetAudit (NU1901–NU1904 warnings). This switch only appends `<WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>` on the packable source-generator. Low (`NU1901`) and moderate (`NU1902`) stay warnings. Do not set `NuGetAudit` / `NuGetAuditMode` / `TreatWarningsAsErrors` here (`NuGetAudit` is already on). Do not promote the test-project `WriteNugetReport` `dotnet list package` files: that command’s exit code is not a findings gate.
+SDK restore already runs NuGetAudit (NU1901–NU1904 warnings). This switch only appends `<WarningsAsErrors>$(WarningsAsErrors);NU1903;NU1904</WarningsAsErrors>` on the packable source-generator. Low (`NU1901`) and moderate (`NU1902`) stay warnings. Do not set `NuGetAudit` / `NuGetAuditMode` / `TreatWarningsAsErrors` here (`NuGetAudit` is already on). Do not promote the test-project `WriteNugetReport` `dotnet list package` files: that command's exit code is not a findings gate.
 
 Turn the switch off for an EOL or backport graph (for example net8 after support ends) that cannot be cleaned without dropping a TFM. Do not put this on tests: MSTest/Coverlet CVEs must not fail the nupkg restore.
 
@@ -408,7 +408,7 @@ Library-only bool, default **false**. UI label **Public API analyzers**. CLI lon
 
 When on, the source-generator project references `Microsoft.CodeAnalysis.PublicApiAnalyzers` 5.6.0 and sets `PublicApiDirectory` to `Properties/PublicAPI`. `dotnet new` does **not** stamp `PublicAPI.Shipped.txt` / `PublicAPI.Unshipped.txt`. `Properties/Build/InitializePublicApi.targets` (imported only when this switch is on **after generate**) writes those files on the first real build if they are missing, then runs `dotnet format analyzers --diagnostics RS0016`. AdditionalFiles are always listed so a first solution compile can see the paths. Nested format sets `PublicApiInitializing` and skips the target. Combo later packages pass `--PublicApiAnalyzers` again; paths are per package (`src/prj/{Name}/Properties/PublicAPI/`). There are no `AnalyzerReleases.Shipped.md` / `Unshipped.md` files; diagnostic-ID release tracking is not used (RS2008 suppressed).
 
-In **template source** the `<!--#if (PublicApiAnalyzers) -->` markers are XML comments, so MSBuild always imports the targets (default after generate is still off). Design-time skips the target; a real stub `dotnet build` does not. The target no-ops when `../../../.template.config` exists. `src/prj/__SourceName__/Properties/PublicAPI/` in this host is a failed stamp — delete it, do not commit.
+In **template source** the `<!--#if (PublicApiAnalyzers) -->` markers are XML comments, so MSBuild always imports the targets (default after generate is still off). Design-time skips the target; a real stub `dotnet build` does not. The target no-ops when `../../../.template.config` exists. `src/prj/__SourceName__/Properties/PublicAPI/` in this host is a failed stamp - delete it, do not commit.
 
 ```powershell
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems --PublicApiAnalyzers
@@ -423,14 +423,14 @@ Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Doc
 | --- | --- | --- | --- |
 | `Package` | `src/prj/{Name}/Properties/NugetMetadata/docs/DocShell.html` | every create | pass `Package` again |
 | `Repository` | `docs/DocShell.html` | first create | omit `Repository` (Exit 73 if stamped again) |
-| `None` | nothing | — | wins over the other choices |
+| `None` | nothing | - | wins over the other choices |
 
 ```powershell
 # combo gut
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems --DocumentationTemplate Package Repository
 dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out --DocumentationTemplate Package
 
-# combo error (Exit 73) — Call 2 stamps docs/DocShell.html again
+# combo error (Exit 73) - Call 2 stamps docs/DocShell.html again
 # dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator1" --output $out --InitAllRepoItems --DocumentationTemplate Repository
 # dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGenerator2" --output $out --DocumentationTemplate Repository
 ```
@@ -439,7 +439,7 @@ dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGener
 
 ## Project roles and Git ignores
 
-The source generator is packable. `IsPublishable` is `false` (NuGet pack is the distribution path). Single `TargetFramework` `netstandard2.0`, stock `<Project Sdk="Microsoft.NET.Sdk">`. There is no `PublishDefaultFramework` / `ImportSdkTargets` pair. `Properties/Build/PackAsSourceGenerator.targets` puts the assembly and XML documentation under `analyzers/dotnet/cs`; no consumer `build/` props are required by the scaffold. `Properties/NugetMetadata/` is nupkg assets (readme, icon, notes, optional `docs/`). Both folders are on disk under `Properties/` so Explorer and Solution Explorer match; they are not source. `.project.editor.globalconfig`, `.config/dotnet-tools.json`, and `Directory.Build.*` stay next to the csproj. `Properties/AssemblyInfo.cs` grants `InternalsVisibleTo` the test assembly (`__SourceName__.Tests` via `sourceName`). The test project’s root `AssemblyInfo.cs` is only MSTest `Parallelize`. DebugHost is always generated: a Console consumer and compile target for Visual Studio `DebugRoslynComponent` (`Properties/launchSettings.json` on the source generator, `OutputItemType` Analyzer / `ReferenceOutputAssembly` false on the host). Tests, DebugHost, and the optional BenchmarkDotNet executable explicitly set `IsPackable` and `IsPublishable` to `false`. Tests, DebugHost, and benchmark share one runnable TFM from the wizard (default `net10.0`). The source generator itself is always `netstandard2.0` and does not multi-target. Versioning default is Nerdbank **Project** (`Properties/version.json`). Tests, DebugHost, and benchmark are not packable. **`--NerdbankGitVersioning`** `Off` is VersionPrefix; `Repo` is the shared root file.
+The source generator is packable. `IsPublishable` is `false` (NuGet pack is the distribution path). Single `TargetFramework` `netstandard2.0`, stock `<Project Sdk="Microsoft.NET.Sdk">`. There is no `PublishDefaultFramework` / `ImportSdkTargets` pair. `Properties/Build/PackAsSourceGenerator.targets` puts the assembly and XML documentation under `analyzers/dotnet/cs`; no consumer `build/` props are required by the scaffold. `Properties/NugetMetadata/` is nupkg assets (readme, icon, notes, optional `docs/`). Both folders are on disk under `Properties/` so Explorer and Solution Explorer match; they are not source. `.project.editor.globalconfig`, `.config/dotnet-tools.json`, and `Directory.Build.*` stay next to the csproj. `Properties/AssemblyInfo.cs` grants `InternalsVisibleTo` the test assembly (`__SourceName__.Tests` via `sourceName`). The test project's root `AssemblyInfo.cs` is only MSTest `Parallelize`. DebugHost is always generated: a Console consumer and compile target for Visual Studio `DebugRoslynComponent` (`Properties/launchSettings.json` on the source generator, `OutputItemType` Analyzer / `ReferenceOutputAssembly` false on the host). Tests, DebugHost, and the optional BenchmarkDotNet executable explicitly set `IsPackable` and `IsPublishable` to `false`. Tests, DebugHost, and benchmark share one runnable TFM from the wizard (default `net10.0`). The source generator itself is always `netstandard2.0` and does not multi-target. Versioning default is Nerdbank **Project** (`Properties/version.json`). Tests, DebugHost, and benchmark are not packable. **`--NerdbankGitVersioning`** `Off` is VersionPrefix; `Repo` is the shared root file.
 
 **Test project layout.** Mini-scopes in this order: runnable TFM, language/debug (from `CSharpProjectOptions`), packaging, test configuration (MSTest logger), Coverlet `#if` block, ReportGenerator `#if` block, NugetReport + `WriteNugetReport`, `.gitignore` hide, `ProjectReference`, then **External dependencies** `PackageReference`s last. Coverage is **`--TestCoverage`**: `Coverlet` (default), `CoverletAndReport`, `None`. Do not restore independent Coverlet/ReportGenerator bools: ReportGenerator consumes `@(CoverletReport)`. Coverlet is `coverlet.msbuild` + `CollectCoverage=true`; that **does** run on `dotnet test` (VSTest path, SDK 10), including Linux/WSL (`dotnet` ships MSBuild). The Coverlet `#if` also writes `Include` `[__SourceName__]*` (sourceName → the source-generator assembly only) and `Threshold` `100` / `line,branch,method` / `total`. Those are generate-time properties, not wizard fields: Visual Studio cannot show extra inputs only when Coverlet is selected. `--TestCoverage None` omits the whole PropertyGroup. `JsonSupportGeneratorTests` runs the generator through `CSharpGeneratorDriver`, compiles the output, exercises the generated JSON round trip, and covers unsupported generic/nested targets so a first `dotnet test` passes the 100% gate. Report/logger/NugetReport paths use `$([MSBuild]::NormalizeDirectory(...))` so Linux does not create a folder named `ReportGeneratorOutput\net10.0`.
 
@@ -449,13 +449,13 @@ Source generator, tests, DebugHost, and optional benchmark each remove `.gitigno
 
 The packable source-generator sets `EnablePackageValidation` to `false` (no `lib/` TFMs). Tests, DebugHost, and benchmark are not packable.
 
-With `PlaceSolution` `SlnFolder` (default), each `src/sln/{Name}/` gets its own `.gitignore` for `.vs/` next to that package’s `.slnx` and handbook `Readme.md`. `RepoRoot` still writes `src/sln/{Name}/Readme.md` as notes (no nested `.gitignore`); delete that folder if you do not need it. `BesideCsproj` writes the `.slnx` and handbook next to the packable source-generator csproj and does **not** create `src/sln/{Name}/` (`src/prj/{Name}/.gitignore` already ignores `.vs/`). Repository-root `.gitignore` is `InitRepoItems` `GitIgnore` / `--InitAllRepoItems` (first create only). Later packages omit Init and do not overwrite it. If root ignore is off, the `RepoRoot` variant and Visual Studio’s extra root `.vs/` stay the owner’s problem.
+With `PlaceSolution` `SlnFolder` (default), each `src/sln/{Name}/` gets its own `.gitignore` for `.vs/` next to that package's `.slnx` and handbook `Readme.md`. `RepoRoot` still writes `src/sln/{Name}/Readme.md` as notes (no nested `.gitignore`); delete that folder if you do not need it. `BesideCsproj` writes the `.slnx` and handbook next to the packable source-generator csproj and does **not** create `src/sln/{Name}/` (`src/prj/{Name}/.gitignore` already ignores `.vs/`). Repository-root `.gitignore` is `InitRepoItems` `GitIgnore` / `--InitAllRepoItems` (first create only). Later packages omit Init and do not overwrite it. If root ignore is off, the `RepoRoot` variant and Visual Studio's extra root `.vs/` stay the owner's problem.
 
 ## `DirectoryMsBuildFiles`
 
 Source generator + this package's `.slnx` only. Bool, default **false**. UI label **Empty Directory.Build and Directory.Solution files**. CLI long name **`--DirectoryMsBuildFiles`**. Omit the switch → nothing. Combo-safe on `SlnFolder` and `BesideCsproj` (paths include the package name). `RepoRoot` stacks `Directory.Solution.*` at the repository root like stacking `.slnx` files. Not an Init* item and not `Directory.Packages.props` (CPM would not cover sibling tests). Tests, DebugHost, and benchmark are not in this switch.
 
-Seeds live under `TemplateAssets/DirectoryMsBuild/`. Extra sources copy `Directory.Build.props` / `.targets` next to the source-generator csproj, and `Directory.Solution.props` / `.targets` next to this package's `.slnx` (`src/sln/{Name}/` for `SlnFolder`, `src/prj/{Name}/` for `BesideCsproj`, repo root for `RepoRoot` — later package then collides, same as stacking `.slnx` files). DocShell extra sources must `exclude` `Versioning/**` and `DirectoryMsBuild/**`.
+Seeds live under `TemplateAssets/DirectoryMsBuild/`. Extra sources copy `Directory.Build.props` / `.targets` next to the source-generator csproj, and `Directory.Solution.props` / `.targets` next to this package's `.slnx` (`src/sln/{Name}/` for `SlnFolder`, `src/prj/{Name}/` for `BesideCsproj`, repo root for `RepoRoot` - later package then collides, same as stacking `.slnx` files). DocShell extra sources must `exclude` `Versioning/**` and `DirectoryMsBuild/**`.
 
 The files are almost empty `<Project>` stubs with comments. MSBuild auto-imports them from those directories. Do not move `PackAsSourceGenerator` or generator configuration into them. The template does not `#if` properties into these files vs the csproj (possible, ugly). The source-generator csproj `None Include`s the two `Directory.Build.*` files with `Link` under `Properties\` (Solution Explorer only). Do **not** move the files into `Properties/` on disk: auto-import follows the directory of the file, same as `.project.editor.globalconfig`. `Directory.Solution.*` stay beside the `.slnx`. When `PlaceSolution` is `BesideCsproj`, the source-generator csproj also `Link`s those two solution files (same folder as the csproj) so they do not look like stray project items.
 
@@ -485,7 +485,7 @@ dotnet new multisourcegeneratorrepo-coree --Author "abcd" --name "...SourceGener
 - **`NuGetAuditHighCriticalAsErrors`**: see section above. Default `true`. Source generator only. NU1903/NU1904 as restore errors. Off for EOL/backport graphs.
 - **`PublicApiAnalyzers`**: see section above. Default `false`. Source generator only. Baseline files are first-build, not generate-time.
 - **`DocumentationTemplate` / `WritePackageDocTemplate` / `WriteRepoDocTemplate`**: see section above. Default empty/`None`. Seed only; not the vendored site.
-- **`PlaceSolution`**: single choice, default `SlnFolder` → `src/sln/__SourceName__/__SourceName__.slnx` plus handbook `Readme.md` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). `RepoRoot` on CLI renames to a root `.slnx`; `RepoRoot` in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS’s conventional root `.slnx`. `RepoRoot` still writes `src/sln/{Name}/Readme.md` as notes and stacks every package’s `.slnx` in one directory. `BesideCsproj` writes `src/prj/{Name}/{Name}.slnx` and the handbook next to the packable source-generator csproj (not tests, DebugHost, or benchmark) and does not create `src/sln/{Name}/`. The `.slnx` virtual folder `/sln/{Name}/` is omitted for `BesideCsproj`; `Readme.md` is a solution item beside the file.
+- **`PlaceSolution`**: single choice, default `SlnFolder` → `src/sln/__SourceName__/__SourceName__.slnx` plus handbook `Readme.md` (one `.slnx` per folder so `dotnet` / CI do not see sibling solutions). `RepoRoot` on CLI renames to a root `.slnx`; `RepoRoot` in Visual Studio keeps `*.generated.slnx` so it does not overwrite VS's conventional root `.slnx`. `RepoRoot` still writes `src/sln/{Name}/Readme.md` as notes and stacks every package's `.slnx` in one directory. `BesideCsproj` writes `src/prj/{Name}/{Name}.slnx` and the handbook next to the packable source-generator csproj (not tests, DebugHost, or benchmark) and does not create `src/sln/{Name}/`. The `.slnx` virtual folder `/sln/{Name}/` is omitted for `BesideCsproj`; `Readme.md` is a solution item beside the file.
 - **`HostIdentifier` / `IsCliHost`**: bind + computed; used for that rename and for VS-only post-actions.
 - **`Author`**: required. CLI `--Author`.
 - **`<Description>`**: not a template parameter. Generate leaves an empty CDATA block for multiline gallery text; the checkpoint fills it (assistant-supported).

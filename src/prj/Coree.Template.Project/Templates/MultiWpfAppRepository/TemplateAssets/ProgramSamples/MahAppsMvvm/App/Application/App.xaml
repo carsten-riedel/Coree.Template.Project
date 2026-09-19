@@ -113,7 +113,9 @@
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="FontWeight" Value="Medium"/>
                 <Setter Property="materialDesign:ButtonAssist.CornerRadius" Value="0" />
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueDarkBrush}"/>
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+                <Setter Property="materialDesign:RippleAssist.Feedback" Value="{DynamicResource PrimaryHueDarkBrush}"/>
             </Style>
             <Style x:Key="CustomTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <Setter Property="FontSize" Value="14"/>
@@ -288,7 +290,9 @@
                             BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                             BorderThickness="1"
                             Padding="2">
-                        <ScrollViewer CanContentScroll="True">
+                        <ScrollViewer CanContentScroll="True"
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      VerticalScrollBarVisibility="Auto">
                             <StackPanel Grid.IsSharedSizeScope="True"
                                         IsItemsHost="True"
                                         KeyboardNavigation.DirectionalNavigation="Cycle" />

@@ -117,6 +117,8 @@
             <Style x:Key="CustomTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+                <Setter Property="materialDesign:HintAssist.Foreground" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+                <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush" Value="{DynamicResource PrimaryHueDarkBrush}"/>
                 <Setter Property="FontWeight" Value="Medium"/>
                 <Setter Property="MinHeight" Value="40"/>
                 <Setter Property="MinWidth" Value="180"/>

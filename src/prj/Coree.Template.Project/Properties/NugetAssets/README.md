@@ -388,7 +388,7 @@ dotnet new multiconsolerepo-coree \
     --AdditionalInstaller WixUserInstaller
 ```
 
-The Windows installer is a separate project in the generated solution. It consumes the normal `dotnet publish` output and writes the MSI under the app's `bin/Setup/` directory; the default `None` choice does not add it. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
+The Windows installer is a separate project in the generated solution. It consumes the normal `dotnet publish` output and writes `__SourceName__.msi` under the app's `bin/Setup/` directory; the technical project is named `__SourceName__.WixSetup`. The default `None` choice does not add it. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
 
 ---
 

@@ -1,4 +1,10 @@
-﻿0.7.0 (2026-09-16)
+﻿0.9.0 (2026-09-20)
+
+ - Added the optional `WixUserInstaller` choice to the multi-console, multi-WinForms, and multi-WPF repository templates. `dotnet publish` feeds the normal app publish output to a separate per-user WiX project and writes `<app>.msi` under `bin/Setup/`; the technical project is `<app>.WixSetup`.
+ - Documented the Visual Studio HeatWave requirement, WiX SDK CLI flow, and generated installer output in the root, NuGet, template, and solution README files.
+ - Kept the default `None` installer choice and all existing `ProgramSample` defaults unchanged.
+
+0.7.0 (2026-09-16)
 
  - Completed the classic multi-project repository template family: multi-library, multi-analyzer, multi-source-generator, multi-console, multi-msbuild, multi-PowerShell, multi-winforms, multi-wpf, and multi-project-template repositories with consistent repository, solution-placement, packaging, and Visual Studio/CLI conventions.
  - Multi-source-generator repository template (`multisourcegeneratorrepo-coree`): incremental C#-model-to-JSON-support sample, GeneratorDriver tests, Console DebugHost, and analyzer-path NuGet packaging.

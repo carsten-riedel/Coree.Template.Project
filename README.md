@@ -378,6 +378,18 @@ Console projects can support framework-dependent, framework-included, single-fil
 
 They can also be configured for distribution as .NET tools.
 
+All three multi-application templates also offer the same optional additional WiX user installer:
+
+```bash
+dotnet new multiconsolerepo-coree \
+    --Author "Your Name" \
+    --output "./MyCompany.Tools" \
+    --name "MyCompany.Tools.Sync" \
+    --AdditionalInstaller WixUserInstaller
+```
+
+The Windows installer is a separate project in the generated solution. It consumes the normal `dotnet publish` output and writes `__SourceName__.msi` under the app's `bin/Setup/` directory; the technical project is named `__SourceName__.WixSetup`. The default `None` choice does not add it. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
+
 ---
 
 # WPF repositories
@@ -409,6 +421,8 @@ dotnet new multiwpfrepo-coree \
 `ProgramSample` is the current replacement for the former single WPF sample/readme layout in multi-app repositories. The legacy `wpfapp-coree` template in `Templates/WpfApp` remains available and unchanged. The MahApps sample is intentionally one fixed feature set; DI, MVVM, SQLite, fonts, and individual app switches are not separate parameters.
 
 Additional applications can be added later without changing the repository structure; each application can choose its own program sample.
+
+The optional installer is selected independently with `--AdditionalInstaller WixUserInstaller` and follows the same `bin/Setup/` publish-step behavior described above.
 
 **Windows only.**
 
@@ -444,6 +458,8 @@ dotnet new multiwinformsrepo-coree \
 
 `ProgramSample` is the maintained replacement for the former standalone WinForms sample layouts. The legacy `winforms-coree` and `winformsdi-coree` templates remain available and unchanged. Generic Host, DI, logging, configuration, and localization form one fixed `GenericHost` feature set rather than separate switches.
 The sample localizes its visible `Settings:Subkey1:Value1` title and single-instance message from the process UI culture. The generated `appsettings.json` uses the `AppSettingsWindowTitle` resource key; replacing it with a literal title still wins.
+
+The optional installer is selected independently with `--AdditionalInstaller WixUserInstaller` and follows the same `bin/Setup/` publish-step behavior described above.
 
 **Windows only.**
 

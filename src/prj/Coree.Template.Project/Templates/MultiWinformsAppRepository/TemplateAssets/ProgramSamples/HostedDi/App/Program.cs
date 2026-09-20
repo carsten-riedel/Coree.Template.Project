@@ -41,10 +41,19 @@ namespace __SourceName__
             }
 
             HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
-            ConfigureApplication(builder);
+            builder.Configuration
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+            builder.Services.AddSingleton<WindowTitleProvider>();
+            builder.Services.AddSingleton<MainForm>();
+            builder.Services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddDebug();
 
             using IHost host = builder.Build();
-            host.StartAsync().GetAwaiter().GetResult();
+            host.Start();
 
             try
             {
@@ -55,19 +64,6 @@ namespace __SourceName__
             {
                 host.StopAsync().GetAwaiter().GetResult();
             }
-        }
-
-        private static void ConfigureApplication(HostApplicationBuilder builder)
-        {
-            builder.Configuration
-                .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-            builder.Services.AddHostedDiApplication();
-            builder.Services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
-
-            builder.Logging.ClearProviders();
-            builder.Logging.AddDebug();
         }
     }
 }

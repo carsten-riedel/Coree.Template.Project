@@ -1,7 +1,6 @@
 #if( CSharpProjectOptions == "DisableImplicitUsings" )
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 #endif
 using System.Threading;
@@ -34,18 +33,6 @@ namespace __SourceName__.Tests
         }
 
         [TestMethod]
-        public void AddHostedDiApplication_RegistersApplicationSingletons()
-        {
-            var services = new ServiceCollection();
-
-            IServiceCollection returnedServices = services.AddHostedDiApplication();
-
-            Assert.AreSame(services, returnedServices);
-            AssertSingleton<WindowTitleProvider>(services);
-            AssertSingleton<MainForm>(services);
-        }
-
-        [TestMethod]
         public void MainForm_UsesConfigurationAndRespondsToReload()
         {
             RunInStaThread(() =>
@@ -54,7 +41,8 @@ namespace __SourceName__.Tests
                 var services = new ServiceCollection();
                 services.AddSingleton<IConfiguration>(configuration);
                 services.AddLogging();
-                services.AddHostedDiApplication();
+                services.AddSingleton<WindowTitleProvider>();
+                services.AddSingleton<MainForm>();
 
                 using ServiceProvider serviceProvider = services.BuildServiceProvider();
                 MainForm form = serviceProvider.GetRequiredService<MainForm>();
@@ -79,12 +67,6 @@ namespace __SourceName__.Tests
             return new ConfigurationBuilder()
                 .AddInMemoryCollection(values)
                 .Build();
-        }
-
-        private static void AssertSingleton<TService>(IServiceCollection services)
-        {
-            ServiceDescriptor descriptor = services.Single(service => service.ServiceType == typeof(TService));
-            Assert.AreEqual(ServiceLifetime.Singleton, descriptor.Lifetime);
         }
 
         private static void RunInStaThread(Action action)

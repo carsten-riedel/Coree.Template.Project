@@ -1,6 +1,6 @@
 <Project Sdk="WixToolset.Sdk/6.0.2">
   <PropertyGroup>
-    <OutputName>__SourceName__.WixDemo.Wpf</OutputName>
+    <OutputName>__SourceName__.WixSetup</OutputName>
     <InstallerPlatform>x64</InstallerPlatform>
     <AppProjectPath>$(MSBuildProjectDirectory)\..\__SourceName__\__SourceName__.csproj</AppProjectPath>
     <AppProjectDirectory>$(MSBuildProjectDirectory)\..\__SourceName__</AppProjectDirectory>

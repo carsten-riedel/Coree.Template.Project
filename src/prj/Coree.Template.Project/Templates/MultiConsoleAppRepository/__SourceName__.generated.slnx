@@ -48,19 +48,19 @@
 <!--#endif -->
 <!--#if (AdditionalInstaller == "WixUserInstaller") -->
 <!--#if (PlaceSolution == "SlnFolder") -->
-    <Project Path="../../prj/__SourceName__.WixDemo/__SourceName__.WixDemo.wixproj">
+    <Project Path="../../prj/__SourceName__.WixSetup/__SourceName__.WixSetup.wixproj">
       <Platform Project="x64" />
       <Build />
       <Publish />
     </Project>
 <!--#elseif (PlaceSolution == "BesideCsproj") -->
-    <Project Path="../__SourceName__.WixDemo/__SourceName__.WixDemo.wixproj">
+    <Project Path="../__SourceName__.WixSetup/__SourceName__.WixSetup.wixproj">
       <Platform Project="x64" />
       <Build />
       <Publish />
     </Project>
 <!--#else -->
-    <Project Path="src/prj/__SourceName__.WixDemo/__SourceName__.WixDemo.wixproj">
+    <Project Path="src/prj/__SourceName__.WixSetup/__SourceName__.WixSetup.wixproj">
       <Platform Project="x64" />
       <Build />
       <Publish />

@@ -905,7 +905,7 @@
     },
     {
       "source": "./TemplateAssets/WixUserInstaller/",
-      "target": "./src/prj/__SourceName__.WixDemo/",
+      "target": "./src/prj/__SourceName__.WixSetup/",
       "condition": "(AdditionalInstaller == \"WixUserInstaller\")"
     },
     {

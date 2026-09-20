@@ -1,6 +1,6 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <Package
-    Id="__SourceName__.WixDemo.WinForms"
+    Id="__SourceName__.WixSetup"
     Name="__SourceName__ WinForms User Installer"
     Manufacturer="MyAuthor"
     Version="1.0.0.0"

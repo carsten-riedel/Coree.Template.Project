@@ -218,7 +218,7 @@ Analog of `dotnet new console --use-program-main` (explicit `Program` + `args`),
 
 ## `AdditionalInstaller`
 
-Single choice, default **`None`**. `WixUserInstaller` adds a Windows-only per-user WiX project under `src/prj/{Name}.WixDemo/`. The generated solution publishes the app to `bin/Publish/` and then writes the MSI to the app's `bin/setup/`; Visual Studio requires the WiX Toolset HeatWave extension. The WiX SDK remains a project-local package reference, so the CLI can build it without the Visual Studio extension. `InstallerUpgradeCode` is generated per template invocation; never replace it with a shared fixed GUID.
+Single choice, default **`None`**. `WixUserInstaller` adds a Windows-only per-user WiX project under `src/prj/{Name}.WixSetup/`. The generated solution publishes the app to `bin/Publish/` and then writes the MSI to the app's `bin/setup/`; Visual Studio requires the WiX Toolset HeatWave extension. The WiX SDK remains a project-local package reference, so the CLI can build it without the Visual Studio extension. `InstallerUpgradeCode` is generated per template invocation; never replace it with a shared fixed GUID.
 
 ## `ProjectLicense`
 

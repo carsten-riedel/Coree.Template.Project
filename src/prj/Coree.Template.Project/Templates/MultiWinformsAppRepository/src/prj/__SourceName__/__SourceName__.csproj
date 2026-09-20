@@ -78,8 +78,8 @@
     <InvariantGlobalization>$(InvariantGlobalization)</InvariantGlobalization>
   </PropertyGroup>
 
-  <!--#if (ProgramSample == "HostedDi") -->
-  <!-- HostedDi application assets and configuration. -->
+  <!--#if (ProgramSample == "GenericHost") -->
+  <!-- GenericHost application assets and configuration. -->
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <ApplicationIcon>Resources\application.ico</ApplicationIcon>

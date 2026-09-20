@@ -47,10 +47,10 @@ src/prj/__SourceName__.Benchmark/  optional BenchmarkDotNet runner
 
 ## Program sample
 
-<!--#if (ProgramSample == "MinimalClassic") -->
-This app uses `MinimalClassic`, the small Visual Studio-style `Form1` skeleton. It is the default `--ProgramSample`.
+<!--#if (ProgramSample == "Basic") -->
+This app uses `Basic`, the small Visual Studio-style `Form1` skeleton. It is the default `--ProgramSample`.
 <!--#else -->
-This app uses `HostedDi`: a fixed Generic Host setup with constructor injection, debug logging, reloadable `appsettings.json`, English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources, profile optimization, and single-instance protection. These capabilities are intentionally one cohesive sample rather than separate feature switches.
+This app uses `GenericHost`: a fixed Generic Host setup with DI, logging, reloadable `appsettings.json`, English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese localization, profile optimization, and single-instance protection. These capabilities are intentionally one cohesive sample rather than separate feature switches.
 The sample `Settings:Subkey1:Value1` contains the `AppSettingsWindowTitle` resource key, so the visible title follows the process UI culture. Replacing it with a literal value still takes precedence.
 <!--#endif -->
 

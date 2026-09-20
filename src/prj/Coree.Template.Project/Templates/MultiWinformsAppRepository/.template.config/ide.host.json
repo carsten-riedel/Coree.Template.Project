@@ -60,13 +60,13 @@
     {
       "id": "ProgramSample",
       "isVisible": true,
-      "defaultValue": "MinimalClassic",
+      "defaultValue": "Basic",
       "persistenceScope": "none",
       "name": {
         "text": "Program sample"
       },
       "description": {
-        "text": "Which cohesive WinForms sample to copy. MinimalClassic is the default Form1 skeleton. HostedDi adds Generic Host, constructor injection, debug logging, reloadable configuration, and English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources. Matching tests and the optional benchmark come with the same choice."
+        "text": "Which cohesive WinForms sample to copy. Basic is the default Form1 skeleton. GenericHost adds Generic Host, DI, logging, configuration, and English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese localization. Matching tests and the optional benchmark come with the same choice."
       }
     },
     {

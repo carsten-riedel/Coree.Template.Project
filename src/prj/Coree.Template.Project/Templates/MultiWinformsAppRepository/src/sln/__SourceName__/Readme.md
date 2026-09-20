@@ -82,10 +82,10 @@ The `.slnx` and this readme live in this folder next to the WinForms app. Open a
 
 ## Program sample
 
-<!--#if (ProgramSample == "MinimalClassic") -->
-`MinimalClassic` is the default Visual Studio-style `Form1` application.
+<!--#if (ProgramSample == "Basic") -->
+`Basic` is the default Visual Studio-style `Form1` application.
 <!--#else -->
-`HostedDi` uses `Host.CreateApplicationBuilder`, constructor injection, debug logging, reloadable `appsettings.json`, localized English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources, profile optimization, and single-instance protection. The benchmark measures its UI-independent configuration lookup.
+`GenericHost` uses `Host.CreateApplicationBuilder`, DI, logging, reloadable `appsettings.json`, localized English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources, profile optimization, and single-instance protection. The benchmark measures its UI-independent configuration lookup.
 The sample `Settings:Subkey1:Value1` contains the `AppSettingsWindowTitle` resource key, so the visible title follows the process UI culture. Replacing it with a literal value still overrides the resource title.
 <!--#endif -->
 
@@ -123,7 +123,7 @@ After a test run, the links below point to generated reports. Each selected targ
 <!--#endif -->
 
 <!--#if (CoverletMSBuild == true) -->
-Coverlet measures the app (`[__SourceName__]*`), skips `Program.cs` and generated `*.g.cs` (WinForms `ApplicationConfiguration`), skips generated form disposal and the HostedDi UI-thread reload callback via `[ExcludeFromCodeCoverage]`, and fails `dotnet test` if line, branch, or method coverage is under 100% on the rest.
+Coverlet measures the app (`[__SourceName__]*`), skips `Program.cs` and generated `*.g.cs` (WinForms `ApplicationConfiguration`), skips generated form disposal and the GenericHost UI-thread reload callback via `[ExcludeFromCodeCoverage]`, and fails `dotnet test` if line, branch, or method coverage is under 100% on the rest.
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
 <!--#if (PlaceSolution == "SlnFolder") -->

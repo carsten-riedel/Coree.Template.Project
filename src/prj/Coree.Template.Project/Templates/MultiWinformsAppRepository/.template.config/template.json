@@ -259,8 +259,8 @@
     },
     // Exclusive seeds under TemplateAssets/ProgramSamples/{choice}/
     // App|Tests|Benchmark/. Extra sources copy each folder onto the stub
-    // project path (no per-file rename). MinimalClassic is the VS WinForms
-    // skeleton (Program + Form1). HostedDi adds a fixed Generic Host,
+    // project path (no per-file rename). Basic is the VS WinForms
+    // skeleton (Program + Form1). GenericHost adds a fixed Generic Host,
     // configuration, logging, and constructor-injection sample. Tests do not
     // call Main (message loop) or ApplicationConfiguration.Initialize
     // (generated). Framework-specific usings stay explicit; only namespaces
@@ -269,20 +269,20 @@
       "type": "parameter",
       "datatype": "choice",
       "isRequired": false,
-      "defaultValue": "MinimalClassic",
+      "defaultValue": "Basic",
       "enableQuotelessLiterals": true,
-      "description": "Which cohesive WinForms sample to copy. Default is the Visual Studio minimal Form1 app. HostedDi adds Generic Host, configuration, logging, constructor injection, and localized English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources. Tests and the optional benchmark are copied with the same choice.",
+      "description": "Which cohesive WinForms sample to copy. Basic is the default Visual Studio Form1 app. GenericHost adds Generic Host, DI, logging, configuration, and localized English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources. Tests and the optional benchmark are copied with the same choice.",
       "displayName": "Program sample",
       "choices": [
         {
-          "choice": "MinimalClassic",
+          "choice": "Basic",
           "description": "Visual Studio WinForms skeleton: STA Program.Main and an empty Form1.",
-          "displayName": "Minimal classic"
+          "displayName": "Basic"
         },
         {
-          "choice": "HostedDi",
-          "description": "WinForms app with Generic Host, constructor injection, logging, reloadable appsettings, English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources, profile optimization, and single-instance protection.",
-          "displayName": "Hosted WinForms with DI"
+          "choice": "GenericHost",
+          "description": "Generic Host, DI, logging, configuration, and English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese localization, with profile optimization and single-instance protection.",
+          "displayName": "GenericHost"
         }
       ]
     },
@@ -845,34 +845,34 @@
       "condition": "(NerdbankGitVersioning == \"Project\")"
     },
     {
-      "source": "./TemplateAssets/ProgramSamples/MinimalClassic/App/",
+      "source": "./TemplateAssets/ProgramSamples/Basic/App/",
       "target": "./src/prj/__SourceName__/",
-      "condition": "(ProgramSample == \"MinimalClassic\")"
+      "condition": "(ProgramSample == \"Basic\")"
     },
     {
-      "source": "./TemplateAssets/ProgramSamples/MinimalClassic/Tests/",
+      "source": "./TemplateAssets/ProgramSamples/Basic/Tests/",
       "target": "./src/prj/__SourceName__.Tests/",
-      "condition": "(ProgramSample == \"MinimalClassic\")"
+      "condition": "(ProgramSample == \"Basic\")"
     },
     {
-      "source": "./TemplateAssets/ProgramSamples/MinimalClassic/Benchmark/",
+      "source": "./TemplateAssets/ProgramSamples/Basic/Benchmark/",
       "target": "./src/prj/__SourceName__.Benchmark/",
-      "condition": "((ProgramSample == \"MinimalClassic\") && BenchmarkProject)"
+      "condition": "((ProgramSample == \"Basic\") && BenchmarkProject)"
     },
     {
-      "source": "./TemplateAssets/ProgramSamples/HostedDi/App/",
+      "source": "./TemplateAssets/ProgramSamples/GenericHost/App/",
       "target": "./src/prj/__SourceName__/",
-      "condition": "(ProgramSample == \"HostedDi\")"
+      "condition": "(ProgramSample == \"GenericHost\")"
     },
     {
-      "source": "./TemplateAssets/ProgramSamples/HostedDi/Tests/",
+      "source": "./TemplateAssets/ProgramSamples/GenericHost/Tests/",
       "target": "./src/prj/__SourceName__.Tests/",
-      "condition": "(ProgramSample == \"HostedDi\")"
+      "condition": "(ProgramSample == \"GenericHost\")"
     },
     {
-      "source": "./TemplateAssets/ProgramSamples/HostedDi/Benchmark/",
+      "source": "./TemplateAssets/ProgramSamples/GenericHost/Benchmark/",
       "target": "./src/prj/__SourceName__.Benchmark/",
-      "condition": "((ProgramSample == \"HostedDi\") && BenchmarkProject)"
+      "condition": "((ProgramSample == \"GenericHost\") && BenchmarkProject)"
     },
     {
       "source": "./TemplateAssets/",

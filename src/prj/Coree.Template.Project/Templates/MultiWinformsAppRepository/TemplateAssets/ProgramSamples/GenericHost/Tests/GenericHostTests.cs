@@ -17,7 +17,7 @@ namespace __SourceName__.Tests
 {
     [TestClass]
     [DoNotParallelize]
-    public sealed class HostedDiTests
+    public sealed class GenericHostTests
     {
         [TestMethod]
         public void MainForm_UsesFallbackWithoutConfiguredTitle()

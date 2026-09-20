@@ -243,6 +243,8 @@ Add more only when you need them.
 | PowerShell repository       | `multipowershellrepo-coree`      | Binary PowerShell modules      |
 | Project-template repository | `multiprojecttemplaterepo-coree` | `dotnet new` template packages |
 
+Former single-template names and their recommended Multi replacements are listed in [Legacy templates](#legacy-templates).
+
 ---
 
 # Library repositories
@@ -601,17 +603,37 @@ Coree.Template.Project still contains first-generation templates such as:
 
 ```text
 classlib-coree
+console-coree
 msbuildtasklib-coree
 nettool-coree
+powershelllib-coree
 wpfapp-coree
 projecttemplate-coree
+sourcegenerator-coree
+winforms-coree
+winformsdi-coree
 ```
 
 These predate the current composable repository architecture.
 
-They remain available during the transition, but the **Multi templates are their intended successors**.
+For existing projects, use this mapping when choosing the replacement:
 
-For new projects, prefer the corresponding Multi template.
+| Former template | Recommended Multi template | Recommendation |
+| ---------------- | -------------------------- | -------------- |
+| `classlib-coree` | `multilibraryrepo-coree` | Use for one library or add more libraries later. |
+| `console-coree` | `multiconsolerepo-coree` | Use for one console application or multiple tools. |
+| `msbuildtasklib-coree` | `multimsbuildrepo-coree` | Use for one MSBuild task package or multiple task packages. |
+| `nettool-coree` | `multiconsolerepo-coree` | Add `--PackAsNuGetTool` when the application is a .NET tool. |
+| `powershelllib-coree` | `multipowershellrepo-coree` | Use for one binary PowerShell module or multiple modules. |
+| `projecttemplate-coree` | `multiprojecttemplaterepo-coree` | Use when the repository produces `dotnet new` templates. |
+| `sourcegenerator-coree` | `multisourcegeneratorrepo-coree` | Use for one source generator or multiple generators. |
+| `winforms-coree` | `multiwinformsrepo-coree` | Select `--ProgramSample Basic`. |
+| `winformsdi-coree` | `multiwinformsrepo-coree` | Select `--ProgramSample GenericHost` for DI, logging, configuration, and localization. |
+| `wpfapp-coree` | `multiwpfrepo-coree` | Select `--ProgramSample MahAppsMvvm` for the closest feature-rich successor; use `MinimalClassic` for the minimal WPF skeleton. |
+
+The table describes the intended successor, not an automatic in-place migration. The legacy templates remain available and unchanged.
+
+The **Multi templates are the intended successors** for new projects.
 
 The Multi templates preserve the simple single-project use case while allowing the same repository to grow later.
 

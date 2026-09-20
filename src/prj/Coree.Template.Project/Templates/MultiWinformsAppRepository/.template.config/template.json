@@ -825,6 +825,12 @@
           ]
         },
         {
+          "condition": "(AdditionalInstaller != \"WixUserInstaller\")",
+          "exclude": [
+            "src/prj/__SourceName__.WixSetup/**"
+          ]
+        },
+        {
           "condition": "(NerdbankGitVersioning != \"Repo\")",
           "exclude": [
             "src/prj/__SourceName__/Properties/Build/NerdbankRepositoryVersion.targets",
@@ -904,11 +910,6 @@
       "condition": "((ProgramSample == \"GenericHost\") && BenchmarkProject)"
     },
     {
-      "source": "./TemplateAssets/WixUserInstaller/",
-      "target": "./src/prj/__SourceName__.WixSetup/",
-      "condition": "(AdditionalInstaller == \"WixUserInstaller\")"
-    },
-    {
       "source": "./TemplateAssets/",
       "target": "./docs/",
       "condition": "WriteRepoDocTemplate",
@@ -919,8 +920,7 @@
             "CodeStyle/**",
             "Licenses/**",
             "DirectoryMsBuild/**",
-            "ProgramSamples/**",
-            "WixUserInstaller/**"
+            "ProgramSamples/**"
           ]
         }
       ]

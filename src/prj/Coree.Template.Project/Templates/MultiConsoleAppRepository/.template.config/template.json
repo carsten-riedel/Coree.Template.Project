@@ -888,6 +888,12 @@
           ]
         },
         {
+          "condition": "(AdditionalInstaller != \"WixUserInstaller\")",
+          "exclude": [
+            "src/prj/__SourceName__.WixSetup/**"
+          ]
+        },
+        {
           "condition": "(NerdbankGitVersioning != \"Repo\")",
           "exclude": [
             "src/prj/__SourceName__/Properties/Build/NerdbankRepositoryVersion.targets",
@@ -973,11 +979,6 @@
       "condition": "((ProgramSample == \"MinimalAsync\") && BenchmarkProject)"
     },
     {
-      "source": "./TemplateAssets/WixUserInstaller/",
-      "target": "./src/prj/__SourceName__.WixSetup/",
-      "condition": "(AdditionalInstaller == \"WixUserInstaller\")"
-    },
-    {
       "source": "./TemplateAssets/",
       "target": "./src/prj/__SourceName__/Properties/NugetMetadata/docs/",
       "condition": "WritePackageDocTemplate",
@@ -988,8 +989,7 @@
             "CodeStyle/**",
             "Licenses/**",
             "DirectoryMsBuild/**",
-            "ProgramSamples/**",
-            "WixUserInstaller/**"
+            "ProgramSamples/**"
           ]
         }
       ]
@@ -1005,8 +1005,7 @@
             "CodeStyle/**",
             "Licenses/**",
             "DirectoryMsBuild/**",
-            "ProgramSamples/**",
-            "WixUserInstaller/**"
+            "ProgramSamples/**"
           ]
         }
       ]

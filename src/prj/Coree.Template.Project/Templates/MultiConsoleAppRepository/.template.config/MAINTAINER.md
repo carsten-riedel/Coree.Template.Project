@@ -205,7 +205,7 @@ Benchmark previously hardcoded `ImplicitUsings` enable. It now follows the switc
 
 Single choice, default **`MinimalClassic`**. UI label **Program sample**. CLI long name **`--ProgramSample`**. Empty CLI `shortName`. Combo-safe (each app has its own `Program.cs`).
 
-Seeds live under `TemplateAssets/ProgramSamples/{choice}/App|Tests|Benchmark/`. Extra sources copy each folder onto the matching stub project (`App/` → `src/prj/{Name}/`, `Tests/` → tests, `Benchmark/` → benchmark). Later sample files drop into those folders without a per-file rename. `Benchmark/` is copied only when `BenchmarkProject` is on. DocShell extra sources must `exclude` `ProgramSamples/**` and `WixUserInstaller/**` as well as `Versioning/**`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`. Do not leave a `Program.cs` under `src/prj/__SourceName__/`. The stub csproj stays one file; sample-specific package references can be `#if` there.
+Seeds live under `TemplateAssets/ProgramSamples/{choice}/App|Tests|Benchmark/`. Extra sources copy each folder onto the matching stub project (`App/` → `src/prj/{Name}/`, `Tests/` → tests, `Benchmark/` → benchmark). Later sample files drop into those folders without a per-file rename. `Benchmark/` is copied only when `BenchmarkProject` is on. DocShell extra sources must `exclude` `ProgramSamples/**` as well as `Versioning/**`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`. Do not leave a `Program.cs` under `src/prj/__SourceName__/`. The stub csproj stays one file; sample-specific package references can be `#if` there.
 
 Each `Program.cs` seed writes `Console.WriteLine` (async also `Task`). Generate-time `#if (CSharpProjectOptions == "DisableImplicitUsings")` adds the usings those names need (`System`, and `System.Threading.Tasks` for async). When implicit usings are on, those lines are omitted. No `KeepScaffoldUnusedUsings` here: unused BCL usings were a library/analyzer IDE0005 demo, not console sample code.
 
@@ -391,7 +391,7 @@ Do not rename `Default` to Minimal: both seeds are the same full VS style dump. 
 
 `Strict` needs the product C# default `Nullable`. Console `Program.cs` does not keep unused usings for the style dump (`KeepScaffoldUnusedUsings` is library/analyzer only). Needed `using` lines follow `DisableImplicitUsings`.
 
-Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that folder to the console app project, **excludes** the other seed, and **renames** the chosen file to `.project.editor.globalconfig`. Do not leave a seed under `src/prj/__SourceName__/`: DocShell extra sources must `exclude` `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, `ProgramSamples/**`, and `WixUserInstaller/**`.
+Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that folder to the console app project, **excludes** the other seed, and **renames** the chosen file to `.project.editor.globalconfig`. Do not leave a seed under `src/prj/__SourceName__/`: DocShell extra sources must `exclude` `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, and `ProgramSamples/**`.
 
 `UseProjectEditorGlobalConfig` is `(ProjectEditorGlobalConfig != "Off")`; the csproj `#if` does not need a new branch per dump.
 
@@ -424,7 +424,7 @@ dotnet new multiconsolerepo-coree --Author "abcd" --name "...App2" --output $out
 
 ## `DocumentationTemplate`
 
-Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, two destinations. Extra sources copy that file only (`exclude` of `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, `ProgramSamples/**`, and `WixUserInstaller/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
+Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, two destinations. Extra sources copy that file only (`exclude` of `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, and `ProgramSamples/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
 
 | Choice | Path | When | Combo later app |
 | --- | --- | --- | --- |

@@ -1,9 +1,12 @@
 <Project Sdk="WixToolset.Sdk/6.0.2">
   <PropertyGroup>
-    <OutputName>__SourceName__.WixSetup</OutputName>
+    <OutputName>__SourceName__</OutputName>
     <InstallerPlatform>x64</InstallerPlatform>
     <AppProjectPath>$(MSBuildProjectDirectory)\..\__SourceName__\__SourceName__.csproj</AppProjectPath>
     <AppProjectDirectory>$(MSBuildProjectDirectory)\..\__SourceName__</AppProjectDirectory>
+    <!-- A concrete TFM keeps WiX project-reference design-time evaluation deterministic. -->
+    <AppTargetFramework>__TargetFramework__</AppTargetFramework>
+    <AppPublishDirectory>$(AppProjectDirectory)\bin\Publish</AppPublishDirectory>
     <AppSetupDirectory>$(AppProjectDirectory)\bin\Setup</AppSetupDirectory>
     <OutputPath>$(AppSetupDirectory)\</OutputPath>
     <IsPublishable>true</IsPublishable>
@@ -18,7 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="$(AppProjectPath)">
-      <AdditionalProperties>_IsPublishing=true;Configuration=$(Configuration)</AdditionalProperties>
+      <AdditionalProperties>_IsPublishing=true;TargetFramework=$(AppTargetFramework);Configuration=$(Configuration)</AdditionalProperties>
       <Targets>PublishForInstaller</Targets>
       <BuildReference>true</BuildReference>
     </ProjectReference>

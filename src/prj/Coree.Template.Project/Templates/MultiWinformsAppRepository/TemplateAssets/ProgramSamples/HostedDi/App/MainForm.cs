@@ -16,31 +16,32 @@ namespace __SourceName__
         internal const string WindowTitleConfigurationKey = "Settings:Subkey1:Value1";
         private const string DefaultWindowTitle = "MainForm";
 
-        private static readonly Action<ILogger, Exception?> LogMainWindowInitialized = LoggerMessage.Define(
-            LogLevel.Information,
+        private static readonly Action<ILogger, string, Exception?> LogWindowTitleApplied = LoggerMessage.Define<string>(
+            LogLevel.Debug,
             new EventId(1, nameof(MainForm)),
-            "Main window initialized with reloadable configuration.");
+            "Window title applied: {WindowTitle}.");
 
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<MainForm> _logger;
         private IDisposable? settingsSubscription;
 
         public MainForm(
             ILogger<MainForm> logger,
             IConfiguration configuration)
         {
-            this.configuration = configuration;
+            _logger = logger;
+            _configuration = configuration;
 
             InitializeComponent();
             CreateHandle();
             ApplySettings();
-            settingsSubscription = ChangeToken.OnChange(configuration.GetReloadToken, OnSettingsChanged);
-
-            LogMainWindowInitialized(logger, null);
+            settingsSubscription = ChangeToken.OnChange(_configuration.GetReloadToken, OnSettingsChanged);
         }
 
         private void ApplySettings()
         {
-            Text = configuration[WindowTitleConfigurationKey] ?? DefaultWindowTitle;
+            Text = _configuration[WindowTitleConfigurationKey] ?? DefaultWindowTitle;
+            LogWindowTitleApplied(_logger, Text, null);
         }
 
         [ExcludeFromCodeCoverage]

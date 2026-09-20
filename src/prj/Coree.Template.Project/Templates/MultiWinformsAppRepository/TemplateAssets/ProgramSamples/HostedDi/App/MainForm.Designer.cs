@@ -18,7 +18,7 @@ namespace __SourceName__
         {
             if (disposing)
             {
-                settingsSubscription?.Dispose();
+                _settingsSubscription?.Dispose();
                 components?.Dispose();
             }
 

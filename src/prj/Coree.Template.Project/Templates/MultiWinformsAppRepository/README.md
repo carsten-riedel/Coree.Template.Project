@@ -50,7 +50,8 @@ src/prj/__SourceName__.Benchmark/  optional BenchmarkDotNet runner
 <!--#if (ProgramSample == "MinimalClassic") -->
 This app uses `MinimalClassic`, the small Visual Studio-style `Form1` skeleton. It is the default `--ProgramSample`.
 <!--#else -->
-This app uses `HostedDi`: a fixed Generic Host setup with constructor injection, debug logging, reloadable `appsettings.json`, profile optimization, and single-instance protection. These capabilities are intentionally one cohesive sample rather than separate feature switches.
+This app uses `HostedDi`: a fixed Generic Host setup with constructor injection, debug logging, reloadable `appsettings.json`, English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources, profile optimization, and single-instance protection. These capabilities are intentionally one cohesive sample rather than separate feature switches.
+The localized fallback title and single-instance message follow the process UI culture; the configured title in `appsettings.json` still takes precedence.
 <!--#endif -->
 
 `--ProgramSample` is the maintained replacement for the older standalone `winforms-coree` and `winformsdi-coree` sample layouts. Those legacy templates remain available and unchanged.

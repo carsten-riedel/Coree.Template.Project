@@ -9,9 +9,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+using System.Globalization;
+
+using __SourceName__.Resources;
+
 namespace __SourceName__.Tests
 {
     [TestClass]
+    [DoNotParallelize]
     public sealed class HostedDiTests
     {
         [TestMethod]
@@ -30,6 +35,60 @@ namespace __SourceName__.Tests
 
                 Assert.AreEqual("MainForm", form.Text);
             });
+        }
+
+        [TestMethod]
+        public void MainForm_UsesLocalizedFallbackTitle()
+        {
+            Strings.Culture = CultureInfo.GetCultureInfo("de-DE");
+
+            try
+            {
+                RunInStaThread(() =>
+                {
+                    IConfiguration configuration = new ConfigurationBuilder().Build();
+                    var services = new ServiceCollection();
+                    services.AddSingleton<IConfiguration>(configuration);
+                    services.AddLogging();
+                    services.AddSingleton<MainForm>();
+
+                    using ServiceProvider serviceProvider = services.BuildServiceProvider();
+                    using MainForm form = serviceProvider.GetRequiredService<MainForm>();
+
+                    Assert.AreEqual("Hauptfenster", form.Text);
+                });
+            }
+            finally
+            {
+                Strings.Culture = null;
+            }
+        }
+
+        [TestMethod]
+        public void MainForm_UsesChineseFallbackTitle()
+        {
+            Strings.Culture = CultureInfo.GetCultureInfo("zh-CN");
+
+            try
+            {
+                RunInStaThread(() =>
+                {
+                    IConfiguration configuration = new ConfigurationBuilder().Build();
+                    var services = new ServiceCollection();
+                    services.AddSingleton<IConfiguration>(configuration);
+                    services.AddLogging();
+                    services.AddSingleton<MainForm>();
+
+                    using ServiceProvider serviceProvider = services.BuildServiceProvider();
+                    using MainForm form = serviceProvider.GetRequiredService<MainForm>();
+
+                    Assert.AreEqual("主窗口", form.Text);
+                });
+            }
+            finally
+            {
+                Strings.Culture = null;
+            }
         }
 
         [TestMethod]

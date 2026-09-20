@@ -271,7 +271,7 @@
       "isRequired": false,
       "defaultValue": "MinimalClassic",
       "enableQuotelessLiterals": true,
-      "description": "Which cohesive WinForms sample to copy. Default is the Visual Studio minimal Form1 app. HostedDi adds Generic Host, configuration, logging, and constructor injection. Tests and the optional benchmark are copied with the same choice.",
+      "description": "Which cohesive WinForms sample to copy. Default is the Visual Studio minimal Form1 app. HostedDi adds Generic Host, configuration, logging, constructor injection, and localized English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources. Tests and the optional benchmark are copied with the same choice.",
       "displayName": "Program sample",
       "choices": [
         {
@@ -281,7 +281,7 @@
         },
         {
           "choice": "HostedDi",
-          "description": "WinForms app with Generic Host, constructor injection, logging, reloadable appsettings, profile optimization, and single-instance protection.",
+          "description": "WinForms app with Generic Host, constructor injection, logging, reloadable appsettings, English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources, profile optimization, and single-instance protection.",
           "displayName": "Hosted WinForms with DI"
         }
       ]

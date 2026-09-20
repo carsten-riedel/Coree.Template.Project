@@ -7,10 +7,11 @@ using System.Reflection;
 using System.Runtime;
 using System.Threading;
 
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
+using __SourceName__.Resources;
 
 namespace __SourceName__
 {
@@ -33,17 +34,18 @@ namespace __SourceName__
             if (!createdNew)
             {
                 MessageBox.Show(
-                    $"{applicationName} is already running!",
-                    "Multiple instances are not supported.",
+                    Strings.MultipleInstancesMessage.Replace("{0}", applicationName, StringComparison.Ordinal),
+                    Strings.MultipleInstancesTitle,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 return;
             }
 
-            HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
-            builder.Configuration
-                .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            HostApplicationBuilder builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings
+            {
+                Args = args,
+                ContentRootPath = AppContext.BaseDirectory,
+            });
 
             builder.Services.AddSingleton<MainForm>();
             builder.Services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
@@ -52,16 +54,22 @@ namespace __SourceName__
             builder.Logging.AddDebug();
 
             using IHost host = builder.Build();
-            host.Start();
-
             try
             {
+                host.Start();
                 ApplicationConfiguration.Initialize();
                 Application.Run(host.Services.GetRequiredService<MainForm>());
             }
             finally
             {
-                host.StopAsync().GetAwaiter().GetResult();
+                try
+                {
+                    host.StopAsync(TimeSpan.FromSeconds(3)).GetAwaiter().GetResult();
+                }
+                finally
+                {
+                    singleInstanceMutex.ReleaseMutex();
+                }
             }
         }
     }

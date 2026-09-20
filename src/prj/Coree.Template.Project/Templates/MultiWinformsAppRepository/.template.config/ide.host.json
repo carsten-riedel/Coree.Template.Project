@@ -66,7 +66,7 @@
         "text": "Program sample"
       },
       "description": {
-        "text": "Which cohesive WinForms sample to copy. MinimalClassic is the default Form1 skeleton. HostedDi adds Generic Host, constructor injection, debug logging, and reloadable configuration. Matching tests and the optional benchmark come with the same choice."
+        "text": "Which cohesive WinForms sample to copy. MinimalClassic is the default Form1 skeleton. HostedDi adds Generic Host, constructor injection, debug logging, reloadable configuration, and English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources. Matching tests and the optional benchmark come with the same choice."
       }
     },
     {

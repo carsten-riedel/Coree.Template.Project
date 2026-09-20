@@ -85,7 +85,8 @@ The `.slnx` and this readme live in this folder next to the WinForms app. Open a
 <!--#if (ProgramSample == "MinimalClassic") -->
 `MinimalClassic` is the default Visual Studio-style `Form1` application.
 <!--#else -->
-`HostedDi` uses `Host.CreateApplicationBuilder`, constructor injection, debug logging, reloadable `appsettings.json`, profile optimization, and single-instance protection. The benchmark measures its UI-independent configuration lookup.
+`HostedDi` uses `Host.CreateApplicationBuilder`, constructor injection, debug logging, reloadable `appsettings.json`, localized English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources, profile optimization, and single-instance protection. The benchmark measures its UI-independent configuration lookup.
+The localized fallback title and single-instance message follow the process UI culture; an explicit title in `appsettings.json` overrides the fallback.
 <!--#endif -->
 
 ## Restore and build

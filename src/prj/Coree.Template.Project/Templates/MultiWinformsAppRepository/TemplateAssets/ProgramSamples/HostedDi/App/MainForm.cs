@@ -9,40 +9,41 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 
+using __SourceName__.Resources;
+
 namespace __SourceName__
 {
     internal sealed partial class MainForm : Form
     {
         internal const string WindowTitleConfigurationKey = "Settings:Subkey1:Value1";
-        private const string DefaultWindowTitle = "MainForm";
-
-        private static readonly Action<ILogger, string, Exception?> LogWindowTitleApplied = LoggerMessage.Define<string>(
-            LogLevel.Debug,
-            new EventId(1, nameof(MainForm)),
-            "Window title applied: {WindowTitle}.");
-
         private readonly IConfiguration _configuration;
         private readonly ILogger<MainForm> _logger;
-        private IDisposable? settingsSubscription;
+        private IDisposable? _settingsSubscription;
 
         public MainForm(
             ILogger<MainForm> logger,
             IConfiguration configuration)
         {
+            ArgumentNullException.ThrowIfNull(logger);
+            ArgumentNullException.ThrowIfNull(configuration);
+
             _logger = logger;
             _configuration = configuration;
 
             InitializeComponent();
             CreateHandle();
             ApplySettings();
-            settingsSubscription = ChangeToken.OnChange(_configuration.GetReloadToken, OnSettingsChanged);
+            _settingsSubscription = ChangeToken.OnChange(_configuration.GetReloadToken, OnSettingsChanged);
         }
 
         private void ApplySettings()
         {
-            Text = _configuration[WindowTitleConfigurationKey] ?? DefaultWindowTitle;
-            LogWindowTitleApplied(_logger, Text, null);
+            Text = _configuration[WindowTitleConfigurationKey] ?? Strings.DefaultWindowTitle;
+            LogWindowTitleApplied(Text);
         }
+
+        [LoggerMessage(EventId = 1, Level = LogLevel.Debug, Message = "Window title applied: {WindowTitle}.")]
+        private partial void LogWindowTitleApplied(string windowTitle);
 
         [ExcludeFromCodeCoverage]
         private void OnSettingsChanged()

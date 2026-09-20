@@ -427,7 +427,7 @@ The same repository can later contain additional independently publishable WinFo
 The WinForms repository has two cohesive application seeds selected with `--ProgramSample`:
 
 - `MinimalClassic` (default): a minimal Visual Studio-style `Form1` skeleton.
-- `HostedDi`: a Generic Host application with constructor injection, debug logging, reloadable configuration, profile optimization, single-instance protection, and matching tests and benchmark.
+- `HostedDi`: a Generic Host application with constructor injection, debug logging, reloadable configuration, English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources, profile optimization, single-instance protection, and matching tests and benchmark.
 
 Create the hosted sample with:
 
@@ -440,7 +440,8 @@ dotnet new multiwinformsrepo-coree \
     --InitAllRepoItems
 ```
 
-`ProgramSample` is the maintained replacement for the former standalone WinForms sample layouts. The legacy `winforms-coree` and `winformsdi-coree` templates remain available and unchanged. Hosting, DI, logging, and configuration form one fixed `HostedDi` feature set rather than separate switches.
+`ProgramSample` is the maintained replacement for the former standalone WinForms sample layouts. The legacy `winforms-coree` and `winformsdi-coree` templates remain available and unchanged. Hosting, DI, logging, configuration, and localization form one fixed `HostedDi` feature set rather than separate switches.
+The sample localizes its fallback title and single-instance message from the process UI culture; an explicit `Settings:Subkey1:Value1` title in `appsettings.json` wins over that fallback.
 
 **Windows only.**
 

@@ -86,7 +86,7 @@ The `.slnx` and this readme live in this folder next to the WinForms app. Open a
 `MinimalClassic` is the default Visual Studio-style `Form1` application.
 <!--#else -->
 `HostedDi` uses `Host.CreateApplicationBuilder`, constructor injection, debug logging, reloadable `appsettings.json`, localized English/German/Spanish/French/Italian/Portuguese/Simplified-Chinese resources, profile optimization, and single-instance protection. The benchmark measures its UI-independent configuration lookup.
-The localized fallback title and single-instance message follow the process UI culture; an explicit title in `appsettings.json` overrides the fallback.
+The sample `Settings:Subkey1:Value1` contains the `AppSettingsWindowTitle` resource key, so the visible title follows the process UI culture. Replacing it with a literal value still overrides the resource title.
 <!--#endif -->
 
 ## Restore and build

@@ -441,7 +441,7 @@ dotnet new multiwinformsrepo-coree \
 ```
 
 `ProgramSample` is the maintained replacement for the former standalone WinForms sample layouts. The legacy `winforms-coree` and `winformsdi-coree` templates remain available and unchanged. Hosting, DI, logging, configuration, and localization form one fixed `HostedDi` feature set rather than separate switches.
-The sample localizes its fallback title and single-instance message from the process UI culture; an explicit `Settings:Subkey1:Value1` title in `appsettings.json` wins over that fallback.
+The sample localizes its visible `Settings:Subkey1:Value1` title and single-instance message from the process UI culture. The generated `appsettings.json` uses the `AppSettingsWindowTitle` resource key; replacing it with a literal title still wins.
 
 **Windows only.**
 

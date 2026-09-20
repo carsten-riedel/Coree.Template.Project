@@ -17,6 +17,9 @@ namespace __SourceName__.Resources
         internal static string DefaultWindowTitle =>
             _resourceManager.GetString(nameof(DefaultWindowTitle), Culture) ?? "MainForm";
 
+        internal static string AppSettingsWindowTitle =>
+            _resourceManager.GetString(nameof(AppSettingsWindowTitle), Culture) ?? "Value from appsettings.json";
+
         internal static string MultipleInstancesTitle =>
             _resourceManager.GetString(nameof(MultipleInstancesTitle), Culture) ?? "Multiple instances are not supported.";
 

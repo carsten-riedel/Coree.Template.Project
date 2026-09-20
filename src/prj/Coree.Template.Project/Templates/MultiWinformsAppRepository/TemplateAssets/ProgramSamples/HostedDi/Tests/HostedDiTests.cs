@@ -92,6 +92,33 @@ namespace __SourceName__.Tests
         }
 
         [TestMethod]
+        public void MainForm_LocalizesAppSettingsWindowTitle()
+        {
+            Strings.Culture = CultureInfo.GetCultureInfo("zh-CN");
+
+            try
+            {
+                RunInStaThread(() =>
+                {
+                    IConfiguration configuration = CreateConfiguration(nameof(Strings.AppSettingsWindowTitle));
+                    var services = new ServiceCollection();
+                    services.AddSingleton<IConfiguration>(configuration);
+                    services.AddLogging();
+                    services.AddSingleton<MainForm>();
+
+                    using ServiceProvider serviceProvider = services.BuildServiceProvider();
+                    using MainForm form = serviceProvider.GetRequiredService<MainForm>();
+
+                    Assert.AreEqual("来自 appsettings.json 的值", form.Text);
+                });
+            }
+            finally
+            {
+                Strings.Culture = null;
+            }
+        }
+
+        [TestMethod]
         public void MainForm_UsesConfigurationAndRespondsToReload()
         {
             RunInStaThread(() =>

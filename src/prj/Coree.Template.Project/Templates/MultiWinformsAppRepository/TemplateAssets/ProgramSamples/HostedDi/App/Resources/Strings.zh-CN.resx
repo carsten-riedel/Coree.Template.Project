@@ -5,6 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
   <data name="DefaultWindowTitle" xml:space="preserve"><value>主窗口</value></data>
+  <data name="AppSettingsWindowTitle" xml:space="preserve"><value>来自 appsettings.json 的值</value></data>
   <data name="MultipleInstancesTitle" xml:space="preserve"><value>不支持多个实例。</value></data>
   <data name="MultipleInstancesMessage" xml:space="preserve"><value>{0} 已在运行！</value></data>
 </root>

@@ -20,6 +20,13 @@ namespace __SourceName__
         private readonly ILogger<MainForm> _logger;
         private IDisposable? _settingsSubscription;
 
+        #region Logging
+
+        [LoggerMessage(EventId = 1, Level = LogLevel.Debug, Message = "Window title applied: {WindowTitle}.")]
+        private partial void LogWindowTitleApplied(string windowTitle);
+
+        #endregion
+
         public MainForm(
             ILogger<MainForm> logger,
             IConfiguration configuration)
@@ -38,12 +45,12 @@ namespace __SourceName__
 
         private void ApplySettings()
         {
-            Text = _configuration[WindowTitleConfigurationKey] ?? Strings.DefaultWindowTitle;
+            string? configuredTitle = _configuration[WindowTitleConfigurationKey];
+            Text = configuredTitle == nameof(Strings.AppSettingsWindowTitle)
+                ? Strings.AppSettingsWindowTitle
+                : configuredTitle ?? Strings.DefaultWindowTitle;
             LogWindowTitleApplied(Text);
         }
-
-        [LoggerMessage(EventId = 1, Level = LogLevel.Debug, Message = "Window title applied: {WindowTitle}.")]
-        private partial void LogWindowTitleApplied(string windowTitle);
 
         [ExcludeFromCodeCoverage]
         private void OnSettingsChanged()

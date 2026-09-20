@@ -5,6 +5,7 @@
   <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms</value></resheader>
   <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms</value></resheader>
   <data name="DefaultWindowTitle" xml:space="preserve"><value>Finestra principale</value></data>
+  <data name="AppSettingsWindowTitle" xml:space="preserve"><value>Valore da appsettings.json</value></data>
   <data name="MultipleInstancesTitle" xml:space="preserve"><value>Le istanze multiple non sono supportate.</value></data>
   <data name="MultipleInstancesMessage" xml:space="preserve"><value>{0} è già in esecuzione.</value></data>
 </root>

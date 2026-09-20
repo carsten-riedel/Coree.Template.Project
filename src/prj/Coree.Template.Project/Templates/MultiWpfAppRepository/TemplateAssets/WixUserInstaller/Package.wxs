@@ -1,0 +1,16 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+    Id="__SourceName__.WixDemo.Wpf"
+    Name="__SourceName__ WPF User Installer"
+    Manufacturer="MyAuthor"
+    Version="1.0.0.0"
+    UpgradeCode="A8A0F4D1-1B3C-4AB9-9C30-0D8C1D7A6C11"
+    Scope="perUser">
+    <MajorUpgrade DowngradeErrorMessage="A newer version of the WPF user installer is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+    <StandardDirectory Id="PerUserProgramFilesFolder">
+      <Directory Id="INSTALLFOLDER" Name="__SourceName__ WPF" />
+    </StandardDirectory>
+    <Files Include="!(bindpath.AppPublish)\**" Directory="INSTALLFOLDER" />
+  </Package>
+</Wix>

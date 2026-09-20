@@ -46,5 +46,26 @@
     <Project Path="src/prj/__SourceName__.Benchmark/__SourceName__.Benchmark.csproj" />
 <!--#endif -->
 <!--#endif -->
+<!--#if (AdditionalInstaller == "WixUserInstaller") -->
+<!--#if (PlaceSolution == "SlnFolder") -->
+    <Project Path="../../prj/__SourceName__.WixDemo/__SourceName__.WixDemo.wixproj">
+      <Platform Project="x64" />
+      <Build />
+      <Publish />
+    </Project>
+<!--#elseif (PlaceSolution == "BesideCsproj") -->
+    <Project Path="../__SourceName__.WixDemo/__SourceName__.WixDemo.wixproj">
+      <Platform Project="x64" />
+      <Build />
+      <Publish />
+    </Project>
+<!--#else -->
+    <Project Path="src/prj/__SourceName__.WixDemo/__SourceName__.WixDemo.wixproj">
+      <Platform Project="x64" />
+      <Build />
+      <Publish />
+    </Project>
+<!--#endif -->
+<!--#endif -->
   </Folder>
 </Solution>

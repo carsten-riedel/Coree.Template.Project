@@ -12,6 +12,10 @@ Choose one application seed with `--ProgramSample` when creating each WPF applic
 The selected sample is a cohesive application choice; DI, MVVM, SQLite, fonts, and individual app features are not separate switches.
 The `ProgramSample` choice is the current replacement for the former single WPF sample/readme layout in multi-app repositories. The legacy `wpfapp-coree` template (`Templates/WpfApp`) remains available and unchanged.
 
+## Optional WiX user installer
+
+Use `--AdditionalInstaller WixUserInstaller` to add a separate Windows per-user WiX project. It packages the normal app publish output and writes the MSI under `src/prj/__SourceName__/bin/setup/`; the default `None` choice leaves the repository unchanged. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
+
 <!--#if (ProgramSample == "MahAppsMvvm") -->
 This application was generated from `MahAppsMvvm`.
 <!--#else -->

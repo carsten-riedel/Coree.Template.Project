@@ -1,0 +1,30 @@
+<Project Sdk="WixToolset.Sdk/6.0.2">
+  <PropertyGroup>
+    <OutputName>__SourceName__.WixDemo.Console</OutputName>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <AppProjectPath>$(MSBuildProjectDirectory)\..\__SourceName__\__SourceName__.csproj</AppProjectPath>
+    <AppProjectDirectory>$(MSBuildProjectDirectory)\..\__SourceName__</AppProjectDirectory>
+    <AppTargetFramework>__TargetFramework__</AppTargetFramework>
+    <AppPublishDirectory>$(AppProjectDirectory)\bin\Publish</AppPublishDirectory>
+    <AppSetupDirectory>$(AppProjectDirectory)\bin\setup</AppSetupDirectory>
+    <OutputPath>$(AppSetupDirectory)\</OutputPath>
+    <IsPublishable>true</IsPublishable>
+    <!-- Wildcard Files harvesting cannot author per-user registry key paths. -->
+    <SuppressIces>ICE38;ICE64;ICE91</SuppressIces>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(AppProjectPath)">
+      <AdditionalProperties>TargetFramework=$(AppTargetFramework);Configuration=$(Configuration)</AdditionalProperties>
+      <Targets>Publish</Targets>
+      <BuildReference>true</BuildReference>
+    </ProjectReference>
+    <BindPath Include="$(AppPublishDirectory)">
+      <BindName>AppPublish</BindName>
+    </BindPath>
+  </ItemGroup>
+
+  <Target Name="BuildInstallerOnPublish" BeforeTargets="Publish" DependsOnTargets="Build" />
+  <!-- The solution invokes Pack for every selected project; WiX has no NuGet package output. -->
+  <Target Name="Pack" />
+</Project>

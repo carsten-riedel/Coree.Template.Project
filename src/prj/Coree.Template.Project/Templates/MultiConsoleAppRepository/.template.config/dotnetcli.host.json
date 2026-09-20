@@ -21,6 +21,10 @@
       "longName": "ProgramSample",
       "shortName": ""
     },
+    "AdditionalInstaller": {
+      "longName": "AdditionalInstaller",
+      "shortName": ""
+    },
     "ProjectLicense": {
       "longName": "ProjectLicense",
       "shortName": ""

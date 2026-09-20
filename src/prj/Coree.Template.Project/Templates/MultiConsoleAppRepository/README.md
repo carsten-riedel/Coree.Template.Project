@@ -1,6 +1,10 @@
 # __SourceName__
 
 .NET multi-console repository. The GitHub landing page is this file.
+
+## Optional WiX user installer
+
+Use `--AdditionalInstaller WixUserInstaller` to add a separate Windows per-user WiX project. It packages the normal app publish output and writes the MSI under `src/prj/__SourceName__/bin/setup/`; the default `None` choice leaves the repository unchanged. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
 <!--#if (PlaceSolution == "SlnFolder") -->
 Each app's `.slnx` and notes live under `src/sln/__SourceName__/`. CLI commands for this app start in that folder.
 <!--#elseif (PlaceSolution == "BesideCsproj") -->

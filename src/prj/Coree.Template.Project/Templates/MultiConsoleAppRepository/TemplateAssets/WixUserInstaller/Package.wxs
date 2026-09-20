@@ -1,0 +1,16 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+    Id="__SourceName__.WixDemo.Console"
+    Name="__SourceName__ Console User Installer"
+    Manufacturer="MyAuthor"
+    Version="1.0.0.0"
+    UpgradeCode="D7F09A5E-6DB4-45E5-8DD0-8A7BC7ACD3E1"
+    Scope="perUser">
+    <MajorUpgrade DowngradeErrorMessage="A newer version of the console user installer is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+    <StandardDirectory Id="PerUserProgramFilesFolder">
+      <Directory Id="INSTALLFOLDER" Name="__SourceName__ Console" />
+    </StandardDirectory>
+    <Files Include="!(bindpath.AppPublish)\**" Directory="INSTALLFOLDER" />
+  </Package>
+</Wix>

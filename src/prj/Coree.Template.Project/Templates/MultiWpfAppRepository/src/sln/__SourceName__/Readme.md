@@ -147,6 +147,12 @@ dotnet publish
 ```
 
 `dotnet publish` with no `--framework` publishes the default TFM from `src/prj/__SourceName__/Properties/Build/PublishDefaultFramework.targets` to `src/prj/__SourceName__/bin/Publish/`. Override with `dotnet publish --framework net8.0-windows` (or another selected TFM). Edit that targets file to change the default. To try a newer TFM (net11.0-windows, …) before shipping it, append it to `TargetFrameworks` so build/test catch incompatibilities; leave the targets file until bare publish should follow. Publish always uses `win-x64`. The publish recipe (self-contained, single-file, …) is a generate-time choice and applies only while publishing. Test and optional benchmark projects are not published.
+<!--#if (AdditionalInstaller == "WixUserInstaller") -->
+
+## WiX user installer
+
+The additional Windows per-user WiX project is part of this solution. `dotnet publish` publishes the app to `src/prj/__SourceName__/bin/Publish/` and then writes the MSI to `src/prj/__SourceName__/bin/setup/`. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
+<!--#endif -->
 
 ## Pack
 

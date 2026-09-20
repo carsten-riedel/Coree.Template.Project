@@ -14,6 +14,12 @@ Libraries this template uses that are not owned or provided by the template auth
 - [ReportGenerator](https://github.com/danielpalme/ReportGenerator) (Apache-2.0)
 - [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) (MIT)
 
+## Optional WiX user installer
+
+- [WiX Toolset](https://wixtoolset.org/) (WiX SDK 6.0.2; review the package license terms)
+
+Visual Studio requires the WiX Toolset HeatWave extension to load or build the generated `.wixproj`; the `dotnet` CLI uses the SDK package directly.
+
 ## Documentation template (DocShell)
 
 When the documentation template is selected, DocShell specifies these libraries (vendored at bootstrap, not inside the template package):

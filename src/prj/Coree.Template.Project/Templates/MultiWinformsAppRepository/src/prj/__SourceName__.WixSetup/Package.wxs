@@ -11,6 +11,6 @@
     <StandardDirectory Id="PerUserProgramFilesFolder">
       <Directory Id="INSTALLFOLDER" Name="__SourceName__ WinForms" />
     </StandardDirectory>
-    <Files Include="!(bindpath.AppPublish)\**" Directory="INSTALLFOLDER" />
+    <Files Include="!(bindpath.__SourceName__)\**" Directory="INSTALLFOLDER" />
   </Package>
 </Wix>

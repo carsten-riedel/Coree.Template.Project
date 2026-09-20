@@ -4,8 +4,6 @@
     <InstallerPlatform>x64</InstallerPlatform>
     <AppProjectPath>$(MSBuildProjectDirectory)\..\__SourceName__\__SourceName__.csproj</AppProjectPath>
     <AppProjectDirectory>$(MSBuildProjectDirectory)\..\__SourceName__</AppProjectDirectory>
-    <AppTargetFramework>__TargetFramework__</AppTargetFramework>
-    <AppPublishDirectory>$(AppProjectDirectory)\bin\Publish</AppPublishDirectory>
     <AppSetupDirectory>$(AppProjectDirectory)\bin\Setup</AppSetupDirectory>
     <OutputPath>$(AppSetupDirectory)\</OutputPath>
     <IsPublishable>true</IsPublishable>
@@ -13,15 +11,15 @@
     <SuppressIces>ICE38;ICE64;ICE91</SuppressIces>
   </PropertyGroup>
 
+  <!-- Reuse the app's single default publish framework; WiX itself is TFM-neutral. -->
+  <Import Project="$(AppProjectDirectory)\Properties\Build\PublishDefaultFramework.props" />
+
   <ItemGroup>
     <ProjectReference Include="$(AppProjectPath)">
-      <AdditionalProperties>TargetFramework=$(AppTargetFramework);Configuration=$(Configuration)</AdditionalProperties>
-      <Targets>Publish</Targets>
+      <AdditionalProperties>_IsPublishing=true;TargetFramework=$(PublishDefaultFramework);Configuration=$(Configuration)</AdditionalProperties>
+      <Targets>PublishForInstaller</Targets>
       <BuildReference>true</BuildReference>
     </ProjectReference>
-    <BindPath Include="$(AppPublishDirectory)">
-      <BindName>AppPublish</BindName>
-    </BindPath>
   </ItemGroup>
 
   <Target Name="BuildInstallerOnPublish" BeforeTargets="Publish" DependsOnTargets="Build" />

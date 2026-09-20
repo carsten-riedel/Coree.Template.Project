@@ -1,0 +1,6 @@
+<Project>
+  <!-- Single source for the framework used by a bare library publish. -->
+  <PropertyGroup>
+    <PublishDefaultFramework>__TargetFramework__</PublishDefaultFramework>
+  </PropertyGroup>
+</Project>

@@ -1,11 +1,27 @@
 <Project>
   <!--
     Explicit Sdk.targets close so PublishDefaultFramework.targets can run
-    after the SDK (needed for switchless `dotnet publish`; see that file).
+    after the SDK (needed for switchless `dotnet publish`; see the props file
+    it imports for the shared default framework).
     A Project Sdk attribute would import Sdk.targets last and wipe the override.
     Nested import is conditioned: dispatch is outer-only; inner builds keep
     the real SDK Publish.
   -->
   <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
   <Import Project="$(MSBuildThisFileDirectory)PublishDefaultFramework.targets" Condition="'$(IsCrossTargetingBuild)' == 'true'" />
+
+  <!--
+    WiX calls this target through ProjectReference. It returns the actual
+    publish directory, so a WiX bind path follows PublishDir overrides too.
+    _IsPublishing is explicit because this target is not named Publish.
+  -->
+  <Target Name="PublishForInstaller" Returns="@(_InstallerPublishDirectory)">
+    <MSBuild
+      Projects="$(MSBuildProjectFullPath)"
+      Targets="Publish"
+      Properties="_IsPublishing=true;TargetFramework=$(TargetFramework)" />
+    <ItemGroup>
+      <_InstallerPublishDirectory Include="$(PublishDir)" />
+    </ItemGroup>
+  </Target>
 </Project>

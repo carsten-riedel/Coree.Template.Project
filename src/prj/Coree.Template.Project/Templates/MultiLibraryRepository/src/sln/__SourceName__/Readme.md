@@ -152,7 +152,7 @@ The class library uses `Microsoft.CodeAnalysis.PublicApiAnalyzers`. The first re
 
 ## Publish
 
-The class library sets `IsPublishable` to `false`. Distribution is `dotnet pack`. To write output to `src/prj/__SourceName__/bin/Publish/` for the highest selected target framework, set `IsPublishable` to `true` and run:
+The class library sets `IsPublishable` to `false`. Distribution is `dotnet pack`. To write output to `src/prj/__SourceName__/bin/Publish/` for the default selected target framework, set `IsPublishable` to `true` and run. The default is defined in `src/prj/__SourceName__/Properties/Build/PublishDefaultFramework.props`:
 
 ```bash
 dotnet publish

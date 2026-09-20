@@ -146,7 +146,7 @@ ReportGenerator writes one summary per target framework under `../__SourceName__
 dotnet publish
 ```
 
-`dotnet publish` with no `--framework` publishes the default TFM from `src/prj/__SourceName__/Properties/Build/PublishDefaultFramework.targets` to `src/prj/__SourceName__/bin/Publish/`. Override with `dotnet publish --framework net8.0-windows` (or another selected TFM). Edit that targets file to change the default. To try a newer TFM (net11.0-windows, …) before shipping it, append it to `TargetFrameworks` so build/test catch incompatibilities; leave the targets file until bare publish should follow. Publish always uses `win-x64`. The publish recipe (self-contained, single-file, …) is a generate-time choice and applies only while publishing. Test and optional benchmark projects are not published.
+`dotnet publish` with no `--framework` publishes the default TFM from `src/prj/__SourceName__/Properties/Build/PublishDefaultFramework.props` to `src/prj/__SourceName__/bin/Publish/`. Override with `dotnet publish --framework net8.0-windows` (or another selected TFM). Edit that props file to change the default. To try a newer TFM (net11.0-windows, …) before shipping it, append it to `TargetFrameworks` so build/test catch incompatibilities; leave the props file until bare publish should follow. Publish always uses `win-x64`. The publish recipe (self-contained, single-file, …) is a generate-time choice and applies only while publishing. Test and optional benchmark projects are not published.
 <!--#if (AdditionalInstaller == "WixUserInstaller") -->
 
 ## WiX user installer

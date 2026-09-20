@@ -1,7 +1,8 @@
 <Project>
   <!--
     Explicit Sdk.targets close so PublishDefaultFramework.targets can run
-    after the SDK (needed for switchless `dotnet publish`; see that file).
+    after the SDK (needed for switchless `dotnet publish`; see the props file
+    it imports for the shared default framework).
     A Project Sdk attribute would import Sdk.targets last and wipe the override.
     Nested import is conditioned: dispatch is outer-only; inner builds keep
     the real SDK Publish. UseWebSdk is a generate-time hash-if (template.json

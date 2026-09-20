@@ -4,7 +4,7 @@
     Name="__SourceName__ WPF User Installer"
     Manufacturer="MyAuthor"
     Version="1.0.0.0"
-    UpgradeCode="A8A0F4D1-1B3C-4AB9-9C30-0D8C1D7A6C11"
+    UpgradeCode="00000000-0000-0000-0000-000000000002"
     Scope="perUser">
     <MajorUpgrade DowngradeErrorMessage="A newer version of the WPF user installer is already installed." />
     <MediaTemplate EmbedCab="yes" />

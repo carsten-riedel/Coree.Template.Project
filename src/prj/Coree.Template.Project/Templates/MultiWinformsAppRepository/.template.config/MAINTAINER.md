@@ -12,7 +12,7 @@ The generated root `README.md` lives beside this folder, one level up. That file
 | --- | --- |
 | `template.json` | Identity, symbols, sources, post-actions. |
 | `ide.host.json` | Visual Studio: visibility, labels, **defaults that differ from CLI**. `persistenceScope: none` so the New Project dialog does not reuse the last create. Host mapping: **CLI ↔ Visual Studio**. No `icon` property: see **Visual Studio template icon**. |
-| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `Author`, `CSharpProjectOptions`, `ProgramSample`, `ProjectLicense`, `NerdbankGitVersioning`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `TestCoverage`, `DirectoryMsBuildFiles`, `DotNetToolManifest`, and `Publish` so they do not steal single-letter aliases. |
+| `dotnetcli.host.json` | CLI long names; empty `shortName` for `InitRepoItems`, `InitAllRepoItems`, `Author`, `CSharpProjectOptions`, `ProgramSample`, `AdditionalInstaller`, `ProjectLicense`, `NerdbankGitVersioning`, `DocumentationTemplate`, `ProjectEditorGlobalConfig`, `AnalysisMode`, `TestCoverage`, `DirectoryMsBuildFiles`, `DotNetToolManifest`, and `Publish` so they do not steal single-letter aliases. |
 | `icon.png` | **Intentionally absent.** Visual Studio then uses the template **package** icon. |
 | `MAINTAINER.md` | This file. |
 
@@ -204,7 +204,7 @@ Benchmark previously hardcoded `ImplicitUsings` enable. It now follows the switc
 
 Single choice, default **`MinimalClassic`**. UI label **Program sample**. CLI long name **`--ProgramSample`**. Empty CLI `shortName`. Combo-safe (each app has its own files). `HostedDi` is the maintained Generic Host/DI alternative.
 
-Seeds live under `TemplateAssets/ProgramSamples/{choice}/App|Tests|Benchmark/`. Extra sources copy each folder onto the matching stub project (`App/` → `src/prj/{Name}/`, `Tests/` → tests, `Benchmark/` → benchmark). Later sample files drop into those folders without a per-file rename. `Benchmark/` is copied only when `BenchmarkProject` is on. DocShell extra sources must `exclude` `ProgramSamples/**` as well as `Versioning/**`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`. Do not leave a `Program.cs` under `src/prj/__SourceName__/`. The stub csproj stays one file (`WinExe`, `UseWindowsForms`); sample-specific package references can be `#if` there.
+Seeds live under `TemplateAssets/ProgramSamples/{choice}/App|Tests|Benchmark/`. Extra sources copy each folder onto the matching stub project (`App/` → `src/prj/{Name}/`, `Tests/` → tests, `Benchmark/` → benchmark). Later sample files drop into those folders without a per-file rename. `Benchmark/` is copied only when `BenchmarkProject` is on. DocShell extra sources must `exclude` `ProgramSamples/**` and `WixUserInstaller/**` as well as `Versioning/**`, `CodeStyle/**`, `Licenses/**`, and `DirectoryMsBuild/**`. Do not leave a `Program.cs` under `src/prj/__SourceName__/`. The stub csproj stays one file (`WinExe`, `UseWindowsForms`); sample-specific package references can be `#if` there.
 
 `MinimalClassic` is the Visual Studio WinForms skeleton: `[STAThread] static void Main()`, `ApplicationConfiguration.Initialize()`, `Application.Run(new Form1())`, plus `Form1` / `Form1.Designer.cs` / `Form1.resx`. Generate-time `#if (CSharpProjectOptions == "DisableImplicitUsings")` adds the usings those names need. When implicit usings are on, those lines are omitted. No `KeepScaffoldUnusedUsings` here.
 
@@ -214,6 +214,10 @@ Seeds live under `TemplateAssets/ProgramSamples/{choice}/App|Tests|Benchmark/`. 
 | --- | --- | --- | --- |
 | `MinimalClassic` | VS Form1 app (`Program` does not return a code) | Construct `Form1`; do not call `Main` (message loop) | Construct `Form1` and read `Text` |
 | `HostedDi` | Generic Host plus injected `MainForm` and reloadable settings | Configuration, registrations, form state, and reload behavior | UI-independent window-title lookup |
+
+## `AdditionalInstaller`
+
+Single choice, default **`None`**. `WixUserInstaller` adds a Windows-only per-user WiX project under `src/prj/{Name}.WixDemo/`. The generated solution publishes the app to `bin/Publish/` and then writes the MSI to the app's `bin/setup/`; Visual Studio requires the WiX Toolset HeatWave extension. The WiX SDK remains a project-local package reference, so the CLI can build it without the Visual Studio extension. `InstallerUpgradeCode` is generated per template invocation; never replace it with a shared fixed GUID.
 
 Coverlet still gates 100% on the app assembly. `ExcludeByFile` skips `Program.cs` (untested message loop) and `**/*.g.cs` (WinForms `ApplicationConfiguration.Initialize` source generator). `ExcludeByAttribute` `CompilerGeneratedAttribute` matches the generated `ApplicationConfiguration` class (`[CompilerGenerated]` in the WinForms generator, not `GeneratedCodeAttribute`). Do not exclude a designer file: Coverlet can then drop the whole partial form type. Generated form disposal is marked `[ExcludeFromCodeCoverage]`; HostedDi also excludes only its UI-thread marshaling callback while testing the configuration provider and observable reload result. `MinimalClassic` construction does not need an STA thread. HostedDi form tests use a dedicated STA thread because the sample exercises configuration callbacks. The HostedDi benchmark is deliberately UI-independent.
 
@@ -384,7 +388,7 @@ Do not rename `Default` to Minimal: both seeds are the same full VS style dump. 
 
 `Strict` needs the product C# default `Nullable`. Console `Program.cs` does not keep unused usings for the style dump (`KeepScaffoldUnusedUsings` is library/analyzer only). Needed `using` lines follow `DisableImplicitUsings`.
 
-Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that folder to the WinForms app project, **excludes** the other seed, and **renames** the chosen file to `.project.editor.globalconfig`. Do not leave a seed under `src/prj/__SourceName__/`: DocShell extra sources must `exclude` `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, and `ProgramSamples/**`.
+Seeds live under `TemplateAssets/CodeStyle/`. Each extra source copies that folder to the WinForms app project, **excludes** the other seed, and **renames** the chosen file to `.project.editor.globalconfig`. Do not leave a seed under `src/prj/__SourceName__/`: DocShell extra sources must `exclude` `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, `ProgramSamples/**`, and `WixUserInstaller/**`.
 
 `UseProjectEditorGlobalConfig` is `(ProjectEditorGlobalConfig != "Off")`; the csproj `#if` does not need a new branch per dump.
 
@@ -404,7 +408,7 @@ Place the PropertyGroup **before** `ImportSdkTargets`.
 
 ## `DocumentationTemplate`
 
-Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, repository-root `docs/` only (no package-docs destination: these apps are not a NuGet tool). Extra sources copy that file only (`exclude` of `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, and `ProgramSamples/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
+Multi-choice, default **empty** (CLI) / **None** (Visual Studio). UI label **Documentation template**. CLI long name **`--DocumentationTemplate`**. Not part of `--InitAllRepoItems`. Same `TemplateAssets/DocShell.html` seed, repository-root `docs/` only (no package-docs destination: these apps are not a NuGet tool). Extra sources copy that file only (`exclude` of `Versioning/**`, `CodeStyle/**`, `Licenses/**`, `DirectoryMsBuild/**`, `ProgramSamples/**`, and `WixUserInstaller/**`). Do **not** vendor the 25-file offline site in the template: the HTML file is the bootstrap contract, so a later checkpoint run acquires the versions that file pins then, not whatever was frozen in this pack. A newer DocShell release is a copy/replace of `TemplateAssets/DocShell.html` (keep that filename). Do not rewrite internal bootstrap paths such as `./documentation/css` here; those change in the DocShell product file itself.
 
 | Choice | Path | When | Combo later app |
 | --- | --- | --- | --- |

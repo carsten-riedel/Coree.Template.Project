@@ -352,6 +352,11 @@
         }
       ]
     },
+    "InstallerUpgradeCode": {
+      "type": "generated",
+      "generator": "guid",
+      "replaces": "00000000-0000-0000-0000-000000000001"
+    },
     // Converts the selected framework values to the semicolon-separated MSBuild list.
     "TargetFrameworksValue": {
       "type": "generated",
@@ -1000,7 +1005,8 @@
             "CodeStyle/**",
             "Licenses/**",
             "DirectoryMsBuild/**",
-            "ProgramSamples/**"
+            "ProgramSamples/**",
+            "WixUserInstaller/**"
           ]
         }
       ]

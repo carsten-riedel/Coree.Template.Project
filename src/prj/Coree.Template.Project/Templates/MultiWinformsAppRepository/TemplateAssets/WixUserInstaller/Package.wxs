@@ -4,7 +4,7 @@
     Name="__SourceName__ WinForms User Installer"
     Manufacturer="MyAuthor"
     Version="1.0.0.0"
-    UpgradeCode="B6A1E5C2-2D4E-4BC0-AD41-1E9D2E8B7D22"
+    UpgradeCode="00000000-0000-0000-0000-000000000003"
     Scope="perUser">
     <MajorUpgrade DowngradeErrorMessage="A newer version of the WinForms user installer is already installed." />
     <MediaTemplate EmbedCab="yes" />

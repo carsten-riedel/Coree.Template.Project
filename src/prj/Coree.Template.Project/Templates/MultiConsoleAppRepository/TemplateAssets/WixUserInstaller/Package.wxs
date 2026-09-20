@@ -4,7 +4,7 @@
     Name="__SourceName__ Console User Installer"
     Manufacturer="MyAuthor"
     Version="1.0.0.0"
-    UpgradeCode="D7F09A5E-6DB4-45E5-8DD0-8A7BC7ACD3E1"
+    UpgradeCode="00000000-0000-0000-0000-000000000001"
     Scope="perUser">
     <MajorUpgrade DowngradeErrorMessage="A newer version of the console user installer is already installed." />
     <MediaTemplate EmbedCab="yes" />

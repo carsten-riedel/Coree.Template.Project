@@ -13,12 +13,12 @@
     <SuppressIces>ICE38;ICE64;ICE91</SuppressIces>
   </PropertyGroup>
 
-  <!-- Reuse the app's single default publish framework; WiX itself is TFM-neutral. -->
+  <!-- Import the shared project contract; WiX itself is TFM-neutral. -->
   <Import Project="$(AppProjectDirectory)\Properties\Build\SharedProject.props" />
 
   <ItemGroup>
     <ProjectReference Include="$(AppProjectPath)">
-      <AdditionalProperties>_IsPublishing=true;TargetFramework=$(PublishDefaultFramework);Configuration=$(Configuration)</AdditionalProperties>
+      <AdditionalProperties>_IsPublishing=true;Configuration=$(Configuration)</AdditionalProperties>
       <Targets>PublishForInstaller</Targets>
       <BuildReference>true</BuildReference>
     </ProjectReference>

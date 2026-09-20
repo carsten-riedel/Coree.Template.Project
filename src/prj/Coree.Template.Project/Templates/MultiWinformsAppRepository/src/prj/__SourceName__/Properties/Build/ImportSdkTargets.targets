@@ -13,13 +13,14 @@
   <!--
     WiX calls this target through ProjectReference. It returns the actual
     publish directory, so a WiX bind path follows PublishDir overrides too.
+    The app selects PublishDefaultFramework here; WiX does not supply a TFM.
     _IsPublishing is explicit because this target is not named Publish.
   -->
   <Target Name="PublishForInstaller" Returns="@(_InstallerPublishDirectory)">
     <MSBuild
       Projects="$(MSBuildProjectFullPath)"
       Targets="Publish"
-      Properties="_IsPublishing=true;TargetFramework=$(TargetFramework)" />
+      Properties="_IsPublishing=true;TargetFramework=$(PublishDefaultFramework)" />
     <ItemGroup>
       <_InstallerPublishDirectory Include="$(PublishDir)" />
     </ItemGroup>

@@ -7,7 +7,7 @@
     <!--
       Keep TargetFrameworks only. Do not add TargetFramework.
       `dotnet publish` with no -f uses the default TFM from
-      Properties/Build/PublishDefaultFramework.props. Override with
+      Properties/Build/SharedProject.props. Override with
       `dotnet publish -f net8.0` (or net10.0, any selected TFM).
       Edit that props file to change the default.
       To try a newer TFM (net11, ...) before shipping it: append it to

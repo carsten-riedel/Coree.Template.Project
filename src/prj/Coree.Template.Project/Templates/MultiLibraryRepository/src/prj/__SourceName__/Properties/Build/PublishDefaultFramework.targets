@@ -1,5 +1,5 @@
 <Project>
-  <Import Project="$(MSBuildThisFileDirectory)PublishDefaultFramework.props" />
+  <Import Project="$(MSBuildThisFileDirectory)SharedProject.props" />
   <!--
     Why this file exists
 

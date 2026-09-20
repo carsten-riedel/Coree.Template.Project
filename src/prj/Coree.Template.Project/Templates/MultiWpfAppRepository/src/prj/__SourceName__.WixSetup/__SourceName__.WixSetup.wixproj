@@ -7,12 +7,14 @@
     <AppSetupDirectory>$(AppProjectDirectory)\bin\Setup</AppSetupDirectory>
     <OutputPath>$(AppSetupDirectory)\</OutputPath>
     <IsPublishable>true</IsPublishable>
+    <!-- The MSI is the setup artifact; do not copy WiX symbols beside it. -->
+    <SuppressPdbOutput>true</SuppressPdbOutput>
     <!-- Wildcard Files harvesting cannot author per-user registry key paths. -->
     <SuppressIces>ICE38;ICE64;ICE91</SuppressIces>
   </PropertyGroup>
 
   <!-- Reuse the app's single default publish framework; WiX itself is TFM-neutral. -->
-  <Import Project="$(AppProjectDirectory)\Properties\Build\PublishDefaultFramework.props" />
+  <Import Project="$(AppProjectDirectory)\Properties\Build\SharedProject.props" />
 
   <ItemGroup>
     <ProjectReference Include="$(AppProjectPath)">

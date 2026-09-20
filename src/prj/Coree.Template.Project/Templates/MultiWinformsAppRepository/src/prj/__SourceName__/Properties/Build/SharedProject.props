@@ -1,5 +1,5 @@
 <Project>
-  <!-- Single source for the framework used by bare app and WiX publishes. -->
+  <!-- Shared project-to-extension properties. -->
   <PropertyGroup>
     <PublishDefaultFramework>__TargetFramework__</PublishDefaultFramework>
   </PropertyGroup>

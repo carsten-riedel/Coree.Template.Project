@@ -218,7 +218,7 @@ Analog of `dotnet new console --use-program-main` (explicit `Program` + `args`),
 
 ## `AdditionalInstaller`
 
-Single choice, default **`None`**. `WixUserInstaller` adds a Windows-only per-user WiX project under `src/prj/{Name}.WixSetup/`. The generated solution publishes the app to `bin/Publish/` and then writes the MSI to the app's `bin/Setup/`; Visual Studio requires the WiX Toolset HeatWave extension. The WiX SDK remains a project-local package reference, so the CLI can build it without the Visual Studio extension. `PublishDefaultFramework.props` is the single source for the bare-publish TFM; the WiX project imports it and calls the app's `PublishForInstaller` target, which returns the effective publish directory for WiX harvesting. `InstallerUpgradeCode` is generated per template invocation; never replace it with a shared fixed GUID.
+Single choice, default **`None`**. `WixUserInstaller` adds a Windows-only per-user WiX project under `src/prj/{Name}.WixSetup/`. The generated solution publishes the app to `bin/Publish/` and then writes the MSI to the app's `bin/Setup/`; Visual Studio requires the WiX Toolset HeatWave extension. The WiX SDK remains a project-local package reference, so the CLI can build it without the Visual Studio extension. `SharedProject.props` is the shared project-to-extension property source; it currently contains the bare-publish TFM. the WiX project imports it and calls the app's `PublishForInstaller` target, which returns the effective publish directory for WiX harvesting. `InstallerUpgradeCode` is generated per template invocation; never replace it with a shared fixed GUID.
 
 ## `ProjectLicense`
 

@@ -59,7 +59,7 @@
       "choices": [
         {
           "choice": "None",
-          "description": "Do not add first-create files. Use this in Visual Studio when adding another console app to an existing repository.",
+          "description": "Do not add first-create files. Use this in Visual Studio when adding another WinForms app to an existing repository.",
           "displayName": "None"
         },
         {
@@ -126,7 +126,7 @@
       "isRequired": false,
       "defaultValue": "SlnFolder",
       "enableQuotelessLiterals": true,
-      "description": "Where this app's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideCsproj writes the .slnx and handbook next to the console app csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
+      "description": "Where this app's .slnx is written. Default src/sln/{name}/ (handbook beside that file). BesideCsproj writes the .slnx and handbook next to the WinForms app csproj and does not create src/sln/{name}/. Do not collect several .slnx files in one directory: `dotnet` then requires an explicit path (MSB1011).",
       "displayName": "Solution file location",
       "choices": [
         {
@@ -185,7 +185,7 @@
     // Publish-time only. Same named recipes as wpfapp-coree.
     "Publish": {
       "type": "parameter",
-      "description": "Publish recipe written into the console app csproj. Applies when _IsPublishing is true.",
+      "description": "Publish recipe written into the WinForms app csproj. Applies when _IsPublishing is true.",
       "datatype": "choice",
       "allowMultipleValues": false,
       "enableQuotelessLiterals": true,
@@ -219,7 +219,7 @@
       ],
       "defaultValue": "FrameworkIncludedSingleCompressed"
     },
-    // One multi-choice for C# / debug in the console app, tests, and
+    // One multi-choice for C# / debug in the WinForms app, tests, and
     // benchmark (VS combobox, like TFMs and InitRepoItems). Checked =
     // current product default. Unchecked = the other explicit value.
     // Properties are always written. No XML documentation file switch.
@@ -232,7 +232,7 @@
       "enableQuotelessLiterals": true,
       "isRequired": false,
       "defaultValue": "DisableImplicitUsings|Nullable|LangLatest|DebugEmbedded",
-      "description": "C# and debug settings for the console app, tests, and benchmark. Uncheck an item to write the alternative value.",
+      "description": "C# and debug settings for the WinForms app, tests, and benchmark. Uncheck an item to write the alternative value.",
       "displayName": "C# project options",
       "choices": [
         {
@@ -260,22 +260,29 @@
     // Exclusive seeds under TemplateAssets/ProgramSamples/{choice}/
     // App|Tests|Benchmark/. Extra sources copy each folder onto the stub
     // project path (no per-file rename). MinimalClassic is the VS WinForms
-    // skeleton (Program + Form1). Tests construct Form1; they do not call
-    // Main (message loop) or ApplicationConfiguration.Initialize (generated).
-    // Program.cs usings only when DisableImplicitUsings.
+    // skeleton (Program + Form1). HostedDi adds a fixed Generic Host,
+    // configuration, logging, and constructor-injection sample. Tests do not
+    // call Main (message loop) or ApplicationConfiguration.Initialize
+    // (generated). Framework-specific usings stay explicit; only namespaces
+    // supplied by WinForms implicit usings are conditional.
     "ProgramSample": {
       "type": "parameter",
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "MinimalClassic",
       "enableQuotelessLiterals": true,
-      "description": "Which WinForms sample to copy. Default is the Visual Studio minimal Form1 app. Tests and the optional benchmark method are copied with the same choice.",
+      "description": "Which cohesive WinForms sample to copy. Default is the Visual Studio minimal Form1 app. HostedDi adds Generic Host, configuration, logging, and constructor injection. Tests and the optional benchmark are copied with the same choice.",
       "displayName": "Program sample",
       "choices": [
         {
           "choice": "MinimalClassic",
           "description": "Visual Studio WinForms skeleton: STA Program.Main and an empty Form1.",
           "displayName": "Minimal classic"
+        },
+        {
+          "choice": "HostedDi",
+          "description": "WinForms app with Generic Host, constructor injection, logging, reloadable appsettings, profile optimization, and single-instance protection.",
+          "displayName": "Hosted WinForms with DI"
         }
       ]
     },
@@ -397,7 +404,7 @@
       "isRequired": false,
       "defaultValue": "Project",
       "enableQuotelessLiterals": true,
-      "description": "Nerdbank.GitVersioning. Default is this app (version.json under Properties/). This repository uses one version.json at the repo root (first create only). Off keeps VersionPrefix in the console app project (no extra package).",
+      "description": "Nerdbank.GitVersioning. Default is this app (version.json under Properties/). This repository uses one version.json at the repo root (first create only). Off keeps VersionPrefix in the WinForms app project (no extra package).",
       "displayName": "Nerdbank.GitVersioning",
       "choices": [
         {
@@ -412,8 +419,8 @@
         },
         {
           "choice": "Off",
-          "description": "VersionMajor / VersionPrefix / PackageVersion in the console app csproj. No Nerdbank.GitVersioning package.",
-          "displayName": "Off (VersionPrefix in the console app project)"
+          "description": "VersionMajor / VersionPrefix / PackageVersion in the WinForms app csproj. No Nerdbank.GitVersioning package.",
+          "displayName": "Off (VersionPrefix in the WinForms app project)"
         }
       ]
     },
@@ -513,8 +520,8 @@
       "isRequired": false,
       "defaultValue": "Strict",
       "enableQuotelessLiterals": true,
-      "description": "Editor and analyzer rules beside the console app project, applied in the IDE and on build. Default is Strict: naming and nullable fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected.",
-      "displayName": "Code style rules for console app project",
+      "description": "Editor and analyzer rules beside the WinForms app project, applied in the IDE and on build. Default is Strict: naming and nullable fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected.",
+      "displayName": "Code style rules for WinForms app project",
       "choices": [
         {
           "choice": "Strict",
@@ -548,7 +555,7 @@
       "defaultValue": "Recommended",
       "enableQuotelessLiterals": true,
       "replaces": "__AnalysisMode__",
-      "description": "SDK code-analysis mode for the console app (CA rules). Default Recommended. Minimum is fewer warnings. All is almost every CA rule as a warning. Test and benchmark projects are not affected.",
+      "description": "SDK code-analysis mode for the WinForms app (CA rules). Default Recommended. Minimum is fewer warnings. All is almost every CA rule as a warning. Test and benchmark projects are not affected.",
       "displayName": "Code analysis mode",
       "choices": [
         {
@@ -579,12 +586,12 @@
       "isRequired": false,
       "defaultValue": "Coverlet",
       "enableQuotelessLiterals": true,
-      "description": "Test coverage on the test project. Default is Coverlet: dotnet test fails if the console app is under 100% line/branch/method coverage. Lower Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. The console app is not affected.",
+      "description": "Test coverage on the test project. Default is Coverlet: dotnet test fails if the WinForms app is under 100% line/branch/method coverage. Lower Threshold in the test csproj if you want less. Coverlet and ReportGenerator also writes HTML/Markdown. None writes no extra test packages. The WinForms app is not affected.",
       "displayName": "Test coverage",
       "choices": [
         {
           "choice": "Coverlet",
-          "description": "Add coverlet.msbuild and collect coverage on dotnet test. Default. Fails the test run below 100% line/branch/method on the console app assembly. Lower Threshold in the test csproj to allow less. Raw Coverlet output only.",
+          "description": "Add coverlet.msbuild and collect coverage on dotnet test. Default. Fails the test run below 100% line/branch/method on the WinForms app assembly. Lower Threshold in the test csproj to allow less. Raw Coverlet output only.",
           "displayName": "Coverlet only (100% gate)"
         },
         {
@@ -612,8 +619,8 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add an optional BenchmarkDotNet console project.",
-      "displayName": "Add optional BenchmarkDotNet console project"
+      "description": "Add an optional BenchmarkDotNet runner project.",
+      "displayName": "Add optional BenchmarkDotNet runner"
     },
     // Opt-in empty Directory.Build.props/.targets next to this app csproj
     // and Directory.Solution.props/.targets next to this app's .slnx
@@ -625,7 +632,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Add empty Directory.Build.props and Directory.Build.targets beside this console app project, and Directory.Solution.props and Directory.Solution.targets beside this app's .slnx (follows PlaceSolution). Landing files for extra MSBuild you do not want in the csproj. Test and benchmark projects are not affected. Default off.",
+      "description": "Add empty Directory.Build.props and Directory.Build.targets beside this WinForms app project, and Directory.Solution.props and Directory.Solution.targets beside this app's .slnx (follows PlaceSolution). Landing files for extra MSBuild you do not want in the csproj. Test and benchmark projects are not affected. Default off.",
       "displayName": "Empty Directory.Build and Directory.Solution MSBuild files"
     },
     // Empty local tool manifest beside this app csproj. Default on.
@@ -635,7 +642,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "description": "Add an empty .config/dotnet-tools.json beside this console app project (no tools). Landing file for dotnet tool install --local. Default on. Every create; paths do not collide. Test and benchmark projects are not affected. Does not restore tools on build.",
+      "description": "Add an empty .config/dotnet-tools.json beside this WinForms app project (no tools). Landing file for dotnet tool install --local. Default on. Every create; paths do not collide. Test and benchmark projects are not affected. Does not restore tools on build.",
       "displayName": "Empty local dotnet-tools.json"
     }
   },
@@ -851,6 +858,21 @@
       "source": "./TemplateAssets/ProgramSamples/MinimalClassic/Benchmark/",
       "target": "./src/prj/__SourceName__.Benchmark/",
       "condition": "((ProgramSample == \"MinimalClassic\") && BenchmarkProject)"
+    },
+    {
+      "source": "./TemplateAssets/ProgramSamples/HostedDi/App/",
+      "target": "./src/prj/__SourceName__/",
+      "condition": "(ProgramSample == \"HostedDi\")"
+    },
+    {
+      "source": "./TemplateAssets/ProgramSamples/HostedDi/Tests/",
+      "target": "./src/prj/__SourceName__.Tests/",
+      "condition": "(ProgramSample == \"HostedDi\")"
+    },
+    {
+      "source": "./TemplateAssets/ProgramSamples/HostedDi/Benchmark/",
+      "target": "./src/prj/__SourceName__.Benchmark/",
+      "condition": "((ProgramSample == \"HostedDi\") && BenchmarkProject)"
     },
     {
       "source": "./TemplateAssets/",
@@ -1089,7 +1111,7 @@
         "actionId": "AC1156F7-BB77-4DB8-B28F-24EEBCCA1E5C",
         "manualInstructions": [
           {
-            "text": "Close Visual Studio, open the .slnx next to the console app project under src/prj/, and delete the extra .slnx Visual Studio created in the repository root."
+            "text": "Close Visual Studio, open the .slnx next to the WinForms app project under src/prj/, and delete the extra .slnx Visual Studio created in the repository root."
           }
         ],
         "continueOnError": true

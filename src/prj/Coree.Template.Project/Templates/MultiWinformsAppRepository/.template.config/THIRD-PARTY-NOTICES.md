@@ -11,6 +11,7 @@ Libraries this template uses that are not owned or provided by the template auth
 
 ## Optional content
 
+- [Microsoft.Extensions.Hosting](https://github.com/dotnet/runtime) (MIT; `HostedDi` program sample)
 - [ReportGenerator](https://github.com/danielpalme/ReportGenerator) (Apache-2.0)
 - [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) (MIT)
 

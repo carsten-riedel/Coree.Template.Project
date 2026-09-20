@@ -424,6 +424,24 @@ dotnet new multiwinformsrepo-coree \
 
 The same repository can later contain additional independently publishable WinForms applications.
 
+The WinForms repository has two cohesive application seeds selected with `--ProgramSample`:
+
+- `MinimalClassic` (default): a minimal Visual Studio-style `Form1` skeleton.
+- `HostedDi`: a Generic Host application with constructor injection, debug logging, reloadable configuration, profile optimization, single-instance protection, and matching tests and benchmark.
+
+Create the hosted sample with:
+
+```bash
+dotnet new multiwinformsrepo-coree \
+    --Author "Your Name" \
+    --output "./MyCompany.WinForms" \
+    --name "MyCompany.WinForms" \
+    --ProgramSample HostedDi \
+    --InitAllRepoItems
+```
+
+`ProgramSample` is the maintained replacement for the former standalone WinForms sample layouts. The legacy `winforms-coree` and `winformsdi-coree` templates remain available and unchanged. Hosting, DI, logging, and configuration form one fixed `HostedDi` feature set rather than separate switches.
+
 **Windows only.**
 
 ---

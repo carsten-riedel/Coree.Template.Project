@@ -78,6 +78,24 @@
     <InvariantGlobalization>$(InvariantGlobalization)</InvariantGlobalization>
   </PropertyGroup>
 
+  <!--#if (ProgramSample == "HostedDi") -->
+  <!-- HostedDi application assets and configuration. -->
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+    <ApplicationIcon>Resources\application.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Properties\appsettings.json;Resources\application.ico" />
+    <Content Include="Properties\appsettings.json">
+      <TargetPath>appsettings.json</TargetPath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <EmbeddedResource Include="Resources\application.ico" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.12" />
+  </ItemGroup>
+  <!--#endif -->
+
   <!--#if (UseNerdbankGitVersioning) -->
   <!-- Versioning: Nerdbank -->
   <!--#if (NerdbankGitVersioning == "Project") -->

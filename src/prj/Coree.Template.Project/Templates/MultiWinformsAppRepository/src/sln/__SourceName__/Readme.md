@@ -4,7 +4,7 @@
 This folder is the per-app area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` lives here; keep the folder while that is true. You can still add extra solution items here.
 <!--#elseif (PlaceSolution == "BesideCsproj") -->
-This folder is the console app. The `.slnx` and this readme sit next to the `.csproj`. Tests and the optional benchmark stay sibling projects under `src/prj/`. There is no `src/sln/` tree for this app.
+This folder is the WinForms app. The `.slnx` and this readme sit next to the `.csproj`. Tests and the optional benchmark stay sibling projects under `src/prj/`. There is no `src/sln/` tree for this app.
 <!--#else -->
 This folder is the per-app area under `src/sln/` for solution-level or cross-project files that should not sit next to a single `.csproj`.
 The `.slnx` is written elsewhere (`PlaceSolution`). Use this folder for shared notes or extra solution items, or delete it if you do not need it.
@@ -32,7 +32,7 @@ The solution file lives at the repository root. Open a terminal there for `dotne
 <!--#if (PlaceSolution == "SlnFolder") -->
 The `.slnx` and this readme live in this folder. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other apps keep their own `.slnx` under `src/sln/<name>/`, so `dotnet` does not ask you to specify a solution.
 <!--#else -->
-The `.slnx` and this readme live in this folder next to the console app. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other apps keep their own `.slnx` under `src/prj/<name>/`, so `dotnet` does not ask you to specify a solution.
+The `.slnx` and this readme live in this folder next to the WinForms app. Open a terminal here for the commands below. The CLI finds the one solution in this directory; you do not pass a `.slnx` or `.csproj` path. Other apps keep their own `.slnx` under `src/prj/<name>/`, so `dotnet` does not ask you to specify a solution.
 <!--#endif -->
 
 ```text
@@ -45,9 +45,9 @@ The `.slnx` and this readme live in this folder next to the console app. Open a 
 <!--#if (WriteSrcGlobalJson) -->
 ../../global.json            .NET SDK pin (highest selected TFM)
 <!--#endif -->
-../../prj/__SourceName__/    console app
+../../prj/__SourceName__/    WinForms app
 <!--#if (DirectoryMsBuildFiles) -->
-../../prj/__SourceName__/Directory.Build.props  optional empty console app MSBuild landing file
+../../prj/__SourceName__/Directory.Build.props  optional empty WinForms app MSBuild landing file
 ../../prj/__SourceName__/Directory.Build.targets
 <!--#endif -->
 <!--#if (DotNetToolManifest) -->
@@ -55,14 +55,14 @@ The `.slnx` and this readme live in this folder next to the console app. Open a 
 <!--#endif -->
 ../../prj/__SourceName__.Tests/  tests (not packed)
 <!--#if (BenchmarkProject == true) -->
-../../prj/__SourceName__.Benchmark/  optional BenchmarkDotNet console app
+../../prj/__SourceName__.Benchmark/  optional BenchmarkDotNet runner
 <!--#endif -->
 <!--#else -->
 ./                         you are here (this readme + __SourceName__.slnx + __SourceName__.csproj)
 <!--#if (DirectoryMsBuildFiles) -->
 ./Directory.Solution.props  optional empty solution MSBuild landing file
 ./Directory.Solution.targets
-./Directory.Build.props     optional empty console app MSBuild landing file
+./Directory.Build.props     optional empty WinForms app MSBuild landing file
 ./Directory.Build.targets
 <!--#endif -->
 <!--#if (WriteSrcGlobalJson) -->
@@ -73,12 +73,20 @@ The `.slnx` and this readme live in this folder next to the console app. Open a 
 <!--#endif -->
 ../__SourceName__.Tests/     tests (not packed)
 <!--#if (BenchmarkProject == true) -->
-../__SourceName__.Benchmark/  optional BenchmarkDotNet console app
+../__SourceName__.Benchmark/  optional BenchmarkDotNet runner
 <!--#endif -->
 <!--#endif -->
 ```
 
 `--tl:off` is optional. Without it the CLI shows the compact terminal logger. Add `--tl:off` for the classic per-project log. The commands work either way.
+
+## Program sample
+
+<!--#if (ProgramSample == "MinimalClassic") -->
+`MinimalClassic` is the default Visual Studio-style `Form1` application.
+<!--#else -->
+`HostedDi` uses `Host.CreateApplicationBuilder`, constructor injection, debug logging, reloadable `appsettings.json`, profile optimization, and single-instance protection. The benchmark measures its UI-independent configuration lookup.
+<!--#endif -->
 
 ## Restore and build
 
@@ -114,7 +122,7 @@ After a test run, the links below point to generated reports. Each selected targ
 <!--#endif -->
 
 <!--#if (CoverletMSBuild == true) -->
-Coverlet measures the app (`[__SourceName__]*`), skips `Program.cs` and generated `*.g.cs` (WinForms `ApplicationConfiguration`), skips `Form1.Dispose` via `[ExcludeFromCodeCoverage]`, and fails `dotnet test` if line, branch, or method coverage is under 100% on the rest.
+Coverlet measures the app (`[__SourceName__]*`), skips `Program.cs` and generated `*.g.cs` (WinForms `ApplicationConfiguration`), skips generated form disposal and the HostedDi UI-thread reload callback via `[ExcludeFromCodeCoverage]`, and fails `dotnet test` if line, branch, or method coverage is under 100% on the rest.
 <!--#endif -->
 <!--#if (ReportGenerator == true) -->
 <!--#if (PlaceSolution == "SlnFolder") -->

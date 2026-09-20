@@ -3,6 +3,7 @@
  - Completed the classic multi-project repository template family: multi-library, multi-analyzer, multi-source-generator, multi-console, multi-msbuild, multi-PowerShell, multi-winforms, multi-wpf, and multi-project-template repositories with consistent repository, solution-placement, packaging, and Visual Studio/CLI conventions.
  - Multi-source-generator repository template (`multisourcegeneratorrepo-coree`): incremental C#-model-to-JSON-support sample, GeneratorDriver tests, Console DebugHost, and analyzer-path NuGet packaging.
  - Multi-WPF repository template (`multiwpfrepo-coree`): optional `MahAppsMvvm` program sample with Hosting/DI, CommunityToolkit.Mvvm, MahApps/Material Design, localization, configuration reload, and SQLite.
+ - Multi-WinForms repository template (`multiwinformsrepo-coree`): optional `HostedDi` program sample with Generic Host, constructor injection, debug logging, reloadable configuration, profile optimization, and single-instance protection.
 
 0.4.4 (2026-09-15)
 

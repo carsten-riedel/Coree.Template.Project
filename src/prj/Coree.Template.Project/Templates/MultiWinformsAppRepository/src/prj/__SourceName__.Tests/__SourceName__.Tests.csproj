@@ -57,7 +57,7 @@
     <CoverletOutput>./CoverletOutput/</CoverletOutput>
     <Include>[__SourceName__]*</Include>
     <!-- Program.Main starts the message loop. WinForms ApplicationConfiguration.g.cs is compiler-generated bootstrap. -->
-    <!-- Form1.Dispose(false) is the finalizer branch; ExcludeFromCodeCoverage is on that method in the designer file. -->
+    <!-- The generated form Dispose method and HostedDi's UI-thread reload callback carry ExcludeFromCodeCoverage. -->
     <ExcludeByFile>**/Program.cs,**/*.g.cs</ExcludeByFile>
     <ExcludeByAttribute>CompilerGeneratedAttribute</ExcludeByAttribute>
     <Threshold>100</Threshold>

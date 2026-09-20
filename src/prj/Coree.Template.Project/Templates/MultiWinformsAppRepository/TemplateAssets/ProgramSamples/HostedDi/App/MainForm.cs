@@ -13,20 +13,22 @@ namespace __SourceName__
 {
     internal sealed partial class MainForm : Form
     {
+        internal const string WindowTitleConfigurationKey = "Settings:Subkey1:Value1";
+        private const string DefaultWindowTitle = "MainForm";
+
         private static readonly Action<ILogger, Exception?> LogMainWindowInitialized = LoggerMessage.Define(
             LogLevel.Information,
             new EventId(1, nameof(MainForm)),
             "Main window initialized with reloadable configuration.");
 
-        private readonly WindowTitleProvider windowTitleProvider;
+        private readonly IConfiguration configuration;
         private IDisposable? settingsSubscription;
 
         public MainForm(
             ILogger<MainForm> logger,
-            IConfiguration configuration,
-            WindowTitleProvider windowTitleProvider)
+            IConfiguration configuration)
         {
-            this.windowTitleProvider = windowTitleProvider;
+            this.configuration = configuration;
 
             InitializeComponent();
             CreateHandle();
@@ -38,7 +40,7 @@ namespace __SourceName__
 
         private void ApplySettings()
         {
-            Text = windowTitleProvider.GetWindowTitle();
+            Text = configuration[WindowTitleConfigurationKey] ?? DefaultWindowTitle;
         }
 
         [ExcludeFromCodeCoverage]

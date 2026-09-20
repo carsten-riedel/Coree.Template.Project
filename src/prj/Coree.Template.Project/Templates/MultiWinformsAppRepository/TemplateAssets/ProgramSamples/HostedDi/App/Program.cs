@@ -45,7 +45,6 @@ namespace __SourceName__
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-            builder.Services.AddSingleton<WindowTitleProvider>();
             builder.Services.AddSingleton<MainForm>();
             builder.Services.Configure<ConsoleLifetimeOptions>(options => options.SuppressStatusMessages = true);
 

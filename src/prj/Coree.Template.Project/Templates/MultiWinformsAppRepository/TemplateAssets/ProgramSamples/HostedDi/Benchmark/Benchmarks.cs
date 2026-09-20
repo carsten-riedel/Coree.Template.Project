@@ -9,26 +9,26 @@ namespace __SourceName__.Benchmark
 {
     public class Benchmarks
     {
-        private readonly WindowTitleProvider windowTitleProvider;
+        private readonly IConfiguration configuration;
 
         public Benchmarks()
         {
             var values = new Dictionary<string, string?>
             {
-                [WindowTitleProvider.ConfigurationKey] = "Benchmark title",
+                [MainForm.WindowTitleConfigurationKey] = "Benchmark title",
             };
 
             IConfiguration configuration = new ConfigurationBuilder()
                 .AddInMemoryCollection(values)
                 .Build();
 
-            windowTitleProvider = new WindowTitleProvider(configuration);
+            this.configuration = configuration;
         }
 
         [Benchmark]
         public string ReadWindowTitle()
         {
-            return windowTitleProvider.GetWindowTitle();
+            return configuration[MainForm.WindowTitleConfigurationKey] ?? "MainForm";
         }
     }
 }

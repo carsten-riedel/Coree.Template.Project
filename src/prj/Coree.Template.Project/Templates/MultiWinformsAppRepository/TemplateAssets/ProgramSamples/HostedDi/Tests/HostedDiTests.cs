@@ -15,21 +15,21 @@ namespace __SourceName__.Tests
     public sealed class HostedDiTests
     {
         [TestMethod]
-        public void WindowTitleProvider_UsesConfiguredTitle()
+        public void MainForm_UsesFallbackWithoutConfiguredTitle()
         {
-            IConfiguration configuration = CreateConfiguration("Configured title");
-            var provider = new WindowTitleProvider(configuration);
+            RunInStaThread(() =>
+            {
+                IConfiguration configuration = new ConfigurationBuilder().Build();
+                var services = new ServiceCollection();
+                services.AddSingleton<IConfiguration>(configuration);
+                services.AddLogging();
+                services.AddSingleton<MainForm>();
 
-            Assert.AreEqual("Configured title", provider.GetWindowTitle());
-        }
+                using ServiceProvider serviceProvider = services.BuildServiceProvider();
+                using MainForm form = serviceProvider.GetRequiredService<MainForm>();
 
-        [TestMethod]
-        public void WindowTitleProvider_UsesFallbackWithoutConfiguredTitle()
-        {
-            IConfiguration configuration = new ConfigurationBuilder().Build();
-            var provider = new WindowTitleProvider(configuration);
-
-            Assert.AreEqual("MainForm", provider.GetWindowTitle());
+                Assert.AreEqual("MainForm", form.Text);
+            });
         }
 
         [TestMethod]
@@ -41,7 +41,6 @@ namespace __SourceName__.Tests
                 var services = new ServiceCollection();
                 services.AddSingleton<IConfiguration>(configuration);
                 services.AddLogging();
-                services.AddSingleton<WindowTitleProvider>();
                 services.AddSingleton<MainForm>();
 
                 using ServiceProvider serviceProvider = services.BuildServiceProvider();
@@ -50,7 +49,7 @@ namespace __SourceName__.Tests
                 Assert.AreEqual("Initial title", form.Text);
                 Assert.AreSame(form, serviceProvider.GetRequiredService<MainForm>());
 
-                configuration[WindowTitleProvider.ConfigurationKey] = "Reloaded title";
+                configuration[MainForm.WindowTitleConfigurationKey] = "Reloaded title";
                 configuration.Reload();
 
                 Assert.AreEqual("Reloaded title", form.Text);
@@ -61,7 +60,7 @@ namespace __SourceName__.Tests
         {
             var values = new Dictionary<string, string?>
             {
-                [WindowTitleProvider.ConfigurationKey] = title,
+                [MainForm.WindowTitleConfigurationKey] = title,
             };
 
             return new ConfigurationBuilder()

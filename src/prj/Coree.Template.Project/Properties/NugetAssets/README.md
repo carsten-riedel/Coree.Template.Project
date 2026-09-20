@@ -388,7 +388,7 @@ dotnet new multiconsolerepo-coree \
     --AdditionalInstaller WixUserInstaller
 ```
 
-The Windows installer is a separate project in the generated solution. It consumes the normal `dotnet publish` output and writes the MSI under the app's `bin/setup/` directory; the default `None` choice does not add it. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
+The Windows installer is a separate project in the generated solution. It consumes the normal `dotnet publish` output and writes the MSI under the app's `bin/Setup/` directory; the default `None` choice does not add it. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
 
 ---
 
@@ -422,7 +422,7 @@ dotnet new multiwpfrepo-coree \
 
 Additional applications can be added later without changing the repository structure; each application can choose its own program sample.
 
-The optional installer is selected independently with `--AdditionalInstaller WixUserInstaller` and follows the same `bin/setup/` publish-step behavior described above.
+The optional installer is selected independently with `--AdditionalInstaller WixUserInstaller` and follows the same `bin/Setup/` publish-step behavior described above.
 
 **Windows only.**
 
@@ -459,7 +459,7 @@ dotnet new multiwinformsrepo-coree \
 `ProgramSample` is the maintained replacement for the former standalone WinForms sample layouts. The legacy `winforms-coree` and `winformsdi-coree` templates remain available and unchanged. Generic Host, DI, logging, configuration, and localization form one fixed `GenericHost` feature set rather than separate switches.
 The sample localizes its visible `Settings:Subkey1:Value1` title and single-instance message from the process UI culture. The generated `appsettings.json` uses the `AppSettingsWindowTitle` resource key; replacing it with a literal title still wins.
 
-The optional installer is selected independently with `--AdditionalInstaller WixUserInstaller` and follows the same `bin/setup/` publish-step behavior described above.
+The optional installer is selected independently with `--AdditionalInstaller WixUserInstaller` and follows the same `bin/Setup/` publish-step behavior described above.
 
 **Windows only.**
 

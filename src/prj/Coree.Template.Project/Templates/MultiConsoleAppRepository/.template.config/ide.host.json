@@ -102,7 +102,7 @@
         "text": "Additional WiX user installer (publish step)"
       },
       "description": {
-        "text": "Optional Windows per-user WiX installer. It packages the normal app publish output into bin/setup. Visual Studio requires the WiX Toolset HeatWave extension installed; the dotnet CLI uses the WiX SDK package."
+        "text": "Optional Windows per-user WiX installer. It packages the normal app publish output into bin/Setup. Visual Studio requires the WiX Toolset HeatWave extension installed; the dotnet CLI uses the WiX SDK package."
       }
     },
     {

@@ -295,7 +295,7 @@
       "isRequired": false,
       "defaultValue": "None",
       "enableQuotelessLiterals": true,
-      "description": "Optionally add a Windows-only separate WiX user installer that runs after the normal app publish and writes the MSI to bin/setup. Visual Studio requires the WiX Toolset HeatWave extension installed; the dotnet CLI uses the WiX SDK package.",
+      "description": "Optionally add a Windows-only separate WiX user installer that runs after the normal app publish and writes the MSI to bin/Setup. Visual Studio requires the WiX Toolset HeatWave extension installed; the dotnet CLI uses the WiX SDK package.",
       "displayName": "Additional WiX user installer (publish step)",
       "choices": [
         {
@@ -305,7 +305,7 @@
         },
         {
           "choice": "WixUserInstaller",
-          "description": "Add a Windows per-user WiX installer as a separate project. It packages the normal app publish output into bin/setup. Visual Studio requires the WiX Toolset HeatWave extension installed.",
+          "description": "Add a Windows per-user WiX installer as a separate project. It packages the normal app publish output into bin/Setup. Visual Studio requires the WiX Toolset HeatWave extension installed.",
           "displayName": "Additional WiX user installer (publish step)"
         }
       ]

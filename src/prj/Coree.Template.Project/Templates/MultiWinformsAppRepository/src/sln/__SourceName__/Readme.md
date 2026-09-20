@@ -144,7 +144,7 @@ dotnet publish
 
 ## WiX user installer
 
-The additional Windows per-user WiX project is part of this solution. `dotnet publish` publishes the app to `src/prj/__SourceName__/bin/Publish/` and then writes the MSI to `src/prj/__SourceName__/bin/setup/`. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
+The additional Windows per-user WiX project is part of this solution. `dotnet publish` publishes the app to `src/prj/__SourceName__/bin/Publish/` and then writes the MSI to `src/prj/__SourceName__/bin/Setup/`. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
 <!--#endif -->
 
 ## Pack

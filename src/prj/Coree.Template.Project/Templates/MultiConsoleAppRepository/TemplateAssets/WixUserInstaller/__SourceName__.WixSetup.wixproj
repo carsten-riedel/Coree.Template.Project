@@ -6,7 +6,7 @@
     <AppProjectDirectory>$(MSBuildProjectDirectory)\..\__SourceName__</AppProjectDirectory>
     <AppTargetFramework>__TargetFramework__</AppTargetFramework>
     <AppPublishDirectory>$(AppProjectDirectory)\bin\Publish</AppPublishDirectory>
-    <AppSetupDirectory>$(AppProjectDirectory)\bin\setup</AppSetupDirectory>
+    <AppSetupDirectory>$(AppProjectDirectory)\bin\Setup</AppSetupDirectory>
     <OutputPath>$(AppSetupDirectory)\</OutputPath>
     <IsPublishable>true</IsPublishable>
     <!-- Wildcard Files harvesting cannot author per-user registry key paths. -->

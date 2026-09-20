@@ -58,7 +58,7 @@ The sample `Settings:Subkey1:Value1` contains the `AppSettingsWindowTitle` resou
 
 ## Optional WiX user installer
 
-Use `--AdditionalInstaller WixUserInstaller` to add a separate Windows per-user WiX project. It packages the normal app publish output and writes the MSI under `src/prj/__SourceName__/bin/setup/`; the default `None` choice leaves the repository unchanged. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
+Use `--AdditionalInstaller WixUserInstaller` to add a separate Windows per-user WiX project. It packages the normal app publish output and writes the MSI under `src/prj/__SourceName__/bin/Setup/`; the default `None` choice leaves the repository unchanged. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
 
 <!--#if (PlaceSolution == "SlnFolder") -->
 Open a terminal in `src/sln/__SourceName__/` and run `dotnet restore`, `dotnet build`, `dotnet test`, or `dotnet publish`. The CLI finds the one solution in that folder; you do not pass a `.slnx` or `.csproj` path.

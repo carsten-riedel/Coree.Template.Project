@@ -388,7 +388,7 @@ The library is packable and `IsPublishable` is `false` (NuGet pack is the distri
 
 The template does not add a custom publish dispatch. `dotnet pack` is the distribution path for this project-template package.
 
-The SDK-style project supplies the standard SDK imports. `SourceControlState.targets` is a `BeforeTargets` hook on `GenerateAssemblyInfo` (SDK 8+ Source Link); `NerdbankRepositoryVersion.targets` is imported only for repository versioning. Both remain ordinary project imports. There are no generate-time conditionals in `.targets` files.
+The SDK-style project supplies the standard SDK imports. `BuildContext.targets` resolves Git state before `GetAssemblyAttributes`, `GenerateAssemblyInfo`, and `GenerateNuspec` (SDK 8+ Source Link); `NerdbankRepositoryVersion.targets` is imported only for repository versioning. Both remain ordinary project imports. There are no generate-time conditionals in `.targets` files.
 
 The packable library always sets `EnablePackageValidation` (no wizard). That is TFM/runtime consistency on `dotnet pack`, not a baseline against nuget.org. Do not stamp `PackageValidationBaselineVersion` at generate; after the first publish the consumer sets it to that version.
 

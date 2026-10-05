@@ -283,8 +283,8 @@
   </ItemGroup>
 <!--#endif -->
 
-  <!-- Source Link git state as properties (SDK 8+). Target hooks GenerateAssemblyInfo. -->
-  <Import Project="Properties/Build/SourceControlState.targets" />
+  <!-- BuildContext resolves Git and deployment properties before GetAssemblyAttributes, GenerateAssemblyInfo, and GenerateNuspec. -->
+  <Import Project="Properties/Build/BuildContext.targets" />
   <!--#if (NerdbankGitVersioning == "Repo") -->
   <Import Project="Properties/Build/NerdbankRepositoryVersion.targets" />
   <!--#endif -->

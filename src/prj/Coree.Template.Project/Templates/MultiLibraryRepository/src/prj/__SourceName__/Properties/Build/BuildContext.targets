@@ -1,0 +1,131 @@
+<Project>
+
+	<!-- BuildContext properties become available when these targets execute. -->
+	<!-- Set a dynamic Description in a target after BuildContextResolveSourceControlState and before GetAssemblyAttributes. -->
+	<Target Name="BuildContextResolveSourceControlState" DependsOnTargets="InitializeSourceControlInformation" BeforeTargets="GenerateAssemblyInfo;GenerateNuspec;GetAssemblyAttributes">
+		<!-- Query the Git repository containing this project, independent of package and nested SourceRoot items. -->
+		<Microsoft.Build.Tasks.Git.LocateRepository Path="$(MSBuildProjectDirectory)" RemoteName="$(GitRepositoryRemoteName)" ConfigurationScope="$(GitRepositoryConfigurationScope)" NoWarnOnMissingInfo="true">
+			<Output TaskParameter="WorkingDirectory" PropertyName="BuildContextSourceControlRoot" />
+			<Output TaskParameter="RevisionId" PropertyName="BuildContextSourceControlRevisionId" />
+			<Output TaskParameter="Url" PropertyName="BuildContextSourceControlRepositoryUrl" />
+			<Output TaskParameter="BranchName" PropertyName="BuildContextSourceControlBranchNameReported" />
+		</Microsoft.Build.Tasks.Git.LocateRepository>
+
+		<PropertyGroup>
+			<!-- WorkingDirectory is the physical checkout root, including for linked worktrees. -->
+			<BuildContextSourceControlAvailable Condition="'$(BuildContextSourceControlRoot)' != ''">true</BuildContextSourceControlAvailable>
+			<BuildContextSourceControlAvailable Condition="'$(BuildContextSourceControlRoot)' == ''">false</BuildContextSourceControlAvailable>
+			<BuildContextSourceControlRoot Condition="'$(BuildContextSourceControlAvailable)' == 'true'">$(BuildContextSourceControlRoot.Trim())</BuildContextSourceControlRoot>
+
+			<!-- LocateRepository reports Git repositories only. -->
+			<BuildContextSourceControlProvider Condition="'$(BuildContextSourceControlAvailable)' == 'true'">git</BuildContextSourceControlProvider>
+			<BuildContextSourceControlProvider Condition="'$(BuildContextSourceControlAvailable)' == 'false'"></BuildContextSourceControlProvider>
+
+			<!-- Revision and URL come from the same repository lookup as the root. -->
+			<BuildContextSourceControlRevisionId Condition="'$(BuildContextSourceControlRevisionId)' != ''">$(BuildContextSourceControlRevisionId.Trim())</BuildContextSourceControlRevisionId>
+			<BuildContextSourceControlHasRevision Condition="'$(BuildContextSourceControlRevisionId)' != ''">true</BuildContextSourceControlHasRevision>
+			<BuildContextSourceControlHasRevision Condition="'$(BuildContextSourceControlHasRevision)' == ''">false</BuildContextSourceControlHasRevision>
+			<BuildContextSourceControlRepositoryUrl Condition="'$(BuildContextSourceControlRepositoryUrl)' != ''">$(BuildContextSourceControlRepositoryUrl.Trim())</BuildContextSourceControlRepositoryUrl>
+
+			<!-- Keep the provider's branch value visible before detached-HEAD and ref-prefix normalization. -->
+			<BuildContextSourceControlBranchName Condition="'$(BuildContextSourceControlBranchNameReported)' != ''">$(BuildContextSourceControlBranchNameReported.Trim())</BuildContextSourceControlBranchName>
+
+			<!-- A Git revision without a named branch indicates a detached HEAD. -->
+			<BuildContextGitHeadIsDetached>false</BuildContextGitHeadIsDetached>
+			<BuildContextGitHeadIsDetached Condition="'$(BuildContextSourceControlProvider)' == 'git' and '$(BuildContextSourceControlHasRevision)' == 'true' and ('$(BuildContextSourceControlBranchName)' == '' or '$(BuildContextSourceControlBranchName)' == 'HEAD')">true</BuildContextGitHeadIsDetached>
+			<BuildContextSourceControlBranchName Condition="'$(BuildContextGitHeadIsDetached)' == 'true'"></BuildContextSourceControlBranchName>
+
+			<!-- Remove the leading refs/heads/ prefix, leaving the short branch name. -->
+			<BuildContextSourceControlBranchName Condition="$([System.String]::Copy('$(BuildContextSourceControlBranchName)').StartsWith('refs/heads/'))">$([System.String]::Copy('$(BuildContextSourceControlBranchName)').Substring(11))</BuildContextSourceControlBranchName>
+			<BuildContextSourceControlHasBranch Condition="'$(BuildContextSourceControlBranchName)' != ''">true</BuildContextSourceControlHasBranch>
+			<BuildContextSourceControlHasBranch Condition="'$(BuildContextSourceControlHasBranch)' == ''">false</BuildContextSourceControlHasBranch>
+
+			<!-- Split after the first slash; preserve any later slashes in the remainder. -->
+			<BuildContextBranchSafeReplacement Condition="'$(BuildContextBranchSafeReplacement)' == ''">_</BuildContextBranchSafeReplacement>
+			<_BuildContextBranchSeparatorIndex></_BuildContextBranchSeparatorIndex>
+			<_BuildContextBranchSeparatorIndex Condition="$([System.String]::Copy('$(BuildContextSourceControlBranchName)').Contains('/'))">$([System.String]::Copy('$(BuildContextSourceControlBranchName)').IndexOf('/'))</_BuildContextBranchSeparatorIndex>
+			<BuildContextBranchFirstSegment></BuildContextBranchFirstSegment>
+			<BuildContextBranchFirstSegment Condition="'$(BuildContextSourceControlBranchName)' != ''">$(BuildContextSourceControlBranchName)</BuildContextBranchFirstSegment>
+			<BuildContextBranchRemainder></BuildContextBranchRemainder>
+			<_BuildContextBranchRemainderStartIndex></_BuildContextBranchRemainderStartIndex>
+			<BuildContextBranchFirstSegment Condition="'$(_BuildContextBranchSeparatorIndex)' != ''">$([System.String]::Copy('$(BuildContextSourceControlBranchName)').Substring(0, $(_BuildContextBranchSeparatorIndex)))</BuildContextBranchFirstSegment>
+			<_BuildContextBranchRemainderStartIndex Condition="'$(_BuildContextBranchSeparatorIndex)' != ''">$([MSBuild]::Add($(_BuildContextBranchSeparatorIndex), 1))</_BuildContextBranchRemainderStartIndex>
+			<BuildContextBranchRemainder Condition="'$(_BuildContextBranchSeparatorIndex)' != ''">$([System.String]::Copy('$(BuildContextSourceControlBranchName)').Substring($(_BuildContextBranchRemainderStartIndex)))</BuildContextBranchRemainder>
+
+			<!-- Make both branch components safe as individual file or path segments. -->
+			<BuildContextBranchFirstSegmentSafe></BuildContextBranchFirstSegmentSafe>
+			<BuildContextBranchFirstSegmentSafe Condition="'$(BuildContextBranchFirstSegment)' != ''">$([System.Text.RegularExpressions.Regex]::Replace($([System.Text.RegularExpressions.Regex]::Replace($([System.Text.RegularExpressions.Regex]::Replace('$(BuildContextBranchFirstSegment)', '[\x00-\x1F&lt;&gt;:"/\\|?*]', '$(BuildContextBranchSafeReplacement)')), '[ .]+$', '$(BuildContextBranchSafeReplacement)')), '(?i)^(CON|PRN|AUX|NUL|CONIN\$|CONOUT\$|COM[1-9\u00B9\u00B2\u00B3]|LPT[1-9\u00B9\u00B2\u00B3])(?=\.|$)', '$(BuildContextBranchSafeReplacement)$1'))</BuildContextBranchFirstSegmentSafe>
+			<BuildContextBranchRemainderSafe></BuildContextBranchRemainderSafe>
+			<BuildContextBranchRemainderSafe Condition="'$(BuildContextBranchRemainder)' != ''">$([System.Text.RegularExpressions.Regex]::Replace($([System.Text.RegularExpressions.Regex]::Replace($([System.Text.RegularExpressions.Regex]::Replace('$(BuildContextBranchRemainder)', '[\x00-\x1F&lt;&gt;:"/\\|?*]', '$(BuildContextBranchSafeReplacement)')), '[ .]+$', '$(BuildContextBranchSafeReplacement)')), '(?i)^(CON|PRN|AUX|NUL|CONIN\$|CONOUT\$|COM[1-9\u00B9\u00B2\u00B3]|LPT[1-9\u00B9\u00B2\u00B3])(?=\.|$)', '$(BuildContextBranchSafeReplacement)$1'))</BuildContextBranchRemainderSafe>
+
+			<!-- Convenience flag for Git-specific behavior. -->
+			<BuildContextGitAvailable Condition="'$(BuildContextSourceControlProvider)' == 'git'">true</BuildContextGitAvailable>
+			<BuildContextGitAvailable Condition="'$(BuildContextGitAvailable)' == ''">false</BuildContextGitAvailable>
+
+			<!-- True only for a named Git branch with a non-empty primary segment. -->
+			<BuildContextGitBranchIsNamed>false</BuildContextGitBranchIsNamed>
+			<BuildContextGitBranchIsNamed Condition="'$(BuildContextGitAvailable)' == 'true' and '$(BuildContextGitHeadIsDetached)' != 'true' and '$(BuildContextSourceControlBranchName)' != '' and '$(BuildContextBranchFirstSegment)' != ''">true</BuildContextGitBranchIsNamed>
+		</PropertyGroup>
+	</Target>
+
+	<!-- Respect an explicit channel; otherwise map the safe primary branch segment. -->
+	<Target Name="BuildContextResolveDeploymentChannel" AfterTargets="BuildContextResolveSourceControlState">
+		<PropertyGroup>
+			<!-- Expose the lowercase branch category separately from a caller-supplied channel. -->
+			<BuildContextBranchCategory Condition="'$(BuildContextBranchFirstSegmentSafe)' != ''">$(BuildContextBranchFirstSegmentSafe.ToLowerInvariant())</BuildContextBranchCategory>
+			<BuildContextBranchCategory Condition="'$(BuildContextBranchFirstSegmentSafe)' == ''"></BuildContextBranchCategory>
+			<!-- Feature work is preview; development, release, and mainline branches map to their delivery channels. -->
+			<BuildContextDeploymentChannel Condition="'$(BuildContextDeploymentChannel)' == '' and '$(BuildContextBranchCategory)' == 'feature'">preview</BuildContextDeploymentChannel>
+			<BuildContextDeploymentChannel Condition="'$(BuildContextDeploymentChannel)' == '' and '$(BuildContextBranchCategory)' == 'bugfix'">preview</BuildContextDeploymentChannel>
+			<BuildContextDeploymentChannel Condition="'$(BuildContextDeploymentChannel)' == '' and '$(BuildContextBranchCategory)' == 'develop'">development</BuildContextDeploymentChannel>
+			<BuildContextDeploymentChannel Condition="'$(BuildContextDeploymentChannel)' == '' and '$(BuildContextBranchCategory)' == 'main'">production</BuildContextDeploymentChannel>
+			<BuildContextDeploymentChannel Condition="'$(BuildContextDeploymentChannel)' == '' and '$(BuildContextBranchCategory)' == 'master'">production</BuildContextDeploymentChannel>
+			<BuildContextDeploymentChannel Condition="'$(BuildContextDeploymentChannel)' == '' and '$(BuildContextBranchCategory)' == 'release'">staging</BuildContextDeploymentChannel>
+			<BuildContextDeploymentChannel Condition="'$(BuildContextDeploymentChannel)' == '' and '$(BuildContextBranchCategory)' == 'hotfix'">production</BuildContextDeploymentChannel>
+		</PropertyGroup>
+	</Target>
+
+	<!-- Unknown channels and preview stay inactive; known delivery channels become active. -->
+	<Target Name="BuildContextResolveDeploymentChannelActivation" AfterTargets="BuildContextResolveDeploymentChannel">
+		<PropertyGroup>
+			<!-- Keep the original channel value and expose its lowercase form for case-insensitive matching. -->
+			<BuildContextDeploymentChannelIsActive>false</BuildContextDeploymentChannelIsActive>
+			<BuildContextDeploymentChannelNormalized Condition="'$(BuildContextDeploymentChannel)' != ''">$(BuildContextDeploymentChannel.ToLowerInvariant())</BuildContextDeploymentChannelNormalized>
+			<BuildContextDeploymentChannelNormalized Condition="'$(BuildContextDeploymentChannel)' == ''"></BuildContextDeploymentChannelNormalized>
+			<BuildContextDeploymentChannelIsActive Condition="'$(BuildContextDeploymentChannelNormalized)' == 'preview'">false</BuildContextDeploymentChannelIsActive>
+			<BuildContextDeploymentChannelIsActive Condition="'$(BuildContextDeploymentChannelNormalized)' == 'development'">true</BuildContextDeploymentChannelIsActive>
+			<BuildContextDeploymentChannelIsActive Condition="'$(BuildContextDeploymentChannelNormalized)' == 'staging'">true</BuildContextDeploymentChannelIsActive>
+			<BuildContextDeploymentChannelIsActive Condition="'$(BuildContextDeploymentChannelNormalized)' == 'production'">true</BuildContextDeploymentChannelIsActive>
+		</PropertyGroup>
+	</Target>
+
+	<!-- The importing project may set <BuildContextDumpEnabled>true</BuildContextDumpEnabled> after Import. -->
+	<!-- This target reads the switch at execution time, after all three resolution targets have run. -->
+	<Target Name="BuildContextDump" AfterTargets="BuildContextResolveDeploymentChannelActivation" Condition="'$(BuildContextDumpEnabled)' == 'true'">
+		<!-- Show the project directory used for lookup and the resulting repository values. -->
+		<Message Importance="High" Text="[BuildContext] MSBuildProjectDirectory=$(MSBuildProjectDirectory)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextSourceControlAvailable=$(BuildContextSourceControlAvailable)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextSourceControlProvider=$(BuildContextSourceControlProvider)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextSourceControlRoot=$(BuildContextSourceControlRoot)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextSourceControlRevisionId=$(BuildContextSourceControlRevisionId)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextSourceControlRepositoryUrl=$(BuildContextSourceControlRepositoryUrl)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextSourceControlBranchNameReported=$(BuildContextSourceControlBranchNameReported)" />
+
+		<!-- Show normalized branch values, availability flags, and the deployment result. -->
+		<Message Importance="High" Text="[BuildContext] BuildContextSourceControlHasRevision=$(BuildContextSourceControlHasRevision)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextSourceControlBranchName=$(BuildContextSourceControlBranchName)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextGitHeadIsDetached=$(BuildContextGitHeadIsDetached)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextSourceControlHasBranch=$(BuildContextSourceControlHasBranch)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextBranchFirstSegment=$(BuildContextBranchFirstSegment)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextBranchRemainder=$(BuildContextBranchRemainder)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextBranchSafeReplacement=$(BuildContextBranchSafeReplacement)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextBranchFirstSegmentSafe=$(BuildContextBranchFirstSegmentSafe)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextBranchRemainderSafe=$(BuildContextBranchRemainderSafe)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextGitAvailable=$(BuildContextGitAvailable)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextGitBranchIsNamed=$(BuildContextGitBranchIsNamed)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextBranchCategory=$(BuildContextBranchCategory)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextDeploymentChannel=$(BuildContextDeploymentChannel)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextDeploymentChannelNormalized=$(BuildContextDeploymentChannelNormalized)" />
+		<Message Importance="High" Text="[BuildContext] BuildContextDeploymentChannelIsActive=$(BuildContextDeploymentChannelIsActive)" />
+	</Target>
+</Project>

@@ -1,0 +1,80 @@
+<Project>
+
+	<Target Name="ResolveSourceControlState" DependsOnTargets="InitializeSourceControlInformation" BeforeTargets="GenerateAssemblyInfo;GenerateNuspec">
+		<!-- Keep only source roots with provider metadata, excluding auxiliary roots such as package caches. -->
+		<ItemGroup>
+			<_PrimarySourceControlRoot Include="@(SourceRoot)" Condition="'%(SourceRoot.SourceControl)' != ''" />
+		</ItemGroup>
+
+		<!-- Snapshot item metadata before applying property string functions. -->
+		<PropertyGroup>
+			<_SourceControlTypeRaw>@(_PrimarySourceControlRoot->'%(SourceControl)')</_SourceControlTypeRaw>
+			<_SourceControlRootRaw>@(_PrimarySourceControlRoot->'%(Identity)')</_SourceControlRootRaw>
+			<_SourceControlRevisionIdRaw>@(_PrimarySourceControlRoot->'%(RevisionId)')</_SourceControlRevisionIdRaw>
+			<_SourceControlRepositoryUrlRaw>@(_PrimarySourceControlRoot->'%(RepositoryUrl)')</_SourceControlRepositoryUrlRaw>
+			<_SourceControlBranchNameRaw>@(_PrimarySourceControlRoot->'%(BranchName)')</_SourceControlBranchNameRaw>
+		</PropertyGroup>
+
+		<PropertyGroup>
+			<!-- Mark source control available only when this project has a matching root. -->
+			<HasSourceControl Condition="'@(_PrimarySourceControlRoot)' != ''">true</HasSourceControl>
+			<HasSourceControl Condition="'@(_PrimarySourceControlRoot)' == ''">false</HasSourceControl>
+
+			<!-- Normalize the provider name by trimming whitespace and using lowercase. -->
+			<SourceControlType Condition="'$(HasSourceControl)' == 'true'">$(_SourceControlTypeRaw.Trim().ToLowerInvariant())</SourceControlType>
+
+			<!-- Trim the selected repository root path. -->
+			<SourceControlRoot Condition="'$(HasSourceControl)' == 'true'">$(_SourceControlRootRaw.Trim())</SourceControlRoot>
+
+			<!-- Prefer the SDK revision; fall back to metadata from the selected root. -->
+			<SourceControlRevisionId Condition="'$(SourceRevisionId)' != ''">$(SourceRevisionId.Trim())</SourceControlRevisionId>
+			<SourceControlRevisionId Condition="'$(SourceRevisionId)' == '' and '$(HasSourceControl)' == 'true'">$(_SourceControlRevisionIdRaw.Trim())</SourceControlRevisionId>
+			<HasSourceRevision Condition="'$(SourceControlRevisionId)' != ''">true</HasSourceRevision>
+			<HasSourceRevision Condition="'$(HasSourceRevision)' == ''">false</HasSourceRevision>
+
+			<!-- Trim the repository URL provided for the selected root. -->
+			<SourceControlRepositoryUrl Condition="'$(HasSourceControl)' == 'true'">$(_SourceControlRepositoryUrlRaw.Trim())</SourceControlRepositoryUrl>
+
+			<!-- Prefer the SDK branch name; fall back to metadata from the selected root. -->
+			<SourceControlBranchName Condition="'$(SourceBranchName)' != ''">$(SourceBranchName.Trim())</SourceControlBranchName>
+			<SourceControlBranchName Condition="'$(SourceBranchName)' == '' and '$(HasSourceControl)' == 'true'">$(_SourceControlBranchNameRaw.Trim())</SourceControlBranchName>
+
+			<!-- A Git revision without a named branch indicates a detached HEAD. -->
+			<HasDetachedHead>false</HasDetachedHead>
+			<HasDetachedHead Condition="'$(SourceControlType)' == 'git' and '$(HasSourceRevision)' == 'true' and ('$(SourceControlBranchName)' == '' or '$(SourceControlBranchName)' == 'HEAD')">true</HasDetachedHead>
+			<SourceControlBranchName Condition="'$(HasDetachedHead)' == 'true'"></SourceControlBranchName>
+
+			<!-- Remove the leading refs/heads/ prefix, leaving the short branch name. -->
+			<SourceControlBranchName Condition="$([System.String]::Copy('$(SourceControlBranchName)').StartsWith('refs/heads/'))">$([System.String]::Copy('$(SourceControlBranchName)').Substring(11))</SourceControlBranchName>
+			<HasSourceBranch Condition="'$(SourceControlBranchName)' != ''">true</HasSourceBranch>
+			<HasSourceBranch Condition="'$(HasSourceBranch)' == ''">false</HasSourceBranch>
+
+			<!-- Split after the first slash; preserve any later slashes in the remainder. -->
+			<SourceControlBranchNameSafeReplacement Condition="'$(SourceControlBranchNameSafeReplacement)' == ''">_</SourceControlBranchNameSafeReplacement>
+			<_SourceControlBranchNameSeparatorIndex></_SourceControlBranchNameSeparatorIndex>
+			<_SourceControlBranchNameSeparatorIndex Condition="$([System.String]::Copy('$(SourceControlBranchName)').Contains('/'))">$([System.String]::Copy('$(SourceControlBranchName)').IndexOf('/'))</_SourceControlBranchNameSeparatorIndex>
+			<SourceControlBranchNamePrimary></SourceControlBranchNamePrimary>
+			<SourceControlBranchNamePrimary Condition="'$(SourceControlBranchName)' != ''">$(SourceControlBranchName)</SourceControlBranchNamePrimary>
+			<SourceControlBranchNameRemainder></SourceControlBranchNameRemainder>
+			<_SourceControlBranchNameRemainderStartIndex></_SourceControlBranchNameRemainderStartIndex>
+			<SourceControlBranchNamePrimary Condition="'$(_SourceControlBranchNameSeparatorIndex)' != ''">$([System.String]::Copy('$(SourceControlBranchName)').Substring(0, $(_SourceControlBranchNameSeparatorIndex)))</SourceControlBranchNamePrimary>
+			<_SourceControlBranchNameRemainderStartIndex Condition="'$(_SourceControlBranchNameSeparatorIndex)' != ''">$([MSBuild]::Add($(_SourceControlBranchNameSeparatorIndex), 1))</_SourceControlBranchNameRemainderStartIndex>
+			<SourceControlBranchNameRemainder Condition="'$(_SourceControlBranchNameSeparatorIndex)' != ''">$([System.String]::Copy('$(SourceControlBranchName)').Substring($(_SourceControlBranchNameRemainderStartIndex)))</SourceControlBranchNameRemainder>
+
+			<!-- Replace cross-platform invalid characters, preserve path separators, and guard Windows names. -->
+			<!-- Replace separators and invalid characters for one safe file name or path component. -->
+			<SourceControlBranchNamePrimaryPathFileSafe></SourceControlBranchNamePrimaryPathFileSafe>
+			<SourceControlBranchNamePrimaryPathFileSafe Condition="'$(SourceControlBranchNamePrimary)' != ''">$([System.Text.RegularExpressions.Regex]::Replace($([System.Text.RegularExpressions.Regex]::Replace($([System.Text.RegularExpressions.Regex]::Replace('$(SourceControlBranchNamePrimary)', '[\x00-\x1F&lt;&gt;:"/\\|?*]', '$(SourceControlBranchNameSafeReplacement)')), '[ .]+$', '$(SourceControlBranchNameSafeReplacement)')), '(?i)^(CON|PRN|AUX|NUL|CONIN\$|CONOUT\$|COM[1-9\u00B9\u00B2\u00B3]|LPT[1-9\u00B9\u00B2\u00B3])(?=\.|$)', '$(SourceControlBranchNameSafeReplacement)$1'))</SourceControlBranchNamePrimaryPathFileSafe>
+			<SourceControlBranchNameRemainderPathFileSafe></SourceControlBranchNameRemainderPathFileSafe>
+			<SourceControlBranchNameRemainderPathFileSafe Condition="'$(SourceControlBranchNameRemainder)' != ''">$([System.Text.RegularExpressions.Regex]::Replace($([System.Text.RegularExpressions.Regex]::Replace($([System.Text.RegularExpressions.Regex]::Replace('$(SourceControlBranchNameRemainder)', '[\x00-\x1F&lt;&gt;:"/\\|?*]', '$(SourceControlBranchNameSafeReplacement)')), '[ .]+$', '$(SourceControlBranchNameSafeReplacement)')), '(?i)^(CON|PRN|AUX|NUL|CONIN\$|CONOUT\$|COM[1-9\u00B9\u00B2\u00B3]|LPT[1-9\u00B9\u00B2\u00B3])(?=\.|$)', '$(SourceControlBranchNameSafeReplacement)$1'))</SourceControlBranchNameRemainderPathFileSafe>
+
+			<!-- Convenience flag for Git-specific behavior. -->
+			<HasGitSourceControl Condition="'$(SourceControlType)' == 'git'">true</HasGitSourceControl>
+			<HasGitSourceControl Condition="'$(HasGitSourceControl)' == ''">false</HasGitSourceControl>
+
+			<!-- True only for a named Git branch with a non-empty primary segment. -->
+			<HasNamedGitBranch>false</HasNamedGitBranch>
+			<HasNamedGitBranch Condition="'$(HasGitSourceControl)' == 'true' and '$(HasDetachedHead)' != 'true' and '$(SourceControlBranchName)' != '' and '$(SourceControlBranchNamePrimary)' != ''">true</HasNamedGitBranch>
+		</PropertyGroup>
+	</Target>
+</Project>

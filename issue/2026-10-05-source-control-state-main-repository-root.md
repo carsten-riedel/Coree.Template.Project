@@ -94,6 +94,32 @@ SourceControlState.SourceControlBranchName=refs/heads/<main repository branch>
 
 No scalar property should contain unrelated NuGet roots, subrepository roots, or artificial leading/trailing semicolon entries.
 
+## Attached proposal for review
+
+The issue folder also contains [`SourceControlState.proposal.targets`](./SourceControlState.proposal.targets), provided as a concrete implementation candidate to evaluate.
+
+It should be treated as a **proposal for testing/review**, not as the accepted fix.
+
+Notable ideas in the proposal that are worth validating:
+
+- filters `@(SourceRoot)` to entries with non-empty `SourceControl` metadata, which removes package-cache roots from the observed `;;git` case;
+- prefers the SDK scalar `SourceRevisionId` and `SourceBranchName` values before falling back to root metadata;
+- recognizes detached Git HEAD when a revision exists but the branch is empty or reported as `HEAD`;
+- clears `SourceControlBranchName` for detached HEAD and exposes `HasDetachedHead`;
+- converts `refs/heads/feature/example` to the short branch name `feature/example`;
+- derives convenience values for a primary branch segment, remainder, and file/path-safe branch-name variants.
+
+The proposal still needs explicit verification against the main requirement of this issue: **the selected scalar root must represent the main repository, not merely every `SourceRoot` that has SCM metadata**. Filtering on `SourceControl != ''` alone may still leave more than one repository/root when subrepositories or submodules are present.
+
+Suggested tests for this proposal:
+
+1. normal checked-out local branch, e.g. SDK value `refs/heads/feature/example`;
+2. detached HEAD, where the revision remains available while the branch is empty or `HEAD`;
+3. package/NuGet source roots plus the main repository root;
+4. main repository with nested Git submodule/subrepository roots;
+5. more than one SCM-bearing `SourceRoot`, confirming that scalar values never become `git;git` or multi-path values;
+6. consistency between `SourceControlRoot`, repository URL, revision, and branch so all describe the same main repository.
+
 ## Acceptance criteria
 
 - One main repository root is identified explicitly from the SDK source-control information.

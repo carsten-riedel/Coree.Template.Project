@@ -31,11 +31,7 @@ dotnet new install Coree.Template.Project
 Create a repository containing a single library:
 
 ```bash
-dotnet new multilibraryrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Core" \
-    --name "MyCompany.Core" \
-    --InitAllRepoItems
+dotnet new multilibraryrepo-coree --Author "Your Name" --output "./MyCompany.Core" --name "MyCompany.Core" --InitAllRepoItems
 ```
 
 That's already a complete **single-project repository**.
@@ -51,19 +47,13 @@ dotnet pack
 If you need another library later:
 
 ```bash
-dotnet new multilibraryrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Core" \
-    --name "MyCompany.Payments"
+dotnet new multilibraryrepo-coree --Author "Your Name" --output "./MyCompany.Core" --name "MyCompany.Payments"
 ```
 
 And another:
 
 ```bash
-dotnet new multilibraryrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Core" \
-    --name "MyCompany.Inventory"
+dotnet new multilibraryrepo-coree --Author "Your Name" --output "./MyCompany.Core" --name "MyCompany.Inventory"
 ```
 
 The same template handles both cases:
@@ -134,11 +124,7 @@ The result depends on the prompt, the agent, and the decisions it makes at that 
 With Coree.Template.Project, the structural part becomes a command:
 
 ```bash
-dotnet new multilibraryrepo-coree \
-    --Author "Your Name" \
-    --output "./MyProject" \
-    --name "MyProject" \
-    --InitAllRepoItems
+dotnet new multilibraryrepo-coree --Author "Your Name" --output "./MyProject" --name "MyProject" --InitAllRepoItems
 ```
 
 Then the agent can work on the actual task:
@@ -252,11 +238,7 @@ Former single-template names and their recommended Multi replacements are listed
 Create one library:
 
 ```bash
-dotnet new multilibraryrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Core" \
-    --name "MyCompany.Core" \
-    --InitAllRepoItems
+dotnet new multilibraryrepo-coree --Author "Your Name" --output "./MyCompany.Core" --name "MyCompany.Core" --InitAllRepoItems
 ```
 
 If that is all the repository ever needs, you're done.
@@ -264,10 +246,7 @@ If that is all the repository ever needs, you're done.
 If another library becomes necessary later:
 
 ```bash
-dotnet new multilibraryrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Core" \
-    --name "MyCompany.Extensions"
+dotnet new multilibraryrepo-coree --Author "Your Name" --output "./MyCompany.Core" --name "MyCompany.Extensions"
 ```
 
 The new component follows the same established repository boundaries.
@@ -283,20 +262,13 @@ An AI agent does not have to infer them.
 Create a single analyzer:
 
 ```bash
-dotnet new multianalyzerrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Analyzers" \
-    --name "MyCompany.Analyzers.Naming" \
-    --InitAllRepoItems
+dotnet new multianalyzerrepo-coree --Author "Your Name" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Naming" --InitAllRepoItems
 ```
 
 Add another later:
 
 ```bash
-dotnet new multianalyzerrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Analyzers" \
-    --name "MyCompany.Analyzers.Performance"
+dotnet new multianalyzerrepo-coree --Author "Your Name" --output "./MyCompany.Analyzers" --name "MyCompany.Analyzers.Performance"
 ```
 
 Generated analyzer projects provide the surrounding structure for analyzer development, testing, packaging, and debugging.
@@ -308,20 +280,13 @@ Generated analyzer projects provide the surrounding structure for analyzer devel
 Create one source generator:
 
 ```bash
-dotnet new multisourcegeneratorrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Generators" \
-    --name "MyCompany.Generators.Json" \
-    --InitAllRepoItems
+dotnet new multisourcegeneratorrepo-coree --Author "Your Name" --output "./MyCompany.Generators" --name "MyCompany.Generators.Json" --InitAllRepoItems
 ```
 
 Add another when required:
 
 ```bash
-dotnet new multisourcegeneratorrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Generators" \
-    --name "MyCompany.Generators.Mapping"
+dotnet new multisourcegeneratorrepo-coree --Author "Your Name" --output "./MyCompany.Generators" --name "MyCompany.Generators.Mapping"
 ```
 
 The repository structure stays consistent as generators are added.
@@ -333,20 +298,13 @@ The repository structure stays consistent as generators are added.
 Create a single MSBuild task package:
 
 ```bash
-dotnet new multimsbuildrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Build" \
-    --name "MyCompany.Build.Tasks" \
-    --InitAllRepoItems
+dotnet new multimsbuildrepo-coree --Author "Your Name" --output "./MyCompany.Build" --name "MyCompany.Build.Tasks" --InitAllRepoItems
 ```
 
 Add another component later:
 
 ```bash
-dotnet new multimsbuildrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Build" \
-    --name "MyCompany.Build.Packaging"
+dotnet new multimsbuildrepo-coree --Author "Your Name" --output "./MyCompany.Build" --name "MyCompany.Build.Packaging"
 ```
 
 The generated structure provides a consistent frame for MSBuild task development, packaging, testing, and consumer-based debugging.
@@ -358,20 +316,13 @@ The generated structure provides a consistent frame for MSBuild task development
 Create one application:
 
 ```bash
-dotnet new multiconsolerepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Tools" \
-    --name "MyCompany.Tools.Sync" \
-    --InitAllRepoItems
+dotnet new multiconsolerepo-coree --Author "Your Name" --output "./MyCompany.Tools" --name "MyCompany.Tools.Sync" --InitAllRepoItems
 ```
 
 Add another tool later:
 
 ```bash
-dotnet new multiconsolerepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Tools" \
-    --name "MyCompany.Tools.Migrate"
+dotnet new multiconsolerepo-coree --Author "Your Name" --output "./MyCompany.Tools" --name "MyCompany.Tools.Migrate"
 ```
 
 Console projects can support framework-dependent, framework-included, single-file, and ReadyToRun publishing scenarios.
@@ -381,11 +332,7 @@ They can also be configured for distribution as .NET tools.
 All three multi-application templates also offer the same optional additional WiX user installer:
 
 ```bash
-dotnet new multiconsolerepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Tools" \
-    --name "MyCompany.Tools.Sync" \
-    --AdditionalInstaller WixUserInstaller
+dotnet new multiconsolerepo-coree --Author "Your Name" --output "./MyCompany.Tools" --name "MyCompany.Tools.Sync" --AdditionalInstaller WixUserInstaller
 ```
 
 The Windows installer is a separate project in the generated solution. It consumes the normal `dotnet publish` output and writes `__SourceName__.msi` under the app's `bin/Setup/` directory; the technical project is named `__SourceName__.WixSetup`. The default `None` choice does not add it. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
@@ -395,11 +342,7 @@ The Windows installer is a separate project in the generated solution. It consum
 # WPF repositories
 
 ```bash
-dotnet new multiwpfrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Desktop" \
-    --name "MyCompany.Desktop" \
-    --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "Your Name" --output "./MyCompany.Desktop" --name "MyCompany.Desktop" --InitAllRepoItems
 ```
 
 The WPF repository has one cohesive application seed selected with `--ProgramSample`:
@@ -410,12 +353,7 @@ The WPF repository has one cohesive application seed selected with `--ProgramSam
 For the second sample, create the repository with:
 
 ```bash
-dotnet new multiwpfrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Desktop" \
-    --name "MyCompany.Desktop" \
-    --ProgramSample MahAppsMvvm \
-    --InitAllRepoItems
+dotnet new multiwpfrepo-coree --Author "Your Name" --output "./MyCompany.Desktop" --name "MyCompany.Desktop" --ProgramSample MahAppsMvvm --InitAllRepoItems
 ```
 
 `ProgramSample` is the current replacement for the former single WPF sample/readme layout in multi-app repositories. The legacy `wpfapp-coree` template in `Templates/WpfApp` remains available and unchanged. The MahApps sample is intentionally one fixed feature set; DI, MVVM, SQLite, fonts, and individual app switches are not separate parameters.
@@ -431,11 +369,7 @@ The optional installer is selected independently with `--AdditionalInstaller Wix
 # WinForms repositories
 
 ```bash
-dotnet new multiwinformsrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.WinForms" \
-    --name "MyCompany.WinForms" \
-    --InitAllRepoItems
+dotnet new multiwinformsrepo-coree --Author "Your Name" --output "./MyCompany.WinForms" --name "MyCompany.WinForms" --InitAllRepoItems
 ```
 
 The same repository can later contain additional independently publishable WinForms applications.
@@ -448,12 +382,7 @@ The WinForms repository has two cohesive application seeds selected with `--Prog
 Create the `GenericHost` sample with:
 
 ```bash
-dotnet new multiwinformsrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.WinForms" \
-    --name "MyCompany.WinForms" \
-    --ProgramSample GenericHost \
-    --InitAllRepoItems
+dotnet new multiwinformsrepo-coree --Author "Your Name" --output "./MyCompany.WinForms" --name "MyCompany.WinForms" --ProgramSample GenericHost --InitAllRepoItems
 ```
 
 `ProgramSample` is the maintained replacement for the former standalone WinForms sample layouts. The legacy `winforms-coree` and `winformsdi-coree` templates remain available and unchanged. Generic Host, DI, logging, configuration, and localization form one fixed `GenericHost` feature set rather than separate switches.
@@ -468,11 +397,7 @@ The optional installer is selected independently with `--AdditionalInstaller Wix
 # PowerShell module repositories
 
 ```bash
-dotnet new multipowershellrepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.PowerShell" \
-    --name "MyCompany.PowerShell" \
-    --InitAllRepoItems
+dotnet new multipowershellrepo-coree --Author "Your Name" --output "./MyCompany.PowerShell" --name "MyCompany.PowerShell" --InitAllRepoItems
 ```
 
 More modules can be added later while keeping the same repository conventions.
@@ -486,20 +411,13 @@ Coree.Template.Project can also generate repositories whose output is itself a `
 Create the first template:
 
 ```bash
-dotnet new multiprojecttemplaterepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Templates" \
-    --name "MyCompany.Templates.Console" \
-    --InitAllRepoItems
+dotnet new multiprojecttemplaterepo-coree --Author "Your Name" --output "./MyCompany.Templates" --name "MyCompany.Templates.Console" --InitAllRepoItems
 ```
 
 Add another:
 
 ```bash
-dotnet new multiprojecttemplaterepo-coree \
-    --Author "Your Name" \
-    --output "./MyCompany.Templates" \
-    --name "MyCompany.Templates.Library"
+dotnet new multiprojecttemplaterepo-coree --Author "Your Name" --output "./MyCompany.Templates" --name "MyCompany.Templates.Library"
 ```
 
 Each generated template package can be packed through the normal .NET toolchain:
@@ -567,20 +485,13 @@ This distinction is intentional.
 The first invocation can initialize repository-wide files:
 
 ```bash
-dotnet new multilibraryrepo-coree \
-    --Author "Your Name" \
-    --output "./MyRepository" \
-    --name "MyLibrary" \
-    --InitAllRepoItems
+dotnet new multilibraryrepo-coree --Author "Your Name" --output "./MyRepository" --name "MyLibrary" --InitAllRepoItems
 ```
 
 Later invocations add components to the existing repository:
 
 ```bash
-dotnet new multilibraryrepo-coree \
-    --Author "Your Name" \
-    --output "./MyRepository" \
-    --name "MySecondLibrary"
+dotnet new multilibraryrepo-coree --Author "Your Name" --output "./MyRepository" --name "MySecondLibrary"
 ```
 
 The same operation works whether it is performed manually or by an automated coding agent.
@@ -796,11 +707,7 @@ Coree.Template.Project is licensed under the [MIT License](LICENSE).
 ```bash
 dotnet new install Coree.Template.Project
 
-dotnet new multilibraryrepo-coree \
-    --Author "Your Name" \
-    --output "./MyLibrary" \
-    --name "MyLibrary" \
-    --InitAllRepoItems
+dotnet new multilibraryrepo-coree --Author "Your Name" --output "./MyLibrary" --name "MyLibrary" --InitAllRepoItems
 ```
 
 Then build the software inside it.

@@ -1,16 +1,20 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <Package
     Id="__SourceName__.WixSetup"
-    Name="__SourceName__ Console User Installer"
+    Name="__SourceName__ (User Installer)"
     Manufacturer="MyAuthor"
-    Version="1.0.0.0"
+    Version="!(bind.fileVersion.MainExecutable)"
     UpgradeCode="00000000-0000-0000-0000-000000000001"
     Scope="perUser">
-    <MajorUpgrade DowngradeErrorMessage="A newer version of the console user installer is already installed." />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of __SourceName__ is already installed." />
     <MediaTemplate EmbedCab="yes" />
     <StandardDirectory Id="PerUserProgramFilesFolder">
-      <Directory Id="INSTALLFOLDER" Name="__SourceName__ Console" />
+      <Directory Id="INSTALLFOLDER" Name="__SourceName__" />
     </StandardDirectory>
-    <Files Include="!(bindpath.__SourceName__)\**" Directory="INSTALLFOLDER" />
+    <!-- The published executable supplies the MSI version; harvest everything else. -->
+    <File Id="MainExecutable" Source="!(bindpath.__SourceName__)\__SourceName__.exe" Directory="INSTALLFOLDER" />
+    <Files Include="!(bindpath.__SourceName__)\**" Directory="INSTALLFOLDER">
+      <Exclude Files="!(bindpath.__SourceName__)\__SourceName__.exe" />
+    </Files>
   </Package>
 </Wix>

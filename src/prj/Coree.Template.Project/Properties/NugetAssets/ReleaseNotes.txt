@@ -1,4 +1,12 @@
-﻿0.9.0 (2026-09-20)
+﻿0.9.2 (2026-10-05)
+
+ - Replaced SourceControlState.targets with BuildContext.targets in the template package project and all nine repository templates. Git values now come from the repository containing the project; branch and deployment properties and an optional high-importance dump are available to imports.
+ - Changed the root and NuGet README command examples to single lines that work in Windows shells.
+ - Added Properties/PublishAssets to the multi-console app template. Files publish beside the app and flow into the optional NuGet tool and WiX installer; the NuGet package README remains a separate asset.
+ - Bound the multi-console MSI version to the published executable. Console, WinForms, and WPF user installers now show the project name without an app-framework suffix and install into a folder named for the project.
+ - Changed NerdBank.GitVersioning defaults in all nine repository templates and this package to put Git height in the third numeric component and use build precision for assembly and NuGet versions. Template release-note headings now use the 0.1 base version.
+
+0.9.0 (2026-09-20)
 
  - Added the optional `WixUserInstaller` choice to the multi-console, multi-WinForms, and multi-WPF repository templates. `dotnet publish` feeds the normal app publish output to a separate per-user WiX project and writes `<app>.msi` under `bin/Setup/`; the technical project is `<app>.WixSetup`.
  - Documented the Visual Studio HeatWave requirement, WiX SDK CLI flow, and generated installer output in the root, NuGet, template, and solution README files.

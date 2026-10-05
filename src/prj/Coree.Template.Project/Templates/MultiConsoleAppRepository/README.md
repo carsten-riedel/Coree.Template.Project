@@ -40,6 +40,7 @@ src/sln/__SourceName__/      optional notes / cross-project files
 src/prj/__SourceName__/      console app
 <!--#endif -->
 src/prj/__SourceName__/Properties/Build/  MSBuild targets (not source)
+src/prj/__SourceName__/Properties/PublishAssets/  files copied beside the published app
 <!--#if (PackAsNuGetTool) -->
 src/prj/__SourceName__/Properties/NugetMetadata/  NuGet metadata (readme, icon, notes)
 <!--#endif -->

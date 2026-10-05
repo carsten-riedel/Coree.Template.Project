@@ -141,6 +141,18 @@
     <Description><![CDATA[]]></Description>
   </PropertyGroup>
 
+  <!-- Publish assets are copied beside the app, with their subfolders preserved. -->
+  <ItemGroup>
+    <None Remove="Properties\PublishAssets\**\*" />
+    <None Include="Properties\PublishAssets\**\*">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <TargetPath>%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+      <Pack>false</Pack>
+    </None>
+  </ItemGroup>
+
   <!--#if (PackAsNuGetTool) -->
   <!-- NuGet package metadata. Files live in Properties/NugetMetadata/. -->
   <!-- https://learn.microsoft.com/en-us/nuget/create-packages/package-authoring-best-practices -->

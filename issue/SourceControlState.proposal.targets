@@ -1,6 +1,6 @@
 <Project>
 
-	<Target Name="ResolveSourceControlState" DependsOnTargets="InitializeSourceControlInformation" BeforeTargets="GenerateAssemblyInfo;GenerateNuspec">
+	<Target Name="ResolveSourceControlState" DependsOnTargets="InitializeSourceControlInformation" BeforeTargets="GenerateAssemblyInfo;GenerateNuspec;GetAssemblyAttributes">
 		<!-- Keep only source roots with provider metadata, excluding auxiliary roots such as package caches. -->
 		<ItemGroup>
 			<_PrimarySourceControlRoot Include="@(SourceRoot)" Condition="'%(SourceRoot.SourceControl)' != ''" />

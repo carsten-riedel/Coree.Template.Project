@@ -110,6 +110,7 @@ Notable ideas in the proposal that are worth validating:
 - derives convenience values for a primary branch segment, remainder, and file/path-safe branch-name variants.
 - adds `ResolveDeploymentChannel`, mapping `feature`/`bugfix` to `preview`, `develop` to `development`, `release` to `staging`, and `main`/`master`/`hotfix` to `production`;
 - adds `ResolveDeploymentChannelActivation`, keeping `preview` inactive while `development`, `staging`, and `production` are active.
+- runs `ResolveSourceControlState` before `GetAssemblyAttributes` as well as `GenerateAssemblyInfo` and `GenerateNuspec`; this should be validated for target ordering, but the behavior is project-neutral.
 
 The proposal still needs explicit verification against the main requirement of this issue: **the selected scalar root must represent the main repository, not merely every `SourceRoot` that has SCM metadata**. Filtering on `SourceControl != ''` alone may still leave more than one repository/root when subrepositories or submodules are present.
 
@@ -123,7 +124,8 @@ Suggested tests for this proposal:
 6. consistency between `SourceControlRoot`, repository URL, revision, and branch so all describe the same main repository;
 7. deployment-channel mapping: `feature/*` and `bugfix/*` → `preview`, `develop` → `development`, `release/*` → `staging`, `main`/`master`/`hotfix/*` → `production`;
 8. activation behavior: `preview=false`, `development=true`, `staging=true`, `production=true`;
-9. detached HEAD / unnamed-branch behavior does not accidentally activate a deployment channel.
+9. detached HEAD / unnamed-branch behavior does not accidentally activate a deployment channel;
+10. `GetAssemblyAttributes` ordering behaves as intended and does not cause duplicate or late source-control-derived assembly metadata.
 
 ## Acceptance criteria
 

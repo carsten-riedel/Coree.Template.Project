@@ -108,6 +108,8 @@ Notable ideas in the proposal that are worth validating:
 - clears `SourceControlBranchName` for detached HEAD and exposes `HasDetachedHead`;
 - converts `refs/heads/feature/example` to the short branch name `feature/example`;
 - derives convenience values for a primary branch segment, remainder, and file/path-safe branch-name variants.
+- adds `ResolveDeploymentChannel`, mapping branch categories such as `feature`, `bugfix`, `develop`, `main`, `master`, `release`, and `hotfix` to deployment channels;
+- adds `ResolveDeploymentChannelActivation`, marking `develop` and `production` active while `feature` remains inactive.
 
 The proposal still needs explicit verification against the main requirement of this issue: **the selected scalar root must represent the main repository, not merely every `SourceRoot` that has SCM metadata**. Filtering on `SourceControl != ''` alone may still leave more than one repository/root when subrepositories or submodules are present.
 
@@ -118,7 +120,9 @@ Suggested tests for this proposal:
 3. package/NuGet source roots plus the main repository root;
 4. main repository with nested Git submodule/subrepository roots;
 5. more than one SCM-bearing `SourceRoot`, confirming that scalar values never become `git;git` or multi-path values;
-6. consistency between `SourceControlRoot`, repository URL, revision, and branch so all describe the same main repository.
+6. consistency between `SourceControlRoot`, repository URL, revision, and branch so all describe the same main repository;
+7. deployment-channel mapping for `feature/*`, `bugfix/*`, `develop`, `main`/`master`, `release/*`, and `hotfix/*`;
+8. detached HEAD / unnamed-branch behavior does not accidentally activate a deployment channel.
 
 ## Acceptance criteria
 

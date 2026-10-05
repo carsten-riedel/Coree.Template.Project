@@ -82,12 +82,12 @@
 		<PropertyGroup>
 			<DeploymentChannel Condition="'$(DeploymentChannel)' == ''"></DeploymentChannel>
 			<_DeploymentChannelBranchName Condition="'$(DeploymentChannel)' == ''">$(SourceControlBranchNamePrimaryPathFileSafe.ToLowerInvariant())</_DeploymentChannelBranchName>
-			<DeploymentChannel Condition="'$(DeploymentChannel)' == '' and '$(_DeploymentChannelBranchName)' == 'feature'">feature</DeploymentChannel>
-			<DeploymentChannel Condition="'$(DeploymentChannel)' == '' and '$(_DeploymentChannelBranchName)' == 'bugfix'">feature</DeploymentChannel>
-			<DeploymentChannel Condition="'$(DeploymentChannel)' == '' and '$(_DeploymentChannelBranchName)' == 'develop'">develop</DeploymentChannel>
+			<DeploymentChannel Condition="'$(DeploymentChannel)' == '' and '$(_DeploymentChannelBranchName)' == 'feature'">preview</DeploymentChannel>
+			<DeploymentChannel Condition="'$(DeploymentChannel)' == '' and '$(_DeploymentChannelBranchName)' == 'bugfix'">preview</DeploymentChannel>
+			<DeploymentChannel Condition="'$(DeploymentChannel)' == '' and '$(_DeploymentChannelBranchName)' == 'develop'">development</DeploymentChannel>
 			<DeploymentChannel Condition="'$(DeploymentChannel)' == '' and '$(_DeploymentChannelBranchName)' == 'main'">production</DeploymentChannel>
 			<DeploymentChannel Condition="'$(DeploymentChannel)' == '' and '$(_DeploymentChannelBranchName)' == 'master'">production</DeploymentChannel>
-			<DeploymentChannel Condition="'$(DeploymentChannel)' == '' and '$(_DeploymentChannelBranchName)' == 'release'">production</DeploymentChannel>
+			<DeploymentChannel Condition="'$(DeploymentChannel)' == '' and '$(_DeploymentChannelBranchName)' == 'release'">staging</DeploymentChannel>
 			<DeploymentChannel Condition="'$(DeploymentChannel)' == '' and '$(_DeploymentChannelBranchName)' == 'hotfix'">production</DeploymentChannel>
 		</PropertyGroup>
 	</Target>
@@ -96,8 +96,9 @@
 		<PropertyGroup>
 			<IsDeploymentChannelActive>false</IsDeploymentChannelActive>
 			<_DeploymentChannelName Condition="'$(DeploymentChannel)' != ''">$(DeploymentChannel.ToLowerInvariant())</_DeploymentChannelName>
-			<IsDeploymentChannelActive Condition="'$(_DeploymentChannelName)' == 'feature'">false</IsDeploymentChannelActive>
-			<IsDeploymentChannelActive Condition="'$(_DeploymentChannelName)' == 'develop'">true</IsDeploymentChannelActive>
+			<IsDeploymentChannelActive Condition="'$(_DeploymentChannelName)' == 'preview'">false</IsDeploymentChannelActive>
+			<IsDeploymentChannelActive Condition="'$(_DeploymentChannelName)' == 'development'">true</IsDeploymentChannelActive>
+			<IsDeploymentChannelActive Condition="'$(_DeploymentChannelName)' == 'staging'">true</IsDeploymentChannelActive>
 			<IsDeploymentChannelActive Condition="'$(_DeploymentChannelName)' == 'production'">true</IsDeploymentChannelActive>
 		</PropertyGroup>
 	</Target>

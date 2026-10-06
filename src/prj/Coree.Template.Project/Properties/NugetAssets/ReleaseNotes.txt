@@ -1,4 +1,4 @@
-﻿Unreleased
+﻿0.9.6 (2026-10-06)
 
  - Added license-specific RTF setup assets, separate application and installer icons, and configurable run-after-install, desktop shortcut, and user PATH choices to the multi-console installer. Only user PATH is offered and initially selected by default.
  - Selected the multi-console installer publisher from the author or organization, corrected the optional shortcut target for ICE69 validation, and shortened the visible per-user installer suffix to (User) across the Console, WinForms, and WPF templates.

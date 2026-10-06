@@ -200,6 +200,14 @@
   </PropertyGroup>
   <!--#endif -->
 
+  <!-- Windows executable icon for build and publish; not a loose publish or package file. -->
+  <PropertyGroup>
+    <ApplicationIcon>Properties\AppIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Update="Properties\AppIcon.ico" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" Pack="false" />
+  </ItemGroup>
+
   <!-- Publish output. Recipes apply only while _IsPublishing. -->
 	<PropertyGroup Condition="'$(_IsPublishing)' == 'true'">
 		<!-- Flat publish output -->

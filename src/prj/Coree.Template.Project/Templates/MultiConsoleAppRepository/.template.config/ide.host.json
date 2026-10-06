@@ -150,7 +150,7 @@
         "text": "Project license"
       },
       "description": {
-        "text": "Default MIT. When packing as a NuGet tool, standard licenses set PackageLicenseExpression and keep License.txt on disk; Custom packs License.txt as the NuGet license file. The LICENSE file at repository root copies this license either way."
+        "text": "Default MIT. Standard licenses use PackageLicenseExpression when packing and create no project License.txt. Custom needs your terms in each selected output: NuGet License.txt when packing, optional repository LICENSE, and optional WiX SetupAssets/License.rtf."
       }
     },
     {

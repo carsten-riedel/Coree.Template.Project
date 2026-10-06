@@ -5,6 +5,8 @@
 ## Optional WiX user installer
 
 Use `--AdditionalInstaller WixUserInstaller` to add a separate Windows per-user WiX project. It packages the normal app publish output and writes `src/prj/__SourceName__/bin/Setup/__SourceName__.msi`; the technical project is named `__SourceName__.WixSetup`. The default `None` choice leaves the repository unchanged. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
+The Windows executable uses `src/prj/__SourceName__/Properties/AppIcon.ico`. With `WixUserInstaller`, the separate installer icon at `src/prj/__SourceName__.WixSetup/SetupAssets/Icon.ico` appears in Windows Installed apps. Replace either file independently for your app. The installer displays the selected project license from `SetupAssets/License.rtf`. Review that file before distribution, especially when `ProjectLicense` is `Custom`: its generated text contains only a copyright notice until you add your terms.
+With `WixUserInstaller`, the generated `.wixproj` controls three installer choices: run the app after installation, add a desktop shortcut, and add the install folder to the user's `PATH`. Each `Offer...` property includes or removes its choice; its matching `...SelectedByDefault` property sets the initial selection. By default, only the user `PATH` choice is offered and initially selected. The other two choices are disabled but can be enabled in the `.wixproj`. Desktop shortcut and user `PATH` use WiX's feature selection page; the run choice appears on the final dialog when enabled.
 <!--#if (PlaceSolution == "SlnFolder") -->
 Each app's `.slnx` and notes live under `src/sln/__SourceName__/`. CLI commands for this app start in that folder.
 <!--#elseif (PlaceSolution == "BesideCsproj") -->
@@ -41,6 +43,10 @@ src/prj/__SourceName__/      console app
 <!--#endif -->
 src/prj/__SourceName__/Properties/Build/  MSBuild targets (not source)
 src/prj/__SourceName__/Properties/PublishAssets/  files copied beside the published app
+src/prj/__SourceName__/Properties/AppIcon.ico  embedded Windows executable icon
+<!--#if (AdditionalInstaller == "WixUserInstaller") -->
+src/prj/__SourceName__.WixSetup/SetupAssets/  installer-only license RTF and icon
+<!--#endif -->
 <!--#if (PackAsNuGetTool) -->
 src/prj/__SourceName__/Properties/NugetMetadata/  NuGet metadata (readme, icon, notes)
 <!--#endif -->

@@ -425,7 +425,7 @@
       "type": "parameter",
       "dataType": "string",
       "replaces": "MyAuthor",
-      "description": "The author of the project. Writes Authors and, when empty, the copyright holder fallback.",
+      "description": "The author of the project. Writes Authors and supplies the default copyright holder and installer publisher.",
       "displayName": "Author",
       "isRequired": "true"
     },
@@ -434,7 +434,7 @@
       "dataType": "string",
       "defaultValue": "",
       "replaces": "MyCopyrightHolder",
-      "description": "Copyright holder for the assembly, license, and package. Defaults to the author when empty.",
+      "description": "Copyright holder for the assembly, license, and package. Defaults to the author when empty; can supply the installer publisher.",
       "displayName": "Copyright holder"
     },
     "PackageCopyrightHolderIsSet": {
@@ -445,7 +445,7 @@
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "false",
-      "description": "Set when the copyright holder is an organization. Controls the Company property.",
+      "description": "Set when the copyright holder is an organization. Controls Company and gives that organization priority as the installer publisher.",
       "displayName": "Copyright holder is an organization"
     },
     // Date generators replace fixed template placeholders in project metadata and package assets.
@@ -560,7 +560,7 @@
       "datatype": "choice",
       "isRequired": false,
       "defaultValue": "MIT",
-      "description": "License for the console app. Default MIT. When packing as a NuGet tool, standards set PackageLicenseExpression and do not create a project License.txt; Custom creates and packs License.txt. The LICENSE file at repository root copies this license either way.",
+      "description": "License for the console app. Default MIT. Standard choices set PackageLicenseExpression when packing as a NuGet tool. Custom needs your license terms in each selected output. Repository LICENSE and WiX SetupAssets/License.rtf are generated only when requested.",
       "displayName": "Project license",
       "choices": [
         {
@@ -580,8 +580,8 @@
         },
         {
           "choice": "Custom",
-          "description": "Copyright only (all rights reserved until you add terms). Writes License.txt and packs it as PackageLicenseFile.",
-          "displayName": "Custom (License.txt)"
+          "description": "Add your license terms before distribution. Starts with a copyright-only placeholder in NuGet License.txt when packing, repository LICENSE when requested, and WiX SetupAssets/License.rtf with the installer.",
+          "displayName": "Custom (add license terms)"
         }
       ]
     },
@@ -742,9 +742,10 @@
   // treat the same as the built-in XML/.md processor. Tokens must sit on their
   // own lines because wholeLine is true. .targets stays registered for
   // generate-time conditionals in Properties/Build if any are added later.
-  // .txt / LICENSE: each TemplateAssets/Licenses seed uses a shallow
+  // .txt / LICENSE / .rtf: each license seed uses a shallow
   // //#if (PackageCopyrightHolderIsSet) / //#else / //#endif. Do not put
   // ProjectLicense #if in those files; extra sources pick the seed.
+  // .wxs selects the installer publisher at generation time.
   "specialCustomOperations": {
     "**/*.txt": {
       "operations": [
@@ -755,6 +756,38 @@
             "else": [ "//#else" ],
             "elseif": [ "//#elseif" ],
             "endif": [ "//#endif" ],
+            "trim": true,
+            "wholeLine": true,
+            "evaluator": "C++"
+          }
+        }
+      ]
+    },
+    "**/*.rtf": {
+      "operations": [
+        {
+          "type": "conditional",
+          "configuration": {
+            "if": [ "//#if" ],
+            "else": [ "//#else" ],
+            "elseif": [ "//#elseif" ],
+            "endif": [ "//#endif" ],
+            "trim": true,
+            "wholeLine": true,
+            "evaluator": "C++"
+          }
+        }
+      ]
+    },
+    "**/*.wxs": {
+      "operations": [
+        {
+          "type": "conditional",
+          "configuration": {
+            "if": [ "<!--#if" ],
+            "else": [ "<!--#else" ],
+            "elseif": [ "<!--#elseif" ],
+            "endif": [ "<!--#endif" ],
             "trim": true,
             "wholeLine": true,
             "evaluator": "C++"
@@ -988,6 +1021,7 @@
             "Versioning/**",
             "CodeStyle/**",
             "Licenses/**",
+            "SetupLicenses/**",
             "DirectoryMsBuild/**",
             "ProgramSamples/**"
           ]
@@ -1004,6 +1038,7 @@
             "Versioning/**",
             "CodeStyle/**",
             "Licenses/**",
+            "SetupLicenses/**",
             "DirectoryMsBuild/**",
             "ProgramSamples/**"
           ]
@@ -1138,6 +1173,26 @@
           }
         }
       ]
+    },
+    {
+      "source": "./TemplateAssets/SetupLicenses/MIT/",
+      "target": "./src/prj/__SourceName__.WixSetup/SetupAssets/",
+      "condition": "((AdditionalInstaller == \"WixUserInstaller\") && (ProjectLicense == \"MIT\"))"
+    },
+    {
+      "source": "./TemplateAssets/SetupLicenses/BSD3Clause/",
+      "target": "./src/prj/__SourceName__.WixSetup/SetupAssets/",
+      "condition": "((AdditionalInstaller == \"WixUserInstaller\") && (ProjectLicense == \"BSD3Clause\"))"
+    },
+    {
+      "source": "./TemplateAssets/SetupLicenses/Apache2/",
+      "target": "./src/prj/__SourceName__.WixSetup/SetupAssets/",
+      "condition": "((AdditionalInstaller == \"WixUserInstaller\") && (ProjectLicense == \"Apache2\"))"
+    },
+    {
+      "source": "./TemplateAssets/SetupLicenses/Custom/",
+      "target": "./src/prj/__SourceName__.WixSetup/SetupAssets/",
+      "condition": "((AdditionalInstaller == \"WixUserInstaller\") && (ProjectLicense == \"Custom\"))"
     },
     {
       "source": "./TemplateAssets/DirectoryMsBuild/",

@@ -1,4 +1,5 @@
 <Project Sdk="WixToolset.Sdk/6.0.2">
+  <!-- MSI output and the app publish location consumed by WiX. -->
   <PropertyGroup>
     <OutputName>__SourceName__</OutputName>
     <InstallerPlatform>x64</InstallerPlatform>
@@ -16,10 +17,30 @@
     <SuppressIces>ICE38;ICE64;ICE91</SuppressIces>
   </PropertyGroup>
 
+  <!-- Installer choices: Offer exposes an option; SelectedByDefault sets its initial state. -->
+  <!-- The two install-time options use the feature picker; launch uses the final dialog. -->
+  <PropertyGroup>
+    <OfferRunAfterInstall>false</OfferRunAfterInstall>
+    <RunAfterInstallSelectedByDefault>false</RunAfterInstallSelectedByDefault>
+    <DefineConstants>$(DefineConstants);OfferRunAfterInstall=$(OfferRunAfterInstall);RunAfterInstallSelectedByDefault=$(RunAfterInstallSelectedByDefault)</DefineConstants>
+
+    <OfferDesktopShortcut>false</OfferDesktopShortcut>
+    <DesktopShortcutSelectedByDefault>false</DesktopShortcutSelectedByDefault>
+    <DefineConstants>$(DefineConstants);OfferDesktopShortcut=$(OfferDesktopShortcut);DesktopShortcutSelectedByDefault=$(DesktopShortcutSelectedByDefault)</DefineConstants>
+
+    <OfferAddToUserPath>true</OfferAddToUserPath>
+    <AddToUserPathSelectedByDefault>true</AddToUserPathSelectedByDefault>
+    <DefineConstants>$(DefineConstants);OfferAddToUserPath=$(OfferAddToUserPath);AddToUserPathSelectedByDefault=$(AddToUserPathSelectedByDefault)</DefineConstants>
+  </PropertyGroup>
+
   <!-- Import the shared project contract; WiX itself is TFM-neutral. -->
   <Import Project="$(AppProjectDirectory)\Properties\Build\SharedProject.props" />
 
+  <!-- WiX UI, installer-only assets, and the published app. -->
   <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="6.0.2" />
+    <!-- Keep installer-only inputs visible in the WiX project in Solution Explorer. -->
+    <None Include="SetupAssets\**\*" />
     <ProjectReference Include="$(AppProjectPath)">
       <AdditionalProperties>_IsPublishing=true;TargetFramework=$(AppTargetFramework);Configuration=$(Configuration)</AdditionalProperties>
       <Targets>PublishForInstaller</Targets>
@@ -27,6 +48,7 @@
     </ProjectReference>
   </ItemGroup>
 
+  <!-- Publish the MSI as the setup artifact. -->
   <Target Name="BuildInstallerOnPublish" BeforeTargets="Publish" DependsOnTargets="Build" />
   <!-- The solution invokes Pack for every selected project; WiX has no NuGet package output. -->
   <Target Name="Pack" />

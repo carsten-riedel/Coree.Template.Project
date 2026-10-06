@@ -137,11 +137,15 @@ dotnet publish
 `dotnet publish` with no `--framework` publishes the default TFM from `src/prj/__SourceName__/Properties/Build/SharedProject.props` to `src/prj/__SourceName__/bin/Publish/`. Override with `dotnet publish --framework net8.0` (or another selected TFM). Edit that props file to change the default. To try a newer TFM (net11, …) before shipping it, append it to `TargetFrameworks` so build/test catch incompatibilities; leave the props file until bare publish should follow. RID and the publish recipe (self-contained, single-file, …) are generate-time choices and apply only while publishing. Test and optional benchmark projects are not published.
 
 Files under `src/prj/__SourceName__/Properties/PublishAssets/` are copied beside the published app, preserving subfolders. The placeholder `Readme.md` is the first such file; replace its heading with app information before distributing.
+`src/prj/__SourceName__/Properties/AppIcon.ico` is embedded in the Windows executable through `ApplicationIcon`; it is not copied as a separate publish file.
 <!--#if (AdditionalInstaller == "WixUserInstaller") -->
 
 ## WiX user installer
 
 The additional Windows per-user WiX project is part of this solution. `dotnet publish` publishes the app to `src/prj/__SourceName__/bin/Publish/` and then writes `src/prj/__SourceName__/bin/Setup/__SourceName__.msi`. The technical project is named `__SourceName__.WixSetup`. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
+
+The installer displays `src/prj/__SourceName__.WixSetup/SetupAssets/License.rtf`, selected from `ProjectLicense` when the project is created. Review it before distribution. With `Custom`, replace the copyright-only placeholder with your license terms. `SetupAssets/Icon.ico` supplies the Windows Installed apps icon; replace it independently of the app's `Properties/AppIcon.ico`.
+By default, the installer offers only the option to add the installation folder to the user `PATH`, and selects it initially. The generated `src/prj/__SourceName__.WixSetup/__SourceName__.WixSetup.wixproj` also contains disabled choices for a desktop shortcut and running the app after installation. Set an `Offer...` property to `true` to include a choice or `false` to remove it; its matching `...SelectedByDefault` property sets the initial selection. Desktop shortcut and user `PATH` use the feature selection page; the run choice appears on the final dialog when enabled. These defaults apply to new installations; upgrades normally retain the installed feature selections. A new terminal is needed to see a changed user `PATH`.
 <!--#endif -->
 <!--#if (NuGetAuditHighCriticalAsErrors) -->
 

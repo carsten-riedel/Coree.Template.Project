@@ -329,13 +329,15 @@ Console projects can support framework-dependent, framework-included, single-fil
 
 They can also be configured for distribution as .NET tools.
 
-All three multi-application templates also offer the same optional additional WiX user installer:
+All three multi-application templates offer the optional `WixUserInstaller` choice:
 
 ```bash
 dotnet new multiconsolerepo-coree --Author "Your Name" --output "./MyCompany.Tools" --name "MyCompany.Tools.Sync" --AdditionalInstaller WixUserInstaller
 ```
 
 The Windows installer is a separate project in the generated solution. It consumes the normal `dotnet publish` output and writes `__SourceName__.msi` under the app's `bin/Setup/` directory; the technical project is named `__SourceName__.WixSetup`. The default `None` choice does not add it. Visual Studio requires the WiX Toolset HeatWave extension installed; the `dotnet` CLI uses the WiX SDK package.
+
+The console template also supplies a selected license RTF, separate app and installer icons, and an offered, initially selected user `PATH` option. Run-after-install and desktop shortcut can be enabled in its generated `.wixproj`; the WinForms and WPF installers currently keep their simpler setup.
 
 ---
 

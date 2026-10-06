@@ -1,4 +1,10 @@
-﻿0.9.2 (2026-10-05)
+﻿Unreleased
+
+ - Added license-specific RTF setup assets, separate application and installer icons, and configurable run-after-install, desktop shortcut, and user PATH choices to the multi-console installer. Only user PATH is offered and initially selected by default.
+ - Selected the multi-console installer publisher from the author or organization, corrected the optional shortcut target for ICE69 validation, and shortened the visible per-user installer suffix to (User) across the Console, WinForms, and WPF templates.
+ - Refreshed the multi-console NuGet icon and documented the distinct setup behavior of the three application templates.
+
+0.9.2 (2026-10-05)
 
  - Replaced SourceControlState.targets with BuildContext.targets in the template package project and all nine repository templates. Git values now come from the repository containing the project; branch and deployment properties and an optional high-importance dump are available to imports.
  - Changed the root and NuGet README command examples to single lines that work in Windows shells.

@@ -385,12 +385,12 @@ App-only single choice, default **`Strict`**. UI label **Code style rules for co
 
 Roslyn reads `GlobalAnalyzerConfigFiles` (`Visible="false"`). Visual Studio Solution Explorer uses a separate `None` item with `Link` under `Properties\` so the file is clickable next to `version.json`. `None Remove` first, or the SDK default glob also shows it at the project root. Do not use `AdditionalFiles` or `Content`. Do not set `CopyToOutputDirectory` (`None` already does not copy or pack). Do not replace `GlobalAnalyzerConfigFiles` with the `None` item. Do **not** move the file into `Properties/` on disk: analyzer-config scope follows the directory of the file, so it must stay next to the csproj. `Link` is UI-only.
 
-Do not rename `Default` to Minimal: both seeds are the same full VS style dump. The split is **severity**, not breadth.
+Do not rename `Default` to Minimal: both seeds start from the full VS style dump. Strict adds explicit structure preferences and error severities; Default retains the baseline suggestions.
 
 | Choice | Seed | What differs |
 | --- | --- | --- |
 | `Default` | `.project.editor.globalconfig.default` | Style dump. Naming stays **suggestion**. No CS1591 / nullable / IDE0005 overrides. |
-| `Strict` | `.project.editor.globalconfig.strict` | Same dump. Naming **error**. Nullable (CS86xx) as **error**. Reserved identifiers (CA1716) as **error**. No CS1591 family and no IDE0005 (XML docs off; a later pack is a tool nupkg; IDE0005 needs `GenerateDocumentationFile` or every build warns `EnableGenerateDocumentationFile`). |
+| `Strict` | `.project.editor.globalconfig.strict` | Baseline dump with block-scoped namespaces (IDE0160), explicit entry points (IDE0211), and block-bodied methods (IDE0022) configured as **error**. Naming **error**. Nullable (CS86xx) as **error**. Reserved identifiers (CA1716) as **error**. No CS1591 family and no IDE0005 (XML docs off; a later pack is a tool nupkg; IDE0005 needs `GenerateDocumentationFile` or every build warns `EnableGenerateDocumentationFile`). |
 | `Off` | none | No file, no `EnforceCodeStyleInBuild`, no `OptimizeImplicitlyTriggeredBuild`. |
 
 `Strict` needs the product C# default `Nullable`. Console `Program.cs` does not keep unused usings for the style dump (`KeepScaffoldUnusedUsings` is library/analyzer only). Needed `using` lines follow `DisableImplicitUsings`.

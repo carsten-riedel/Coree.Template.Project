@@ -361,12 +361,12 @@ Library-only single choice, default **`Strict`**. UI label **Code style rules fo
 
 Roslyn reads `GlobalAnalyzerConfigFiles` (`Visible="false"`). Visual Studio Solution Explorer uses a separate `None` item with `Link` under `Properties\` so the file is clickable next to `version.json` / Public API. `None Remove` first, or the SDK default glob also shows it at the project root. Do not use `AdditionalFiles` or `Content`. Do not set `CopyToOutputDirectory` (`None` already does not copy or pack). Do not replace `GlobalAnalyzerConfigFiles` with the `None` item. Do **not** move the file into `Properties/` on disk: analyzer-config scope follows the directory of the file, so it must stay next to the csproj. `Link` is UI-only.
 
-Do not rename `Default` to Minimal: both seeds are the same full VS style dump. The split is **severity**, not breadth.
+Do not rename `Default` to Minimal: both seeds start from the full VS style dump. Strict adds explicit structure preferences and error severities; Default retains the baseline suggestions.
 
 | Choice | Seed | What differs |
 | --- | --- | --- |
 | `Default` | `.project.editor.globalconfig.default` | Style dump. Naming stays **suggestion**. No CS1591 / nullable / IDE0005 overrides. |
-| `Strict` | `.project.editor.globalconfig.strict` | Same dump. Naming **error**. Public-release compiler gates: XML docs (CS1591 family), nullable (CS86xx), unused usings (IDE0005), reserved identifiers (CA1716). |
+| `Strict` | `.project.editor.globalconfig.strict` | Baseline dump with block-scoped namespaces (IDE0160), explicit entry points (IDE0211), and block-bodied methods (IDE0022) configured as **error**. Naming **error**. Public-release compiler gates: XML docs (CS1591 family), nullable (CS86xx), unused usings (IDE0005), reserved identifiers (CA1716). |
 | `Off` | none | No file, no `EnforceCodeStyleInBuild`, no `OptimizeImplicitlyTriggeredBuild`. |
 
 `Strict` needs the product C# defaults (`GenerateDocumentationFile`, `Nullable`, `DisableImplicitUsings`) or those errors fire on every build for the wrong reason. The scaffold `AddTask`, `TaskNodeTask`, `HomeTask`, and `DumpEnvVarsTask` already have XML docs so a first Strict build can pass. Do not generate unused usings to demonstrate IDE0005. Needed `using` lines follow `CSharpProjectOptions == "DisableImplicitUsings"` when a type actually requires them. Sample tasks use `Microsoft.Build.Framework` and a fully specified `Microsoft.Build.Utilities.Task` base so implicit usings (`System.Threading.Tasks.Task`) do not collide. `HomeTask` keeps `Execute()` in Coverlet and puts `[ExcludeFromCodeCoverage]` on the OS probe and the missing-home warning (one testhost cannot hit every branch). `DumpEnvVarsTask` is registered in consumer props; `HomeTask` / `TaskNodeTask` run from consumer `.targets` before `CoreCompile` on PackageReference consumers.

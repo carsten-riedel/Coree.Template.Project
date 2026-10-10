@@ -1,4 +1,9 @@
-﻿0.9.8 (2026-10-10)
+﻿0.9.10 (2026-10-10)
+
+ - Configured block-scoped namespaces (IDE0160), explicit entry points instead of top-level statements (IDE0211), and block-bodied methods (IDE0022) as errors in all eight project-scoped Strict profiles. Default profiles retain their existing preferences.
+ - Updated the corresponding CLI and Visual Studio descriptions and maintainer documentation; the profile comments are in English.
+
+0.9.8 (2026-10-10)
 
  - Generalized the project-scoped .NET tool manifest choice across all nine repository templates. Selecting NerdBank Project or Repo versioning includes nbgv 3.10.94, matching the package reference; Off starts with an empty manifest and disabling the choice omits it.
  - Enabled native runtime roll-forward for nbgv and documented explicit tool restore and version queries in generated repository and solution handbooks. Builds do not restore local tools.

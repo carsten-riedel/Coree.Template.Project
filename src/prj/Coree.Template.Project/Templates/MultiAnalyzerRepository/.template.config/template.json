@@ -480,7 +480,7 @@
       "isRequired": false,
       "defaultValue": "Strict",
       "enableQuotelessLiterals": true,
-      "description": "Editor and analyzer rules beside the analyzer project, applied in the IDE and on build. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Default (style suggestions) is the same dump without those errors. Off writes no file. Test and benchmark projects are not affected.",
+      "description": "Editor and analyzer rules beside the analyzer project, applied in the IDE and on build. Default is Strict: naming, XML docs, nullable, and unused usings fail the build. Strict also configures block-scoped namespaces, explicit entry points, and block-bodied methods as errors. Default (style suggestions) uses the baseline preferences without Strict errors. Off writes no file. Test and benchmark projects are not affected.",
       "displayName": "Code style rules for analyzer project",
       "choices": [
         {

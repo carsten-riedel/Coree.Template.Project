@@ -39,7 +39,7 @@ src/prj/__SourceName__/AnalyzerPackage/  consumer MSBuild props (packed to build
 src/prj/__SourceName__/Properties/Build/  MSBuild targets (not source)
 src/prj/__SourceName__/Properties/NugetMetadata/  NuGet metadata (readme, icon, notes)
 <!--#if (DotNetToolManifest) -->
-src/prj/__SourceName__/.config/dotnet-tools.json  empty local tool manifest
+src/prj/__SourceName__/.config/dotnet-tools.json  project-scoped .NET tool manifest
 <!--#endif -->
 src/prj/__SourceName__.Tests/  tests (not packed)
 src/prj/__SourceName__.DebugHost/  Visual Studio F5 compile target (not packed)
@@ -63,7 +63,23 @@ Open a terminal in the repository root and run `dotnet restore`, `dotnet build`,
 `src/global.json` pins the .NET SDK to the selected DebugHost target framework (`rollForward: latestFeature`). `dotnet` finds it when the working directory is under `src/`. The analyzer package stays netstandard2.0.
 <!--#endif -->
 <!--#if (DotNetToolManifest) -->
-`src/prj/__SourceName__/.config/dotnet-tools.json` is an empty local tool manifest. Run `dotnet tool install --local` from that project folder.
+`src/prj/__SourceName__/.config/dotnet-tools.json` provides project-scoped .NET tools.
+<!--#if (UseNerdbankGitVersioning) -->
+Run these commands from the main project folder:
+
+```powershell
+dotnet tool restore
+<!--#if (NerdbankGitVersioning == "Project") -->
+dotnet nbgv get-version -p Properties -v NuGetPackageVersion
+<!--#elseif (NerdbankGitVersioning == "Repo") -->
+dotnet nbgv get-version -v NuGetPackageVersion
+<!--#endif -->
+```
+
+The manifest pins `nbgv` to the same version as the NerdBank package reference. Runtime roll-forward lets nbgv use a newer installed .NET runtime when .NET 8 is absent. Tool restore is an explicit step; build does not restore local tools.
+<!--#else -->
+The manifest starts empty. Add your own project-local tools with `dotnet tool install --local <package-id>`.
+<!--#endif -->
 <!--#if (PlaceSolution == "SlnFolder") -->
 The default solution-folder working directory does not see this file.
 <!--#endif -->

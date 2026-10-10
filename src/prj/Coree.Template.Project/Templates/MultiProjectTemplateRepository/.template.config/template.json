@@ -367,15 +367,15 @@
       "description": "Add empty Directory.Build.props and Directory.Build.targets beside this library project, and Directory.Solution.props and Directory.Solution.targets beside this library's .slnx (follows PlaceSolution). Landing files for extra MSBuild you do not want in the csproj. Default off.",
       "displayName": "Empty Directory.Build and Directory.Solution MSBuild files"
     },
-    // Empty local tool manifest beside this library csproj. Default on.
-    // Combo-safe: path includes the library name. Not Init. No tools pinned
-    // and no tool restore on build.
+    // Project-scoped tool manifest beside this library csproj. Default on.
+    // Combo-safe: path includes the library name. Not Init. NerdBank selects nbgv.
+    // No tool restore on build.
     "DotNetToolManifest": {
       "type": "parameter",
       "dataType": "bool",
       "defaultValue": "true",
-      "description": "Add an empty .config/dotnet-tools.json beside this library project (no tools). Landing file for dotnet tool install --local. Default on. Every create; paths do not collide. Does not restore tools on build.",
-      "displayName": "Empty local dotnet-tools.json"
+      "description": "Create a project-scoped .config/dotnet-tools.json. Includes nbgv when NerdBank versioning is selected; otherwise starts empty for your own tools. Default on. Each project has its own manifest; other projects are not affected. Tool restore is an explicit step; build does not restore tools.",
+      "displayName": "Project-scoped .NET tool manifest"
     }
   },
   // Registers XML-style conditionals for extensions that hosts do not always

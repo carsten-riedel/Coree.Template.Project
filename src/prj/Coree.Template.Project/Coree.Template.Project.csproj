@@ -105,6 +105,10 @@
 	<ItemGroup>
 		<None Remove=".gitignore" />
 	</ItemGroup>
+	<!-- Project-local tools stay in .config/ on disk and appear under Properties in Solution Explorer. -->
+	<ItemGroup>
+		<None Include=".config\dotnet-tools.json" Link="Properties\dotnet-tools.json" Pack="false" />
+	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Templates\" />
 	</ItemGroup>

@@ -59,7 +59,23 @@ For F5 debugging, set `__SourceName__.DebugHost` as the startup project. The def
 `src/global.json` pins .NET 10 when PowerShell 7.6 is selected and .NET 8 otherwise (`rollForward: latestFeature`). It applies to commands whose working directory is under `src/`.
 <!--#endif -->
 <!--#if (DotNetToolManifest) -->
-`src/prj/__SourceName__/.config/dotnet-tools.json` is an empty local tool manifest for module-local build tooling.
+`src/prj/__SourceName__/.config/dotnet-tools.json` provides project-scoped .NET tools.
+<!--#if (UseNerdbankGitVersioning) -->
+Run these commands from the main project folder:
+
+```powershell
+dotnet tool restore
+<!--#if (NerdbankGitVersioning == "Project") -->
+dotnet nbgv get-version -p Properties -v NuGetPackageVersion
+<!--#elseif (NerdbankGitVersioning == "Repo") -->
+dotnet nbgv get-version -v NuGetPackageVersion
+<!--#endif -->
+```
+
+The manifest pins `nbgv` to the same version as the NerdBank package reference. Runtime roll-forward lets nbgv use a newer installed .NET runtime when .NET 8 is absent. Tool restore is an explicit step; build does not restore local tools.
+<!--#else -->
+The manifest starts empty. Add your own project-local tools with `dotnet tool install --local <package-id>`.
+<!--#endif -->
 <!--#endif -->
 <!--#if (PlaceSolution == "BesideCsproj") -->
 Additional command and layout notes: [src/prj/__SourceName__/Readme.md](src/prj/__SourceName__/Readme.md).

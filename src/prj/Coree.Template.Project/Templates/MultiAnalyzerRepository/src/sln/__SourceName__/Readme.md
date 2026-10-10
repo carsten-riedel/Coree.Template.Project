@@ -51,7 +51,7 @@ The `.slnx` and this readme live in this folder next to the packable analyzer. O
 ../../prj/__SourceName__/Directory.Build.targets
 <!--#endif -->
 <!--#if (DotNetToolManifest) -->
-../../prj/__SourceName__/.config/dotnet-tools.json  empty local tool manifest
+../../prj/__SourceName__/.config/dotnet-tools.json  project-scoped .NET tool manifest
 <!--#endif -->
 ../../prj/__SourceName__.Tests/  tests (not packed)
 ../../prj/__SourceName__.DebugHost/  Visual Studio F5 compile target (not packed)
@@ -70,7 +70,7 @@ The `.slnx` and this readme live in this folder next to the packable analyzer. O
 ../global.json               .NET SDK pin (DebugHost TFM)
 <!--#endif -->
 <!--#if (DotNetToolManifest) -->
-./.config/dotnet-tools.json  empty local tool manifest
+./.config/dotnet-tools.json  project-scoped .NET tool manifest
 <!--#endif -->
 ../__SourceName__.Tests/     tests (not packed)
 ../__SourceName__.DebugHost/ Visual Studio F5 compile target (not packed)
@@ -202,3 +202,25 @@ Severity is an MSBuild property on the compile target (`EmDashAnalyzerSeverity`,
 For stepping without F5, debug `FunctionalTests` from Test Explorer.
 
 `DebugHost` is not packed. `dotnet pack` still produces only the analyzer nupkg.
+
+<!--#if (DotNetToolManifest) -->
+## Project-local tools
+
+The main project folder is `src/prj/__SourceName__/` relative to the repository root.
+<!--#if (UseNerdbankGitVersioning) -->
+Run these commands from the main project folder:
+
+```powershell
+dotnet tool restore
+<!--#if (NerdbankGitVersioning == "Project") -->
+dotnet nbgv get-version -p Properties -v NuGetPackageVersion
+<!--#elseif (NerdbankGitVersioning == "Repo") -->
+dotnet nbgv get-version -v NuGetPackageVersion
+<!--#endif -->
+```
+
+The manifest pins `nbgv` to the same version as the NerdBank package reference. Runtime roll-forward lets nbgv use a newer installed .NET runtime when .NET 8 is absent. Tool restore is an explicit step; build does not restore local tools.
+<!--#else -->
+The manifest starts empty. Add your own project-local tools with `dotnet tool install --local <package-id>`.
+<!--#endif -->
+<!--#endif -->

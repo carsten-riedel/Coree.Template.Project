@@ -177,10 +177,10 @@
       "defaultValue": "true",
       "persistenceScope": "none",
       "name": {
-        "text": "Empty local dotnet-tools.json"
+        "text": "Project-scoped .NET tool manifest"
       },
       "description": {
-        "text": "Default on. Writes an empty .config/dotnet-tools.json beside this library (no tools). Landing file for dotnet tool install --local. Uncheck to skip. Tests and benchmark are not affected. Does not restore tools on build."
+        "text": "Default on. Creates this project's .config/dotnet-tools.json. Includes nbgv when NerdBank versioning is selected; otherwise starts empty. Uncheck to skip the manifest. Related projects are not affected. Tool restore is explicit; build does not restore tools."
       }
     }
   ]

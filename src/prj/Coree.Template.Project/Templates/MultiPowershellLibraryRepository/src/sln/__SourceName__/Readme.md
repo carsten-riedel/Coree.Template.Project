@@ -121,3 +121,25 @@ dotnet run --project ../__SourceName__.Benchmark/__SourceName__.Benchmark.csproj
 <!--#endif -->
 ```
 <!--#endif -->
+
+<!--#if (DotNetToolManifest) -->
+## Project-local tools
+
+The main project folder is `src/prj/__SourceName__/` relative to the repository root.
+<!--#if (UseNerdbankGitVersioning) -->
+Run these commands from the main project folder:
+
+```powershell
+dotnet tool restore
+<!--#if (NerdbankGitVersioning == "Project") -->
+dotnet nbgv get-version -p Properties -v NuGetPackageVersion
+<!--#elseif (NerdbankGitVersioning == "Repo") -->
+dotnet nbgv get-version -v NuGetPackageVersion
+<!--#endif -->
+```
+
+The manifest pins `nbgv` to the same version as the NerdBank package reference. Runtime roll-forward lets nbgv use a newer installed .NET runtime when .NET 8 is absent. Tool restore is an explicit step; build does not restore local tools.
+<!--#else -->
+The manifest starts empty. Add your own project-local tools with `dotnet tool install --local <package-id>`.
+<!--#endif -->
+<!--#endif -->

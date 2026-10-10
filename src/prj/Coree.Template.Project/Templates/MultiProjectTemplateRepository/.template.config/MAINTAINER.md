@@ -409,7 +409,7 @@ dotnet new multilibraryrepo-coree --Author "abcd" --name "...Library2" --output 
 
 ## `DotNetToolManifest`
 
-Library project only. Bool, default **true**. UI label **Empty local dotnet-tools.json**. CLI long name **`--DotNetToolManifest`**. Omit the switch → empty `src/prj/{Name}/.config/dotnet-tools.json`. `--DotNetToolManifest false` skips it. Combo-safe: path includes the library name. Not Init. `tools` is `{}`; no `dotnet tool restore` on build. `isRoot` is true so a later parent manifest does not merge in. `dotnet tool install --local` from the library folder fills the file. With `SlnFolder`, the handbook CWD (`src/sln/{Name}/`) does not see this manifest. With `BesideCsproj`, the handbook CWD is the library folder and does.
+Library project only. Bool, default **true**. UI label **Project-scoped .NET tool manifest**. CLI long name **`--DotNetToolManifest`**. Omit the switch → project-scoped `src/prj/{Name}/.config/dotnet-tools.json`. `--DotNetToolManifest false` skips it. Combo-safe: path includes the library name. Not Init. `tools` contains `nbgv` when `UseNerdbankGitVersioning` is true (Project or Repo), pinned to the package-reference version with runtime roll-forward enabled; otherwise it is `{}`. No `dotnet tool restore` on build. `isRoot` is true so a later parent manifest does not merge in. `dotnet tool install --local` from the library folder adds further tools to the file. With `SlnFolder`, the handbook CWD (`src/sln/{Name}/`) does not see this manifest. With `BesideCsproj`, the handbook CWD is the library folder and does.
 
 The library csproj `None Include`s the file with `Link` under `Properties\` (Solution Explorer only). Disk path stays `.config/`.
 
@@ -431,5 +431,5 @@ dotnet new multilibraryrepo-coree --Author "abcd" --name "...Library2" --output 
 - **`<Description>`**: not a template parameter. Generate leaves an empty CDATA block for multiline gallery text; the checkpoint fills it (assistant-supported).
 - **`EnablePackageValidation`**: not a symbol. Always `true` on the packable library. No `PackageValidationBaselineVersion` at generate.
 - **`DirectoryMsBuildFiles`**: see section above. Default `false`. Empty `Directory.Build.*` beside the library and `Directory.Solution.*` beside this `.slnx`. No `Directory.Packages.props`.
-- **`DotNetToolManifest`**: see section above. Default `true`. Empty `src/prj/{Name}/.config/dotnet-tools.json`. `--DotNetToolManifest false` skips it.
+- **`DotNetToolManifest`**: see section above. Default `true`. Project-scoped `src/prj/{Name}/.config/dotnet-tools.json`. `--DotNetToolManifest false` skips it.
 - Conditionals in `.md` / `.slnx` use `<!--#if` on their own lines (`specialCustomOperations`, `wholeLine`). `.txt` and the renamed root `LICENSE` use `//#if`. License seeds under `TemplateAssets/Licenses/` may use a shallow copyright `//#if` / `//#else`; extra sources pick the file so there is no `ProjectLicense` `#if` in the text.

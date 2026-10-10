@@ -1,4 +1,10 @@
-﻿0.9.6 (2026-10-06)
+﻿0.9.8 (2026-10-10)
+
+ - Generalized the project-scoped .NET tool manifest choice across all nine repository templates. Selecting NerdBank Project or Repo versioning includes nbgv 3.10.94, matching the package reference; Off starts with an empty manifest and disabling the choice omits it.
+ - Enabled native runtime roll-forward for nbgv and documented explicit tool restore and version queries in generated repository and solution handbooks. Builds do not restore local tools.
+ - Added the template package project's own local nbgv manifest, linked under Properties in Solution Explorer and excluded from the package, with restore and version-query instructions in the repository and package README files.
+
+0.9.6 (2026-10-06)
 
  - Added license-specific RTF setup assets, separate application and installer icons, and configurable run-after-install, desktop shortcut, and user PATH choices to the multi-console installer. Only user PATH is offered and initially selected by default.
  - Selected the multi-console installer publisher from the author or organization, corrected the optional shortcut target for ICE69 validation, and shortened the visible per-user installer suffix to (User) across the Console, WinForms, and WPF templates.

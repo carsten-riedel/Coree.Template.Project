@@ -683,6 +683,15 @@ On Windows, the repository contains tooling for building and installing the curr
 .\Test-LocalTemplatePackage.ps1
 ```
 
+The package project has its own pinned NerdBank CLI tool. From `src/prj/Coree.Template.Project/`, restore the tool and query the current package version:
+
+```powershell
+dotnet tool restore
+dotnet nbgv get-version -p Properties -v NuGetPackageVersion
+```
+
+Tool restore is explicit; building the project does not restore local tools.
+
 Detailed development-machine setup belongs outside the normal user installation flow.
 
 ---

@@ -1,4 +1,12 @@
-# This repository is a .NET template pack. HTML (DocShell seeds, GitHub Pages)
-# and GitHub Actions under .github must not appear in the detected-language bar.
-*.html linguist-detectable=false
-/.github/** linguist-detectable=false
+# Normalize text files while preserving automatic binary detection.
+* text=auto
+
+# Keep C# language detection explicit.
+*.cs linguist-language=C#
+
+# Shared automation and agent support do not represent application code.
+.github/** linguist-vendored
+workflows/** linguist-vendored
+AGENTS.md linguist-vendored
+AGENTS/** linguist-vendored
+.agents/** linguist-vendored

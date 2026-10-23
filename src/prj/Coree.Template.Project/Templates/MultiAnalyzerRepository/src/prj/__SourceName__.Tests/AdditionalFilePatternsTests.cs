@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace __SourceName__.Tests
 {
@@ -56,6 +57,33 @@ namespace __SourceName__.Tests
             Assert.IsTrue(AdditionalFilePatterns.IsMatch("dir/file", "**"));
             Assert.IsFalse(AdditionalFilePatterns.IsMatch("dir/file", "*"));
             Assert.IsFalse(AdditionalFilePatterns.IsMatch("notes.txt", "other/**/*.txt"));
+        }
+
+        [TestMethod]
+        [Timeout(10_000)]
+        public void IsMatchHandlesDeepNonmatchingRecursivePatterns()
+        {
+            var directoryPath = string.Join("/", Enumerable.Repeat("nested", 64));
+
+            Assert.IsFalse(AdditionalFilePatterns.IsMatch(directoryPath + "/notes.md", "**/*.txt"));
+            Assert.IsFalse(AdditionalFilePatterns.IsMatch(directoryPath + "/notes.md", "**/missing/*.md"));
+            Assert.IsTrue(AdditionalFilePatterns.IsMatch(directoryPath + "/notes.txt", "**/*.txt"));
+        }
+
+        [TestMethod]
+        [DataRow("target/notes.txt", "**/target/**/*.txt", true)]
+        [DataRow("root/target/notes.txt", "**/target/**/*.txt", true)]
+        [DataRow("root/target/deep/notes.txt", "**/target/**/*.txt", true)]
+        [DataRow("root/other/deep/notes.txt", "**/target/**/*.txt", false)]
+        [DataRow("root/target/deep/notes.md", "**/target/**/*.txt", false)]
+        [DataRow("root/target/deep/notes.txt", "root/**/target/**/notes.txt", true)]
+        [DataRow("root/target/deep/notes.md", "root/**/target/**/notes.txt", false)]
+        [DataRow("root/target/deep/notes.txt", "**/**/notes.txt", true)]
+        [DataRow("root/target/deep/notes.md", "**/**/notes.txt", false)]
+        [DataRow(@"root\target\deep\NOTES.TXT", @"**\target\**\notes.txt", true)]
+        public void IsMatchPreservesMultipleRecursiveSegments(string path, string pattern, bool expected)
+        {
+            Assert.AreEqual(expected, AdditionalFilePatterns.IsMatch(path, pattern));
         }
 
         [TestMethod]

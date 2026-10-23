@@ -132,7 +132,7 @@ namespace __SourceName__
 
                     for (var i = pi; i < path.Length; i++)
                     {
-                        if (path[i] == '/' && Match(path, i + 1, pattern, gi))
+                        if (path[i] == '/' && Match(path, i + 1, pattern, after))
                         {
                             return true;
                         }

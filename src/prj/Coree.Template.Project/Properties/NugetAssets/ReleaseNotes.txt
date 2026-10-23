@@ -1,4 +1,8 @@
-﻿0.9.10 (2026-10-10)
+﻿Unreleased
+
+ - Prevented repeated directory-suffix exploration in the multi-analyzer template's additional-file glob matcher for deeply nested nonmatching files. Existing glob syntax is preserved, with deep-path and multiple-recursive-segment regression tests.
+
+0.9.10 (2026-10-10)
 
  - Configured block-scoped namespaces (IDE0160), explicit entry points instead of top-level statements (IDE0211), and block-bodied methods (IDE0022) as errors in all eight project-scoped Strict profiles. Default profiles retain their existing preferences.
  - Updated the corresponding CLI and Visual Studio descriptions and maintainer documentation; the profile comments are in English.

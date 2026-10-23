@@ -451,6 +451,10 @@ The packable analyzer sets `EnablePackageValidation` to `false` (no `lib/` TFMs)
 
 With `PlaceSolution` `SlnFolder` (default), each `src/sln/{Name}/` gets its own `.gitignore` for `.vs/` next to that package's `.slnx` and handbook `Readme.md`. `RepoRoot` still writes `src/sln/{Name}/Readme.md` as notes (no nested `.gitignore`); delete that folder if you do not need it. `BesideCsproj` writes the `.slnx` and handbook next to the packable analyzer csproj and does **not** create `src/sln/{Name}/` (`src/prj/{Name}/.gitignore` already ignores `.vs/`). Repository-root `.gitignore` is `InitRepoItems` `GitIgnore` / `--InitAllRepoItems` (first create only). Later packages omit Init and do not overwrite it. If root ignore is off, the `RepoRoot` variant and Visual Studio's extra root `.vs/` stay the owner's problem.
 
+## Additional-file glob matching
+
+`AdditionalFilePatterns` preserves the existing case-insensitive include/exclude syntax: `*` and `?` stay within a path segment, while `**` can span directory levels. After trying a directory boundary for `**`, continue with the remaining pattern (`after`) instead of restarting that same wildcard (`gi`). Restarting it revisits every later directory suffix repeatedly; an 18-level nonmatch against `**/*.txt` caused 2,621,440 recursive calls before this correction. The deep-path regression and multiple-recursive-segment cases protect both rejection cost and matching behavior. This is not a general complexity guarantee for arbitrary combinations of wildcards.
+
 ## `DirectoryMsBuildFiles`
 
 Analyzer + this package's `.slnx` only. Bool, default **false**. UI label **Empty Directory.Build and Directory.Solution files**. CLI long name **`--DirectoryMsBuildFiles`**. Omit the switch → nothing. Combo-safe on `SlnFolder` and `BesideCsproj` (paths include the package name). `RepoRoot` stacks `Directory.Solution.*` at the repository root like stacking `.slnx` files. Not an Init* item and not `Directory.Packages.props` (CPM would not cover sibling tests). Tests, DebugHost, and benchmark are not in this switch.

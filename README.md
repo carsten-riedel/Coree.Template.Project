@@ -36,12 +36,12 @@ dotnet new multilibraryrepo-coree --Author "Your Name" --output "./MyCompany.Cor
 
 That's already a complete **single-project repository**.
 
-Build it using the normal .NET CLI:
+The default layout puts the solution under `MyCompany.Core/src/sln/MyCompany.Core/`. From the same directory where you ran `dotnet new`, build, test, and pack that solution:
 
 ```bash
-dotnet build
-dotnet test
-dotnet pack
+dotnet build "./MyCompany.Core/src/sln/MyCompany.Core/MyCompany.Core.slnx"
+dotnet test "./MyCompany.Core/src/sln/MyCompany.Core/MyCompany.Core.slnx"
+dotnet pack "./MyCompany.Core/src/sln/MyCompany.Core/MyCompany.Core.slnx"
 ```
 
 If you need another library later:
